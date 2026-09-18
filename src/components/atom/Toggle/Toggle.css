@@ -1,0 +1,8 @@
+.toggle { display: inline-flex; align-items: center; gap: var(--sp-3); min-height: 44px; cursor: pointer; }
+.toggle.is-disabled { opacity: .55; cursor: not-allowed; }
+.toggle-track { position: relative; width: 44px; height: 26px; border-radius: var(--r-pill); border: 0; background: var(--color-border-strong); padding: 0; transition: background var(--dur-fast); flex: 0 0 auto; }
+.toggle-track[aria-checked="true"] { background: var(--color-primary); }
+.toggle-thumb { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform var(--dur-fast) var(--ease-out); box-shadow: var(--shadow-sm); }
+.toggle-track[aria-checked="true"] .toggle-thumb { transform: translateX(18px); }
+.toggle-text { display: flex; flex-direction: column; line-height: var(--lh-title); }
+.toggle-label { font-weight: var(--fw-medium); }

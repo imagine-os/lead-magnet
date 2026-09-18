@@ -1,0 +1,20 @@
+.dt-wrap { width: 100%; overflow-x: auto; border: 1px solid var(--color-border-subtle); border-radius: var(--r-card); background: var(--color-surface); }
+.dt { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+.dt th { text-align: left; height: var(--h-thead); padding: 0 var(--sp-3); background: var(--color-table-head); color: var(--color-table-head-text); font-size: var(--fs-xs); font-weight: var(--fw-semibold); white-space: nowrap; position: sticky; top: 0; }
+.dt td { padding: var(--sp-2) var(--sp-3); min-height: var(--h-row); height: var(--h-row); border-top: 1px solid var(--color-border-subtle); vertical-align: middle; }
+.dt tbody tr:nth-child(even) td { background: var(--color-table-zebra); }
+.dt tr.is-clickable { cursor: pointer; } .dt tr.is-clickable:hover td { background: var(--color-surface-tint); }
+.dt-rowlink { color: inherit; font-weight: var(--fw-medium); }
+.dt-rowlink::after { content: ''; position: absolute; inset: 0; }
+.dt tbody tr { position: relative; }
+.is-dense .dt td { height: 36px; padding: 4px var(--sp-3); }
+@media (max-width: 768px) {
+  .dt thead { display: none; }
+  .dt, .dt tbody, .dt tr, .dt td { display: block; width: 100%; }
+  .dt tr { padding: var(--sp-3) var(--sp-4); border-top: 1px solid var(--color-border); }
+  .dt tr:first-child { border-top: 0; }
+  .dt td { border: 0; height: auto; min-height: 0; padding: 4px 0; display: flex; justify-content: space-between; gap: var(--sp-3); text-align: right !important; }
+  .dt td::before { content: attr(data-label); color: var(--color-label); font-size: var(--fs-xs); font-weight: var(--fw-semibold); text-align: left; flex: 0 0 40%; }
+  .dt td.hide-card { display: none; }
+  .dt tbody tr:nth-child(even) td { background: transparent; }
+}

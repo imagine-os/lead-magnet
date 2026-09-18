@@ -1,0 +1,5 @@
+.phoneframe-wrap { position: relative; flex: 0 0 auto; }
+.phoneframe { position: absolute; top: 0; left: 0; transform-origin: top left; padding: 12px; border-radius: 48px; background: #101321; box-shadow: 0 0 0 2px #2b3148, var(--shadow-xl); }
+.phoneframe-notch { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); width: 120px; height: 26px; border-radius: 14px; background: #101321; z-index: 2; }
+.phoneframe-screen { border-radius: 38px; overflow: hidden; background: #fff; }
+.phoneframe-iframe { width: 100%; height: 100%; border: 0; display: block; }

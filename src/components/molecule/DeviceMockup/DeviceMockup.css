@@ -1,0 +1,12 @@
+.device { position: relative; --device-bezel: #101321; --device-edge: #2b3148; }
+.device-screen { position: relative; overflow: hidden; background: var(--lp-bg, var(--color-surface)); }
+.device-img, .device-iframe { width: 100%; height: 100%; border: 0; object-fit: cover; display: block; }
+.device-phone { width: 100%; max-width: 300px; aspect-ratio: 390 / 844; padding: 12px; border-radius: 44px; background: var(--device-bezel); box-shadow: 0 0 0 2px var(--device-edge), var(--shadow-xl); }
+.device-phone .device-screen { width: 100%; height: 100%; border-radius: 34px; }
+.device-notch { position: absolute; top: 22px; left: 50%; transform: translateX(-50%); width: 34%; height: 24px; border-radius: 14px; background: var(--device-bezel); z-index: 2; }
+.device-laptop { width: 100%; max-width: 760px; }
+.device-laptop .device-screen { aspect-ratio: 16 / 10; border: 14px solid var(--device-bezel); border-bottom-width: 18px; border-radius: 18px 18px 6px 6px; box-shadow: 0 0 0 2px var(--device-edge), var(--shadow-xl); }
+.device-base { display: block; height: 16px; margin: 0 -4%; border-radius: 0 0 14px 14px; background: linear-gradient(#3a405a, #1d2236); }
+.device-tv { width: 100%; max-width: 980px; }
+.device-tv .device-screen { aspect-ratio: 16 / 9; border: 10px solid var(--device-bezel); border-radius: 10px; box-shadow: 0 0 0 2px var(--device-edge), var(--shadow-xl); }
+.device-stand { display: block; width: 30%; height: 14px; margin: 6px auto 0; border-radius: 0 0 10px 10px; background: var(--device-edge); }

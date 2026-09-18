@@ -1,0 +1,5 @@
+import { createElement as h } from 'react';
+import { defineMeta } from '../../../design/meta';
+import { defineSpec } from '../../../specs/types';
+const spec = defineSpec({ code: 'HUB-01', name: 'Testing hub', purpose: 'Demo spec for the inspector.', layout: ['header', 'grid'], data: ['prospects'], roles: ['guest'], logic: ['counts'], integrations: [], components: ['Card'], actions: [{ id: 'hub.toggleTheme', label: 'Theme', intent: 'switch theme' }], states: ['default'] });
+export default defineMeta({ tier: 'organism', name: 'InspectorPanel', description: 'Dev-mode drawer showing a page spec with links to tables, rules, components and actions.', props: [{ name: 'spec', type: 'PageSpec', required: true, description: '' }, { name: 'open', type: 'boolean', required: true, description: '' }], states: ['closed', 'open'], usages: [{ title: 'Shape', render: () => h('p', { className: 'muted small' }, `Opens on every page in dev mode (Ctrl+.). Demo spec: ${spec.code} with ${spec.actions.length} action.`) }], a11y: ['Drawer semantics; tabs keyboard operable.'], usedBy: ['HUB-01'] });

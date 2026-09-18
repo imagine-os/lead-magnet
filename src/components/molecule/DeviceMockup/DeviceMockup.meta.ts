@@ -1,0 +1,6 @@
+import { createElement as h } from 'react';
+import { defineMeta } from '../../../design/meta';
+import { DeviceMockup } from './DeviceMockup';
+const fake = (label: string) => h('div', { style: { padding: 16, fontFamily: 'var(--font-display)', color: 'var(--color-heading)' } }, label);
+export default defineMeta({ tier: 'molecule', name: 'DeviceMockup', description: 'CSS-only phone / laptop / TV frames; slot children, an iframe src or a generated image.', props: [{ name: 'kind', type: "'phone'|'laptop'|'tv'", required: true, description: '' }, { name: 'src', type: 'string', description: 'Same-origin iframe' }, { name: 'imageSrc', type: 'string', description: 'Generated asset' }, { name: 'title', type: 'string', required: true, description: 'aria-label' }], states: ['phone', 'laptop', 'tv'],
+  usages: [{ title: 'Three frames', render: () => h('div', { className: 'grid grid-3', style: { alignItems: 'end' } }, h(DeviceMockup, { kind: 'phone', title: 'Phone', style: { maxWidth: 160 } }, fake('Phone')), h(DeviceMockup, { kind: 'laptop', title: 'Laptop' }, fake('Laptop')), h(DeviceMockup, { kind: 'tv', title: 'TV' }, fake('TV'))) }], a11y: ['role=group with a title; iframe titled; image has alt.'], usedBy: ['HUB-01', 'L-01'] });

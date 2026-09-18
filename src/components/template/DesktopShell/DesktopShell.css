@@ -1,0 +1,12 @@
+.shell { display: flex; min-height: 100vh; }
+.shell-side { width: var(--w-sidebar); flex: 0 0 auto; position: sticky; top: 0; height: 100vh; }
+.shell-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.shell-content { flex: 1; min-width: 0; }
+.shell-brand { display: flex; align-items: center; gap: var(--sp-2); color: var(--color-heading); font-weight: var(--fw-bold); font-family: var(--font-display); }
+.shell-brand:hover { text-decoration: none; }
+.shell-mark { display: grid; place-items: center; width: 32px; height: 32px; border-radius: var(--r-md); background: var(--color-ink); color: var(--color-ink-text); font-size: var(--fs-xs); font-weight: var(--fw-bold); }
+.shell-hublink { display: flex; align-items: center; min-height: 44px; padding: 0 var(--sp-3); border-radius: var(--r-md); font-weight: var(--fw-medium); }
+.shell-hublink:hover { background: var(--color-surface-tint); text-decoration: none; }
+.shell-overlay { position: fixed; inset: 0; background: var(--color-scrim); z-index: 940; }
+.shell-overlay-panel { position: absolute; top: 0; left: 0; bottom: 0; width: min(var(--w-sidebar), 86vw); }
+.shell-overlay-close { position: absolute; top: var(--sp-3); right: calc(-1 * var(--h-control) - var(--sp-3)); background: var(--color-surface); }

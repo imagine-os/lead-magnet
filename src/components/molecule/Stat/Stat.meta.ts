@@ -1,0 +1,4 @@
+import { createElement as h } from 'react';
+import { defineMeta } from '../../../design/meta';
+import { Stat } from './Stat';
+export default defineMeta({ tier: 'molecule', name: 'Stat', description: 'KPI tile for dashboards, hub footer and role views.', props: [{ name: 'label', type: 'string', required: true, description: '' }, { name: 'value', type: 'ReactNode', required: true, description: '' }, { name: 'tone', type: "'default'|'success'|'warn'|'danger'|'accent'", default: 'default', description: '' }], states: ['default'], usages: [{ title: 'Row', render: () => h('div', { className: 'grid grid-4' }, h(Stat, { label: 'Routes', value: 58 }), h(Stat, { label: 'Built', value: 11, tone: 'success' }), h(Stat, { label: 'Stubs', value: 47, tone: 'warn' }), h(Stat, { label: 'Savings / yr', value: '$18,400', tone: 'accent', hint: 'Paws & Play' })) }], a11y: ['Label precedes value in DOM order.'], usedBy: ['HUB-01', 'D-01'] });

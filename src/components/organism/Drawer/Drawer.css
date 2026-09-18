@@ -1,0 +1,6 @@
+.drawer-scrim { position: fixed; inset: 0; background: var(--color-scrim); z-index: 950; display: flex; }
+.drawer { background: var(--color-surface); color: var(--color-text); height: 100%; display: flex; flex-direction: column; box-shadow: var(--shadow-xl); animation: drawer-in var(--dur-base) var(--ease-out); }
+.drawer-right { margin-left: auto; } .drawer-left { margin-right: auto; }
+.drawer-head { display: flex; align-items: center; justify-content: space-between; padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--color-border); }
+.drawer-body { padding: var(--sp-4); overflow: auto; flex: 1; }
+@keyframes drawer-in { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }

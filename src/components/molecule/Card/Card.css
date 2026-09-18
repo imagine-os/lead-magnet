@@ -1,0 +1,7 @@
+.card { background: var(--color-surface); border: 1px solid var(--color-border-subtle); border-radius: var(--r-card); box-shadow: var(--shadow-sm); min-width: 0; }
+.card-p-sm { padding: var(--sp-3); } .card-p-md { padding: var(--sp-4); } .card-p-lg { padding: var(--sp-6); }
+.card-tint { background: var(--color-surface-tint); border-color: transparent; }
+.card-ink { background: var(--color-ink); color: var(--color-ink-text); border-color: transparent; }
+.card-ink h1, .card-ink h2, .card-ink h3 { color: inherit; }
+.card.is-interactive { transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast); }
+.card.is-interactive:hover, .card.is-interactive:focus-within { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--color-border); }

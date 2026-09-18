@@ -1,0 +1,6 @@
+.progress { display: flex; flex-direction: column; gap: 4px; min-width: 120px; }
+.progress-head { display: flex; justify-content: space-between; gap: var(--sp-2); }
+.progress-track { height: 8px; border-radius: var(--r-pill); background: var(--color-surface-3); overflow: hidden; }
+.progress-sm .progress-track { height: 4px; }
+.progress-fill { height: 100%; border-radius: var(--r-pill); background: var(--color-primary); transition: width var(--dur-slow) var(--ease-out); }
+.progress-success { background: var(--color-success); } .progress-warn { background: var(--color-warn); } .progress-accent { background: var(--color-accent); }

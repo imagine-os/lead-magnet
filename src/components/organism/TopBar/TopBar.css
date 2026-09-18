@@ -1,0 +1,5 @@
+.topbar { display: flex; align-items: center; gap: var(--sp-2); min-height: var(--h-topbar); padding: 0 var(--sp-4); background: var(--color-surface); border-bottom: 1px solid var(--color-border-subtle); position: sticky; top: 0; z-index: 20; }
+.topbar-title { font-size: var(--fs-md); font-family: var(--font-sans); letter-spacing: 0; }
+.topbar-user { display: inline-flex; align-items: center; gap: var(--sp-2); min-height: 44px; padding: 0 var(--sp-2); border-radius: var(--r-md); color: var(--color-text); font-size: var(--fs-xs); }
+.topbar-user:hover { background: var(--color-surface-tint); text-decoration: none; }
+@media (max-width: 600px) { .topbar-username { display: none; } }

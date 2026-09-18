@@ -1,0 +1,4 @@
+.langtoggle { display: inline-flex; border: 1px solid var(--color-border); border-radius: var(--r-md); overflow: hidden; }
+.langtoggle-btn { min-width: 44px; min-height: 44px; padding: 0 var(--sp-3); border: 0; background: var(--color-surface); color: var(--color-text-muted); font-weight: var(--fw-semibold); font-size: var(--fs-xs); }
+.langtoggle-sm .langtoggle-btn { min-height: 40px; }
+.langtoggle-btn.is-active { background: var(--color-ink); color: var(--color-ink-text); }

@@ -1,0 +1,2 @@
+.avatar { display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--color-primary-soft); color: var(--color-primary-text); font-weight: var(--fw-semibold); font-size: var(--fs-xs); width: 36px; height: 36px; object-fit: cover; flex: 0 0 auto; }
+.avatar-sm { width: 28px; height: 28px; font-size: 11px; } .avatar-lg { width: 56px; height: 56px; font-size: var(--fs-md); }

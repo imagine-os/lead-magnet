@@ -1,0 +1,4 @@
+import { createElement as h } from 'react';
+import { defineMeta } from '../../../design/meta';
+import { Sidebar } from './Sidebar';
+export default defineMeta({ tier: 'organism', name: 'Sidebar', description: 'Grouped side navigation built from route nav defs; groups collapse with <details>.', props: [{ name: 'groups', type: 'SidebarGroup[]', required: true, description: '' }, { name: 'showCodes', type: 'boolean', description: 'Page code pills (dev mode)' }], states: ['default', 'active', 'collapsed'], usages: [{ title: 'Dev group', render: () => h('div', { style: { height: 240, width: 256 } }, h(Sidebar, { showCodes: true, groups: [{ key: 'dev', label: 'Developer', icon: 'code', items: [{ to: '/dev', label: 'Routes', icon: 'list', code: 'D-01' }, { to: '/dev/canvas', label: 'Canvas', icon: 'map', code: 'D-07' }] }] })) }], a11y: ['<nav aria-label>; NavLink sets aria-current.'], usedBy: ['D-01'] });

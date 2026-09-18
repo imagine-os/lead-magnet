@@ -1,0 +1,5 @@
+import { createElement as h, useState } from 'react';
+import { defineMeta } from '../../../design/meta';
+import { Tabs } from './Tabs';
+function Demo() { const [v, set] = useState('kanban'); return h('div', null, h(Tabs, { label: 'Docs', value: v, onChange: set, tabs: [{ id: 'kanban', label: 'Kanban', count: 3 }, { id: 'changelog', label: 'Changelog', count: 1 }, { id: 'prompts', label: 'Prompts', count: 1 }] }), h('div', { role: 'tabpanel', id: `panel-${v}`, 'aria-labelledby': `tab-${v}`, className: 'muted small', style: { padding: 12 } }, `${v} panel`)); }
+export default defineMeta({ tier: 'molecule', name: 'Tabs', description: 'Tablist with arrow-key navigation; caller renders the tabpanel.', props: [{ name: 'tabs', type: 'TabDef[]', required: true, description: '' }, { name: 'value', type: 'T', required: true, description: '' }], states: ['default', 'active'], usages: [{ title: 'Docs tabs', render: () => h(Demo) }], a11y: ['role=tablist / tab / tabpanel wiring; one tab stop.'], usedBy: ['D-06', 'D-09'] });

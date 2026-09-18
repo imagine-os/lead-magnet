@@ -1,0 +1,4 @@
+import { createElement as h } from 'react';
+import { defineMeta } from '../../../design/meta';
+import { FeedbackButton } from './FeedbackButton';
+export default defineMeta({ tier: 'organism', name: 'FeedbackButton', description: 'Floating annotations button on staff pages; modal writes a feedback row (kind, text, component, viewport, theme).', props: [{ name: 'pageCode', type: 'string', required: true, description: '' }, { name: 'route', type: 'string', required: true, description: '' }], states: ['closed', 'open', 'sending'], usages: [{ title: 'Live (bottom right)', render: () => h('div', { style: { position: 'relative', height: 60 } }, h('p', { className: 'muted small' }, 'Mounted by DesktopShell; see the button bottom-right of this page.'), h(FeedbackButton, { pageCode: 'D-02', route: '/dev/components' })) }], a11y: ['Button labelled; modal is a native dialog.'], usedBy: ['D-02', 'D-09'] });

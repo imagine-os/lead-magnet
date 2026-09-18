@@ -1,0 +1,4 @@
+.stat { display: flex; flex-direction: column; gap: 4px; padding: var(--sp-4); border-radius: var(--r-card); background: var(--color-surface); border: 1px solid var(--color-border-subtle); min-width: 0; }
+.stat-value { font-size: var(--fs-2xl); line-height: 1.1; color: var(--color-heading); font-weight: var(--fw-bold); }
+.stat-lg .stat-value { font-size: var(--fs-3xl); }
+.stat-success .stat-value { color: var(--color-success); } .stat-warn .stat-value { color: var(--color-warn); } .stat-danger .stat-value { color: var(--color-danger); } .stat-accent .stat-value { color: var(--color-primary-text); }

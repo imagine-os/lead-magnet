@@ -1,0 +1,5 @@
+.specchip { position: fixed; left: var(--sp-3); bottom: var(--sp-3); z-index: 900; display: inline-flex; align-items: center; gap: var(--sp-2); min-height: 44px; padding: 0 var(--sp-3); border-radius: var(--r-pill); border: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-text); box-shadow: var(--shadow-lg); font-size: var(--fs-xs); max-width: calc(100vw - 24px); }
+.specchip code { font-weight: var(--fw-bold); color: var(--color-primary-text); }
+.specchip-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px; }
+.specchip-pct { font-weight: var(--fw-semibold); padding: 0 6px; border-radius: var(--r-pill); }
+.specchip-pct.is-good { background: var(--color-success-bg); color: var(--color-success); } .specchip-pct.is-mid { background: var(--color-warn-bg); color: var(--color-warn); } .specchip-pct.is-low { background: var(--color-danger-bg); color: var(--color-danger); }

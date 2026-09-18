@@ -1,0 +1,23 @@
+// Unit checks for the pure engine (no browser). Run: npm run test:engine
+import assert from 'node:assert/strict';
+// Bundle the engine with esbuild (a Vite dependency) so extension-less TS imports resolve under Node.
+import { build } from 'esbuild';
+import { mkdtempSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+const out = join(mkdtempSync(join(tmpdir(), 'lm-engine-')), 'engine.mjs');
+const r = await build({ entryPoints: [new URL('../src/engine/index.ts', import.meta.url).pathname], bundle: true, format: 'esm', platform: 'node', write: false, define: { 'import.meta.env.DEV': 'false' } });
+writeFileSync(out, r.outputFiles[0].text);
+const { guessStack, savings, deriveRoleViews, pickArchetype, composePage, imagePrompts, nextQuestions, applyAnswer, computeConfidence, adaptFromEvents } = await import(out);
+const p = { id: 'pro_test', created_at: '', updated_at: '', first_name: 'Maya', last_name: 'C', business_name: 'Paws & Play', industry: 'pet_care', sub_industry: null, city: 'Austin', country: 'US', lang: 'en', website: null, team_size: 9, locations: 1, revenue_band: '250k_1m', warmth: 'warm', source: 'linkedin', style: { palette: { primary: '#F25F3A', accent: '#FFD23F', bg: '#FFF8F2', surface: '#fff', text: '#222' }, tone: 'playful', font: 'display', imagery: ['dogs'] }, life_roles: ['owner', 'spouse/partner', 'kids', 'accountant'], business_roles: ['owner', 'manager', 'front desk'], known_tools: ['Gingr'], confidence: 0.6, fields_known: ['industry', 'first_name', 'business_name'], notes: '', logo_url: null, photo_url: null };
+let n = 0; const ok = (name, fn) => { fn(); n++; console.log('ok', name); };
+ok('guessStack picks one tool per category, confirmed first', () => { const g = guessStack(p); assert.ok(g.length >= 5); assert.equal(new Set(g.map((x) => x.category)).size, g.length); assert.equal(g.find((x) => x.tool === 'Gingr')?.status, 'confirmed'); assert.ok(!g.find((x) => x.tool === 'PetExec')); });
+ok('guessStack honours rejected', () => { const g = guessStack(p, [{ tool: 'Gingr', category: 'Pet software', monthly_cost: 0, confidence: 1, status: 'rejected', replaced_by: '' }]); assert.ok(!g.find((x) => x.tool === 'Gingr')); });
+ok('savings math', () => { const s = savings(p, guessStack(p)); assert.equal(s.price_band, 'team'); assert.equal(s.annual_current, Math.round(s.monthly_current * 12 * 100) / 100); assert.equal(s.net_monthly, Math.round((s.monthly_current - s.our_price_monthly) * 100) / 100); });
+ok('deriveRoleViews: one per role, 3 widgets', () => { const v = deriveRoleViews(p); assert.equal(v.length, 7); assert.ok(v.every((x) => x.widgets.length === 3 && x.headline.en && x.headline.es)); assert.equal(v.filter((x) => x.kind === 'life').length, 4); });
+ok('pickArchetype warm -> reveal', () => { assert.equal(pickArchetype(p)[0].archetype, 'reveal'); assert.equal(pickArchetype({ ...p, warmth: 'cold' })[0].archetype, 'audit'); assert.equal(pickArchetype({ ...p, warmth: 'hot' })[0].archetype, 'letter'); assert.ok(pickArchetype(p)[0].reasons.length); });
+ok('composePage resolves EN+ES with tokens', () => { const m = composePage(p, 'reveal', { pageId: 'pg_1' }); assert.equal(m.sections[0].kind, 'hero_reveal'); assert.ok(m.sections[0].headline.en.includes('Paws & Play')); assert.ok(m.sections[0].headline.es.includes('Paws & Play')); assert.equal(m.cta.primary.to, '/demo/pro_test'); for (const a of ['audit', 'walkthrough', 'letter']) assert.ok(composePage(p, a).sections.length >= 4); });
+ok('imagePrompts covers every kind', () => { const k = new Set(imagePrompts(p).map((x) => x.kind)); for (const x of ['hero', 'device_phone', 'device_laptop', 'device_tv', 'role_card', 'og_image', 'video_frames']) assert.ok(k.has(x), x); });
+ok('intake: nextQuestions weights, applyAnswer recomputes', () => { const q = nextQuestions(p); assert.equal(q[0].field, 'team_size'); const p2 = applyAnswer(p, 'team_size', 12); assert.ok(p2.fields_known.includes('team_size')); assert.ok(p2.confidence > computeConfidence(p.fields_known)); assert.equal(computeConfidence([]), 0); });
+ok('adaptFromEvents recommends', () => { const page = { id: 'pg_1', archetype: 'reveal', prospect_id: p.id }; const ev = (type, meta, s = 's1') => ({ id: Math.random().toString(), page_id: 'pg_1', session_id: s, type, meta, ts: '' }); const recs = adaptFromEvents(page, [ev('view', {}), ev('section_view', { section: 'savings_stack', seconds: 45 }), ev('exit_intent', {})], p); assert.ok(recs.some((r) => r.kind === 'add_section' && r.section === 'letter')); assert.ok(recs.some((r) => r.section === 'stack_audit')); });
+console.log(`\n${n} engine checks passed`);

@@ -1,0 +1,35 @@
+{
+  "name": "lead-magnet",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Lead Magnet - hyper-personalized landing pages whose lead magnet is a pre-built, fully themed operations system for one prospect",
+  "homepage": "https://imagine-os.github.io/lead-magnet/",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run tokens && tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "tokens": "node --experimental-strip-types scripts/gen-tokens.mjs",
+    "sql": "node --experimental-strip-types scripts/gen-sql.mjs",
+    "test:engine": "node scripts/test-engine.mjs",
+    "screenshots": "node scripts/screenshots.mjs",
+    "qa:responsive": "node scripts/qa-responsive.mjs"
+  },
+  "dependencies": {
+    "@fontsource/bricolage-grotesque": "^5.2.5",
+    "@fontsource/inter": "^5.2.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-markdown": "^9.0.1",
+    "react-router-dom": "^6.26.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "playwright": "^1.47.0",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.8"
+  }
+}

@@ -1,0 +1,2933 @@
+[
+ {
+  "path": "/p/:slug",
+  "code": "L-01",
+  "surface": "public",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "L-01",
+   "name": "Reveal landing",
+   "purpose": "\"We already built <Business>'s operating system\": hero reveal on phone/laptop/TV, savings stack, role views, proof, FAQ, CTA band, inline booking.",
+   "layout": [
+    "hero_reveal",
+    "savings_stack",
+    "role_views",
+    "proof",
+    "faq",
+    "cta_band",
+    "booking_inline",
+    "sticky CTA (mobile)",
+    "exit intent"
+   ],
+   "data": [
+    "pages",
+    "prospects",
+    "stack_guesses",
+    "events"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "DeviceMockup",
+    "Stat",
+    "Button",
+    "Card",
+    "LangToggle"
+   ],
+   "actions": [
+    {
+     "id": "landing.openDemo",
+     "label": "Open your demo",
+     "intent": "open {business} demo",
+     "permission": "demo.open"
+    },
+    {
+     "id": "landing.bookCall",
+     "label": "Book a 15-min walkthrough",
+     "intent": "book a walkthrough call",
+     "permission": "booking.create"
+    },
+    {
+     "id": "landing.saveWorkspace",
+     "label": "Save your workspace",
+     "intent": "save my workspace with my email"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module landing (T12)"
+   ]
+  }
+ },
+ {
+  "path": "/p/:slug/audit",
+  "code": "L-02",
+  "surface": "public",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "L-02",
+   "name": "Savings audit landing",
+   "purpose": "Leads with money: pre-checked tool list the prospect corrects, live savings counter, then the reveal.",
+   "layout": [
+    "hero (money headline)",
+    "stack_audit",
+    "savings_stack (live counter)",
+    "role_views",
+    "proof",
+    "cta_band",
+    "booking_inline"
+   ],
+   "data": [
+    "pages",
+    "prospects",
+    "stack_guesses",
+    "events"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "DataTable",
+    "Chip",
+    "Stat",
+    "DeviceMockup",
+    "Button"
+   ],
+   "actions": [
+    {
+     "id": "landing.confirmTool",
+     "label": "Yes, we pay for this",
+     "intent": "confirm we use {tool}",
+     "params": {
+      "tool": "string"
+     }
+    },
+    {
+     "id": "landing.rejectTool",
+     "label": "No, not us",
+     "intent": "reject {tool}",
+     "params": {
+      "tool": "string"
+     }
+    },
+    {
+     "id": "landing.openDemo",
+     "label": "Open your demo",
+     "intent": "open {business} demo"
+    },
+    {
+     "id": "landing.bookCall",
+     "label": "Book a walkthrough",
+     "intent": "book a walkthrough call"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module landing (T12)"
+   ]
+  }
+ },
+ {
+  "path": "/p/:slug/story",
+  "code": "L-03",
+  "surface": "public",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "L-03",
+   "name": "Walkthrough landing",
+   "purpose": "\"A day in the life\" scroll story through each role's view; ends with \"this is Tuesday next week if you book today\".",
+   "layout": [
+    "hero",
+    "walkthrough_steps (scroll-driven)",
+    "role_views",
+    "savings_stack",
+    "cta_band",
+    "booking_inline"
+   ],
+   "data": [
+    "pages",
+    "prospects",
+    "events"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "DeviceMockup",
+    "Card",
+    "Button"
+   ],
+   "actions": [
+    {
+     "id": "landing.openDemo",
+     "label": "Open your demo",
+     "intent": "open {business} demo"
+    },
+    {
+     "id": "landing.bookCall",
+     "label": "Make it next Tuesday",
+     "intent": "book a walkthrough call"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module landing (T12)"
+   ]
+  }
+ },
+ {
+  "path": "/p/:slug/letter",
+  "code": "L-04",
+  "surface": "public",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "L-04",
+   "name": "Letter landing",
+   "purpose": "Short personal message from us over their branded app, one CTA. Best for hot / high-ticket warm.",
+   "layout": [
+    "letter",
+    "hero_reveal (app behind)",
+    "cta_band",
+    "booking_inline"
+   ],
+   "data": [
+    "pages",
+    "prospects",
+    "events"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "DeviceMockup",
+    "Button"
+   ],
+   "actions": [
+    {
+     "id": "landing.openDemo",
+     "label": "Open your demo",
+     "intent": "open {business} demo"
+    },
+    {
+     "id": "landing.bookCall",
+     "label": "Pick a slot",
+     "intent": "book a walkthrough call"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module landing (T12)"
+   ]
+  }
+ },
+ {
+  "path": "/p/:slug/expired",
+  "code": "L-05",
+  "surface": "public",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "L-05",
+   "name": "Expired / generic page",
+   "purpose": "Shown when a page is past expires_at or the slug is unknown: honest message and a way to book or request a fresh workspace.",
+   "layout": [
+    "message",
+    "request new workspace",
+    "book a call"
+   ],
+   "data": [
+    "pages"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Card",
+    "Button"
+   ],
+   "actions": [
+    {
+     "id": "landing.requestRefresh",
+     "label": "Request a fresh workspace",
+     "intent": "request a new workspace"
+    },
+    {
+     "id": "landing.bookCall",
+     "label": "Book a call",
+     "intent": "book a walkthrough call"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module landing (T12)"
+   ]
+  }
+ },
+ {
+  "path": "/demo/:prospectId",
+  "code": "C-01",
+  "surface": "demo",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "C-01",
+   "name": "OS demo shell",
+   "purpose": "The prospect's operating system, themed to them: role switcher for every business + life role, phone / desktop / TV layouts, EN/ES.",
+   "layout": [
+    "top bar (their logo, role switcher, lang)",
+    "role home",
+    "nav per role",
+    "save workspace prompt at moment of value"
+   ],
+   "data": [
+    "prospects",
+    "pages",
+    "events"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "RoleSwitcher",
+    "Stat",
+    "Card",
+    "Tabs",
+    "LangToggle"
+   ],
+   "actions": [
+    {
+     "id": "demo.switchRole",
+     "label": "Switch role",
+     "intent": "view as {role}",
+     "params": {
+      "role": "string"
+     }
+    },
+    {
+     "id": "demo.saveWorkspace",
+     "label": "Save your workspace",
+     "intent": "save my workspace"
+    },
+    {
+     "id": "demo.bookCall",
+     "label": "Book a walkthrough",
+     "intent": "book a walkthrough call"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module os-demo (T13)"
+   ]
+  }
+ },
+ {
+  "path": "/demo/:prospectId/role/:role",
+  "code": "C-02",
+  "surface": "demo",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "C-02",
+   "name": "Role home",
+   "purpose": "One role's view: 3+ widgets from deriveRoleViews themed to the industry (KPI, calendar, list, chat, chart, doc).",
+   "layout": [
+    "headline",
+    "widgets grid",
+    "today",
+    "quick actions"
+   ],
+   "data": [
+    "prospects"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Stat",
+    "Card",
+    "DataTable"
+   ],
+   "actions": [
+    {
+     "id": "demo.openWidget",
+     "label": "Open",
+     "intent": "open {widget}",
+     "params": {
+      "widget": "string"
+     }
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module os-demo (T13)"
+   ]
+  }
+ },
+ {
+  "path": "/demo/:prospectId/departments",
+  "code": "C-03",
+  "surface": "demo",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "C-03",
+   "name": "Departments board",
+   "purpose": "Their departments (from the industry catalog) as a board with people, tasks and KPIs.",
+   "layout": [
+    "department columns",
+    "people",
+    "open items"
+   ],
+   "data": [
+    "prospects"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Card",
+    "Badge"
+   ],
+   "actions": [],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module os-demo (T13)"
+   ]
+  }
+ },
+ {
+  "path": "/demo/:prospectId/comms",
+  "code": "C-04",
+  "surface": "demo",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "C-04",
+   "name": "Comms inbox",
+   "purpose": "Unified inbox mock: calls, email, SMS, WhatsApp in one thread list, themed sample messages.",
+   "layout": [
+    "channel filter",
+    "thread list",
+    "thread",
+    "composer (Placeholder)"
+   ],
+   "data": [
+    "prospects"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Tabs",
+    "Card",
+    "Textarea",
+    "Placeholder"
+   ],
+   "actions": [
+    {
+     "id": "demo.reply",
+     "label": "Reply",
+     "intent": "reply to {thread}",
+     "params": {
+      "thread": "id"
+     }
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module os-demo (T13)"
+   ]
+  }
+ },
+ {
+  "path": "/demo/:prospectId/money",
+  "code": "C-05",
+  "surface": "demo",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "C-05",
+   "name": "Money",
+   "purpose": "Savings (their crossed-out stack) plus payments / payroll sample views.",
+   "layout": [
+    "savings stack",
+    "cash today",
+    "payments list",
+    "payroll (Placeholder)"
+   ],
+   "data": [
+    "prospects",
+    "stack_guesses"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Stat",
+    "DataTable",
+    "Placeholder"
+   ],
+   "actions": [],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module os-demo (T13)"
+   ]
+  }
+ },
+ {
+  "path": "/demo/:prospectId/life",
+  "code": "C-06",
+  "surface": "demo",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "C-06",
+   "name": "Family / life view",
+   "purpose": "Views for the people in their life: partner, kids, accountant, coach; shared calendar and lists.",
+   "layout": [
+    "people row",
+    "shared calendar",
+    "lists",
+    "chat"
+   ],
+   "data": [
+    "prospects"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Avatar",
+    "Card"
+   ],
+   "actions": [],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module os-demo (T13)"
+   ]
+  }
+ },
+ {
+  "path": "/demo/:prospectId/settings",
+  "code": "C-07",
+  "surface": "demo",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "C-07",
+   "name": "Settings & roles",
+   "purpose": "Their roles and permissions, brand palette, language: shows that it is theirs and configurable.",
+   "layout": [
+    "roles table",
+    "brand",
+    "language",
+    "invite (Placeholder)"
+   ],
+   "data": [
+    "prospects"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "DataTable",
+    "Placeholder",
+    "LangToggle"
+   ],
+   "actions": [
+    {
+     "id": "demo.invite",
+     "label": "Invite",
+     "intent": "invite {person}",
+     "params": {
+      "person": "string"
+     }
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module os-demo (T13)"
+   ]
+  }
+ },
+ {
+  "path": "/book/:prospectId",
+  "code": "B-01",
+  "surface": "public",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "B-01",
+   "name": "Book a call",
+   "purpose": "Inline 15-min slot picker (mock calendar), name/email at the moment of value, writes bookings + booking_started/confirmed events.",
+   "layout": [
+    "slot grid (next 7 days)",
+    "details form",
+    "confirm"
+   ],
+   "data": [
+    "bookings",
+    "prospects",
+    "events"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Card",
+    "Field",
+    "Input",
+    "Button"
+   ],
+   "actions": [
+    {
+     "id": "booking.pickSlot",
+     "label": "Pick a slot",
+     "intent": "book {slot}",
+     "params": {
+      "slot": "date"
+     },
+     "permission": "booking.create"
+    },
+    {
+     "id": "booking.confirm",
+     "label": "Confirm",
+     "intent": "confirm my booking",
+     "permission": "booking.create"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module booking (T14)"
+   ]
+  }
+ },
+ {
+  "path": "/book/:prospectId/confirmed",
+  "code": "B-02",
+  "surface": "public",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "B-02",
+   "name": "Booking confirmed",
+   "purpose": "Confirmation with calendar add (Placeholder until a real provider) and a link back to their demo.",
+   "layout": [
+    "confirmation",
+    "add to calendar (Placeholder)",
+    "back to demo"
+   ],
+   "data": [
+    "bookings"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Card",
+    "Placeholder"
+   ],
+   "actions": [
+    {
+     "id": "booking.addToCalendar",
+     "label": "Add to calendar",
+     "intent": "add the call to my calendar"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module booking (T14)"
+   ]
+  }
+ },
+ {
+  "path": "/studio",
+  "code": "S-01",
+  "surface": "studio",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist"
+  ],
+  "spec": {
+   "code": "S-01",
+   "name": "Prospects list",
+   "purpose": "Every prospect with warmth, confidence, live page, last event; filters; new prospect.",
+   "layout": [
+    "filters",
+    "DataTable",
+    "new prospect"
+   ],
+   "data": [
+    "prospects",
+    "pages",
+    "events"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "DataTable",
+    "Chip",
+    "Button",
+    "Badge"
+   ],
+   "actions": [
+    {
+     "id": "studio.newProspect",
+     "label": "New prospect",
+     "intent": "create a prospect",
+     "permission": "prospects.write"
+    },
+    {
+     "id": "studio.openProspect",
+     "label": "Open",
+     "intent": "open prospect {name}",
+     "params": {
+      "name": "string"
+     }
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module studio (T11)"
+   ]
+  }
+ },
+ {
+  "path": "/studio/prospects/:id",
+  "code": "S-02",
+  "surface": "studio",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist"
+  ],
+  "spec": {
+   "code": "S-02",
+   "name": "Prospect profile + AI intake",
+   "purpose": "Profile, confidence meter, nextQuestions() as an adaptive intake form, applyAnswer() updates; stack guesses to confirm/reject; enricher status (LLM not wired).",
+   "layout": [
+    "header",
+    "confidence",
+    "intake questions",
+    "stack guesses",
+    "roles",
+    "style"
+   ],
+   "data": [
+    "prospects",
+    "stack_guesses"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "ProgressBar",
+    "Field",
+    "Input",
+    "Select",
+    "DataTable",
+    "Placeholder"
+   ],
+   "actions": [
+    {
+     "id": "studio.answerQuestion",
+     "label": "Save answer",
+     "intent": "answer {field} with {value}",
+     "params": {
+      "field": "string",
+      "value": "string"
+     },
+     "permission": "prospects.write"
+    },
+    {
+     "id": "studio.confirmTool",
+     "label": "Confirm tool",
+     "intent": "confirm {tool}",
+     "params": {
+      "tool": "string"
+     },
+     "permission": "prospects.write"
+    },
+    {
+     "id": "studio.runEnricher",
+     "label": "Enrich with AI",
+     "intent": "enrich this prospect",
+     "permission": "prospects.write"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module studio (T11)"
+   ]
+  }
+ },
+ {
+  "path": "/studio/prospects/:id/compose",
+  "code": "S-03",
+  "surface": "studio",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist"
+  ],
+  "spec": {
+   "code": "S-03",
+   "name": "Page composer",
+   "purpose": "pickArchetype() ranking with reasons, composePage() preview in ViewportFrame at 390 / 1280, variant, publish (14 days).",
+   "layout": [
+    "archetype ranking",
+    "preview",
+    "variant",
+    "publish"
+   ],
+   "data": [
+    "prospects",
+    "pages",
+    "stack_guesses"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "ViewportFrame",
+    "SegmentedControl",
+    "Button",
+    "Badge"
+   ],
+   "actions": [
+    {
+     "id": "studio.pickArchetype",
+     "label": "Use this archetype",
+     "intent": "use the {archetype} archetype",
+     "params": {
+      "archetype": "enum:reveal|audit|walkthrough|letter"
+     },
+     "permission": "pages.publish"
+    },
+    {
+     "id": "studio.publishPage",
+     "label": "Publish",
+     "intent": "publish the page",
+     "permission": "pages.publish"
+    },
+    {
+     "id": "studio.expirePage",
+     "label": "Expire",
+     "intent": "expire the page",
+     "permission": "pages.publish"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module studio (T11)"
+   ]
+  }
+ },
+ {
+  "path": "/studio/prospects/:id/assets",
+  "code": "S-04",
+  "surface": "studio",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist"
+  ],
+  "spec": {
+   "code": "S-04",
+   "name": "Assets & image prompts",
+   "purpose": "imagePrompts() per kind with status; generate is a Placeholder until the provider is wired (T40); approve / reject.",
+   "layout": [
+    "prompt cards by kind",
+    "generate (Placeholder)",
+    "approve / reject"
+   ],
+   "data": [
+    "assets",
+    "prospects"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Card",
+    "Textarea",
+    "Placeholder",
+    "Badge"
+   ],
+   "actions": [
+    {
+     "id": "studio.generateAsset",
+     "label": "Generate",
+     "intent": "generate the {kind} image",
+     "params": {
+      "kind": "string"
+     }
+    },
+    {
+     "id": "studio.approveAsset",
+     "label": "Approve",
+     "intent": "approve {asset}",
+     "params": {
+      "asset": "id"
+     },
+     "permission": "prospects.write"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module studio (T11)"
+   ]
+  }
+ },
+ {
+  "path": "/studio/prospects/:id/outreach",
+  "code": "S-05",
+  "surface": "studio",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist"
+  ],
+  "spec": {
+   "code": "S-05",
+   "name": "Outreach composer",
+   "purpose": "Cold / warm messages per channel pointing at the page; templates filled with prospect tokens; send is a Placeholder.",
+   "layout": [
+    "channel",
+    "template",
+    "preview",
+    "send (Placeholder)",
+    "touches history"
+   ],
+   "data": [
+    "touches",
+    "prospects",
+    "pages"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Select",
+    "Textarea",
+    "DataTable",
+    "Placeholder"
+   ],
+   "actions": [
+    {
+     "id": "studio.draftTouch",
+     "label": "Draft",
+     "intent": "draft a {channel} message",
+     "params": {
+      "channel": "string"
+     },
+     "permission": "prospects.write"
+    },
+    {
+     "id": "studio.sendTouch",
+     "label": "Send",
+     "intent": "send the message"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module studio (T11)"
+   ]
+  }
+ },
+ {
+  "path": "/admin",
+  "code": "A-01",
+  "surface": "admin",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst"
+  ],
+  "spec": {
+   "code": "A-01",
+   "name": "Funnel overview",
+   "purpose": "outreach_open -> view -> demo_open -> booking per archetype / warmth; A/B by variant.",
+   "layout": [
+    "KPI row",
+    "funnel",
+    "by archetype",
+    "recent"
+   ],
+   "data": [
+    "events",
+    "pages",
+    "prospects",
+    "bookings"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Stat",
+    "DataTable",
+    "Chip"
+   ],
+   "actions": [
+    {
+     "id": "admin.filterFunnel",
+     "label": "Filter",
+     "intent": "filter the funnel by {archetype}",
+     "params": {
+      "archetype": "string"
+     },
+     "permission": "events.read"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module admin (T15)"
+   ]
+  }
+ },
+ {
+  "path": "/admin/prospects/:id",
+  "code": "A-02",
+  "surface": "admin",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst"
+  ],
+  "spec": {
+   "code": "A-02",
+   "name": "Prospect timeline",
+   "purpose": "Every touch, view, section, CTA, demo role switch and booking for one prospect, in order; adaptFromEvents() recommendations.",
+   "layout": [
+    "header",
+    "timeline",
+    "recommendations"
+   ],
+   "data": [
+    "events",
+    "touches",
+    "bookings",
+    "prospects",
+    "pages"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Card",
+    "Badge"
+   ],
+   "actions": [
+    {
+     "id": "admin.applyRecommendation",
+     "label": "Apply",
+     "intent": "apply recommendation {n}",
+     "params": {
+      "n": "number"
+     },
+     "permission": "pages.publish"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module admin (T15)"
+   ]
+  }
+ },
+ {
+  "path": "/admin/events",
+  "code": "A-03",
+  "surface": "admin",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst"
+  ],
+  "spec": {
+   "code": "A-03",
+   "name": "Events log",
+   "purpose": "Raw events table with filters by type / page / session.",
+   "layout": [
+    "filters",
+    "DataTable"
+   ],
+   "data": [
+    "events"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "DataTable",
+    "Chip"
+   ],
+   "actions": [],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module admin (T15)"
+   ]
+  }
+ },
+ {
+  "path": "/admin/outreach",
+  "code": "A-04",
+  "surface": "admin",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst"
+  ],
+  "spec": {
+   "code": "A-04",
+   "name": "Outreach board",
+   "purpose": "Touches by status (draft, sent, opened, clicked, replied) per channel.",
+   "layout": [
+    "status columns",
+    "cards"
+   ],
+   "data": [
+    "touches",
+    "prospects"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Card",
+    "Badge"
+   ],
+   "actions": [
+    {
+     "id": "admin.moveTouch",
+     "label": "Move",
+     "intent": "mark {touch} as {status}",
+     "params": {
+      "touch": "id",
+      "status": "string"
+     },
+     "permission": "prospects.write"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module admin (T15)"
+   ]
+  }
+ },
+ {
+  "path": "/admin/bookings",
+  "code": "A-05",
+  "surface": "admin",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst"
+  ],
+  "spec": {
+   "code": "A-05",
+   "name": "Bookings",
+   "purpose": "Upcoming and past walkthrough calls with status changes.",
+   "layout": [
+    "upcoming",
+    "past",
+    "status"
+   ],
+   "data": [
+    "bookings",
+    "prospects"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "DataTable",
+    "Select"
+   ],
+   "actions": [
+    {
+     "id": "admin.setBookingStatus",
+     "label": "Set status",
+     "intent": "mark booking {id} {status}",
+     "params": {
+      "id": "id",
+      "status": "enum:requested|confirmed|cancelled|completed"
+     },
+     "permission": "prospects.write"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module admin (T15)"
+   ]
+  }
+ },
+ {
+  "path": "/plan",
+  "code": "K-01",
+  "surface": "plan",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst"
+  ],
+  "spec": {
+   "code": "K-01",
+   "name": "Plan Kanban",
+   "purpose": "tasks by status (backlog / doing / done / blocked / awaiting Justin) with model badge, codes, dependencies; move with buttons (not drag-only).",
+   "layout": [
+    "lanes",
+    "cards",
+    "move"
+   ],
+   "data": [
+    "tasks"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Card",
+    "Badge",
+    "Select"
+   ],
+   "actions": [
+    {
+     "id": "plan.moveTask",
+     "label": "Move",
+     "intent": "move {task} to {status}",
+     "params": {
+      "task": "id",
+      "status": "string"
+     },
+     "permission": "plan.edit"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module plan (T10)"
+   ]
+  }
+ },
+ {
+  "path": "/plan/list",
+  "code": "K-02",
+  "surface": "plan",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst"
+  ],
+  "spec": {
+   "code": "K-02",
+   "name": "Plan list",
+   "purpose": "Sortable table of every task: id, title, module, codes, model, phase, depends on, status.",
+   "layout": [
+    "filters",
+    "DataTable"
+   ],
+   "data": [
+    "tasks"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "DataTable",
+    "Chip"
+   ],
+   "actions": [],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module plan (T10)"
+   ]
+  }
+ },
+ {
+  "path": "/plan/timeline",
+  "code": "K-03",
+  "surface": "plan",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst"
+  ],
+  "spec": {
+   "code": "K-03",
+   "name": "Plan timeline",
+   "purpose": "Dependency graph: phases as columns, tasks as nodes, depends_on as edges (SVG); tasks are bound by dependencies, not calendar days.",
+   "layout": [
+    "phase columns",
+    "nodes",
+    "edges",
+    "legend"
+   ],
+   "data": [
+    "tasks"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Card",
+    "Badge"
+   ],
+   "actions": [
+    {
+     "id": "plan.focusTask",
+     "label": "Focus",
+     "intent": "focus task {task}",
+     "params": {
+      "task": "id"
+     }
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module plan (T10)"
+   ]
+  }
+ },
+ {
+  "path": "/plan/tasks/:id",
+  "code": "K-04",
+  "surface": "plan",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst"
+  ],
+  "spec": {
+   "code": "K-04",
+   "name": "Task detail",
+   "purpose": "One task: notes, codes, dependencies both ways, status change, model.",
+   "layout": [
+    "header",
+    "dependencies",
+    "notes",
+    "status"
+   ],
+   "data": [
+    "tasks"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Card",
+    "Select",
+    "Badge"
+   ],
+   "actions": [
+    {
+     "id": "plan.setStatus",
+     "label": "Set status",
+     "intent": "set {task} to {status}",
+     "params": {
+      "task": "id",
+      "status": "string"
+     },
+     "permission": "plan.edit"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module plan (T10)"
+   ]
+  }
+ },
+ {
+  "path": "/site",
+  "code": "W-01",
+  "surface": "public",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "W-01",
+   "name": "Website home",
+   "purpose": "Imagine's public site: the offer (an OS already built for you), sample prospect pages, how it works, pricing.",
+   "layout": [
+    "hero",
+    "samples",
+    "how",
+    "pricing teaser",
+    "footer"
+   ],
+   "data": [
+    "prospects"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "DeviceMockup",
+    "Card",
+    "Button"
+   ],
+   "actions": [
+    {
+     "id": "site.seeSample",
+     "label": "See a sample",
+     "intent": "open a sample landing page"
+    },
+    {
+     "id": "site.startPurchase",
+     "label": "Get yours",
+     "intent": "start the purchase flow"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module website (T16)"
+   ]
+  }
+ },
+ {
+  "path": "/site/how",
+  "code": "W-02",
+  "surface": "public",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "W-02",
+   "name": "How it works",
+   "purpose": "Intake -> stack guess -> compose -> demo -> book; the AI methodology explained.",
+   "layout": [
+    "steps",
+    "engine diagram",
+    "faq"
+   ],
+   "data": [],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Card"
+   ],
+   "actions": [],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module website (T16)"
+   ]
+  }
+ },
+ {
+  "path": "/site/pricing",
+  "code": "W-03",
+  "surface": "public",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "W-03",
+   "name": "Pricing + purchase flow",
+   "purpose": "starter / team / multi bands with the savings math; purchase flow is a Placeholder until Stripe (T51).",
+   "layout": [
+    "bands",
+    "savings calculator",
+    "checkout (Placeholder)"
+   ],
+   "data": [
+    "prospects"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Card",
+    "Stat",
+    "Placeholder"
+   ],
+   "actions": [
+    {
+     "id": "site.choosePlan",
+     "label": "Choose plan",
+     "intent": "choose the {band} plan",
+     "params": {
+      "band": "enum:starter|team|multi"
+     }
+    },
+    {
+     "id": "site.checkout",
+     "label": "Checkout",
+     "intent": "pay for the plan"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module website (T16)"
+   ]
+  }
+ },
+ {
+  "path": "/proposal/:prospectId",
+  "code": "R-01",
+  "surface": "public",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "R-01",
+   "name": "Client proposal view",
+   "purpose": "The full stack for one prospect: their OS, savings, roles, timeline, price, next steps; printable.",
+   "layout": [
+    "cover",
+    "what you get",
+    "savings",
+    "roles",
+    "timeline",
+    "price",
+    "accept (Placeholder)"
+   ],
+   "data": [
+    "prospects",
+    "stack_guesses",
+    "pages"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Card",
+    "Stat",
+    "DataTable",
+    "Placeholder"
+   ],
+   "actions": [
+    {
+     "id": "proposal.accept",
+     "label": "Accept proposal",
+     "intent": "accept the proposal"
+    },
+    {
+     "id": "proposal.print",
+     "label": "Print",
+     "intent": "print the proposal",
+     "permission": "proposal.read"
+    }
+   ],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module proposal (T16)"
+   ]
+  }
+ },
+ {
+  "path": "/manual",
+  "code": "M-01",
+  "surface": "manual",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst"
+  ],
+  "spec": {
+   "code": "M-01",
+   "name": "Ops manual home",
+   "purpose": "How we run Lead Magnet: chapters EN/ES rendered from docs/ops-manual.",
+   "layout": [
+    "chapter list"
+   ],
+   "data": [],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Card"
+   ],
+   "actions": [],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module manual (T33)"
+   ]
+  }
+ },
+ {
+  "path": "/manual/intake",
+  "code": "M-02",
+  "surface": "manual",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst"
+  ],
+  "spec": {
+   "code": "M-02",
+   "name": "Chapter: intake & research",
+   "purpose": "How to research a prospect and run the adaptive intake.",
+   "layout": [
+    "chapter"
+   ],
+   "data": [],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Card",
+    "Button"
+   ],
+   "actions": [],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module manual (T33)"
+   ]
+  }
+ },
+ {
+  "path": "/manual/compose",
+  "code": "M-03",
+  "surface": "manual",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst"
+  ],
+  "spec": {
+   "code": "M-03",
+   "name": "Chapter: compose & publish",
+   "purpose": "Choosing an archetype, previewing, publishing, the 14-day rule.",
+   "layout": [
+    "chapter"
+   ],
+   "data": [],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Card",
+    "Button"
+   ],
+   "actions": [],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module manual (T33)"
+   ]
+  }
+ },
+ {
+  "path": "/manual/outreach",
+  "code": "M-04",
+  "surface": "manual",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst"
+  ],
+  "spec": {
+   "code": "M-04",
+   "name": "Chapter: outreach & follow-up",
+   "purpose": "Channels, cadences, what to say, reading the funnel.",
+   "layout": [
+    "chapter"
+   ],
+   "data": [],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Card",
+    "Button"
+   ],
+   "actions": [],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module manual (T33)"
+   ]
+  }
+ },
+ {
+  "path": "/manual/calls",
+  "code": "M-05",
+  "surface": "manual",
+  "status": "stub",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst"
+  ],
+  "spec": {
+   "code": "M-05",
+   "name": "Chapter: walkthrough calls",
+   "purpose": "Running the 15-minute walkthrough and the proposal.",
+   "layout": [
+    "chapter"
+   ],
+   "data": [],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst"
+   ],
+   "logic": [],
+   "integrations": [],
+   "components": [
+    "Card",
+    "Button"
+   ],
+   "actions": [],
+   "states": [
+    "loading",
+    "default",
+    "empty"
+   ],
+   "notes": [
+    "Built by module manual (T33)"
+   ]
+  }
+ },
+ {
+  "path": "/dev",
+  "code": "D-01",
+  "surface": "dev",
+  "status": "built",
+  "roles": [
+   "super_admin"
+  ],
+  "spec": {
+   "roles": [
+    "super_admin"
+   ],
+   "integrations": [],
+   "states": [
+    "default",
+    "empty"
+   ],
+   "checkedAt": [
+    390,
+    1280
+   ],
+   "code": "D-01",
+   "name": "Routes manifest",
+   "purpose": "Every route with code, surface, status, roles, spec completeness and action count; the same manifest window.__leadmagnet exposes.",
+   "layout": [
+    "counts",
+    "filter by surface / status",
+    "DataTable"
+   ],
+   "data": [],
+   "logic": [
+    "status = built | stub from registry",
+    "completeness from specCompleteness()"
+   ],
+   "components": [
+    "DataTable",
+    "Chip",
+    "Stat",
+    "Badge",
+    "ProgressBar"
+   ],
+   "actions": [
+    {
+     "id": "dev.filterRoutes",
+     "label": "Filter",
+     "intent": "show {surface} routes",
+     "params": {
+      "surface": "string"
+     }
+    }
+   ]
+  }
+ },
+ {
+  "path": "/dev/components",
+  "code": "D-02",
+  "surface": "dev",
+  "status": "built",
+  "roles": [
+   "super_admin"
+  ],
+  "spec": {
+   "roles": [
+    "super_admin"
+   ],
+   "integrations": [],
+   "states": [
+    "default",
+    "empty"
+   ],
+   "checkedAt": [
+    390,
+    1280
+   ],
+   "code": "D-02",
+   "name": "Component library",
+   "purpose": "Every component meta with props, states, a11y and live usages, grouped by tier.",
+   "layout": [
+    "tier tabs",
+    "component cards with live usages"
+   ],
+   "data": [],
+   "logic": [
+    "globbed from src/components/**/*.meta.ts"
+   ],
+   "components": [
+    "Tabs",
+    "Card",
+    "Badge"
+   ],
+   "actions": [
+    {
+     "id": "dev.pickTier",
+     "label": "Tier",
+     "intent": "show {tier} components",
+     "params": {
+      "tier": "enum:atom|molecule|organism|template"
+     }
+    }
+   ]
+  }
+ },
+ {
+  "path": "/dev/tables",
+  "code": "D-03",
+  "surface": "dev",
+  "status": "built",
+  "roles": [
+   "super_admin"
+  ],
+  "spec": {
+   "roles": [
+    "super_admin"
+   ],
+   "integrations": [],
+   "states": [
+    "default",
+    "empty"
+   ],
+   "checkedAt": [
+    390,
+    1280
+   ],
+   "code": "D-03",
+   "name": "Tables",
+   "purpose": "Browse any table: schema columns and seeded rows, live via useTable.",
+   "layout": [
+    "table list with counts",
+    "columns",
+    "rows"
+   ],
+   "data": [
+    "prospects",
+    "stack_guesses",
+    "pages",
+    "events",
+    "bookings",
+    "assets",
+    "touches",
+    "tasks",
+    "feedback"
+   ],
+   "logic": [
+    "reads schema registry + DataProvider"
+   ],
+   "components": [
+    "DataTable",
+    "Badge",
+    "Chip"
+   ],
+   "actions": [
+    {
+     "id": "dev.openTable",
+     "label": "Open table",
+     "intent": "open the {table} table",
+     "params": {
+      "table": "string"
+     },
+     "permission": "tables.read"
+    },
+    {
+     "id": "dev.resetDb",
+     "label": "Reset demo data",
+     "intent": "reset the demo database",
+     "permission": "dev.tools"
+    }
+   ]
+  }
+ },
+ {
+  "path": "/dev/tables/:table",
+  "code": "D-03",
+  "surface": "dev",
+  "status": "built",
+  "roles": [
+   "super_admin"
+  ],
+  "spec": {
+   "roles": [
+    "super_admin"
+   ],
+   "integrations": [],
+   "states": [
+    "default",
+    "empty"
+   ],
+   "checkedAt": [
+    390,
+    1280
+   ],
+   "code": "D-03",
+   "name": "Tables",
+   "purpose": "Browse any table: schema columns and seeded rows, live via useTable.",
+   "layout": [
+    "table list with counts",
+    "columns",
+    "rows"
+   ],
+   "data": [
+    "prospects",
+    "stack_guesses",
+    "pages",
+    "events",
+    "bookings",
+    "assets",
+    "touches",
+    "tasks",
+    "feedback"
+   ],
+   "logic": [
+    "reads schema registry + DataProvider"
+   ],
+   "components": [
+    "DataTable",
+    "Badge",
+    "Chip"
+   ],
+   "actions": [
+    {
+     "id": "dev.openTable",
+     "label": "Open table",
+     "intent": "open the {table} table",
+     "params": {
+      "table": "string"
+     },
+     "permission": "tables.read"
+    },
+    {
+     "id": "dev.resetDb",
+     "label": "Reset demo data",
+     "intent": "reset the demo database",
+     "permission": "dev.tools"
+    }
+   ]
+  }
+ },
+ {
+  "path": "/dev/actions",
+  "code": "D-04",
+  "surface": "dev",
+  "status": "built",
+  "roles": [
+   "super_admin"
+  ],
+  "spec": {
+   "roles": [
+    "super_admin"
+   ],
+   "integrations": [],
+   "states": [
+    "default",
+    "empty"
+   ],
+   "checkedAt": [
+    390,
+    1280
+   ],
+   "code": "D-04",
+   "name": "Actions registry",
+   "purpose": "Every declared action with page, permission, params and handler-live status. This manifest is the WebMCP surface and the voice vocabulary (P-05).",
+   "layout": [
+    "counts",
+    "DataTable",
+    "run panel"
+   ],
+   "data": [],
+   "logic": [
+    "flattens spec.actions across routes",
+    "live = registered on the actions bus (open the page first)"
+   ],
+   "components": [
+    "DataTable",
+    "Badge",
+    "Button",
+    "Stat"
+   ],
+   "actions": [
+    {
+     "id": "dev.runAction",
+     "label": "Run",
+     "intent": "run action {id}",
+     "params": {
+      "id": "string"
+     },
+     "permission": "dev.tools"
+    }
+   ]
+  }
+ },
+ {
+  "path": "/dev/rules",
+  "code": "D-05",
+  "surface": "dev",
+  "status": "built",
+  "roles": [
+   "super_admin"
+  ],
+  "spec": {
+   "roles": [
+    "super_admin"
+   ],
+   "integrations": [],
+   "states": [
+    "default",
+    "empty"
+   ],
+   "checkedAt": [
+    390,
+    1280
+   ],
+   "code": "D-05",
+   "name": "Rules",
+   "purpose": "Business rules registry (R-xxx) with status, pages and where implemented.",
+   "layout": [
+    "filter",
+    "rules list"
+   ],
+   "data": [],
+   "logic": [
+    "globbed from src/rules/*.ts"
+   ],
+   "components": [
+    "Card",
+    "Badge",
+    "Chip"
+   ],
+   "actions": [
+    {
+     "id": "dev.filterRules",
+     "label": "Filter",
+     "intent": "show {status} rules",
+     "params": {
+      "status": "string"
+     }
+    }
+   ]
+  }
+ },
+ {
+  "path": "/docs",
+  "code": "D-06",
+  "surface": "docs",
+  "status": "built",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst"
+  ],
+  "spec": {
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst"
+   ],
+   "integrations": [],
+   "states": [
+    "default",
+    "empty"
+   ],
+   "checkedAt": [
+    390,
+    1280
+   ],
+   "code": "D-06",
+   "name": "Docs viewer",
+   "purpose": "Every docs/**/*.md rendered in-app with tabs for kanban, changelog, prompts, decisions, pages, reference.",
+   "layout": [
+    "tabs",
+    "file list",
+    "markdown"
+   ],
+   "data": [],
+   "logic": [
+    "import.meta.glob docs/**/*.md as raw"
+   ],
+   "components": [
+    "Tabs",
+    "Card"
+   ],
+   "actions": [
+    {
+     "id": "dev.openDoc",
+     "label": "Open doc",
+     "intent": "open the {doc} document",
+     "params": {
+      "doc": "string"
+     },
+     "permission": "docs.read"
+    }
+   ]
+  }
+ },
+ {
+  "path": "/docs/pages/:code",
+  "code": "D-06",
+  "surface": "docs",
+  "status": "built",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst"
+  ],
+  "spec": {
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst"
+   ],
+   "integrations": [],
+   "states": [
+    "default",
+    "empty"
+   ],
+   "checkedAt": [
+    390,
+    1280
+   ],
+   "code": "D-06",
+   "name": "Docs viewer",
+   "purpose": "Every docs/**/*.md rendered in-app with tabs for kanban, changelog, prompts, decisions, pages, reference.",
+   "layout": [
+    "tabs",
+    "file list",
+    "markdown"
+   ],
+   "data": [],
+   "logic": [
+    "import.meta.glob docs/**/*.md as raw"
+   ],
+   "components": [
+    "Tabs",
+    "Card"
+   ],
+   "actions": [
+    {
+     "id": "dev.openDoc",
+     "label": "Open doc",
+     "intent": "open the {doc} document",
+     "params": {
+      "doc": "string"
+     },
+     "permission": "docs.read"
+    }
+   ]
+  }
+ },
+ {
+  "path": "/dev/canvas",
+  "code": "D-07",
+  "surface": "dev",
+  "status": "built",
+  "roles": [
+   "super_admin"
+  ],
+  "spec": {
+   "roles": [
+    "super_admin"
+   ],
+   "integrations": [],
+   "states": [
+    "default",
+    "thumbnails on",
+    "filtered"
+   ],
+   "checkedAt": [
+    390,
+    1280
+   ],
+   "code": "D-07",
+   "name": "Page canvas",
+   "purpose": "Zoomable, pannable canvas laying out every route as a card grouped by surface: code chip, status colour, live scaled iframe thumbnail on demand; click opens the page.",
+   "layout": [
+    "toolbar (zoom -, %, +, fit, thumbnails, surface filter)",
+    "canvas (groups by surface, cards)",
+    "legend / help"
+   ],
+   "data": [],
+   "logic": [
+    "zoom: buttons, +/- keys, wheel; pan: arrow keys, drag, scrollbars (drag never the only way)",
+    "thumbnails are same-origin iframes at 1280 scaled to the card"
+   ],
+   "components": [
+    "Button",
+    "IconButton",
+    "Chip",
+    "Badge",
+    "Tooltip",
+    "Card"
+   ],
+   "actions": [
+    {
+     "id": "dev.canvasZoomIn",
+     "label": "Zoom in",
+     "intent": "zoom in the canvas"
+    },
+    {
+     "id": "dev.canvasZoomOut",
+     "label": "Zoom out",
+     "intent": "zoom out the canvas"
+    },
+    {
+     "id": "dev.canvasFit",
+     "label": "Fit",
+     "intent": "fit the canvas"
+    },
+    {
+     "id": "dev.canvasThumbnails",
+     "label": "Thumbnails",
+     "intent": "toggle live thumbnails"
+    },
+    {
+     "id": "dev.canvasOpen",
+     "label": "Open page",
+     "intent": "open page {code}",
+     "params": {
+      "code": "string"
+     }
+    }
+   ]
+  }
+ },
+ {
+  "path": "/dev/qa",
+  "code": "D-08",
+  "surface": "dev",
+  "status": "built",
+  "roles": [
+   "super_admin"
+  ],
+  "spec": {
+   "roles": [
+    "super_admin"
+   ],
+   "integrations": [],
+   "states": [
+    "default",
+    "empty"
+   ],
+   "checkedAt": [
+    390,
+    1280
+   ],
+   "code": "D-08",
+   "name": "QA preview",
+   "purpose": "Any route side by side at 360 / 390 / 768 / 1280 / 1920 / 2560 / 3840 in same-origin iframes scaled to fit.",
+   "layout": [
+    "route picker",
+    "width chips",
+    "frames"
+   ],
+   "data": [],
+   "logic": [
+    "ViewportFrame scales with ResizeObserver"
+   ],
+   "components": [
+    "ViewportFrame",
+    "Select",
+    "Chip"
+   ],
+   "actions": [
+    {
+     "id": "dev.previewRoute",
+     "label": "Preview",
+     "intent": "preview {route} at every width",
+     "params": {
+      "route": "string"
+     }
+    }
+   ]
+  }
+ },
+ {
+  "path": "/dev/feedback",
+  "code": "D-09",
+  "surface": "dev",
+  "status": "built",
+  "roles": [
+   "super_admin"
+  ],
+  "spec": {
+   "roles": [
+    "super_admin",
+    "strategist"
+   ],
+   "integrations": [],
+   "states": [
+    "default",
+    "empty"
+   ],
+   "checkedAt": [
+    390,
+    1280
+   ],
+   "code": "D-09",
+   "name": "Feedback inbox",
+   "purpose": "Annotations triage: every feedback row; set triage (fix / ask / later / wontfix), status and decision_ref before changing anything (P-08).",
+   "layout": [
+    "status tabs",
+    "DataTable",
+    "row editor"
+   ],
+   "data": [
+    "feedback"
+   ],
+   "logic": [
+    "writes by id through the provider"
+   ],
+   "components": [
+    "Tabs",
+    "DataTable",
+    "Select",
+    "Input",
+    "Button",
+    "Badge",
+    "EmptyState"
+   ],
+   "actions": [
+    {
+     "id": "dev.triageFeedback",
+     "label": "Triage",
+     "intent": "triage feedback {id} as {triage}",
+     "params": {
+      "id": "id",
+      "triage": "enum:fix|ask|later|wontfix"
+     },
+     "permission": "feedback.read"
+    },
+    {
+     "id": "dev.setFeedbackStatus",
+     "label": "Set status",
+     "intent": "mark feedback {id} {status}",
+     "params": {
+      "id": "id",
+      "status": "enum:new|seen|waiting|done"
+     },
+     "permission": "feedback.read"
+    }
+   ]
+  }
+ },
+ {
+  "path": "/",
+  "code": "HUB-01",
+  "surface": "public",
+  "status": "built",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "HUB-01",
+   "name": "Testing hub",
+   "purpose": "Start here: switch language, theme, dev mode and role; open every surface (prospect landing pages, OS demo live in a phone, studio, analytics, plan, proposal, website, docs, manual, dev tools) and see the build counts.",
+   "layout": [
+    "header (brand, EN/ES, theme, dev mode)",
+    "role switcher",
+    "prospects: landing pages per archetype + demo",
+    "OS demo in PhoneFrame",
+    "surface cards",
+    "dev tools D-01..D-09",
+    "counts footer"
+   ],
+   "data": [
+    "prospects",
+    "pages",
+    "tasks",
+    "feedback"
+   ],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [
+    "counts = routes / built / stubs / tables / rules / components from registries",
+    "prospect cards read live pages and the savings from the composed model"
+   ],
+   "integrations": [],
+   "components": [
+    "LangToggle",
+    "IconButton",
+    "Toggle",
+    "RoleSwitcher",
+    "PhoneFrame",
+    "Card",
+    "Badge",
+    "Stat",
+    "Button",
+    "Avatar",
+    "DeviceMockup"
+   ],
+   "actions": [
+    {
+     "id": "hub.setLang",
+     "label": "EN / ES",
+     "intent": "switch language to {lang}",
+     "params": {
+      "lang": "enum:en|es"
+     }
+    },
+    {
+     "id": "hub.toggleTheme",
+     "label": "Theme",
+     "intent": "switch to dark mode"
+    },
+    {
+     "id": "hub.toggleDevMode",
+     "label": "Dev mode",
+     "intent": "turn dev mode on",
+     "permission": "dev.tools"
+    },
+    {
+     "id": "hub.switchUser",
+     "label": "Sign in as",
+     "intent": "sign in as {role}",
+     "params": {
+      "role": "string"
+     }
+    },
+    {
+     "id": "hub.openSurface",
+     "label": "Open",
+     "intent": "open {surface}",
+     "params": {
+      "surface": "string"
+     }
+    },
+    {
+     "id": "hub.resetDemoData",
+     "label": "Reset demo data",
+     "intent": "reset the demo database",
+     "permission": "dev.tools"
+    }
+   ],
+   "rules": [
+    "R-P01",
+    "R-P02"
+   ],
+   "states": [
+    "default",
+    "dev mode",
+    "viewing as"
+   ],
+   "checkedAt": [
+    390,
+    1280
+   ]
+  }
+ },
+ {
+  "path": "/no-access",
+  "code": "HUB-02",
+  "surface": "public",
+  "status": "built",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "code": "HUB-02",
+   "name": "No access",
+   "purpose": "Friendly page when the current role cannot open a route; offers the hub and the roles that can.",
+   "layout": [
+    "message",
+    "roles that can",
+    "hub link"
+   ],
+   "data": [],
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "logic": [
+    "reads ?from= and lists roles allowed on that route"
+   ],
+   "integrations": [],
+   "components": [
+    "Card",
+    "Button",
+    "Badge"
+   ],
+   "actions": [
+    {
+     "id": "hub.signInAs",
+     "label": "Sign in as",
+     "intent": "sign in as {role}",
+     "params": {
+      "role": "string"
+     }
+    }
+   ],
+   "states": [
+    "default"
+   ],
+   "checkedAt": [
+    390,
+    1280
+   ]
+  }
+ }
+]

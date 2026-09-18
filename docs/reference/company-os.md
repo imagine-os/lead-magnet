@@ -1,0 +1,3 @@
+# Company OS (reference only)
+
+`Playset-LLC/Company-OS` is the eventual backend for every imagine-os product. For Lead Magnet it is **reference only**: we design the `DataProvider` seam, ids, `updated_at` and provider-based state so a `CompanyOsProvider` can slot in behind the same interface, but **nothing wires into it until Justin says so** (D-016, the same rule as Petrock's D-183). Do not copy code from it, do not call its APIs, do not add it as a dependency. Task T50 in the plan is `blocked` for exactly this reason; the Supabase provider (T44) is the interim real backend when Justin confirms.

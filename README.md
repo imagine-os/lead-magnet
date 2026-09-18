@@ -1,0 +1,41 @@
+# Lead Magnet
+
+**Hyper-personalized landing pages whose lead magnet is a pre-built, fully themed operations system for one prospect.** From what we know about a prospect (business, style, life, the roles of the people around them) we guess their software stack and what they can cut, derive departments and roles, compose the highest-converting landing page, show their OS live, and push them to the next stage: open the demo or book a call. Outreach, proposal and content connect to it; everything is tracked; as the AI intake learns more, the page adapts.
+
+- **Live:** https://imagine-os.github.io/lead-magnet/ (GitHub Pages, Actions source; deploys on every push to `main`)
+- **Start here:** `/#/` (HUB-01 testing hub) then `docs/README.md`, `CLAUDE.md`, `docs/build-plan.md`
+- **Version:** 0.1.0 (foundation)
+
+## What is in the box (v0.1.0)
+
+| Count | Note |
+| --- | --- |
+| 50 routes · 13 built · 37 stubs | every planned page code is registered (`src/modules/_stubs`) so the hub, canvas and manifest show the whole map |
+| 9 tables | prospects, stack_guesses, pages, events, bookings, assets, touches, tasks, feedback |
+| 36 components | `src/components/<tier>/<Name>/` with metas at `/#/dev/components` |
+| 12 rules | `/#/dev/rules` |
+| 3 seeded prospects | dog daycare (Austin, en, warm), two-location dental (Miami, es, cold), restaurant group (Denver, en, hot); one live page each, stack guesses, assets, events, touches |
+| 4 archetypes | Reveal / Savings Audit / Walkthrough / Letter, `docs/reference/conversion-playbook.md` |
+| 31 plan tasks | `/#/plan` (stub until T10) and `docs/build-plan.md` |
+
+Counts come from the hub footer; re-measure when you change them.
+
+## Run
+
+```bash
+npm install                 # fonts ship via @fontsource (offline)
+npm run dev                 # http://localhost:5173/#/
+npm run build               # tokens -> tsc --noEmit -> vite build (green before every push)
+npm run test:engine         # pure engine checks
+npm run sql                 # supabase/schema.sql + docs/data-model.md
+npm run screenshots -- --codes=HUB-01,D-07   # after build; docs/screenshots/<CODE>/<width>.jpg
+npm run qa:responsive       # after build; docs/qa/responsive-report.{md,json}
+```
+
+Node 22 (`--experimental-strip-types` for `.mjs` scripts importing `.ts`). Chromium is preinstalled at `/opt/pw-browsers`; never run `playwright install`.
+
+## Map
+
+`src/engine` (pure personalization: catalog, stack guess, savings, role views, archetype picker, composer, image prompts, adaptive intake) · `src/modules/*` (pages; each exports `{ routes, strings }`) · `src/data` (DataProvider seam, MockProvider, schema, seed) · `src/components` (library) · `src/design` (tokens) · `src/actions` (actions bus = WebMCP surface) · `src/tracking` (`track()`) · `docs/` (prompts, changelog, decisions, kanban, pages, reference).
+
+Rules for agents: `CLAUDE.md`. Model used for this foundation: Fable 5.1.

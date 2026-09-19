@@ -1,0 +1,1711 @@
+{
+ "generated": "2026-09-19T20:02:26.419Z",
+ "width": 1920,
+ "server": "external",
+ "maxSteps": 400,
+ "totals": {
+  "routes": 51,
+  "hookMounted": 42,
+  "noHook": [
+   "L-05",
+   "B-01",
+   "B-02",
+   "W-01",
+   "W-02",
+   "W-03",
+   "R-01",
+   "HUB-02",
+   "L-06"
+  ],
+  "unreachedPrimaries": 10,
+  "deadEnds": 3,
+  "arrowOwners": 96,
+  "budgetExhausted": [
+   "A-04",
+   "K-01",
+   "K-02",
+   "M-01",
+   "D-04",
+   "D-05"
+  ],
+  "avgCoverage": 55,
+  "errors": 0,
+  "consoleErrors": 0
+ },
+ "results": [
+  {
+   "route": "/p/paws-and-play-austin",
+   "code": "L-01",
+   "surface": "public",
+   "candidates": 67,
+   "reachable": 47,
+   "coverage": 70,
+   "budgetExhausted": false,
+   "primaries": 4,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": true,
+   "back": {
+    "before": "#/p/paws-and-play-austin",
+    "after": "#/p/paws-and-play-austin",
+    "moved": false
+   },
+   "steps": 189,
+   "stale": 0,
+   "edges": 181
+  },
+  {
+   "route": "/p/paws-and-play-austin/audit",
+   "code": "L-02",
+   "surface": "public",
+   "candidates": 85,
+   "reachable": 65,
+   "coverage": 76,
+   "budgetExhausted": false,
+   "primaries": 6,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": true,
+   "back": {
+    "before": "#/p/paws-and-play-austin/audit",
+    "after": "#/p/paws-and-play-austin/audit",
+    "moved": false
+   },
+   "steps": 261,
+   "stale": 0,
+   "edges": 253
+  },
+  {
+   "route": "/p/paws-and-play-austin/story",
+   "code": "L-03",
+   "surface": "public",
+   "candidates": 61,
+   "reachable": 41,
+   "coverage": 67,
+   "budgetExhausted": false,
+   "primaries": 4,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": true,
+   "back": {
+    "before": "#/p/paws-and-play-austin/story",
+    "after": "#/p/paws-and-play-austin/story",
+    "moved": false
+   },
+   "steps": 169,
+   "stale": 0,
+   "edges": 161
+  },
+  {
+   "route": "/p/paws-and-play-austin/letter",
+   "code": "L-04",
+   "surface": "public",
+   "candidates": 28,
+   "reachable": 26,
+   "coverage": 93,
+   "budgetExhausted": false,
+   "primaries": 4,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": true,
+   "back": {
+    "before": "#/p/paws-and-play-austin/letter",
+    "after": "#/p/paws-and-play-austin/letter",
+    "moved": false
+   },
+   "steps": 105,
+   "stale": 0,
+   "edges": 99
+  },
+  {
+   "route": "/p/paws-and-play-austin/expired",
+   "code": "L-05",
+   "surface": "public",
+   "candidates": 10,
+   "reachable": 0,
+   "coverage": 0,
+   "budgetExhausted": false,
+   "primaries": 2,
+   "unreachedPrimaries": [
+    {
+     "text": "Book a call",
+     "comp": "Button",
+     "x": 559,
+     "y": 1125
+    },
+    {
+     "text": "Request a fresh workspace",
+     "comp": "Button",
+     "x": 554,
+     "y": 1723
+    }
+   ],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": false,
+   "back": null,
+   "steps": 2,
+   "stale": 0,
+   "edges": 0
+  },
+  {
+   "route": "/demo/pro_maya",
+   "code": "C-01",
+   "surface": "demo",
+   "candidates": 30,
+   "reachable": 24,
+   "coverage": 80,
+   "budgetExhausted": false,
+   "primaries": 1,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "Business · OwnerBusiness · ManagerBusiness · Front DeskBusin",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/demo/pro_maya/role/owner",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 197,
+   "stale": 0,
+   "edges": 182
+  },
+  {
+   "route": "/demo/pro_maya/role/owner",
+   "code": "C-02",
+   "surface": "demo",
+   "candidates": 30,
+   "reachable": 27,
+   "coverage": 90,
+   "budgetExhausted": false,
+   "primaries": 1,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "Business · OwnerBusiness · ManagerBusiness · Front DeskBusin",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/demo/pro_maya/role/owner",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 125,
+   "stale": 0,
+   "edges": 112
+  },
+  {
+   "route": "/demo/pro_maya/departments",
+   "code": "C-03",
+   "surface": "demo",
+   "candidates": 28,
+   "reachable": 6,
+   "coverage": 21,
+   "budgetExhausted": false,
+   "primaries": 1,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "Business · OwnerBusiness · ManagerBusiness · Front DeskBusin",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/demo/pro_maya/role/owner",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 129,
+   "stale": 0,
+   "edges": 117
+  },
+  {
+   "route": "/demo/pro_maya/comms",
+   "code": "C-04",
+   "surface": "demo",
+   "candidates": 25,
+   "reachable": 7,
+   "coverage": 28,
+   "budgetExhausted": false,
+   "primaries": 2,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "Business · OwnerBusiness · ManagerBusiness · Front DeskBusin",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/demo/pro_maya/role/owner",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 129,
+   "stale": 1,
+   "edges": 117
+  },
+  {
+   "route": "/demo/pro_maya/money",
+   "code": "C-05",
+   "surface": "demo",
+   "candidates": 17,
+   "reachable": 5,
+   "coverage": 29,
+   "budgetExhausted": false,
+   "primaries": 2,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "Business · OwnerBusiness · ManagerBusiness · Front DeskBusin",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/demo/pro_maya/role/owner",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 125,
+   "stale": 0,
+   "edges": 113
+  },
+  {
+   "route": "/demo/pro_maya/life",
+   "code": "C-06",
+   "surface": "demo",
+   "candidates": 26,
+   "reachable": 6,
+   "coverage": 23,
+   "budgetExhausted": false,
+   "primaries": 2,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "Business · OwnerBusiness · ManagerBusiness · Front DeskBusin",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/demo/pro_maya/role/owner",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 129,
+   "stale": 0,
+   "edges": 117
+  },
+  {
+   "route": "/demo/pro_maya/settings",
+   "code": "C-07",
+   "surface": "demo",
+   "candidates": 32,
+   "reachable": 5,
+   "coverage": 16,
+   "budgetExhausted": false,
+   "primaries": 2,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "Business · OwnerBusiness · ManagerBusiness · Front DeskBusin",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/demo/pro_maya/role/owner",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 125,
+   "stale": 0,
+   "edges": 113
+  },
+  {
+   "route": "/book/pro_maya",
+   "code": "B-01",
+   "surface": "public",
+   "candidates": 75,
+   "reachable": 0,
+   "coverage": 0,
+   "budgetExhausted": false,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": false,
+   "back": null,
+   "steps": 2,
+   "stale": 0,
+   "edges": 0
+  },
+  {
+   "route": "/book/pro_maya/confirmed",
+   "code": "B-02",
+   "surface": "public",
+   "candidates": 4,
+   "reachable": 0,
+   "coverage": 0,
+   "budgetExhausted": false,
+   "primaries": 1,
+   "unreachedPrimaries": [
+    {
+     "text": "Pick a time",
+     "comp": "Button",
+     "x": 895,
+     "y": 208
+    }
+   ],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": false,
+   "back": null,
+   "steps": 2,
+   "stale": 0,
+   "edges": 0
+  },
+  {
+   "route": "/studio",
+   "code": "S-01",
+   "surface": "studio",
+   "candidates": 38,
+   "reachable": 32,
+   "coverage": 84,
+   "budgetExhausted": false,
+   "primaries": 1,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "Industry",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/studio",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 149,
+   "stale": 0,
+   "edges": 122
+  },
+  {
+   "route": "/studio/prospects/pro_maya",
+   "code": "S-02",
+   "surface": "studio",
+   "candidates": 81,
+   "reachable": 43,
+   "coverage": 53,
+   "budgetExhausted": false,
+   "primaries": 5,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "Choose…Under $250k$250k - $1M$1M - $5M$5M+",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "BoldWarmCleanLuxuryPlayful",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DisplayHumanistSerifMono",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "",
+     "comp": "Textarea",
+     "tag": "textarea"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/studio/prospects/pro_maya",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 177,
+   "stale": 0,
+   "edges": 137
+  },
+  {
+   "route": "/studio/prospects/pro_maya/compose",
+   "code": "S-03",
+   "surface": "studio",
+   "candidates": 41,
+   "reachable": 39,
+   "coverage": 95,
+   "budgetExhausted": false,
+   "primaries": 3,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": true,
+   "back": {
+    "before": "#/studio/prospects/pro_maya/compose",
+    "after": "#/studio/prospects/pro_maya",
+    "moved": true
+   },
+   "steps": 161,
+   "stale": 0,
+   "edges": 137
+  },
+  {
+   "route": "/studio/prospects/pro_maya/assets",
+   "code": "S-04",
+   "surface": "studio",
+   "candidates": 70,
+   "reachable": 33,
+   "coverage": 47,
+   "budgetExhausted": false,
+   "primaries": 12,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "Cinematic hero image for Paws & Play Austin, a pet care (day",
+     "comp": "Textarea",
+     "tag": "textarea"
+    },
+    {
+     "text": "Portrait-orientation card for the \"manager\" role at Paws & P",
+     "comp": "Textarea",
+     "tag": "textarea"
+    },
+    {
+     "text": "Phone screen mockup of a clean operations dashboard UI theme",
+     "comp": "Textarea",
+     "tag": "textarea"
+    },
+    {
+     "text": "Laptop screen mockup of a clean operations dashboard UI them",
+     "comp": "Textarea",
+     "tag": "textarea"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/studio/prospects/pro_maya/assets",
+    "after": "#/studio/prospects/pro_maya",
+    "moved": true
+   },
+   "steps": 133,
+   "stale": 0,
+   "edges": 100
+  },
+  {
+   "route": "/studio/prospects/pro_maya/outreach",
+   "code": "S-05",
+   "surface": "studio",
+   "candidates": 35,
+   "reachable": 33,
+   "coverage": 94,
+   "budgetExhausted": false,
+   "primaries": 4,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "Maya - we built Paws & Play Austin an operating system befor",
+     "comp": "Textarea",
+     "tag": "textarea"
+    },
+    {
+     "text": "Channel",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/studio/prospects/pro_maya/outreach",
+    "after": "#/studio/prospects/pro_maya",
+    "moved": true
+   },
+   "steps": 137,
+   "stale": 0,
+   "edges": 105
+  },
+  {
+   "route": "/admin",
+   "code": "A-01",
+   "surface": "admin",
+   "candidates": 55,
+   "reachable": 48,
+   "coverage": 87,
+   "budgetExhausted": false,
+   "primaries": 1,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "highline-hospitality-denver · Highline Hospitality Groupsonr",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/admin?slug=highline-hospitality-denver",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 205,
+   "stale": 0,
+   "edges": 179
+  },
+  {
+   "route": "/admin/prospects/pro_maya",
+   "code": "A-02",
+   "surface": "admin",
+   "candidates": 32,
+   "reachable": 26,
+   "coverage": 81,
+   "budgetExhausted": false,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": true,
+   "back": {
+    "before": "#/admin/prospects/pro_maya",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 105,
+   "stale": 0,
+   "edges": 83
+  },
+  {
+   "route": "/admin/events",
+   "code": "A-03",
+   "surface": "admin",
+   "candidates": 713,
+   "reachable": 24,
+   "coverage": 3,
+   "budgetExhausted": false,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "Alls_ab_daniel_a_00s_ab_daniel_a_01s_ab_daniel_a_02s_ab_dani",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "AllPaws & Play AustinSonrisa Dental MiamiHighline Hospitalit",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "AllVariant AVariant B",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "AllPage viewSection seenScroll depthCTA clickDemo openedRole",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/admin/events",
+    "after": "#/admin",
+    "moved": true
+   },
+   "steps": 253,
+   "stale": 2,
+   "edges": 192
+  },
+  {
+   "route": "/admin/outreach",
+   "code": "A-04",
+   "surface": "admin",
+   "candidates": 31,
+   "reachable": 25,
+   "coverage": 81,
+   "budgetExhausted": true,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "AllCold emailLinkedIn DMWhatsAppSMSCallWarm intro",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "DraftScheduledSentOpenedClickedRepliedBounced",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/admin/outreach",
+    "after": "#/admin",
+    "moved": true
+   },
+   "steps": 400,
+   "stale": 0,
+   "edges": 230
+  },
+  {
+   "route": "/admin/bookings",
+   "code": "A-05",
+   "surface": "admin",
+   "candidates": 25,
+   "reachable": 21,
+   "coverage": 84,
+   "budgetExhausted": false,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "Set status",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Set status",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Set status",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Set status",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Set status",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Set status",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Set status",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/admin/bookings",
+    "after": "#/admin",
+    "moved": true
+   },
+   "steps": 145,
+   "stale": 0,
+   "edges": 95
+  },
+  {
+   "route": "/plan",
+   "code": "K-01",
+   "surface": "plan",
+   "candidates": 235,
+   "reachable": 89,
+   "coverage": 38,
+   "budgetExhausted": true,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "Status of T50",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Status of T01",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Status of T40",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Status of T01",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Status of T47",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Status of T02",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Status of T42",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Status of T46",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Status of T47",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Status of T48",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Status of T46",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Status of T01",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/plan",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 400,
+   "stale": 1,
+   "edges": 334
+  },
+  {
+   "route": "/plan/list",
+   "code": "K-02",
+   "surface": "plan",
+   "candidates": 138,
+   "reachable": 102,
+   "coverage": 74,
+   "budgetExhausted": true,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": true,
+   "back": {
+    "before": "#/plan/list",
+    "after": "#/plan",
+    "moved": true
+   },
+   "steps": 400,
+   "stale": 0,
+   "edges": 379
+  },
+  {
+   "route": "/plan/timeline",
+   "code": "K-03",
+   "surface": "plan",
+   "candidates": 39,
+   "reachable": 37,
+   "coverage": 95,
+   "budgetExhausted": false,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": true,
+   "back": {
+    "before": "#/plan/timeline",
+    "after": "#/plan",
+    "moved": true
+   },
+   "steps": 157,
+   "stale": 0,
+   "edges": 125
+  },
+  {
+   "route": "/plan/tasks/pro_maya",
+   "code": "K-04",
+   "surface": "plan",
+   "candidates": 23,
+   "reachable": 21,
+   "coverage": 91,
+   "budgetExhausted": false,
+   "primaries": 1,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": true,
+   "back": {
+    "before": "#/plan/tasks/pro_maya",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 85,
+   "stale": 0,
+   "edges": 63
+  },
+  {
+   "route": "/site",
+   "code": "W-01",
+   "surface": "public",
+   "candidates": 42,
+   "reachable": 0,
+   "coverage": 0,
+   "budgetExhausted": false,
+   "primaries": 2,
+   "unreachedPrimaries": [
+    {
+     "text": "Get yours",
+     "comp": "Button",
+     "x": 147,
+     "y": 511
+    },
+    {
+     "text": "Get yours",
+     "comp": "Button",
+     "x": 1606,
+     "y": 2201
+    }
+   ],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": false,
+   "back": null,
+   "steps": 2,
+   "stale": 0,
+   "edges": 0
+  },
+  {
+   "route": "/site/how",
+   "code": "W-02",
+   "surface": "public",
+   "candidates": 17,
+   "reachable": 0,
+   "coverage": 0,
+   "budgetExhausted": false,
+   "primaries": 1,
+   "unreachedPrimaries": [
+    {
+     "text": "Get yours",
+     "comp": "Button",
+     "x": 1394,
+     "y": 2503
+    }
+   ],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": false,
+   "back": null,
+   "steps": 2,
+   "stale": 0,
+   "edges": 0
+  },
+  {
+   "route": "/site/pricing",
+   "code": "W-03",
+   "surface": "public",
+   "candidates": 21,
+   "reachable": 0,
+   "coverage": 0,
+   "budgetExhausted": false,
+   "primaries": 1,
+   "unreachedPrimaries": [
+    {
+     "text": "Choose plan",
+     "comp": "Button",
+     "x": 711,
+     "y": 729
+    }
+   ],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": false,
+   "back": null,
+   "steps": 2,
+   "stale": 0,
+   "edges": 0
+  },
+  {
+   "route": "/proposal/pro_maya",
+   "code": "R-01",
+   "surface": "public",
+   "candidates": 11,
+   "reachable": 0,
+   "coverage": 0,
+   "budgetExhausted": false,
+   "primaries": 2,
+   "unreachedPrimaries": [
+    {
+     "text": "Book the walkthrough",
+     "comp": "Button",
+     "x": 347,
+     "y": 4646
+    },
+    {
+     "text": "Accept proposal",
+     "comp": "Button",
+     "x": 633,
+     "y": 4646
+    }
+   ],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": false,
+   "back": null,
+   "steps": 2,
+   "stale": 0,
+   "edges": 0
+  },
+  {
+   "route": "/manual",
+   "code": "M-01",
+   "surface": "manual",
+   "candidates": 41,
+   "reachable": 24,
+   "coverage": 59,
+   "budgetExhausted": true,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "I · How Lead Magnet worksII · Intake and researchIII · Compo",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "I · How Lead Magnet worksII · Intake and researchIII · Compo",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "I · How Lead Magnet worksII · Intake and researchIII · Compo",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "I · How Lead Magnet worksII · Intake and researchIII · Compo",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "I · How Lead Magnet worksII · Intake and researchIII · Compo",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "I · How Lead Magnet worksII · Intake and researchIII · Compo",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "I · How Lead Magnet worksII · Intake and researchIII · Compo",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "I · How Lead Magnet worksII · Intake and researchIII · Compo",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/manual",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 400,
+   "stale": 0,
+   "edges": 342
+  },
+  {
+   "route": "/manual/intake",
+   "code": "M-02",
+   "surface": "manual",
+   "candidates": 23,
+   "reachable": 21,
+   "coverage": 91,
+   "budgetExhausted": false,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "I · How Lead Magnet worksII · Intake and researchIII · Compo",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/manual/intake",
+    "after": "#/manual",
+    "moved": true
+   },
+   "steps": 85,
+   "stale": 0,
+   "edges": 61
+  },
+  {
+   "route": "/manual/compose",
+   "code": "M-03",
+   "surface": "manual",
+   "candidates": 23,
+   "reachable": 20,
+   "coverage": 87,
+   "budgetExhausted": false,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "I · How Lead Magnet worksII · Intake and researchIII · Compo",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/manual/compose",
+    "after": "#/manual",
+    "moved": true
+   },
+   "steps": 89,
+   "stale": 0,
+   "edges": 65
+  },
+  {
+   "route": "/manual/outreach",
+   "code": "M-04",
+   "surface": "manual",
+   "candidates": 23,
+   "reachable": 20,
+   "coverage": 87,
+   "budgetExhausted": false,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "I · How Lead Magnet worksII · Intake and researchIII · Compo",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/manual/compose",
+    "after": "#/manual",
+    "moved": true
+   },
+   "steps": 89,
+   "stale": 0,
+   "edges": 65
+  },
+  {
+   "route": "/manual/calls",
+   "code": "M-05",
+   "surface": "manual",
+   "candidates": 21,
+   "reachable": 19,
+   "coverage": 90,
+   "budgetExhausted": false,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "I · How Lead Magnet worksII · Intake and researchIII · Compo",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/manual/compose",
+    "after": "#/manual",
+    "moved": true
+   },
+   "steps": 85,
+   "stale": 0,
+   "edges": 61
+  },
+  {
+   "route": "/dev",
+   "code": "D-01",
+   "surface": "dev",
+   "candidates": 84,
+   "reachable": 82,
+   "coverage": 98,
+   "budgetExhausted": false,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": true,
+   "back": {
+    "before": "#/dev",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 329,
+   "stale": 0,
+   "edges": 308
+  },
+  {
+   "route": "/dev/components",
+   "code": "D-02",
+   "surface": "dev",
+   "candidates": 159,
+   "reachable": 46,
+   "coverage": 29,
+   "budgetExhausted": false,
+   "primaries": 8,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": true,
+   "back": {
+    "before": "#/dev/components",
+    "after": "#/dev",
+    "moved": true
+   },
+   "steps": 185,
+   "stale": 0,
+   "edges": 165
+  },
+  {
+   "route": "/dev/tables",
+   "code": "D-03",
+   "surface": "dev",
+   "candidates": 33,
+   "reachable": 31,
+   "coverage": 94,
+   "budgetExhausted": false,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": true,
+   "back": {
+    "before": "#/dev/tables",
+    "after": "#/dev",
+    "moved": true
+   },
+   "steps": 125,
+   "stale": 0,
+   "edges": 102
+  },
+  {
+   "route": "/dev/tables/prospects",
+   "code": "D-03",
+   "surface": "dev",
+   "candidates": 33,
+   "reachable": 31,
+   "coverage": 94,
+   "budgetExhausted": false,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": true,
+   "back": {
+    "before": "#/dev/tables/prospects",
+    "after": "#/dev/tables",
+    "moved": true
+   },
+   "steps": 125,
+   "stale": 0,
+   "edges": 102
+  },
+  {
+   "route": "/dev/actions",
+   "code": "D-04",
+   "surface": "dev",
+   "candidates": 476,
+   "reachable": 102,
+   "coverage": 21,
+   "budgetExhausted": true,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": true,
+   "back": {
+    "before": "#/dev/actions",
+    "after": "#/dev",
+    "moved": true
+   },
+   "steps": 400,
+   "stale": 0,
+   "edges": 341
+  },
+  {
+   "route": "/dev/rules",
+   "code": "D-05",
+   "surface": "dev",
+   "candidates": 172,
+   "reachable": 106,
+   "coverage": 62,
+   "budgetExhausted": true,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": true,
+   "back": {
+    "before": "#/dev/rules",
+    "after": "#/dev",
+    "moved": true
+   },
+   "steps": 400,
+   "stale": 0,
+   "edges": 377
+  },
+  {
+   "route": "/docs",
+   "code": "D-06",
+   "surface": "docs",
+   "candidates": 27,
+   "reachable": 24,
+   "coverage": 89,
+   "budgetExhausted": false,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": true,
+   "back": {
+    "before": "#/docs",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 305,
+   "stale": 5,
+   "edges": 279
+  },
+  {
+   "route": "/docs/pages/HUB-01",
+   "code": "D-06",
+   "surface": "docs",
+   "candidates": 72,
+   "reachable": 20,
+   "coverage": 28,
+   "budgetExhausted": false,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": true,
+   "back": {
+    "before": "#/docs/pages/HUB-01",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 121,
+   "stale": 4,
+   "edges": 90
+  },
+  {
+   "route": "/dev/canvas",
+   "code": "D-07",
+   "surface": "dev",
+   "candidates": 191,
+   "reachable": 9,
+   "coverage": 5,
+   "budgetExhausted": false,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [
+    {
+     "text": "Page canvas. Zoom with plus and minus, fit with 0, pan with ",
+     "comp": "DesktopShell",
+     "tag": "div"
+    },
+    {
+     "text": "C-05Load live thumbnail",
+     "comp": "DesktopShell",
+     "tag": "button"
+    },
+    {
+     "text": "Money/demo/:prospectId/moneyTheir crossed-out stack with the",
+     "comp": "DesktopShell",
+     "tag": "a"
+    }
+   ],
+   "arrowOwners": [],
+   "hookMounted": true,
+   "back": {
+    "before": "#/dev/canvas",
+    "after": "#/dev",
+    "moved": true
+   },
+   "steps": 37,
+   "stale": 0,
+   "edges": 18
+  },
+  {
+   "route": "/dev/qa",
+   "code": "D-08",
+   "surface": "dev",
+   "candidates": 29,
+   "reachable": 27,
+   "coverage": 93,
+   "budgetExhausted": false,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "A-01 · Funnel overviewA-02 · Prospect timelineA-03 · Events ",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/dev/qa",
+    "after": "#/dev",
+    "moved": true
+   },
+   "steps": 109,
+   "stale": 0,
+   "edges": 83
+  },
+  {
+   "route": "/dev/feedback",
+   "code": "D-09",
+   "surface": "dev",
+   "candidates": 24,
+   "reachable": 21,
+   "coverage": 88,
+   "budgetExhausted": false,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "allcommentrequestbugideaquestionpraise",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/dev/feedback",
+    "after": "#/dev",
+    "moved": true
+   },
+   "steps": 85,
+   "stale": 0,
+   "edges": 57
+  },
+  {
+   "route": "/",
+   "code": "HUB-01",
+   "surface": "public",
+   "candidates": 64,
+   "reachable": 53,
+   "coverage": 83,
+   "budgetExhausted": false,
+   "primaries": 3,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "Myself (super admin)StrategistAnalystProspectGuest",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Justin (super admin) · Super adminNora Vale · StrategistTheo",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Myself (super admin)StrategistAnalystProspectGuest",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/",
+    "after": "#/",
+    "moved": false
+   },
+   "steps": 217,
+   "stale": 0,
+   "edges": 192
+  },
+  {
+   "route": "/no-access",
+   "code": "HUB-02",
+   "surface": "public",
+   "candidates": 9,
+   "reachable": 0,
+   "coverage": 0,
+   "budgetExhausted": false,
+   "primaries": 0,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": false,
+   "back": null,
+   "steps": 2,
+   "stale": 0,
+   "edges": 0
+  },
+  {
+   "route": "/og/paws-and-play-austin",
+   "code": "L-06",
+   "surface": "public",
+   "candidates": 4,
+   "reachable": 0,
+   "coverage": 0,
+   "budgetExhausted": false,
+   "primaries": 1,
+   "unreachedPrimaries": [
+    {
+     "text": "Open the page",
+     "comp": "Button",
+     "x": 663,
+     "y": 680
+    }
+   ],
+   "deadEnds": [],
+   "arrowOwners": [],
+   "hookMounted": false,
+   "back": null,
+   "steps": 2,
+   "stale": 0,
+   "edges": 0
+  }
+ ],
+ "consoleErrors": {}
+}

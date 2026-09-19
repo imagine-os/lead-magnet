@@ -30,4 +30,22 @@ export const strings = {
   'hub.noaccess_title': { en: 'That page is for another role', es: 'Esa página es para otro rol' }, 'hub.noaccess_body': { en: 'You are viewing as {role}. Until real auth lands, pick a role that can open it.', es: 'Estás viendo como {role}. Hasta que haya auth real, elige un rol que pueda abrirla.' },
   'hub.signin_as': { en: 'Sign in as {role}', es: 'Entrar como {role}' }, 'hub.back': { en: 'Back to the hub', es: 'Volver al hub' },
   'hub.tv_hint': { en: 'TV mode: arrow keys or a remote d-pad move the focus, Enter opens, Backspace goes back.', es: 'Modo TV: las flechas o el d-pad del control mueven el foco, Enter abre, Retroceso vuelve.' },
+  // control.* : the CommandPalette (src/components/organism/CommandPalette) is mounted on every shell by ControlBridge; its
+  // strings live here because the hub declares its actions (hub.openCommands, hub.voiceListen) and D-092 keeps every string in a module table.
+  'control.title': { en: 'Commands', es: 'Comandos' }, 'control.open': { en: 'Commands', es: 'Comandos' }, 'control.shortcut': { en: 'Ctrl/Cmd + K', es: 'Ctrl/Cmd + K' },
+  'control.placeholder': { en: 'Type or say what to do, e.g. "switch to dark mode"', es: 'Escribe o di qué hacer, p. ej. "cambia a modo oscuro"' },
+  'control.speak': { en: 'Speak', es: 'Hablar' }, 'control.listening': { en: 'Listening…', es: 'Escuchando…' }, 'control.stop': { en: 'Stop', es: 'Detener' },
+  'control.heard': { en: 'Heard: "{text}"', es: 'Escuché: "{text}"' },
+  'control.unsupported': { en: 'voice not supported in this browser', es: 'voz no compatible con este navegador' },
+  'control.denied': { en: 'Microphone access was denied. Allow it in the browser and try again.', es: 'Se denegó el micrófono. Permítelo en el navegador y vuelve a intentar.' },
+  'control.gesture': { en: 'Press Speak to use the microphone.', es: 'Pulsa Hablar para usar el micrófono.' },
+  'control.on_page': { en: 'On this page', es: 'En esta página' }, 'control.matches': { en: '{n} matches', es: '{n} coincidencias' },
+  'control.no_match': { en: 'No action matches. Try the words of a button on screen.', es: 'Ninguna acción coincide. Prueba con las palabras de un botón en pantalla.' },
+  'control.needs': { en: 'needs {permission}', es: 'requiere {permission}' }, 'control.any_role': { en: 'any role', es: 'cualquier rol' },
+  'control.live': { en: 'live', es: 'activa' }, 'control.opens': { en: 'opens {page}', es: 'abre {page}' },
+  'control.params': { en: 'Fill the blanks', es: 'Completa los datos' }, 'control.optional': { en: 'optional', es: 'opcional' },
+  'control.run': { en: 'Run', es: 'Ejecutar' }, 'control.running': { en: 'Running…', es: 'Ejecutando…' },
+  'control.result_ok': { en: 'Done', es: 'Hecho' }, 'control.result_fail': { en: 'Did not run', es: 'No se ejecutó' },
+  'control.hint_keys': { en: 'Up / Down choose · Enter runs · Esc closes', es: 'Arriba / Abajo eligen · Enter ejecuta · Esc cierra' },
+  'control.hidden_for_role': { en: '{n} more need another role', es: '{n} más requieren otro rol' },
 };

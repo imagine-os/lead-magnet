@@ -7,14 +7,40 @@ export const KEY_TO_DIRECTION: Record<string, Direction> = { ArrowUp: 'up', Arro
 export const FOCUSABLE_SELECTOR = 'a[href], button, input, select, textarea, summary, [tabindex], [contenteditable="true"]';
 /** Elements that own the arrow keys themselves: the hook never hijacks arrows inside them (nor inside `[data-spatial="skip"]`). */
 const ARROW_OWNERS = 'input, select, textarea, [contenteditable="true"], [role="slider"], [role="listbox"], [role="combobox"], [role="menu"], [role="menubar"], [role="grid"], [role="tree"], [role="tablist"], [role="radiogroup"], [role="spinbutton"], iframe, [data-spatial="skip"]';
+/** Composite widgets that own ONE axis: the other axis is free for the d-pad to leave them (a tablist you could enter but never exit is a trap, P-04). */
+const HORIZONTAL_OWNERS = '[role="tablist"], [role="radiogroup"], [role="menubar"]';
+const VERTICAL_OWNERS = '[role="listbox"], [role="menu"], [role="tree"]';
 const NON_TEXT_INPUTS = new Set(['button', 'submit', 'reset', 'checkbox', 'radio', 'file', 'image', 'color']);
+const isHorizontal = (dir?: Direction) => dir === 'left' || dir === 'right';
 
-export function consumesArrows(el: Element | null): boolean {
+/**
+ * Does `el` (or an ancestor) own the arrow key `dir`? Text fields own Left / Right (caret) but not Up / Down (a single-line input
+ * does nothing with them); textareas, selects, sliders, combos, grids, iframes and `[data-spatial="skip"]` own all four;
+ * horizontal composites (tablist, radiogroup, menubar) own Left / Right only, vertical ones (listbox, menu, tree) Up / Down only.
+ * Without `dir` (Enter / Space / Backspace) any owner counts.
+ */
+export function consumesArrows(el: Element | null, dir?: Direction): boolean {
   if (!el || el === document.body || el === document.documentElement) return false;
-  if (el instanceof HTMLInputElement && NON_TEXT_INPUTS.has(el.type)) return !!el.closest('[data-spatial="skip"], [role="radiogroup"]');
-  return !!el.closest(ARROW_OWNERS);
+  const owner = el.closest(ARROW_OWNERS);
+  if (!owner) return false;
+  if (dir == null) return !(el instanceof HTMLInputElement && NON_TEXT_INPUTS.has(el.type) && !el.closest('[data-spatial="skip"], [role="radiogroup"]'));
+  if (el instanceof HTMLInputElement) {
+    if (NON_TEXT_INPUTS.has(el.type)) return !!el.closest('[data-spatial="skip"]') || (!!el.closest('[role="radiogroup"]') && isHorizontal(dir));
+    if (el.closest('[data-spatial="skip"]')) return true;
+    return isHorizontal(dir); // single-line text field: Up / Down leave it
+  }
+  if (owner.matches(HORIZONTAL_OWNERS) && !owner.closest('[data-spatial="skip"]') && !el.closest('select, textarea, [contenteditable="true"], iframe')) return isHorizontal(dir);
+  if (owner.matches(VERTICAL_OWNERS) && !owner.closest('[data-spatial="skip"]') && !el.closest('select, textarea, [contenteditable="true"], iframe')) return !isHorizontal(dir);
+  return true;
 }
-export const inOpenDialog = (): boolean => !!document.querySelector('[role="dialog"][aria-modal="true"], [role="alertdialog"], dialog[open]');
+/** A modal is open: an `<dialog>` that is actually `open`, or a non-dialog element with role dialog / alertdialog that is rendered. `Modal` keeps its `<dialog role="dialog" aria-modal="true">` in the DOM while closed, so the attribute alone is not evidence. */
+export function inOpenDialog(): boolean {
+  for (const el of document.querySelectorAll<HTMLElement>('[role="dialog"][aria-modal="true"], [role="alertdialog"], dialog[open]')) {
+    if (el instanceof HTMLDialogElement) { if (el.open) return true; continue; }
+    const r = el.getBoundingClientRect(); if (r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== 'hidden') return true;
+  }
+  return false;
+}
 
 const visible = (el: HTMLElement, rect: DOMRect) => rect.width > 0 && rect.height > 0 && getComputedStyle(el).visibility !== 'hidden' && !el.closest('[hidden], [aria-hidden="true"], [inert]');
 export interface Candidate { el: HTMLElement; rect: DOMRect }

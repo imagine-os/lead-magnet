@@ -9,10 +9,12 @@ import type { BaseRow } from '../data/schema/types';
 import type { PageRow, ProspectRow, TaskRow } from '../data/schema/core';
 import { buildManifest } from './manifest';
 import { getRoutes } from './registry';
+import { CommandPalette } from '../components/organism/CommandPalette/CommandPalette';
 
 /**
  * Lends the actions bus what only the React tree knows (session `can`, router `navigate`, seeded defaults) and keeps the
- * WebMCP tool set in sync with the manifest and the live handlers. Renders nothing. Mounted once inside the router.
+ * WebMCP tool set in sync with the manifest and the live handlers. Renders the one CommandPalette (T46: Ctrl/Cmd+K and the
+ * Commands / Speak buttons on every shell open it). Mounted once inside the router.
  */
 export function ControlBridge() {
   const { can, role, hasRole } = useSession();
@@ -49,5 +51,5 @@ export function ControlBridge() {
     sync();
     return onActionsChange(sync);
   }, []);
-  return null;
+  return <CommandPalette />;
 }

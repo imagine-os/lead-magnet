@@ -5,11 +5,15 @@ export type Prospect = ProspectRow;
 export type Archetype = A;
 export type { Warmth, RevenueBand };
 
-export type IndustryKey = 'pet_care' | 'dental' | 'restaurant' | 'gym_wellness' | 'real_estate' | 'law_firm' | 'salon_spa' | 'home_services' | 'auto_shop' | 'med_spa' | 'other';
+/** Keys of the catalog in src/engine/catalog/industries.ts (`keyof typeof DEFS`): adding an industry there is the whole change. */
+export type { IndustryKey } from './catalog/industries';
+import type { IndustryKey } from './catalog/industries';
 export interface StackItem { tool: string; category: string; monthly_cost: number; replaced_by: string; /** 0..1 how common in this industry */ prevalence: number; /** cost scales with seats */ per_seat?: boolean; /** cost scales with locations */ per_location?: boolean }
 export interface Industry {
   key: IndustryKey; label: Bi; departments: Bi[]; business_roles: string[]; life_roles: string[]; stack: StackItem[]; pains: Bi[]; kpis: { label: Bi; sample: string }[]; motifs: string[]; verbs: Bi;
 }
+/** How sure we are before the prospect says anything: likely = we would bet on it, possible = plausible for the industry (D-056 proposed). Derived from confidence, never stored. */
+export type StackTier = 'likely' | 'possible';
 export interface StackGuess { tool: string; category: string; monthly_cost: number; confidence: number; status: 'guessed' | 'confirmed' | 'rejected'; replaced_by: string }
 export interface Savings { monthly_current: number; annual_current: number; tools_cut: number; our_price_monthly: number; price_band: 'starter' | 'team' | 'multi'; net_monthly: number; net_annual: number; items: StackGuess[] }
 

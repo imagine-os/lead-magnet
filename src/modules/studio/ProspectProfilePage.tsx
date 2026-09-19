@@ -1,13 +1,15 @@
 import { useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useData, useRow, useTable } from '../../data/DataContext';
-import { FONTS, LANGS, REVENUE_BANDS, TONES, WARMTH, type PageRow, type ProspectRow, type StackGuessRow } from '../../data/schema/core';
-import { FIELD_WEIGHTS, applyAnswer, defaultEnricher, nextQuestions, pickArchetype, savings, type NextQuestion } from '../../engine';
+import { FONTS, TONES, type PageRow, type ProspectRow, type StackGuessRow } from '../../data/schema/core';
+import type { IntakeTurnRow } from '../../data/schema/studio';
+import { FIELD_WEIGHTS, applyAnswer, defaultEnricher, pickArchetype, savings, stackTier } from '../../engine';
 import { prospectStyle } from '../../design/tokens';
 import { useI18n } from '../../i18n/I18nProvider';
 import { useSession } from '../../auth/SessionProvider';
 import { useActions } from '../../actions';
 import { Card } from '../../components/molecule/Card/Card';
+import { IntakeChat, type AnswerSource } from './IntakeChat';
 import { Field } from '../../components/molecule/Field/Field';
 import { Stat } from '../../components/molecule/Stat/Stat';
 import { EmptyState } from '../../components/molecule/EmptyState/EmptyState';
@@ -21,12 +23,9 @@ import { Select } from '../../components/atom/Select/Select';
 import { Textarea } from '../../components/atom/Textarea/Textarea';
 import { useToast } from '../../components/molecule/Toast/Toast';
 import { ProspectNav } from './ProspectNav';
-import { industryOptions, livePageOf, parseList, pct, usd } from './lib';
+import { livePageOf, pct, usd } from './lib';
+import { coerce, displayValue } from './fields';
 import './studio.css';
-
-type Editor = 'text' | 'number' | 'list' | 'select' | 'style';
-const LIST_FIELDS = ['known_tools', 'business_roles', 'life_roles'];
-const NUMBER_FIELDS = ['team_size', 'locations'];
 
 export function ProspectProfilePage() {
   const { id } = useParams();
@@ -38,36 +37,35 @@ export function ProspectProfilePage() {
   const p = useRow<ProspectRow>('prospects', id);
   const { rows: guesses } = useTable<StackGuessRow>('stack_guesses', { where: { prospect_id: id ?? '' } });
   const { rows: pages } = useTable<PageRow>('pages', { where: { prospect_id: id ?? '' } });
-  const [draft, setDraft] = useState<Record<string, string>>({});
   const [newRole, setNewRole] = useState({ business: '', life: '' });
   const [notes, setNotes] = useState<string | null>(null);
   const writable = can('prospects.write');
 
-  const questions = useMemo(() => (p ? nextQuestions(p, 4) : []), [p]);
   const ranked = useMemo(() => (p ? pickArchetype(p, { guessedTools: guesses.filter((g) => g.status !== 'rejected').length }) : []), [p, guesses]);
   const sav = useMemo(() => (p ? savings(p, guesses) : null), [p, guesses]);
   const known = useMemo(() => new Set(p?.fields_known ?? []), [p]);
   const page = p ? livePageOf(pages, p.id) : null;
 
-  const editorFor = (field: string): Editor => (field === 'style' ? 'style' : NUMBER_FIELDS.includes(field) ? 'number' : LIST_FIELDS.includes(field) ? 'list' : ['industry', 'warmth', 'lang', 'revenue_band'].includes(field) ? 'select' : 'text');
-  const optionsFor = (field: string) => {
-    if (field === 'industry') return industryOptions(bi);
-    if (field === 'warmth') return WARMTH.map((w) => ({ value: w, label: t(`studio.warmth_${w}`) }));
-    if (field === 'lang') return LANGS.map((l) => ({ value: l, label: l === 'es' ? 'Español' : 'English' }));
-    if (field === 'revenue_band') return REVENUE_BANDS.map((r) => ({ value: r, label: t(`studio.band_${r}`) }));
-    return [];
-  };
-  const coerce = (field: string, raw: string): unknown => (NUMBER_FIELDS.includes(field) ? Math.max(0, Number(raw) || 0) : LIST_FIELDS.includes(field) ? parseList(raw) : raw.trim());
-
-  /** Every write is applyAnswer() + update by id (R-S03); confidence and the recommendation follow from the row. */
-  const answer = async (field: string, raw: string) => {
-    if (!p) return;
-    const value = coerce(field, raw);
-    if (value === '' || (Array.isArray(value) && !value.length)) { toast.push({ tone: 'warn', title: t('studio.answer_empty') }); return; }
+  /**
+   * Every write is applyAnswer() + update by id (R-S03), and every answer is appended to the intake transcript
+   * (R-S06) with who produced it. Returns false when there was nothing to save, so the chat keeps the draft.
+   */
+  const answer = async (field: string, raw: string, source: AnswerSource = 'manual', question?: string): Promise<boolean> => {
+    if (!p) return false;
+    // "style" is answered by the style editor below, so the intake only confirms what is already on the row
+    const value = field === 'style' ? (p.style as unknown) : coerce(field, raw);
+    if (value === '' || (Array.isArray(value) && !value.length)) { toast.push({ tone: 'warn', title: t('studio.answer_empty') }); return false; }
     const next = applyAnswer(p, field as keyof ProspectRow, value as never);
     await data.update<ProspectRow>('prospects', p.id, { [field]: next[field as keyof ProspectRow], fields_known: next.fields_known, confidence: next.confidence } as Partial<ProspectRow>);
-    setDraft((d) => ({ ...d, [field]: '' }));
+    const shown = field === 'style' ? `${t(`studio.tone_${p.style.tone}`)} · ${p.style.palette.primary}` : displayValue(value);
+    await recordTurn(field, question ?? bi(FIELD_WEIGHTS[field]?.question ?? { en: field, es: field }), shown, source, next.confidence);
     toast.push({ tone: 'success', title: t('studio.answer_saved', { field: t(`studio.field_${field}`, { field }) }), body: t('studio.confidence_now', { pct: pct(next.confidence) }) });
+    return true;
+  };
+  /** One row per answered question, so the transcript survives a reload and A-01 can read how a profile was built. */
+  const recordTurn = async (field: string, question: string, answerText: string, source: AnswerSource, confidence_after: number) => {
+    if (!p) return;
+    await data.insert<IntakeTurnRow>('intake_turns', { prospect_id: p.id, field, question: question.replace('{business}', p.business_name), answer: answerText, source, confidence_after, ts: new Date().toISOString() });
   };
 
   const setGuess = async (gid: string, status: StackGuessRow['status']) => { await data.update<StackGuessRow>('stack_guesses', gid, { status }); };
@@ -106,6 +104,7 @@ export function ProspectProfilePage() {
     let merged: ProspectRow = p;
     for (const k of keys) merged = applyAnswer(merged, k as keyof ProspectRow, patch[k as keyof ProspectRow] as never);
     await data.update<ProspectRow>('prospects', p.id, { ...patch, fields_known: merged.fields_known, confidence: merged.confidence });
+    for (const k of keys) await recordTurn(k, bi(FIELD_WEIGHTS[k]?.question ?? { en: k, es: k }), displayValue(patch[k as keyof ProspectRow]), 'rule', merged.confidence);
     toast.push({ tone: 'success', title: t('studio.enrich_done', { n: keys.length }), body: keys.join(', ') });
   };
 
@@ -114,7 +113,7 @@ export function ProspectProfilePage() {
   const latest = useRef({ answer, setGuess, addRole, removeRole, setStyle, fillGaps, saveNotes, guesses, p });
   latest.current = { answer, setGuess, addRole, removeRole, setStyle, fillGaps, saveNotes, guesses, p };
   useActions('S-02', {
-    'studio.answerQuestion': (a) => latest.current.answer(String(a?.field ?? ''), String(a?.value ?? '')),
+    'studio.answerQuestion': (a) => latest.current.answer(String(a?.field ?? ''), String(a?.value ?? ''), 'manual'),
     'studio.confirmTool': (a) => { const g = latest.current.guesses.find((x) => x.tool.toLowerCase() === String(a?.tool ?? '').toLowerCase()); return g ? latest.current.setGuess(g.id, 'confirmed') : undefined; },
     'studio.rejectTool': (a) => { const g = latest.current.guesses.find((x) => x.tool.toLowerCase() === String(a?.tool ?? '').toLowerCase()); return g ? latest.current.setGuess(g.id, 'rejected') : undefined; },
     'studio.addRole': (a) => latest.current.addRole(a?.kind === 'life' ? 'life' : 'business', String(a?.role ?? '')),
@@ -131,20 +130,6 @@ export function ProspectProfilePage() {
   const top = ranked[0];
   const unknown = Object.keys(FIELD_WEIGHTS).filter((f) => !known.has(f));
   const paletteKeys = ['primary', 'accent', 'bg', 'surface', 'text'] as const;
-
-  /** One control per question type; the Save button sits beside the Field so the Field keeps a single labelled child. */
-  const questionControl = (q: NextQuestion) => {
-    const kind = editorFor(q.field);
-    const value = draft[q.field] ?? '';
-    if (kind === 'style') return <Input readOnly aria-label={bi(q.question)} value={`${t(`studio.tone_${p.style.tone}`)} · ${p.style.palette.primary}`} />;
-    if (kind === 'select') return <Select value={value} placeholder={t('studio.choose')} onChange={(e) => setDraft((d) => ({ ...d, [q.field]: e.target.value }))} options={optionsFor(q.field)} />;
-    return <Input type={kind === 'number' ? 'number' : 'text'} inputMode={kind === 'number' ? 'numeric' : undefined} value={value} placeholder={kind === 'list' ? t('studio.comma_separated') : ''} onChange={(e) => setDraft((d) => ({ ...d, [q.field]: e.target.value }))} onKeyDown={(e) => { if (e.key === 'Enter' && writable) void answer(q.field, value); }} />;
-  };
-  const questionSave = (q: NextQuestion) => {
-    const value = draft[q.field] ?? '';
-    if (editorFor(q.field) === 'style') return <Button size="sm" variant="outline" icon="check" disabled={!writable} onClick={() => void setStyle({})}>{t('studio.mark_style_known')}</Button>;
-    return <Button size="sm" icon="check" disabled={!writable || !value.trim()} onClick={() => void answer(q.field, value)}>{t('studio.save')}</Button>;
-  };
 
   return (
     <div className="container container-wide page stack st-page">
@@ -176,16 +161,7 @@ export function ProspectProfilePage() {
             </div>)}
           </Card>
 
-          <Card className="stack-sm">
-            <h2>{t('studio.intake')}</h2>
-            <p className="muted small">{t('studio.intake_sub')}</p>
-            {questions.length === 0 ? <EmptyState icon="check" title={t('studio.intake_done')} body={t('studio.intake_done_body')} /> : questions.map((q) => (
-              <div key={q.field} className="st-question">
-                <Field label={bi(q.question)} hint={t('studio.weight_hint', { w: q.weight.toFixed(2), field: q.field })}>{questionControl(q)}</Field>
-                {questionSave(q)}
-              </div>
-            ))}
-          </Card>
+          <IntakeChat p={p} writable={writable} onAnswer={answer} onAskAi={fillGaps} />
 
           <Card className="stack-sm">
             <div className="row wrap"><h2 className="grow">{t('studio.stack')}</h2>{sav && <Badge tone="success">{t('studio.savings_month', { v: usd(sav.net_monthly) })}</Badge>}</div>
@@ -197,6 +173,7 @@ export function ProspectProfilePage() {
                     <div className="grow"><span className="st-strong">{g.tool}</span> <span className="xs muted">{g.category} · {t('studio.replaced_by', { by: g.replaced_by })}</span></div>
                     <span className="st-guess-cost">{usd(g.monthly_cost)}<span className="xs muted">/mo</span></span>
                     <Badge size="sm" tone={g.status === 'confirmed' ? 'success' : g.status === 'rejected' ? 'danger' : 'neutral'}>{t(`studio.guess_${g.status}`)}</Badge>
+                    <Badge size="sm" tone={stackTier(g) === 'likely' ? 'info' : 'neutral'}>{t(`studio.tier_${stackTier(g)}`)}</Badge>
                     <span className="xs muted">{pct(g.confidence)}</span>
                     <span className="row">
                       <Button size="sm" variant={g.status === 'confirmed' ? 'primary' : 'outline'} icon="check" disabled={!writable} onClick={() => void setGuess(g.id, 'confirmed')}>{t('studio.confirm')}</Button>

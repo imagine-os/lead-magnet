@@ -11,7 +11,7 @@
 .st-strong { font-weight: var(--fw-semibold); color: var(--color-heading); }
 .st-block { display: block; }
 .st-cell-gap { gap: var(--sp-1); }
-.st-link { color: var(--color-primary); font-size: var(--fs-sm); text-decoration: underline; min-height: 44px; display: inline-flex; align-items: center; padding: 0 var(--sp-2); }
+.st-link { color: var(--color-primary-text); font-size: var(--fs-sm); text-decoration: underline; min-height: 44px; display: inline-flex; align-items: center; padding: 0 var(--sp-2); }
 .st-slug { font-size: var(--fs-sm); word-break: break-all; }
 .st-clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .st-reasons { margin: 0; padding-left: var(--sp-4); display: flex; flex-direction: column; gap: 2px; }
@@ -67,3 +67,23 @@
 
 /* 10-foot: the bands in tokens.css scale type; keep the workbench columns from stretching past reading width */
 @media (min-width: 2560px) { .st-cols { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); } .st-question { padding: var(--sp-4); } }
+
+/* --- conversational intake (S-02) --- */
+.st-thread { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-3); max-height: 420px; overflow-y: auto; }
+.st-turn { display: flex; flex-direction: column; gap: var(--sp-1); }
+.st-bubble { padding: var(--sp-3); border-radius: var(--r-card); border: 1px solid var(--color-border-subtle); background: var(--color-surface-2); font-size: var(--fs-sm); line-height: var(--lh-base); max-width: 92%; }
+.st-bubble.is-ask { align-self: flex-start; border-bottom-left-radius: var(--r-sm); }
+.st-bubble.is-answer { align-self: flex-end; background: var(--color-surface-3); border-bottom-right-radius: var(--r-sm); display: flex; flex-direction: column; gap: var(--sp-2); }
+.st-bubble.is-current { max-width: 100%; border-color: var(--color-primary); background: var(--color-surface-tint); display: flex; flex-direction: column; gap: var(--sp-1); }
+.st-ask { display: flex; flex-direction: column; gap: var(--sp-3); }
+.st-ask-q { font-family: var(--font-display); font-size: var(--fs-md); line-height: var(--lh-title); color: var(--color-heading); }
+.st-paste { border-top: 1px solid var(--color-border-subtle); padding-top: var(--sp-3); }
+.st-proposals { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-2); }
+.st-proposal { display: flex; align-items: flex-start; gap: var(--sp-3); flex-wrap: wrap; padding: var(--sp-3); border: 1px dashed var(--color-border-strong); border-radius: var(--r-card); background: var(--color-surface-2); }
+.st-proposal-body { gap: var(--sp-1); }
+.st-evidence { display: block; font-style: italic; word-break: break-word; }
+
+/* --- A/B variants (S-03) --- */
+.st-variant { height: 100%; }
+
+@media (min-width: 2560px) { .st-thread { max-height: 620px; } }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useData, useTable } from '../../data/DataContext';
 import { SOURCES, WARMTH, type BookingRow, type EventRow, type PageRow, type ProspectRow, type Warmth } from '../../data/schema/core';
 import { computeConfidence, guessStack, industry } from '../../engine';
+import { PAGE_TTL_DAYS } from '../../rules/studio';
 import { useI18n } from '../../i18n/I18nProvider';
 import { useSession } from '../../auth/SessionProvider';
 import { useActions } from '../../actions';
@@ -19,7 +20,7 @@ import { ProgressBar } from '../../components/atom/ProgressBar/ProgressBar';
 import { Select } from '../../components/atom/Select/Select';
 import { Toggle } from '../../components/atom/Toggle/Toggle';
 import { useToast } from '../../components/molecule/Toast/Toast';
-import { defaultStyle, industryLabel, industryOptions, fullName, livePageOf, daysLeft, shortTime } from './lib';
+import { defaultStyle, industryLabel, industryOptions, fullName, livePageOf, daysLeft, shortTime, studioSummary } from './lib';
 import './studio.css';
 
 interface NewForm { first_name: string; last_name: string; business_name: string; industry: string; city: string; lang: 'en' | 'es'; warmth: Warmth; source: (typeof SOURCES)[number]; team_size: string }
@@ -82,12 +83,32 @@ export function ProspectsPage() {
     } finally { setBusy(false); }
   };
 
-  const latest = useRef({ form, create, prospects });
-  latest.current = { form, create, prospects };
+  /** Duplicate as a new prospect: the profile, roles and style come along, the page, events and bookings do not (R-S07). */
+  const duplicate = async (src: ProspectRow) => {
+    if (!writable) return;
+    setBusy(true);
+    try {
+      const { id: _id, created_at: _c, updated_at: _u, ...rest } = src;
+      const copy: Partial<ProspectRow> = { ...rest, business_name: t('studio.copy_of', { name: src.business_name }), style: { ...src.style, palette: { ...src.style.palette }, imagery: [...src.style.imagery] }, business_roles: [...src.business_roles], life_roles: [...src.life_roles], known_tools: [...src.known_tools], fields_known: [...src.fields_known] };
+      const created = await data.insert<ProspectRow>('prospects', copy);
+      for (const g of guessStack(created)) await data.insert('stack_guesses', { prospect_id: created.id, ...g });
+      toast.push({ tone: 'success', title: t('studio.duplicated', { business: created.business_name }), body: t('studio.duplicated_body') });
+      nav(`/studio/prospects/${created.id}`);
+      return created.id;
+    } finally { setBusy(false); }
+  };
+
+  const latest = useRef({ form, create, prospects, duplicate });
+  latest.current = { form, create, prospects, duplicate };
   useActions('S-01', {
     'studio.newProspect': () => setOpen(true),
     'studio.createProspect': (p) => latest.current.create({ ...latest.current.form, business_name: String(p?.business ?? latest.current.form.business_name), industry: String(p?.industry ?? latest.current.form.industry) }),
     'studio.filterProspects': (p) => { if (p?.warmth) setWarmth(p.warmth as Warmth | 'all'); if (p?.industry) setInd(String(p.industry)); if (p?.live != null) setLiveOnly(String(p.live) === 'true'); },
+    'studio.duplicateProspect': (p) => {
+      const q = String(p?.name ?? '').toLowerCase();
+      const hit = latest.current.prospects.find((x) => x.business_name.toLowerCase().includes(q) || fullName(x).toLowerCase().includes(q));
+      return hit ? latest.current.duplicate(hit) : undefined;
+    },
     'studio.openProspect': (p) => {
       const q = String(p?.name ?? '').toLowerCase();
       const hit = latest.current.prospects.find((x) => x.business_name.toLowerCase().includes(q) || fullName(x).toLowerCase().includes(q));
@@ -109,10 +130,12 @@ export function ProspectsPage() {
       return (<span className="row wrap st-cell-gap"><Badge size="sm" tone="primary">{t(`studio.arch_${pg.archetype}`)}</Badge><Badge size="sm" status={pg.status}>{t(`studio.status_${pg.status}`)}</Badge>{d != null && <span className="xs muted">{d > 0 ? t('studio.days_left', { n: d }) : t('studio.expired_ago')}</span>}</span>);
     } },
     { key: 'last_event', header: t('studio.col_last_event'), render: (p) => <span className="xs muted">{lastEvent[p.id] ? shortTime(lastEvent[p.id], lang) : t('studio.never')}</span> },
+    // the DataTable row link covers the whole row (.dt-rowlink::after), so a per-row control has to sit above it
+    { key: 'act', header: t('studio.col_act'), width: '130px', render: (p) => <Button size="sm" variant="ghost" icon="copy" disabled={!writable} onClick={() => void duplicate(p)} aria-label={t('studio.duplicate_name', { name: p.business_name })}>{t('studio.duplicate')}</Button> },
     { key: 'booking', header: t('studio.col_booking'), render: (p) => { const b = lastBooking[p.id]; return b ? <Badge size="sm" tone={b.status === 'confirmed' || b.status === 'completed' ? 'success' : b.status === 'cancelled' ? 'danger' : 'info'}>{t(`studio.booking_${b.status}`)}</Badge> : <span className="xs muted">{t('studio.no_booking')}</span>; } },
   ];
 
-  const livePages = prospects.filter((p) => pageOf[p.id]?.status === 'live').length;
+  const summary = studioSummary(prospects, pages, bookings);
   const avgConfidence = prospects.length ? Math.round((prospects.reduce((s, p) => s + p.confidence, 0) / prospects.length) * 100) : 0;
 
   return (
@@ -122,12 +145,20 @@ export function ProspectsPage() {
         <Button icon="plus" onClick={() => setOpen(true)} disabled={!writable}>{t('studio.new_prospect')}</Button>
       </div>
 
-      <div className="grid grid-4">
-        <Stat label={t('studio.kpi_prospects')} value={prospects.length} />
-        <Stat label={t('studio.kpi_live')} value={livePages} tone="success" hint={t('studio.kpi_live_hint')} />
-        <Stat label={t('studio.kpi_confidence')} value={`${avgConfidence}%`} tone={avgConfidence >= 60 ? 'success' : 'warn'} />
-        <Stat label={t('studio.kpi_bookings')} value={bookings.length} tone="accent" />
-      </div>
+      <Card padding="sm" className="stack-sm">
+        <div className="row wrap"><div className="eyebrow grow">{t('studio.summary')}</div><span className="xs muted">{t('studio.summary_sub')}</span></div>
+        <div className="grid grid-4">
+          <Stat label={t('studio.kpi_prospects')} value={prospects.length} hint={t('studio.by_warmth', { cold: summary.byWarmth.cold ?? 0, warm: summary.byWarmth.warm ?? 0, hot: summary.byWarmth.hot ?? 0 })} />
+          <Stat label={t('studio.kpi_live')} value={summary.livePages} tone="success" hint={summary.splitPages ? t('studio.kpi_split_hint', { n: summary.splitPages }) : t('studio.kpi_live_hint')} />
+          <Stat label={t('studio.kpi_bookings_week')} value={summary.bookingsThisWeek} tone="accent" hint={t('studio.kpi_bookings_all', { n: bookings.length })} />
+          <Stat label={t('studio.kpi_next_expiring')} value={summary.nextExpiring ? (summary.nextExpiring.days > 0 ? t('studio.days_left', { n: summary.nextExpiring.days }) : t('studio.expired_ago')) : '-'} tone={summary.nextExpiring && summary.nextExpiring.days <= 3 ? 'warn' : 'default'} hint={summary.nextExpiring ? summary.nextExpiring.page.slug : t('studio.kpi_none_expiring', { days: PAGE_TTL_DAYS })} />
+        </div>
+        <div className="row wrap">
+          <ProgressBar size="sm" label={t('studio.kpi_confidence')} value={avgConfidence} tone={avgConfidence >= 60 ? 'success' : 'primary'} />
+          {(['cold', 'warm', 'hot'] as const).map((w) => <Chip key={w} selected={warmth === w} onClick={() => setWarmth(warmth === w ? 'all' : w)}>{t(`studio.warmth_${w}`)} · {summary.byWarmth[w] ?? 0}</Chip>)}
+          {summary.nextExpiring && <a className="st-link" href={`#/studio/prospects/${summary.nextExpiring.page.prospect_id}/compose`}>{t('studio.open_expiring', { slug: summary.nextExpiring.page.slug })}</a>}
+        </div>
+      </Card>
 
       <Card padding="sm" className="stack-sm">
         <div className="eyebrow">{t('studio.filters')}</div>

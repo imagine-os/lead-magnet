@@ -9,13 +9,14 @@
  * number is always theirs, never ours.
  */
 import { useEffect, useLayoutEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Stat } from '../../../components/molecule/Stat/Stat';
 import { Badge } from '../../../components/atom/Badge/Badge';
 import { Button } from '../../../components/atom/Button/Button';
 import { useI18n } from '../../../i18n/I18nProvider';
 import type { Section } from '../../../engine/types';
 import { useLanding } from '../context';
-import { useCountUp, useInView, usePrefersReducedMotion } from '../hooks';
+import { useCountUp, useInView, useLiveActions, usePrefersReducedMotion } from '../hooks';
 import { usd } from '../format';
 import { SectionShell } from './SectionShell';
 
@@ -25,7 +26,9 @@ const SEQUENCE_MS = 1100;
 
 export function SavingsStack({ section }: { section: Sav }) {
   const { bi, t, lang } = useI18n();
-  const { guesses, savings: live, openDemo } = useLanding();
+  const { guesses, savings: live, openDemo, model, pageCode, track } = useLanding();
+  const nav = useNavigate();
+  const { slug } = useParams();
   const items = guesses.length ? live.items : section.savings.items;
   const totals = guesses.length ? live : section.savings;
   const { ref, inView } = useInView<HTMLDivElement>(0.3);
@@ -51,6 +54,17 @@ export function SavingsStack({ section }: { section: Sav }) {
     const finish = window.setTimeout(() => { window.clearInterval(tick); setCut(items.length); }, step * items.length + 400);
     return () => { window.clearInterval(tick); window.clearTimeout(finish); };
   }, [armed, inView, items.length]);
+
+  // "A number they can correct beats a number they must believe" (playbook 3). On the reveal, the walkthrough and
+  // the letter the number is ours; one tap moves them to the audit archetype of the same page, where every line is
+  // correctable. On the audit page itself the rows are already right there, so the link would be a loop.
+  const correctable = model.archetype !== 'audit' && !!slug;
+  const correctStack = () => {
+    track('cta_click', { cta: 'correct_stack', action: 'landing.correctStack', section: section.id, from_archetype: model.archetype });
+    nav(`/p/${slug}/audit`);
+    return 'opening the audit page so the stack can be corrected';
+  };
+  useLiveActions(pageCode, { 'landing.correctStack': () => (correctable ? correctStack() : 'this page already lets you correct every line') });
 
   const cutCount = Math.min(armed ? cut : items.length, items.length);
   const cutSoFar = items.slice(0, cutCount).reduce((sum, g) => sum + g.monthly_cost, 0);
@@ -83,7 +97,10 @@ export function SavingsStack({ section }: { section: Sav }) {
           <Stat size="lg" label={t('landing.net_year')} value={usd(annual, lang)} hint={t('landing.vs_today', { now: usd(totals.monthly_current, lang), ours: usd(totals.our_price_monthly, lang) })} />
           <Stat label={t('landing.tools_cut')} value={totals.tools_cut} hint={t('landing.tools_cut_hint')} />
           <p className="lp-note">{t('landing.savings_note')}</p>
-          <Button variant="primary" icon="play" className="lp-btn-primary" onClick={() => openDemo(section.id)}>{t('landing.see_it_instead')}</Button>
+          <div className="lp-savings-actions">
+            <Button variant="primary" icon="play" className="lp-btn-primary" onClick={() => openDemo(section.id)}>{t('landing.see_it_instead')}</Button>
+            {correctable && <Button variant="ghost" size="sm" icon="edit" onClick={correctStack}>{t('landing.correct_stack')}</Button>}
+          </div>
         </div>
       </div>
     </SectionShell>

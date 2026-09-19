@@ -1,22 +1,21 @@
 /**
  * The repeated primary CTA with the honest urgency line (playbook 8, R-C04): the real `expires_at` from the page row,
- * counted in days, never a fake countdown. One primary ("Open your demo"), one secondary (the calendar, inline below).
+ * counted in days and named as a date, never a fake countdown. One primary ("Open your demo"), one secondary (the
+ * calendar, inline below). The urgency copy itself lives in <ExpiryLine tone="band" /> so the band, the hero, the
+ * letter, the booking grid and the sticky bar can never disagree about when the workspace goes down.
  */
 import { Button } from '../../../components/atom/Button/Button';
-import { Badge } from '../../../components/atom/Badge/Badge';
 import { useI18n } from '../../../i18n/I18nProvider';
 import type { Section } from '../../../engine/types';
 import { useLanding } from '../context';
-import { daysLeft } from '../usePageModel';
 import { SectionShell } from './SectionShell';
+import { ExpiryLine } from './ExpiryLine';
 
 type Band = Extract<Section, { kind: 'cta_band' }>;
 
 export function CtaBand({ section }: { section: Band }) {
-  const { bi, t, lang } = useI18n();
-  const { model, page, openDemo, bookCall } = useLanding();
-  const days = daysLeft(page.expires_at);
-  const until = page.expires_at ? new Date(page.expires_at).toLocaleDateString(lang === 'es' ? 'es-MX' : 'en-US', { month: 'long', day: 'numeric' }) : null;
+  const { bi } = useI18n();
+  const { model, openDemo, bookCall } = useLanding();
   return (
     <SectionShell id={section.id} kind="cta_band" label={bi(section.headline)}>
       <div className="lp-band">
@@ -28,10 +27,7 @@ export function CtaBand({ section }: { section: Band }) {
           <Button size="lg" variant="primary" icon="play" className="lp-btn-primary" onClick={() => openDemo(section.id)}>{bi(model.cta.primary.label)}</Button>
           <Button size="lg" variant="outline" icon="calendar" className="lp-btn-secondary" onClick={() => bookCall(section.id)}>{bi(model.cta.secondary.label)}</Button>
         </div>
-        <p className="lp-urgency">
-          <Badge tone={days != null && days <= 3 ? 'warn' : 'neutral'} size="sm">{t('landing.urgency_badge')}</Badge>
-          {days != null && until ? t('landing.urgency_real', { days, date: until }) : bi(section.urgency)}
-        </p>
+        <ExpiryLine tone="band" fallback={bi(section.urgency)} />
       </div>
     </SectionShell>
   );

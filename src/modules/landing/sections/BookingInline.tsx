@@ -12,6 +12,7 @@ import { dayLabel, previewSlots, slotGrid, timeLabel, tzForProspect } from '../.
 import { useLanding } from '../context';
 import { useLiveActions } from '../hooks';
 import { SectionShell } from './SectionShell';
+import { ExpiryLine } from './ExpiryLine';
 
 type Booking = Extract<Section, { kind: 'booking_inline' }>;
 
@@ -48,6 +49,7 @@ export function BookingInline({ section }: { section: Booking }) {
           </div>
         ))}
       </div>
+      <ExpiryLine />
       <p className="lp-note">{t('landing.book_note')}</p>
     </SectionShell>
   );

@@ -10,6 +10,7 @@ import { useI18n } from '../../../i18n/I18nProvider';
 import type { Section } from '../../../engine/types';
 import { useLanding } from '../context';
 import { SectionShell } from './SectionShell';
+import { ExpiryLine } from './ExpiryLine';
 
 type Letter = Extract<Section, { kind: 'letter' }>;
 
@@ -31,6 +32,7 @@ export function LetterSection({ section }: { section: Letter }) {
             <Button size="lg" variant="primary" icon="play" className="lp-btn-primary" onClick={() => openDemo(section.id)}>{bi(model.cta.primary.label)}</Button>
             <Placeholder will={`play the 40-second voice note from ${section.from}`} by="content pass (T50)" button={{ label: t('landing.play_note'), variant: 'outline', size: 'lg', icon: 'play' }} />
           </div>
+          <ExpiryLine />
         </div>
       </div>
     </SectionShell>

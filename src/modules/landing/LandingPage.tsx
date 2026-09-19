@@ -10,6 +10,7 @@
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useGamepadNav, useSpatialNav } from '../../a11y';
 import type { Archetype, EventType } from '../../data/schema/core';
 import { prospectStyle } from '../../design/tokens';
 import { useDefaultLang, useI18n } from '../../i18n/I18nProvider';
@@ -59,8 +60,19 @@ function LiveLanding({ state, pageCode }: { state: Live; pageCode: string }) {
   const [form, setForm] = useState({ name: `${prospect.first_name} ${prospect.last_name}`.trim(), email: '' });
   const [emailError, setEmailError] = useState('');
   const mainRef = useRef<HTMLElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const pressTimer = useRef(0);
   const trackCtx = useMemo(() => ({ page_id: page.id, prospect_id: prospect.id }), [page.id, prospect.id]);
+
+  /**
+   * D-pad / arrow-key navigation across the whole page (P-04, T47): the remote in the back office and a gamepad both
+   * drive the same handlers a keyboard does. The call is deliberately minimal - one container ref. `onBack` is the
+   * one override: a public landing page has no level above it, so "back" returns to the top of the page instead of
+   * walking the hash up to a route that does not exist. Cards keep their own Left / Right (they preventDefault, and
+   * the hook ignores an already-handled key), inputs keep their arrows, and an open dialog turns the hook off.
+   */
+  const spatial = useSpatialNav(rootRef, { onBack: () => window.scrollTo({ top: 0, behavior: 'auto' }) });
+  useGamepadNav(spatial);
 
   // Every event carries the variant, so a test is comparable without joining back to `pages` (A-01).
   const eventMeta = useMemo(() => ({
@@ -151,7 +163,7 @@ function LiveLanding({ state, pageCode }: { state: Live; pageCode: string }) {
 
   return (
     <LandingProvider value={ctx}>
-      <div className="lp" data-archetype={model.archetype} data-variant={page.variant} style={prospectStyle(model.palette, model.font)}>
+      <div className="lp" ref={rootRef} data-archetype={model.archetype} data-variant={page.variant} style={prospectStyle(model.palette, model.font)}>
         <a className="lp-skip" href="#lp-main">{t('landing.skip')}</a>
         <header className="lp-topbar">
           <div className="lp-wrap lp-topbar-in">
@@ -179,7 +191,10 @@ function LiveLanding({ state, pageCode }: { state: Live; pageCode: string }) {
         </footer>
 
         <div className={`lp-sticky ${sticky ? 'is-on' : ''}`} aria-hidden={!sticky}>
-          <p className="lp-sticky-num">{t('landing.sticky_savings', { money: usd(Math.max(0, live.net_annual), lang) })}</p>
+          <p className="lp-sticky-num">
+            {t('landing.sticky_savings', { money: usd(Math.max(0, live.net_annual), lang) })}
+            {days != null && <span className="lp-sticky-days"> · {t('landing.sticky_days', { days })}</span>}
+          </p>
           <div className="lp-sticky-row">
             <Button
               block size="lg" variant="primary" className="lp-btn-primary" icon="play"
@@ -195,7 +210,7 @@ function LiveLanding({ state, pageCode }: { state: Live; pageCode: string }) {
 
         <ExitModal open={showExit} onClose={() => setShowExit(false)} onPick={(iso) => void bookCall('exit_intent', iso)} onBook={() => void bookCall('exit_intent')} />
 
-        <Modal open={showSave} onClose={() => setShowSave(false)} title={t('landing.save_title')} size="sm"
+        <Modal open={showSave} onClose={() => setShowSave(false)} title={t('landing.save_title')} size="sm" closeLabel={t('landing.close')}
           footer={<><Button variant="ghost" onClick={() => setShowSave(false)}>{t('landing.save_later')}</Button><Button variant="primary" className="lp-btn-primary" icon="check" onClick={() => void submitSave()}>{t('landing.save_submit')}</Button></>}>
           <p className="lp-sub">{t('landing.save_body', { days: days ?? 14 })}</p>
           <Field label={t('landing.save_name')}><Input value={form.name} autoComplete="name" onChange={(e) => setForm({ ...form, name: e.target.value })} /></Field>
@@ -221,7 +236,7 @@ function ExitModal({ open, onClose, onPick, onBook }: { open: boolean; onClose: 
     [prospect.id, tz],
   );
   return (
-    <Modal open={open} onClose={onClose} title={t('landing.exit_title', { first: prospect.first_name })} size="sm"
+    <Modal open={open} onClose={onClose} title={t('landing.exit_title', { first: prospect.first_name })} size="sm" closeLabel={t('landing.close')}
       footer={<><Button variant="ghost" onClick={onClose}>{t('landing.exit_stay')}</Button><Button variant="primary" className="lp-btn-primary" icon="calendar" onClick={onBook}>{bi(model.cta.secondary.label)}</Button></>}>
       <p>{t('landing.exit_body', { business: prospect.business_name })}</p>
       <p className="lp-sub lp-exit-lead">{t('landing.exit_pick')} · {t('landing.book_tz', { tz: tz.abbr })}</p>

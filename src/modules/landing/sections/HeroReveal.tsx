@@ -21,6 +21,7 @@ import type { RoleView, Section } from '../../../engine/types';
 import { useLanding } from '../context';
 import { useFrames, useScrollFrames } from '../hooks';
 import { SectionShell } from './SectionShell';
+import { ExpiryLine } from './ExpiryLine';
 import { MiniOs } from './MiniOs';
 
 type Hero = Extract<Section, { kind: 'hero_reveal' }>;
@@ -68,6 +69,7 @@ export function HeroReveal({ section }: { section: Hero }) {
             <Button size="lg" variant="primary" icon="play" className="lp-btn-primary" onClick={() => openDemo(section.id)}>{bi(model.cta.primary.label)}</Button>
             <Button size="lg" variant="outline" icon="calendar" className="lp-btn-secondary" onClick={() => bookCall(section.id)}>{bi(model.cta.secondary.label)}</Button>
           </div>
+          <ExpiryLine />
           <p className="lp-hero-meta">{t('landing.hero_meta', { business: section.businessName, city: section.city })}</p>
         </div>
         <div className="lp-hero-devices" ref={ref} data-frame={frame} data-frames={frames ? frames.phone.length : FALLBACK_FRAMES} data-source={frames ? 'frames' : 'live'} style={{ ['--lp-progress' as string]: reduced ? '1' : String(progress) }}>

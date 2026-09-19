@@ -30,17 +30,26 @@ export function StackAudit({ section }: { section: Audit }) {
   const live = computeSavings(prospect, rows as unknown as StackGuess[]);
   const annual = useCountUp(Math.max(0, live.net_annual), inView);
   const answered = rows.filter((r) => r.status !== 'guessed').length;
+  const rejected = rows.filter((r) => r.status === 'rejected').length;
 
-  const answer = async (tool: string, status: 'confirmed' | 'rejected') => {
+  /**
+   * One tap answers, the same tap again takes it back. A mis-tap on "No, not us" used to be permanent, which makes
+   * the whole row feel like a commitment - and a correction flow you cannot correct is the fastest way to stop
+   * someone answering at all. `next` is the status we are moving to; pressing the active answer returns the row to
+   * our guess, so the savings number walks back up as visibly as it walked down.
+   */
+  const answer = async (tool: string, next: 'confirmed' | 'rejected' | 'guessed') => {
     const row = guesses.find((g) => g.tool.toLowerCase() === tool.toLowerCase());
     if (!row) return `no guess named "${tool}"`;
+    const status = row.status === next ? 'guessed' : next;
     await data.update<StackGuessRow>('stack_guesses', row.id, { status });
-    track('form_submit', { form: 'stack_audit', tool: row.tool, answer: status, monthly_cost: row.monthly_cost });
-    return `${row.tool} marked ${status}`;
+    track('form_submit', { form: 'stack_audit', tool: row.tool, answer: status, undo: status === 'guessed', monthly_cost: row.monthly_cost });
+    return status === 'guessed' ? `${row.tool} is back to our guess` : `${row.tool} marked ${status}`;
   };
   useLiveActions(pageCode, {
     'landing.confirmTool': (p) => answer(String(p?.tool ?? ''), 'confirmed'),
     'landing.rejectTool': (p) => answer(String(p?.tool ?? ''), 'rejected'),
+    'landing.resetTool': (p) => answer(String(p?.tool ?? ''), 'guessed'),
   });
 
   return (
@@ -48,6 +57,7 @@ export function StackAudit({ section }: { section: Audit }) {
       <div className="lp-head">
         <h2 className="lp-h2">{bi(section.headline)}</h2>
         <p className="lp-sub">{bi(section.sub)}</p>
+        <p className="lp-note">{t('landing.audit_how')}</p>
       </div>
       <div className="lp-audit" ref={ref}>
         <ul className="lp-audit-list">
@@ -59,10 +69,12 @@ export function StackAudit({ section }: { section: Audit }) {
               </div>
               <span className="lp-audit-price">{g.status === 'rejected' ? <s>{usd(g.monthly_cost, lang)}</s> : usd(g.monthly_cost, lang)}<span className="lp-audit-mo">{t('landing.per_month')}</span></span>
               <div className="lp-audit-answers">
-                <Button size="sm" variant={g.status === 'confirmed' ? 'primary' : 'outline'} aria-pressed={g.status === 'confirmed'} onClick={() => void answer(g.tool, 'confirmed')}>{bi(section.confirmLabel)}</Button>
-                <Button size="sm" variant={g.status === 'rejected' ? 'danger' : 'outline'} aria-pressed={g.status === 'rejected'} onClick={() => void answer(g.tool, 'rejected')}>{bi(section.rejectLabel)}</Button>
+                <Button size="sm" variant={g.status === 'confirmed' ? 'primary' : 'outline'} aria-pressed={g.status === 'confirmed'} title={g.status === 'confirmed' ? t('landing.audit_undo') : undefined} onClick={() => void answer(g.tool, 'confirmed')}>{bi(section.confirmLabel)}</Button>
+                <Button size="sm" variant={g.status === 'rejected' ? 'danger' : 'outline'} aria-pressed={g.status === 'rejected'} title={g.status === 'rejected' ? t('landing.audit_undo') : undefined} onClick={() => void answer(g.tool, 'rejected')}>{bi(section.rejectLabel)}</Button>
               </div>
-              {g.status !== 'guessed' && <Badge tone={g.status === 'confirmed' ? 'success' : 'neutral'} size="sm">{g.status === 'confirmed' ? t('landing.confirmed') : t('landing.not_us')}</Badge>}
+              {g.status !== 'guessed'
+                ? <Badge tone={g.status === 'confirmed' ? 'success' : 'neutral'} size="sm">{g.status === 'confirmed' ? t('landing.confirmed') : t('landing.not_us')}</Badge>
+                : <Badge tone="neutral" size="sm">{t('landing.audit_guess')}</Badge>}
             </li>
           ))}
         </ul>
@@ -70,6 +82,7 @@ export function StackAudit({ section }: { section: Audit }) {
           <Stat size="lg" label={t('landing.net_year')} value={usd(annual, lang)} hint={t('landing.vs_today', { now: usd(live.monthly_current, lang), ours: usd(live.our_price_monthly, lang) })} />
           <Stat label={t('landing.answered')} value={`${answered} / ${rows.length}`} hint={t('landing.answered_hint')} />
           <p className="lp-note">{t('landing.audit_note')}</p>
+          <p className="lp-note">{t('landing.audit_rejected_note', { n: rejected })}</p>
         </div>
       </div>
     </SectionShell>

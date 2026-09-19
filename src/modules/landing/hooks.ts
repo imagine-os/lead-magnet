@@ -190,9 +190,19 @@ export function useViewTracking(ctx: TrackCtx, meta: Record<string, unknown>, re
 }
 
 const EXIT_KEY = 'leadmagnet.exitintent';
+/** A flick back up the page faster than this (px per second) reads as "I am done here" on a touch screen. */
+const FLICK_UP_PX_PER_S = 1400;
 /**
- * Second chance, once per session (playbook 7): desktop = pointer leaves through the top of the viewport;
- * touch = the back gesture (a pushed history entry) or 45 s idle. Never a discount, always the calendar.
+ * Second chance, once per session (playbook 7). Never a discount, always the calendar.
+ *
+ * Three intents, none of them hover-only (P-03):
+ *  - fine pointer: the pointer leaves through the top of the viewport (for the tab bar or the close button);
+ *  - coarse pointer: the back gesture (a pushed history entry), **a fast flick back up the page** after they have
+ *    read some of it - the touch equivalent of reaching for the back button - or 45 s of no interaction at all;
+ *  - either: the tab being hidden is not used, because switching apps is not leaving.
+ *
+ * The flick only arms once the viewer is past a quarter of the page, so scrolling back to re-read the hero on arrival
+ * never triggers it, and it needs a sustained upward move (two samples) rather than one jittery frame.
  */
 export function useExitIntent(onFire: () => void, enabled: boolean) {
   const fired = useRef(false);
@@ -211,9 +221,23 @@ export function useExitIntent(onFire: () => void, enabled: boolean) {
     let idle = 0;
     const resetIdle = () => { window.clearTimeout(idle); idle = window.setTimeout(fire, 45000); };
     const onPop = () => { fire(); };
+
+    // Fast scroll-up intent (touch). Sampled on scroll, so it costs nothing and needs no touch listeners.
+    let lastY = window.scrollY, lastT = performance.now(), ups = 0;
+    const onScrollUp = () => {
+      const y = window.scrollY, now = performance.now();
+      const dt = Math.max(16, now - lastT);
+      const speed = ((lastY - y) / dt) * 1000; // positive when moving up the page
+      const doc = document.documentElement;
+      const readEnough = y > Math.max(600, (doc.scrollHeight - window.innerHeight) * 0.25);
+      if (readEnough && speed > FLICK_UP_PX_PER_S) { ups += 1; if (ups >= 2) fire(); } else if (speed <= 0) ups = 0;
+      lastY = y; lastT = now;
+    };
+
     if (coarse) {
       try { history.pushState({ lm: 'exit' }, ''); } catch { /* ignore */ }
       window.addEventListener('popstate', onPop);
+      window.addEventListener('scroll', onScrollUp, { passive: true });
       for (const ev of ['touchstart', 'scroll', 'keydown'] as const) window.addEventListener(ev, resetIdle, { passive: true });
       resetIdle();
     } else {
@@ -222,6 +246,7 @@ export function useExitIntent(onFire: () => void, enabled: boolean) {
     return () => {
       document.removeEventListener('mouseout', onMouseOut);
       window.removeEventListener('popstate', onPop);
+      window.removeEventListener('scroll', onScrollUp);
       for (const ev of ['touchstart', 'scroll', 'keydown'] as const) window.removeEventListener(ev, resetIdle);
       window.clearTimeout(idle);
     };

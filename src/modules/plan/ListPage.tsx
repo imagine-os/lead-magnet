@@ -4,7 +4,7 @@ import { useI18n } from '../../i18n/I18nProvider';
 import { useTable } from '../../data/DataContext';
 import type { ModelName, TaskRow, TaskStatus } from '../../data/schema/core';
 import { useActions } from '../../actions';
-import { DataTable, type Column } from '../../components/organism/DataTable/DataTable';
+import { DataTable, type Column, type SortState } from '../../components/organism/DataTable/DataTable';
 import { Chip } from '../../components/atom/Chip/Chip';
 import { Badge } from '../../components/atom/Badge/Badge';
 import { Stat } from '../../components/molecule/Stat/Stat';
@@ -48,17 +48,20 @@ export function ListPage() {
     'plan.openTask': (p) => { nav(`/plan/tasks/${String(p?.task ?? '')}`); return { ok: true }; },
   });
 
-  const h = (col: Col) => `${t(LABEL_KEY[col])}${sortCol === col ? (dir === 'asc' ? ' ↑' : ' ↓') : ''}`;
+  /** Header sort lives in the DataTable (aria-sort + glyph); the chip row below stays as the card-mode (< 768) control. */
+  const h = (col: Col) => t(LABEL_KEY[col]);
+  const sort: SortState = { key: sortCol, dir };
+  const onSort = (s: SortState) => { if (COLS.includes(s.key as Col)) { setSortCol(s.key as Col); setDir(s.dir); } };
   const columns: Column<Row>[] = [
-    { key: 'id', header: h('id'), width: '88px', render: (r) => <code>{r.id}</code> },
-    { key: 'title', header: h('title') },
-    { key: 'module', header: h('module'), render: (r) => <span className="xs">{r.module}</span> },
-    { key: 'codes', header: h('codes'), render: (r) => (r.codeList.length ? <span className="row wrap xs"><CodeChips codes={r.codeList} /></span> : <span className="faint">&mdash;</span>) },
-    { key: 'model', header: h('model'), render: (r) => <ModelBadge model={r.model} /> },
-    { key: 'phase', header: h('phase'), align: 'right', width: '76px' },
-    { key: 'depends_on', header: h('depends_on'), render: (r) => (r.deps.length ? <span className="row wrap xs">{r.deps.map((d) => <Link key={d} to={`/plan/tasks/${d}`} className={map[d]?.status === 'done' ? 'pl-dep is-done' : 'pl-dep is-open'} title={map[d]?.title}><code>{d}</code></Link>)}</span> : <span className="faint">&mdash;</span>) },
-    { key: 'status', header: h('status'), render: (r) => <span className="row wrap xs"><Badge status={r.status} size="sm">{t(`plan.lane_${r.status}`)}</Badge>{r.status !== 'done' && r.ready && <Badge tone="success" size="sm">{t('plan.ready_yes')}</Badge>}</span> },
-    { key: 'owner', header: h('owner'), hideOnCard: true, render: (r) => <span className="xs">{r.owner}</span> },
+    { key: 'id', header: h('id'), sortable: true, width: '88px', render: (r) => <code>{r.id}</code> },
+    { key: 'title', header: h('title'), sortable: true },
+    { key: 'module', header: h('module'), sortable: true, render: (r) => <span className="xs">{r.module}</span> },
+    { key: 'codes', header: h('codes'), sortable: true, render: (r) => (r.codeList.length ? <span className="row wrap xs"><CodeChips codes={r.codeList} /></span> : <span className="faint">&mdash;</span>) },
+    { key: 'model', header: h('model'), sortable: true, render: (r) => <ModelBadge model={r.model} /> },
+    { key: 'phase', header: h('phase'), sortable: true, align: 'right', width: '76px' },
+    { key: 'depends_on', header: h('depends_on'), sortable: true, render: (r) => (r.deps.length ? <span className="row wrap xs">{r.deps.map((d) => <Link key={d} to={`/plan/tasks/${d}`} className={map[d]?.status === 'done' ? 'pl-dep is-done' : 'pl-dep is-open'} title={map[d]?.title}><code>{d}</code></Link>)}</span> : <span className="faint">&mdash;</span>) },
+    { key: 'status', header: h('status'), sortable: true, render: (r) => <span className="row wrap xs"><Badge status={r.status} size="sm">{t(`plan.lane_${r.status}`)}</Badge>{r.status !== 'done' && r.ready && <Badge tone="success" size="sm">{t('plan.ready_yes')}</Badge>}</span> },
+    { key: 'owner', header: h('owner'), sortable: true, hideOnCard: true, render: (r) => <span className="xs">{r.owner}</span> },
   ];
 
   const done = tasks.filter((x) => x.status === 'done').length;
@@ -97,7 +100,7 @@ export function ListPage() {
       <IconButton icon={dir === 'asc' ? 'arrow-up' : 'arrow-down'} label={t(dir === 'asc' ? 'plan.asc' : 'plan.desc')} variant="outline" size="sm" onClick={() => setDir((d) => (d === 'asc' ? 'desc' : 'asc'))} />
     </div>
 
-    <DataTable<Row> caption={t('plan.k02_title')} rows={rows} rowHref={(r) => `/plan/tasks/${r.id}`} onRowClick={(r) => nav(`/plan/tasks/${r.id}`)} empty={{ title: t('plan.empty_title'), body: t('plan.empty_body') }} columns={columns} />
+    <DataTable<Row> caption={t('plan.k02_title')} rows={rows} sort={sort} onSort={onSort} rowHref={(r) => `/plan/tasks/${r.id}`} onRowClick={(r) => nav(`/plan/tasks/${r.id}`)} empty={{ title: t('plan.empty_title'), body: t('plan.empty_body') }} columns={columns} />
     <p className="xs muted">{t('plan.list_hint')}</p>
   </div>);
 }

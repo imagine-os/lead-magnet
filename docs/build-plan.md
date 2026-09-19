@@ -10,7 +10,7 @@ _The first deliverable. Tasks are bound by dependencies, not calendar days. The 
 | 1 | Modules in parallel (six workers on one branch, module contract in `CLAUDE.md`) | Opus 5 | done (2026-09-18, changelogs 0002..0008) |
 | 2 | Integration: build green, code review, decisions, surfaces, push | Fable 5.1 | done (2026-09-19, v0.2.0, changelog 0009) |
 | 3 | Polish passes: Spanish fill, screenshots, responsive + a11y matrix, ops manual, integration pass 2 | Sonnet 5 / Opus 5 / Fable 5.1 | done (2026-09-19, v0.3.0, changelogs 0010..0016); reruns after every phase-4 delivery |
-| 4 | Providers and platform: image gen, video-on-scroll, booking, LLM enricher, Supabase, WebMCP, voice, d-pad, realtime, annotations, Company OS, Stripe | mixed; several await Justin | T41 (lite), T45, T49 done; T47 doing; T46, T48, T52, T53 backlog; T40, T42, T43, T44, T51, T54 await Justin; T50 blocked |
+| 4 | Providers and platform: image gen, video-on-scroll, booking, LLM enricher, Supabase, WebMCP, voice, d-pad, realtime, annotations, Company OS, Stripe | mixed; several await Justin | pass 3 (2026-09-19, v0.4.0, changelogs 0017..0023): T41 (lite), T45, T46, T47, T49, T52, T53, T22 done; T48, T55, T57, T58, T59, T60 backlog; T40, T42, T43, T44, T51, T54, T56 await Justin; T50 blocked |
 
 ## Modules x codes x model
 
@@ -58,15 +58,22 @@ _The first deliverable. Tasks are bound by dependencies, not calendar days. The 
 | T43 | LLM enricher for intake + copy | engine | S-02 | Fable 5.1 | 4 | T11 | awaiting_justin (model + key) |
 | T44 | Supabase provider + auth | data | - | Fable 5.1 | 4 | T20 | awaiting_justin |
 | T45 | WebMCP tools generated from the actions manifest | actions | D-04 | Fable 5.1 | 4 | T20 | done (136 tools, CLI, changelog 0010) |
-| T46 | Voice controller over actions | a11y | - | Fable 5.1 | 4 | T45 | backlog |
-| T47 | D-pad / remote spatial navigation | a11y | - | Fable 5.1 | 4 | T20 | doing (hub + demo shell done, changelog 0010) |
+| T46 | Voice controller over actions | a11y | HUB-01 | Fable 5.1 | 4 | T45 | done (`matchPhrase`, `test:voice` 18 checks, `CommandPalette`, changelog 0018) |
+| T47 | D-pad / remote spatial navigation | a11y | - | Fable 5.1 | 4 | T20 | done (every shell hooked, `qa:dpad` rehearsal; changelogs 0018 / 0019 / 0023) |
 | T48 | Realtime presence + concurrent editing | data | - | Fable 5.1 | 4 | T44 | backlog |
 | T49 | Annotation pins on page + triage doc | annotations | D-09 | Opus 5 | 4 | T20 | done (changelog 0012) |
 | T50 | Company OS wiring | integration | - | Fable 5.1 | 4 | T44 | blocked (until Justin says so) |
 | T51 | Stripe purchase flow | website | W-03 | Opus 5 | 4 | T16 | awaiting_justin |
-| T52 | Catalog pass 2: sub-industries, price review dates, the industries Justin named | engine | S-02 | Sonnet 5 | 4 | T11 | backlog (D-063) |
-| T53 | A/B readout: both live variants of a slug side by side on A-01 | admin | A-01 | Opus 5 | 4 | T15 | backlog (D-061, D-078) |
+| T52 | Catalog pass 2: sub-industries, price review dates, the industries Justin named | engine | S-02 | Sonnet 5 | 4 | T11 | done (24 sub-industries, `price_reviewed`, 2 checks, `catalog:doc`; changelog 0022) |
+| T53 | A/B readout: both live variants of a slug side by side on A-01 | admin | A-01 A-03 | Opus 5 | 4 | T15 | done (per-slug readout, sample gate, `promote_variant`, date range; changelog 0020) |
 | T54 | Static prerender of `/p/<slug>` for crawler-visible OG tags | landing | L-01 L-06 | Opus 5 | 4 | T12 | awaiting_justin (D-080) |
+| T22 | Integration pass 3: sortable tables, `--scale` in the library, spatial hook on every shell, sub-industry intake, objections in `composePage()`, docs, v0.4.0 | integration | - | Fable 5.1 | 4 | T46 T47 T52 T53 | done (changelog 0023) |
+| T55 | Sub-industry in the engine: `guessStack()` weights `sub[].extra_tools`, S-02 profile editor + S-01 filter | engine | S-01 S-02 | Opus 5 | 4 | T52 | backlog (intake question landed in 0023, D-122) |
+| T56 | Comms provider: calls, email, SMS, WhatsApp on one number | os-demo | C-04 C-06 S-05 | Opus 5 | 4 | T44 | awaiting_justin (provider + keys) |
+| T57 | ES-native voice intents pass | a11y | - | Sonnet 5 | 4 | T46 | backlog |
+| T58 | `qa:dpad --strict` in the a11y matrix | qa | - | Sonnet 5 | 4 | T47 T32 | backlog (D-124) |
+| T59 | Admin follow-ups: `DateRange` on A-01 / A-03, `Stat` delta tiles, A-02 lists recorded `promote_variant` rows | admin | A-01 A-02 A-03 | Opus 5 | 4 | T53 | backlog (changelog 0020 requests 4, 6, 7) |
+| T60 | Demo depth pass: department workspace, document editor, full calendar, unwired quick actions | os-demo | C-02 C-03 C-06 | Opus 5 | 4 | T13 | backlog (changelog 0021) |
 
 ## Definition of done (per task)
 `npm run typecheck` clean (module workers) / `npm run build` green (integrator); every page has a spec with actions and a page doc; every unfinished control is a `Placeholder`; strings via `useT()`; `docs/changelog/_pending/<module>.md` written; kanban / decisions / surfaces rows proposed; screenshots at 390 + 1280 for built pages; the `platform-principles.md` checklist ticked.
@@ -94,3 +101,11 @@ _Filled by T21 (Fable 5.1, 2026-09-19, changelog 0016)._
 - Cross-module fixes at the root: text / status token ladder >= 4.5:1 on both themes, `--lp-on-primary` computed per palette, DataTable row-link overlay that no longer swallows row controls, 44 px boxes on every small control, the OS demo's phone chrome at 109 px (was 291), `data-component` on all 38 component roots, `IndustryKey` derived from the catalog, `.modal-foot` wraps, `hub.tv_hint` in the hub strings.
 - v0.3.0: 51 routes (all built), 11 tables, 47 rules, 38 components, 136 unique action ids (210 declared rows), 18 engine checks, 35 tasks (23 done, 1 doing, 4 backlog, 6 awaiting Justin, 1 blocked). Decisions D-056..D-092 appended (integration rows decided, module rows proposed).
 - Next passes: T46 voice controller over the generated vocabulary, T47 spatial navigation on the remaining shells, T52 / T53 studio + admin follow-ups; T40, T42, T43, T44, T51, T54 as Justin provides providers / keys / go-aheads; rerun T30..T33 after every phase-4 delivery.
+
+## Integration pass 3 outcome
+_Filled by T22 (Fable 5.1, 2026-09-19, changelog 0023)._
+
+- Phase 4 advanced: T46 voice controller (`matchPhrase` over the generated vocabulary, `CommandPalette` on every shell, never auto-listens), T47 spatial navigation on every shell with `npm run qa:dpad` as the rehearsal, T52 catalog pass 2 (24 sub-industries, dated prices, coverage checks), T53 A/B readout on A-01 with a stated sample gate; landing and OS demo pass 3; nine component-request cards closed at the root of the library.
+- Cross-module fixes at the root: `DataTable` sortable headers adopted on A-03 / A-05 / K-02 / S-01; `Avatar`, `Button` icon and `Chip` follow `--scale`; `Tabs` stays inside its host; `Stat` `--stat-value-size`; `mic` / `link` icons; `--lime-700` / `--lime-650` chart tokens; `data-spatial="skip"` on the D-07 canvas and the landing role strip; the spatial hook on B-01, B-02, L-05, W-01..W-03, R-01, HUB-02; the intake asks the sub-industry (engine + S-02); the four switching objections composed for every archetype; `SEED_VERSION` 4; `npm run sql` caught up (`intake_turns`, `promote_variant`).
+- v0.4.0: 51 routes (all built), 11 tables, 51 rules, 42 components, 144 unique action ids / WebMCP tools (227 declared rows), 21 engine checks, 18 voice checks, 42 tasks (28 done, 0 doing, 6 backlog, 7 awaiting Justin, 1 blocked). Decisions D-093..D-124 appended (module rows proposed, D-109 and the integration rows D-121..D-124 decided).
+- Next: the pass-3 QA sweep (`qa:responsive`, `qa:a11y`, `qa:dpad`, `i18n:check`, screenshots, `npm run frames`), then T55, T57, T58, T59, T60 from the backlog; T40, T42, T43, T44, T51, T54, T56 as Justin provides providers / keys / go-aheads.

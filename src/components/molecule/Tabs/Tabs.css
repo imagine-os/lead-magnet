@@ -1,5 +1,5 @@
-.tabs { display: flex; gap: var(--sp-1); border-bottom: 1px solid var(--color-border); overflow-x: auto; scrollbar-width: none; }
-.tab { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 var(--sp-3); border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; background: transparent; color: var(--color-text-muted); font-weight: var(--fw-medium); font-size: var(--fs-sm); white-space: nowrap; }
+.tabs { display: flex; flex-wrap: nowrap; gap: var(--sp-1); border-bottom: 1px solid var(--color-border); overflow-x: auto; scrollbar-width: none; max-width: 100%; min-width: 0; }
+.tab { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 var(--sp-3); border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; background: transparent; color: var(--color-text-muted); font-weight: var(--fw-medium); font-size: var(--fs-sm); white-space: nowrap; }
 .tab:hover { color: var(--color-heading); }
 .tab.is-active { color: var(--color-primary-text); border-bottom-color: var(--color-primary); }
 .tab-count { font-size: var(--fs-2xs); background: var(--color-surface-3); border-radius: var(--r-pill); padding: 0 6px; line-height: 16px; }

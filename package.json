@@ -1,7 +1,7 @@
 {
   "name": "lead-magnet",
   "private": true,
-  "version": "0.3.0",
+  "version": "0.4.0",
   "type": "module",
   "description": "Lead Magnet - hyper-personalized landing pages whose lead magnet is a pre-built, fully themed operations system for one prospect",
   "homepage": "https://imagine-os.github.io/lead-magnet/",
@@ -13,11 +13,14 @@
     "tokens": "node --experimental-strip-types scripts/gen-tokens.mjs",
     "sql": "node --experimental-strip-types scripts/gen-sql.mjs",
     "test:engine": "node scripts/test-engine.mjs",
+    "test:voice": "node scripts/test-voice.mjs",
+    "catalog:doc": "node --experimental-strip-types scripts/gen-catalog-doc.mjs",
     "screenshots": "node scripts/screenshots.mjs",
     "frames": "node scripts/frames.mjs",
     "og": "node scripts/og.mjs",
     "qa:responsive": "node scripts/qa-responsive.mjs",
     "qa:a11y": "node scripts/qa-a11y.mjs",
+    "qa:dpad": "node scripts/qa-dpad.mjs",
     "actions": "node --experimental-strip-types scripts/actions.mjs",
     "i18n:check": "node --experimental-strip-types scripts/i18n-check.mjs"
   },

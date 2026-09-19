@@ -88,6 +88,30 @@ create table if not exists public.feedback (
 );
 create trigger feedback_touch before update on public.feedback for each row execute function public.touch_updated_at();
 
+-- prospects · Intake transcript: The conversational intake on S-02, one row per answered question: the field, the question as it was asked, the answer as it was saved, who produced it (strategist, rule enricher or LLM) and the confidence right after. Append-only; the profile itself lives on prospects.
+-- access:
+--   · strategist read/write
+--   · analyst read
+create table if not exists public.intake_turns (
+  -- Primary key
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  prospect_id uuid not null references public.prospects(id) on delete set null,
+  -- FIELD_WEIGHTS key the answer filled
+  field text not null,
+  -- The question as it was asked, in the strategist’s language
+  question text not null,
+  -- The answer as saved (arrays are comma-joined)
+  answer text not null,
+  source text not null check (source in ('manual', 'rule', 'llm')),
+  -- prospects.confidence right after this turn (0..1)
+  confidence_after numeric(12,2) not null,
+  ts timestamptz not null
+);
+create index if not exists intake_turns_prospect_id_idx on public.intake_turns(prospect_id);
+create trigger intake_turns_touch before update on public.intake_turns for each row execute function public.touch_updated_at();
+
 -- pages · Landing pages: A composed landing page for a prospect: archetype, slug, variant (A/B), status and the PageModel snapshot the page renders.
 create table if not exists public.pages (
   -- Primary key
@@ -150,7 +174,7 @@ create table if not exists public.prospects (
 );
 create trigger prospects_touch before update on public.prospects for each row execute function public.touch_updated_at();
 
--- pages · Page recommendations: What adaptFromEvents() suggested for a page, recorded before it is applied (R-A03): kind, target archetype or section, the reason, the score and who decided. A-02 writes these; the funnel reads them.
+-- pages · Page recommendations: What adaptFromEvents() suggested for a page, recorded before it is applied (R-A03): kind, target archetype or section, the reason, the score and who decided. A-02 writes the engine kinds and A-01 writes promote_variant when an A/B side is ahead past the minimum sample; nothing is applied from a row alone.
 -- access:
 --   · strategist read/write
 --   · analyst read
@@ -161,7 +185,7 @@ create table if not exists public.recommendations (
   updated_at timestamptz not null default now(),
   prospect_id uuid not null references public.prospects(id) on delete set null,
   page_id uuid not null references public.pages(id) on delete set null,
-  kind text not null check (kind in ('switch_archetype', 'add_section', 'shorten', 'ask')),
+  kind text not null check (kind in ('switch_archetype', 'add_section', 'shorten', 'ask', 'promote_variant')),
   to_archetype text check (to_archetype in ('reveal', 'audit', 'walkthrough', 'letter')),
   -- Section kind for add_section
   section text,

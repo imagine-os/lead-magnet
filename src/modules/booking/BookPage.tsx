@@ -20,12 +20,14 @@ import { LangToggle } from '../../components/molecule/LangToggle/LangToggle';
 import { useToast } from '../../components/molecule/Toast/Toast';
 import { DURATION_MIN, dayLabel, findSlot, normalizeSlotIso, slotGrid, slotInWords, timeLabel, tzForProspect, withRequested } from '../../engine/slots';
 import { useNarrow } from './useNarrow';
+import { useGamepadNav, useSpatialNav } from '../../a11y';
 import './booking.css';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 /** B-01 - the prospect picks a 15-minute walkthrough, then gives their details. Public page, own chrome, their palette. */
 export function BookPage() {
+  const root = useRef<HTMLDivElement>(null); const spatial = useSpatialNav(root); useGamepadNav(spatial); // P-04: arrows / d-pad move focus (pass-3 integration)
   const { prospectId } = useParams();
   const [params] = useSearchParams();
   const nav = useNavigate(); const data = useData(); const toast = useToast();
@@ -88,7 +90,7 @@ export function BookPage() {
 
   const days = narrow ? grid.days.filter((d) => d.key === dayKey) : grid.days;
   const ready = !!slot;
-  return (<div className="bk" style={prospectStyle(prospect.style.palette, prospect.style.font)} lang={lang}>
+  return (<div className="bk" ref={root} style={prospectStyle(prospect.style.palette, prospect.style.font)} lang={lang}>
     <header className="bk-bar">
       <Link to={page ? `/p/${page.slug}` : `/book/${prospect.id}`} className="bk-mark">{prospect.business_name}</Link>
       <div className="row"><span className="xs bk-tz">{tz.abbr}</span><LangToggle size="sm" /></div>

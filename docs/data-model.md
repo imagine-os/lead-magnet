@@ -8,9 +8,28 @@ _Generated from `src/data/schema/*.ts` by `npm run sql`. The TypeScript files ar
 - **The engine is pure.** `stack_guesses`, `pages.model` and `assets.prompt` are outputs of `src/engine` functions from a `prospects` row; regenerate, do not hand-edit.
 - **Tracking is one table.** Every interaction is an `events` row written by `src/tracking/track()`.
 
-## Tables (10)
+## Tables (11)
 
 ### Prospects & stack
+
+#### `intake_turns`
+The conversational intake on S-02, one row per answered question: the field, the question as it was asked, the answer as it was saved, who produced it (strategist, rule enricher or LLM) and the confidence right after. Append-only; the profile itself lives on prospects.  
+_Source: S-02 conversational intake_
+
+| column | type | notes |
+| --- | --- | --- |
+| `id` | uuid | Primary key |
+| `created_at` | timestamptz |  |
+| `updated_at` | timestamptz |  |
+| `prospect_id` | uuid | -> `prospects`  |
+| `field` | text | FIELD_WEIGHTS key the answer filled |
+| `question` | text | The question as it was asked, in the strategist’s language |
+| `answer` | text | The answer as saved (arrays are comma-joined) |
+| `source` | enum (manual \| rule \| llm) |  |
+| `confidence_after` | numeric | prospects.confidence right after this turn (0..1) |
+| `ts` | timestamptz |  |
+
+**Access:** strategist read/write; analyst read
 
 #### `prospects`
 One row per person we are building a lead magnet for: business, style, life and business roles, what we know and how confident we are.  
@@ -120,7 +139,7 @@ _Source: engine composePage()_
 | `model` | json | PageModel snapshot |
 
 #### `recommendations`
-What adaptFromEvents() suggested for a page, recorded before it is applied (R-A03): kind, target archetype or section, the reason, the score and who decided. A-02 writes these; the funnel reads them.  
+What adaptFromEvents() suggested for a page, recorded before it is applied (R-A03): kind, target archetype or section, the reason, the score and who decided. A-02 writes the engine kinds and A-01 writes promote_variant when an A/B side is ahead past the minimum sample; nothing is applied from a row alone.  
 _Source: A-02, engine adaptFromEvents()_
 
 | column | type | notes |
@@ -130,7 +149,7 @@ _Source: A-02, engine adaptFromEvents()_
 | `updated_at` | timestamptz |  |
 | `prospect_id` | uuid | -> `prospects`  |
 | `page_id` | uuid | -> `pages`  |
-| `kind` | enum (switch_archetype \| add_section \| shorten \| ask) |  |
+| `kind` | enum (switch_archetype \| add_section \| shorten \| ask \| promote_variant) |  |
 | `to_archetype` | enum (reveal \| audit \| walkthrough \| letter), null |  |
 | `section` | text, null | Section kind for add_section |
 | `reason` | text |  |

@@ -15,6 +15,8 @@
   --lime-500: #B8F25B;
   --lime-600: #8FD22E;
   --lime-100: #EEFAD6;
+  --lime-700: #6B9E22;
+  --lime-650: #71A825;
   --n-0: #FFFFFF;
   --n-25: #FAFBFD;
   --n-50: #F5F7FB;
@@ -172,6 +174,8 @@
   --color-danger-bg: #FDEBEB;
   --color-info: #1D4ED8;
   --color-info-bg: #E7EEFD;
+  --color-violet: #6D28D9;
+  --color-violet-bg: #EFE9FD;
   color-scheme: light;
 }
 :root[data-theme="dark"] {
@@ -217,5 +221,7 @@
   --color-danger-bg: #4A1B1B;
   --color-info: #7DA0FF;
   --color-info-bg: #17245A;
+  --color-violet: #C4B5FD;
+  --color-violet-bg: #2E1F5E;
   color-scheme: dark;
 }

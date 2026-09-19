@@ -1,11 +1,11 @@
 {
  "$schema": "https://json-schema.org/draft/2020-12/schema",
  "title": "Lead Magnet actions manifest",
- "version": "0.2.0",
+ "version": "0.4.0",
  "generated": "2026-09-19",
  "source": "scripts/actions.mjs export (compiled PageSpec.actions)",
  "routes": 51,
- "declared": 179,
+ "declared": 227,
  "tools": [
   {
    "name": "admin.applyRecommendation",
@@ -53,6 +53,31 @@
    ]
   },
   {
+   "name": "admin.compareVariants",
+   "description": "compare the A/B variants on {slug} — \"Compare variants\" on A-01 (needs events.read)",
+   "label": "Compare variants",
+   "intent": "compare the A/B variants on {slug}",
+   "permission": "events.read",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "slug": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "A-01",
+     "path": "/admin",
+     "status": "built"
+    }
+   ]
+  },
+  {
    "name": "admin.dismissRecommendation",
    "description": "dismiss recommendation {n} — \"Dismiss\" on A-02 (needs prospects.write)",
    "label": "Dismiss",
@@ -79,9 +104,9 @@
   },
   {
    "name": "admin.filterEvents",
-   "description": "show {type} events for {prospect} — \"Filter\" on A-03 (needs events.read)",
+   "description": "show {type} events for {prospect} on variant {variant} — \"Filter\" on A-03 (needs events.read)",
    "label": "Filter",
-   "intent": "show {type} events for {prospect}",
+   "intent": "show {type} events for {prospect} on variant {variant}",
    "permission": "events.read",
    "inputSchema": {
     "type": "object",
@@ -101,6 +126,14 @@
      "prospect": {
       "type": "string",
       "description": "a row id (never a screen position)"
+     },
+     "variant": {
+      "type": "string",
+      "enum": [
+       "A",
+       "B"
+      ],
+      "description": "one of A, B"
      }
     },
     "required": [],
@@ -116,9 +149,9 @@
   },
   {
    "name": "admin.filterFunnel",
-   "description": "filter the funnel by {archetype} and {warmth} — \"Filter\" on A-01 (needs events.read)",
+   "description": "filter the funnel by {archetype}, {warmth} and the last {range} days — \"Filter\" on A-01 (needs events.read)",
    "label": "Filter",
-   "intent": "filter the funnel by {archetype} and {warmth}",
+   "intent": "filter the funnel by {archetype}, {warmth} and the last {range} days",
    "permission": "events.read",
    "inputSchema": {
     "type": "object",
@@ -143,6 +176,16 @@
        "hot"
       ],
       "description": "one of all, cold, warm, hot"
+     },
+     "range": {
+      "type": "string",
+      "enum": [
+       "7",
+       "30",
+       "90",
+       "all"
+      ],
+      "description": "one of 7, 30, 90, all"
      }
     },
     "required": [],
@@ -306,6 +349,26 @@
    "label": "Open the studio",
    "intent": "open the studio",
    "permission": "pages.publish",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "A-01",
+     "path": "/admin",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "admin.recordAbWinner",
+   "description": "record the recommendation to promote the winning variant — \"Record the A/B recommendation\" on A-01 (needs prospects.write)",
+   "label": "Record the A/B recommendation",
+   "intent": "record the recommendation to promote the winning variant",
+   "permission": "prospects.write",
    "inputSchema": {
     "type": "object",
     "properties": {},
@@ -980,6 +1043,56 @@
    ]
   },
   {
+   "name": "demo.shareView",
+   "description": "copy the link to this view — \"Share this view\" on C-01, C-02, C-03, C-04, C-05, C-06, C-07 (needs demo.open)",
+   "label": "Share this view",
+   "intent": "copy the link to this view",
+   "permission": "demo.open",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "C-01",
+     "path": "/demo/:prospectId",
+     "status": "built"
+    },
+    {
+     "code": "C-02",
+     "path": "/demo/:prospectId/role/:role",
+     "status": "built"
+    },
+    {
+     "code": "C-03",
+     "path": "/demo/:prospectId/departments",
+     "status": "built"
+    },
+    {
+     "code": "C-04",
+     "path": "/demo/:prospectId/comms",
+     "status": "built"
+    },
+    {
+     "code": "C-05",
+     "path": "/demo/:prospectId/money",
+     "status": "built"
+    },
+    {
+     "code": "C-06",
+     "path": "/demo/:prospectId/life",
+     "status": "built"
+    },
+    {
+     "code": "C-07",
+     "path": "/demo/:prospectId/settings",
+     "status": "built"
+    }
+   ]
+  },
+  {
    "name": "demo.switchRole",
    "description": "view as {role} — \"Switch role\" on C-01, C-02, C-03, C-04, C-05, C-06, C-07 (needs demo.open)",
    "label": "Switch role",
@@ -1140,6 +1253,55 @@
    ]
   },
   {
+   "name": "dev.filterFeedback",
+   "description": "show {kind} feedback on {page} that is {status} — \"Filter\" on D-09 (needs feedback.read)",
+   "label": "Filter",
+   "intent": "show {kind} feedback on {page} that is {status}",
+   "permission": "feedback.read",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "kind": {
+      "type": "string",
+      "enum": [
+       "all",
+       "comment",
+       "request",
+       "bug",
+       "idea",
+       "question",
+       "praise"
+      ],
+      "description": "one of all, comment, request, bug, idea, question, praise"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "all",
+       "new",
+       "seen",
+       "waiting",
+       "done"
+      ],
+      "description": "one of all, new, seen, waiting, done"
+     },
+     "page": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "D-09",
+     "path": "/dev/feedback",
+     "status": "built"
+    }
+   ]
+  },
+  {
    "name": "dev.filterRoutes",
    "description": "show {surface} routes — \"Filter\" on D-01 (any role)",
    "label": "Filter",
@@ -1185,6 +1347,31 @@
     {
      "code": "D-05",
      "path": "/dev/rules",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "dev.needsJustin",
+   "description": "send feedback {id} to Justin — \"Needs Justin\" on D-09 (needs feedback.read)",
+   "label": "Needs Justin",
+   "intent": "send feedback {id} to Justin",
+   "permission": "feedback.read",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "D-09",
+     "path": "/dev/feedback",
      "status": "built"
     }
    ]
@@ -1342,6 +1529,10 @@
      "id": {
       "type": "string",
       "description": "free text"
+     },
+     "params": {
+      "type": "string",
+      "description": "free text"
      }
     },
     "required": [],
@@ -1421,6 +1612,26 @@
     {
      "code": "D-09",
      "path": "/dev/feedback",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "hub.openCommands",
+   "description": "open the command palette — \"Commands\" on HUB-01 (any role)",
+   "label": "Commands",
+   "intent": "open the command palette",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "HUB-01",
+     "path": "/",
      "status": "built"
     }
    ]
@@ -1590,6 +1801,26 @@
    ]
   },
   {
+   "name": "hub.voiceListen",
+   "description": "listen for a voice command — \"Speak\" on HUB-01 (any role)",
+   "label": "Speak",
+   "intent": "listen for a voice command",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "HUB-01",
+     "path": "/",
+     "status": "built"
+    }
+   ]
+  },
+  {
    "name": "landing.bookCall",
    "description": "book a walkthrough call — \"Book a 15-min walkthrough\" on L-01, L-02, L-03, L-04, L-05 (needs booking.create)",
    "label": "Book a 15-min walkthrough",
@@ -1650,6 +1881,31 @@
     {
      "code": "L-02",
      "path": "/p/:slug/audit",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "landing.correctStack",
+   "description": "let me correct the tools you guessed — \"Correct the stack\" on L-01, L-03 (needs demo.open)",
+   "label": "Correct the stack",
+   "intent": "let me correct the tools you guessed",
+   "permission": "demo.open",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "L-01",
+     "path": "/p/:slug",
+     "status": "built"
+    },
+    {
+     "code": "L-03",
+     "path": "/p/:slug/story",
      "status": "built"
     }
    ]
@@ -1841,6 +2097,31 @@
    ]
   },
   {
+   "name": "landing.resetTool",
+   "description": "undo my answer about {tool} — \"Undo this answer\" on L-02 (any role)",
+   "label": "Undo this answer",
+   "intent": "undo my answer about {tool}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "tool": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "L-02",
+     "path": "/p/:slug/audit",
+     "status": "built"
+    }
+   ]
+  },
+  {
    "name": "landing.saveWorkspace",
    "description": "save my workspace with my email — \"Save your workspace\" on L-01, L-02, L-03, L-04 (any role)",
    "label": "Save your workspace",
@@ -1950,6 +2231,41 @@
    ]
   },
   {
+   "name": "landing.shareRole",
+   "description": "copy the link to the {role} view — \"Send this role view\" on L-01, L-02, L-03 (needs demo.open)",
+   "label": "Send this role view",
+   "intent": "copy the link to the {role} view",
+   "permission": "demo.open",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "role": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "L-01",
+     "path": "/p/:slug",
+     "status": "built"
+    },
+    {
+     "code": "L-02",
+     "path": "/p/:slug/audit",
+     "status": "built"
+    },
+    {
+     "code": "L-03",
+     "path": "/p/:slug/story",
+     "status": "built"
+    }
+   ]
+  },
+  {
    "name": "landing.toggleFaq",
    "description": "answer {question} — \"Open a question\" on L-01 (any role)",
    "label": "Open a question",
@@ -2040,6 +2356,206 @@
     {
      "code": "L-03",
      "path": "/p/:slug/story",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "manual.listDecisions",
+   "description": "list the open decisions in the ops manual — \"List open decisions\" on M-01 (any role)",
+   "label": "List open decisions",
+   "intent": "list the open decisions in the ops manual",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "M-01",
+     "path": "/manual",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "manual.nextChapter",
+   "description": "go to the next chapter — \"Next chapter\" on M-02, M-03, M-04, M-05 (any role)",
+   "label": "Next chapter",
+   "intent": "go to the next chapter",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "M-02",
+     "path": "/manual/intake",
+     "status": "built"
+    },
+    {
+     "code": "M-03",
+     "path": "/manual/compose",
+     "status": "built"
+    },
+    {
+     "code": "M-04",
+     "path": "/manual/outreach",
+     "status": "built"
+    },
+    {
+     "code": "M-05",
+     "path": "/manual/calls",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "manual.openChapter",
+   "description": "open the {chapter} chapter of the ops manual — \"Open chapter\" on M-01, M-02, M-03, M-04, M-05 (any role)",
+   "label": "Open chapter",
+   "intent": "open the {chapter} chapter of the ops manual",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "chapter": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "M-01",
+     "path": "/manual",
+     "status": "built"
+    },
+    {
+     "code": "M-02",
+     "path": "/manual/intake",
+     "status": "built"
+    },
+    {
+     "code": "M-03",
+     "path": "/manual/compose",
+     "status": "built"
+    },
+    {
+     "code": "M-04",
+     "path": "/manual/outreach",
+     "status": "built"
+    },
+    {
+     "code": "M-05",
+     "path": "/manual/calls",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "manual.prevChapter",
+   "description": "go to the previous chapter — \"Previous chapter\" on M-02, M-03, M-04, M-05 (any role)",
+   "label": "Previous chapter",
+   "intent": "go to the previous chapter",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "M-02",
+     "path": "/manual/intake",
+     "status": "built"
+    },
+    {
+     "code": "M-03",
+     "path": "/manual/compose",
+     "status": "built"
+    },
+    {
+     "code": "M-04",
+     "path": "/manual/outreach",
+     "status": "built"
+    },
+    {
+     "code": "M-05",
+     "path": "/manual/calls",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "manual.print",
+   "description": "print this chapter of the ops manual — \"Print\" on M-01, M-02, M-03, M-04, M-05 (any role)",
+   "label": "Print",
+   "intent": "print this chapter of the ops manual",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "M-01",
+     "path": "/manual",
+     "status": "built"
+    },
+    {
+     "code": "M-02",
+     "path": "/manual/intake",
+     "status": "built"
+    },
+    {
+     "code": "M-03",
+     "path": "/manual/compose",
+     "status": "built"
+    },
+    {
+     "code": "M-04",
+     "path": "/manual/outreach",
+     "status": "built"
+    },
+    {
+     "code": "M-05",
+     "path": "/manual/calls",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "manual.readAll",
+   "description": "show the whole ops manual as one page — \"Read the whole manual\" on M-01 (any role)",
+   "label": "Read the whole manual",
+   "intent": "show the whole ops manual as one page",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "on": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "M-01",
+     "path": "/manual",
      "status": "built"
     }
    ]
@@ -2637,6 +3153,31 @@
    ]
   },
   {
+   "name": "studio.applyFact",
+   "description": "apply the proposed {fact} — \"Apply\" on S-02 (needs prospects.write)",
+   "label": "Apply",
+   "intent": "apply the proposed {fact}",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "fact": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-02",
+     "path": "/studio/prospects/:id",
+     "status": "built"
+    }
+   ]
+  },
+  {
    "name": "studio.approveAsset",
    "description": "approve {asset} — \"Approve\" on S-04 (needs prospects.write)",
    "label": "Approve",
@@ -2707,6 +3248,35 @@
    ]
   },
   {
+   "name": "studio.copyVariantLink",
+   "description": "copy the link that forces variant {variant} — \"Copy variant link\" on S-03 (any role)",
+   "label": "Copy variant link",
+   "intent": "copy the link that forces variant {variant}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "variant": {
+      "type": "string",
+      "enum": [
+       "A",
+       "B"
+      ],
+      "description": "one of A, B"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-03",
+     "path": "/studio/prospects/:id/compose",
+     "status": "built"
+    }
+   ]
+  },
+  {
    "name": "studio.createProspect",
    "description": "create {business} in {industry} — \"Create prospect\" on S-01 (needs prospects.write)",
    "label": "Create prospect",
@@ -2731,6 +3301,31 @@
     {
      "code": "S-01",
      "path": "/studio",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.dismissFact",
+   "description": "dismiss the proposed {fact} — \"Dismiss\" on S-02 (any role)",
+   "label": "Dismiss",
+   "intent": "dismiss the proposed {fact}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "fact": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-02",
+     "path": "/studio/prospects/:id",
      "status": "built"
     }
    ]
@@ -2761,6 +3356,31 @@
    ]
   },
   {
+   "name": "studio.duplicateProspect",
+   "description": "duplicate prospect {name} as a new prospect — \"Duplicate\" on S-01 (needs prospects.write)",
+   "label": "Duplicate",
+   "intent": "duplicate prospect {name} as a new prospect",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-01",
+     "path": "/studio",
+     "status": "built"
+    }
+   ]
+  },
+  {
    "name": "studio.expirePage",
    "description": "expire the page — \"Expire\" on S-03 (needs pages.publish)",
    "label": "Expire",
@@ -2776,6 +3396,55 @@
     {
      "code": "S-03",
      "path": "/studio/prospects/:id/compose",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.expireVariant",
+   "description": "expire variant {variant} — \"Expire variant\" on S-03 (needs pages.publish)",
+   "label": "Expire variant",
+   "intent": "expire variant {variant}",
+   "permission": "pages.publish",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "variant": {
+      "type": "string",
+      "enum": [
+       "A",
+       "B"
+      ],
+      "description": "one of A, B"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-03",
+     "path": "/studio/prospects/:id/compose",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.extractFacts",
+   "description": "extract the facts from the pasted text — \"Extract facts\" on S-02 (needs prospects.write)",
+   "label": "Extract facts",
+   "intent": "extract the facts from the pasted text",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-02",
+     "path": "/studio/prospects/:id",
      "status": "built"
     }
    ]
@@ -2969,6 +3638,31 @@
    ]
   },
   {
+   "name": "studio.pasteFacts",
+   "description": "paste {text} into the facts box — \"Paste facts\" on S-02 (needs prospects.write)",
+   "label": "Paste facts",
+   "intent": "paste {text} into the facts box",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "text": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-02",
+     "path": "/studio/prospects/:id",
+     "status": "built"
+    }
+   ]
+  },
+  {
    "name": "studio.pickArchetype",
    "description": "use the {archetype} archetype — \"Use this archetype\" on S-03 (needs pages.publish)",
    "label": "Use this archetype",
@@ -3066,6 +3760,45 @@
    "inputSchema": {
     "type": "object",
     "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-03",
+     "path": "/studio/prospects/:id/compose",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.publishVariant",
+   "description": "publish variant {variant} as the {archetype} page — \"Publish variant\" on S-03 (needs pages.publish)",
+   "label": "Publish variant",
+   "intent": "publish variant {variant} as the {archetype} page",
+   "permission": "pages.publish",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "variant": {
+      "type": "string",
+      "enum": [
+       "A",
+       "B"
+      ],
+      "description": "one of A, B"
+     },
+     "archetype": {
+      "type": "string",
+      "enum": [
+       "reveal",
+       "audit",
+       "walkthrough",
+       "letter"
+      ],
+      "description": "one of reveal, audit, walkthrough, letter"
+     }
+    },
     "required": [],
     "additionalProperties": false
    },
@@ -3295,6 +4028,26 @@
     {
      "code": "S-03",
      "path": "/studio/prospects/:id/compose",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.skipQuestion",
+   "description": "skip this question and ask the next one — \"Skip\" on S-02 (any role)",
+   "label": "Skip",
+   "intent": "skip this question and ask the next one",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-02",
+     "path": "/studio/prospects/:id",
      "status": "built"
     }
    ]

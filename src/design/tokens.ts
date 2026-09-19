@@ -16,6 +16,8 @@ export const brand = {
   ink900: '#0B0F1F', ink800: '#141A33', ink700: '#1E2647', ink600: '#2B3560',
   electric700: '#3450D6', electric600: '#4A66F0', electric500: '#5B7CFF', electric400: '#7F98FF', electric200: '#C9D4FF', electric100: '#E4EAFF', electric50: '#F2F5FF',
   lime500: '#B8F25B', lime600: '#8FD22E', lime100: '#EEFAD6',
+  /** Chart-fill steps of the lime ramp (the 500 / 600 steps are 1.79:1 on white): validated categorical pair with electric-600 / electric-500 (PairedBarChart, D-097+). */
+  lime700: '#6B9E22', lime650: '#71A825',
   electricOnDark: '#8FA6FF', electricOnDarkHover: '#A8BAFF',
 } as const;
 
@@ -24,10 +26,10 @@ export const neutrals = {
   'n-400': '#A2ABBF', 'n-500': '#7F899E', 'n-600': '#616B80', 'n-700': '#48506A', 'n-800': '#2F3550', 'n-850': '#1F2438', 'n-900': '#161A2B', 'n-950': '#0E1120', 'n-1000': '#000000',
 } as const;
 
-/** Every fg sits at >= 4.5:1 on its own bg and on white (WCAG 2.1 AA for badge-sized text): success 5.9, warn 5.3, danger 5.6, info 5.8. */
+/** Every fg sits at >= 4.5:1 on its own bg and on white (WCAG 2.1 AA for badge-sized text): success 5.9, warn 5.3, danger 5.6, info 5.8, violet 7.2 (fifth model hue, Badge tone `violet`). */
 export const status = {
-  light: { success: '#0F6B3C', successBg: '#E3F6EB', warn: '#9A5200', warnBg: '#FEF3E2', danger: '#B91C1C', dangerBg: '#FDEBEB', info: '#1D4ED8', infoBg: '#E7EEFD' },
-  dark: { success: '#5FD68F', successBg: '#12321F', warn: '#F5A94B', warnBg: '#3B2A0E', danger: '#FF7B7B', dangerBg: '#4A1B1B', info: '#7DA0FF', infoBg: '#17245A' },
+  light: { success: '#0F6B3C', successBg: '#E3F6EB', warn: '#9A5200', warnBg: '#FEF3E2', danger: '#B91C1C', dangerBg: '#FDEBEB', info: '#1D4ED8', infoBg: '#E7EEFD', violet: '#6D28D9', violetBg: '#EFE9FD' },
+  dark: { success: '#5FD68F', successBg: '#12321F', warn: '#F5A94B', warnBg: '#3B2A0E', danger: '#FF7B7B', dangerBg: '#4A1B1B', info: '#7DA0FF', infoBg: '#17245A', violet: '#C4B5FD', violetBg: '#2E1F5E' },
 } as const;
 
 /** Plan / task lifecycle hues (K- module) and page status hues (draft/live/expired). One vocabulary. */
@@ -124,13 +126,13 @@ function resolve(value: string): string {
 function themeBlock(theme: ThemeName): string {
   const sem = Object.fromEntries(Object.entries(semantic[theme]).map(([k, v]) => [k, resolve(v)]));
   const st = status[theme];
-  const stVars = { 'color-success': st.success, 'color-success-bg': st.successBg, 'color-warn': st.warn, 'color-warn-bg': st.warnBg, 'color-danger': st.danger, 'color-danger-bg': st.dangerBg, 'color-info': st.info, 'color-info-bg': st.infoBg };
+  const stVars = { 'color-success': st.success, 'color-success-bg': st.successBg, 'color-warn': st.warn, 'color-warn-bg': st.warnBg, 'color-danger': st.danger, 'color-danger-bg': st.dangerBg, 'color-info': st.info, 'color-info-bg': st.infoBg, 'color-violet': st.violet, 'color-violet-bg': st.violetBg };
   return `${vars(sem)}\n${vars(stVars)}\n  color-scheme: ${theme};`;
 }
 
 /** Builds the full tokens stylesheet: static scales on :root, --scale bands, light block, dark block. */
 export function buildTokensCss(): string {
-  const ramp = vars({ 'ink-900': brand.ink900, 'ink-800': brand.ink800, 'ink-700': brand.ink700, 'ink-600': brand.ink600, 'electric-700': brand.electric700, 'electric-600': brand.electric600, 'electric-500': brand.electric500, 'electric-400': brand.electric400, 'electric-200': brand.electric200, 'electric-100': brand.electric100, 'electric-50': brand.electric50, 'lime-500': brand.lime500, 'lime-600': brand.lime600, 'lime-100': brand.lime100 });
+  const ramp = vars({ 'ink-900': brand.ink900, 'ink-800': brand.ink800, 'ink-700': brand.ink700, 'ink-600': brand.ink600, 'electric-700': brand.electric700, 'electric-600': brand.electric600, 'electric-500': brand.electric500, 'electric-400': brand.electric400, 'electric-200': brand.electric200, 'electric-100': brand.electric100, 'electric-50': brand.electric50, 'lime-500': brand.lime500, 'lime-600': brand.lime600, 'lime-100': brand.lime100, 'lime-700': brand.lime700, 'lime-650': brand.lime650 });
   const hues = Object.entries(lifecycleHues).flatMap(([k, h]) => [[`status-${k}-fg`, h.fg], [`status-${k}-bg`, h.bg]]);
   let css = `/* GENERATED from src/design/tokens.ts by scripts/gen-tokens.mjs - do not edit by hand */\n:root {\n  --scale: 1;\n${ramp}\n${vars(neutrals)}\n${vars(type)}\n${vars(spacing)}\n${vars(radii)}\n${vars(motion)}\n${vars(layoutTokens)}\n${vars(Object.fromEntries(hues))}\n${vars(shadows)}\n}\n`;
   css += `/* 10-foot bands (P-01): type and spacing scale up per width band, never per page. */\n@media (min-width: 1920px) { :root { --scale: 1.125; } }\n@media (min-width: 2560px) { :root { --scale: 1.5; } }\n@media (min-width: 3840px) { :root { --scale: 2.25; } }\n`;

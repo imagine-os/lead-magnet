@@ -204,7 +204,12 @@
 .lp-role-name { font-family: var(--lp-font-display); font-size: var(--fs-lg); font-weight: var(--fw-bold); }
 .lp-role-headline { font-size: var(--fs-sm); color: var(--lp-muted); margin: 0; }
 .lp-role-widgets { display: grid; gap: var(--sp-2); font-size: calc(13px * var(--scale)); }
-.lp .lp-role-try { margin-top: auto; align-self: flex-start; }
+.lp-role-actions { margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); }
+.lp .lp-role-try { align-self: flex-start; }
+/* Per-role share link: the field is the confirmation *and* the fallback when the clipboard is refused. */
+.lp-share { display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-3); border-radius: var(--r-md); background: var(--lp-tint); border: 1px solid var(--lp-line); min-width: 0; }
+.lp-share-label { font-size: var(--fs-xs); color: var(--lp-text); }
+.lp .lp-share-url { width: 100%; min-width: 0; font-size: var(--fs-xs); font-family: var(--font-mono); text-overflow: ellipsis; }
 .lp-role-widgets .lp-w-title { font-size: calc(12px * var(--scale)); }
 
 /* ---------- walkthrough story ---------- */
@@ -253,8 +258,11 @@
 .lp-sample-title { font-family: var(--lp-font-display); color: var(--lp-text); }
 .lp-quote { margin: 0; font-family: var(--lp-font-display); font-size: clamp(18px, 2vw, calc(28px * var(--scale))); line-height: 1.35; }
 .lp-quote footer { margin-top: var(--sp-2); font-family: var(--lp-font-body); color: var(--lp-muted); text-transform: capitalize; }
-.lp-logos { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
-.lp-logo { display: grid; place-items: center; width: 72px; height: 44px; border-radius: var(--r-md); background: var(--lp-surface); border: 1px solid var(--lp-line); color: var(--lp-muted); font-family: var(--lp-font-display); font-weight: var(--fw-bold); }
+/* Proof you can check in two minutes; it replaced five invented logo marks (pass 3). */
+.lp-checkable { margin-top: var(--sp-8); display: flex; flex-direction: column; gap: var(--sp-4); }
+.lp-check-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-3); grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.lp-check { display: flex; align-items: flex-start; gap: var(--sp-3); padding: var(--sp-4); border: 1px solid var(--lp-line); border-left: 3px solid var(--lp-primary); border-radius: var(--r-md); background: var(--lp-surface); font-size: var(--fs-md); line-height: 1.5; min-width: 0; }
+.lp-check svg { flex: 0 0 auto; color: var(--lp-primary); margin-top: 2px; }
 
 /* ---------- letter ---------- */
 .lp-letter { display: flex; justify-content: center; }
@@ -276,6 +284,10 @@
 .lp-band .lp-h2 { max-width: 20ch; }
 .lp-urgency { display: flex; align-items: center; flex-wrap: wrap; gap: var(--sp-2); font-size: var(--fs-sm); margin: 0; color: color-mix(in srgb, var(--lp-on-primary) 88%, transparent); }
 
+/* Honest expiry beside every CTA (R-C04): a fact, not a countdown - so it is quiet, not red. */
+.lp-expiry { margin: var(--sp-3) 0 0; font-size: var(--fs-sm); line-height: 1.5; color: var(--lp-muted); max-width: 54ch; }
+.lp-savings-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); }
+
 /* ---------- inline booking ---------- */
 .lp-book { display: grid; gap: var(--sp-3); grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); }
 .lp-book-day { background: var(--lp-surface); border: 1px solid var(--lp-line); border-radius: var(--r-card); padding: var(--sp-3); display: flex; flex-direction: column; gap: var(--sp-2); }
@@ -291,6 +303,7 @@
 .lp-sticky.is-on { transform: none; }
 /* A bare button is an ask; the number beside it is the reason. */
 .lp-sticky-num { margin: 0; text-align: center; font-family: var(--lp-font-display); font-weight: var(--fw-bold); font-size: var(--fs-sm); color: var(--lp-primary-text); font-variant-numeric: tabular-nums; }
+.lp-sticky-days { font-weight: var(--fw-regular); color: var(--lp-muted); }
 .lp-sticky-row { display: flex; gap: var(--sp-2); align-items: stretch; }
 .lp-sticky-row > :first-child { flex: 1 1 auto; min-width: 0; }
 @media (max-width: 767px) { .lp-sticky { display: flex; } .lp-foot-in { padding-bottom: calc(var(--sp-20)); } }
@@ -304,12 +317,38 @@
 .lp-expired .lp-h1 { max-width: 22ch; }
 .lp-expired-main { padding: clamp(40px, 6vw, calc(96px * var(--scale))) var(--sp-4) var(--sp-16); display: flex; flex-direction: column; gap: var(--sp-5); max-width: 78ch; }
 .lp-expired-card { max-width: 62ch; }
+/* The second chance on a dead link is the calendar, given its own block rather than buried under the form. */
+.lp-expired-second { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-3); padding: var(--sp-5); border-radius: var(--r-lg); border: 1px solid var(--lp-line); background: var(--lp-tint); max-width: 62ch; }
+.lp-expired-second-h { margin: 0; font-family: var(--lp-font-display); font-size: var(--fs-xl); font-weight: var(--fw-bold); color: var(--lp-text); }
+.lp-expired-second .lp-note { margin: 0; }
 
-/* ---------- 10-foot bands: give the biggest screens more of the page, not just bigger type ---------- */
+/* ---------- 10-foot bands: give the biggest screens more of the page, not just bigger type ----------
+   The clamp maxima below are what used to stop the page from growing: at 1920 the headline hit its 68px * --scale
+   ceiling (76 px) while 5.6vw wanted 107 px, so a wall-mounted TV rendered a desktop page slightly enlarged. Each
+   band now raises the ceiling to what the vw term already asks for; nothing here is a new size, it is a removed cap. */
+@media (min-width: 1920px) {
+  .lp-h1 { font-size: clamp(32px, 5.6vw, 112px); }
+  .lp-h2 { font-size: clamp(24px, 3vw, 62px); }
+  .lp-lede { font-size: clamp(16px, 1.6vw, 31px); }
+  .lp-fact { font-size: clamp(15px, 1.4vw, 27px); }
+  .lp-expiry, .lp-sub { font-size: calc(19px * var(--scale)); }
+  .lp-running strong { font-size: clamp(20px, 2.4vw, 46px); }
+  .lp .stat-lg { --stat-value-size: clamp(40px, 4.2vw, 80px); }
+  .lp-sticky-num { font-size: calc(18px * var(--scale)); }
+}
 @media (min-width: 2560px) {
   .lp-proof { grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); }
+  .lp-check-list { grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); }
   .lp-book { grid-template-columns: repeat(7, minmax(0, 1fr)); }
   .lp-roles { grid-template-columns: repeat(auto-fill, minmax(520px, 1fr)); }
+  .lp-h1 { font-size: clamp(32px, 5.6vw, 150px); }
+  .lp-h2 { font-size: clamp(24px, 3vw, 80px); }
+  .lp-lede { font-size: clamp(16px, 1.6vw, 42px); }
+  .lp-fact { font-size: clamp(15px, 1.4vw, 36px); }
+  .lp-expiry { font-size: 30px; }
+  .lp-check { font-size: 30px; }
+  .lp-running strong { font-size: 60px; }
+  .lp .stat-lg { --stat-value-size: clamp(40px, 4.2vw, 108px); }
 }
 /* 4K: the headline, the CTAs and the savings number are what has to land from ten feet; nothing tiny, nothing centred
    in a narrow column. The wrap widens so the hero is not a stamp in the middle of the wall. */
@@ -324,6 +363,10 @@
   .lp-stack-cat, .lp-stack-repl { font-size: 30px; }
   .lp-note, .lp-hero-meta { font-size: 28px; }
   .lp-urgency { font-size: 36px; }
+  .lp-expiry { font-size: 38px; }
+  .lp-check { font-size: 38px; }
+  .lp .stat-lg { --stat-value-size: 150px; }
+  .lp-h2 { font-size: clamp(24px, 3vw, 104px); }
   .lp-device-phone .device { max-width: 460px; }
 }
 

@@ -1,8 +1,9 @@
-import type { ReactNode } from 'react';
+import { useRef, type ReactNode } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useI18n } from '../../i18n/I18nProvider';
 import { LangToggle } from '../../components/molecule/LangToggle/LangToggle';
 import { Icon } from '../../components/atom/Icon/Icon';
+import { useGamepadNav, useSpatialNav } from '../../a11y';
 import './website.css';
 
 export type SitePage = 'home' | 'how' | 'pricing';
@@ -14,8 +15,9 @@ const NAV: { key: SitePage; to: string; label: string }[] = [
 
 /** Imagine's own chrome for W-01..W-03: our brand, our tokens, no prospect theming. Public pages own their chrome. */
 export function SiteChrome({ active, children }: { active: SitePage; children: ReactNode }) {
+  const root = useRef<HTMLDivElement>(null); const spatial = useSpatialNav(root); useGamepadNav(spatial); // P-04: arrows / d-pad move focus (pass-3 integration)
   const { t } = useI18n();
-  return (<div className="site">
+  return (<div className="site" ref={root}>
     <a className="site-skip" href="#site-main">{t('site.skip')}</a>
     <header className="site-head">
       <div className="container container-wide site-head-in">

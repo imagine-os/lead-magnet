@@ -17,6 +17,7 @@ import { Placeholder } from '../../components/atom/Placeholder/Placeholder';
 import { DeviceMockup } from '../../components/molecule/DeviceMockup/DeviceMockup';
 import { DataTable, type Column } from '../../components/organism/DataTable/DataTable';
 import { EmptyState } from '../../components/molecule/EmptyState/EmptyState';
+import { useGamepadNav, useSpatialNav } from '../../a11y';
 import './proposal.css';
 
 const money = (n: number) => `$${Math.round(n).toLocaleString('en-US')}`;
@@ -39,6 +40,7 @@ export function ProposalPage() {
   const { rows: pages } = useTable<PageRow>('pages', { where: { prospect_id: prospectId } });
   const pageId = pages.find((p) => p.status === 'live')?.id ?? pages[0]?.id ?? null;
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const spatial = useSpatialNav(rootRef); useGamepadNav(spatial); // P-04: arrows / d-pad move focus (pass-3 integration)
 
   const guesses: StackGuess[] = useMemo(() => {
     if (!prospect) return [];

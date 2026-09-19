@@ -16,5 +16,19 @@
 .btn-ghost:hover:not(:disabled) { background: var(--color-surface-tint); color: var(--color-primary-text); }
 .btn-danger { background: var(--color-danger); color: #fff; }
 .btn-link { background: none; color: var(--color-primary-text); height: auto; min-height: 44px; padding: 0; border: 0; text-decoration: underline; text-underline-offset: 3px; }
+/* The icon follows the --scale band (Icon takes a pixel size; CSS width / height win over the attributes). */
+.btn .icon { width: calc(18px * var(--scale)); height: calc(18px * var(--scale)); flex: none; } .btn-sm .icon { width: calc(16px * var(--scale)); height: calc(16px * var(--scale)); }
 .btn-spinner { width: 14px; height: 14px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: btn-spin .7s linear infinite; }
 @keyframes btn-spin { to { transform: rotate(360deg); } }
+/* tone="prospect": the same variants painted from the prospect's --lp-* properties (prospectStyle() on the page root),
+   every one with a --color-* fallback so the button is still right outside a themed page. */
+.btn-prospect.btn-primary { background: var(--lp-primary, var(--color-primary)); color: var(--lp-on-primary, var(--color-text-on-primary)); }
+.btn-prospect.btn-primary:hover:not(:disabled) { background: var(--lp-primary, var(--color-primary)); filter: brightness(.92); }
+.btn-prospect.btn-accent { background: var(--lp-accent, var(--color-accent)); color: var(--lp-on-accent, var(--color-accent-text)); }
+.btn-prospect.btn-secondary { background: var(--lp-surface, var(--color-surface)); color: var(--lp-primary, var(--color-primary-text)); border-color: var(--lp-primary, var(--color-primary)); }
+.btn-prospect.btn-secondary:hover:not(:disabled) { background: color-mix(in srgb, var(--lp-primary, var(--color-primary)) 8%, var(--lp-bg, var(--color-bg))); }
+.btn-prospect.btn-outline { background: var(--lp-surface, var(--color-surface)); color: var(--lp-text, var(--color-text)); border-color: color-mix(in srgb, var(--lp-text, var(--color-text)) 22%, var(--lp-bg, var(--color-bg))); }
+.btn-prospect.btn-outline:hover:not(:disabled), .btn-prospect.btn-outline:focus-visible { color: var(--lp-primary, var(--color-primary-text)); border-color: var(--lp-primary, var(--color-primary)); }
+.btn-prospect.btn-ghost { color: var(--lp-text, var(--color-text)); }
+.btn-prospect.btn-ghost:hover:not(:disabled) { background: color-mix(in srgb, var(--lp-primary, var(--color-primary)) 8%, var(--lp-bg, var(--color-bg))); color: var(--lp-primary, var(--color-primary-text)); }
+.btn-prospect.btn-link { color: var(--lp-primary, var(--color-primary-text)); }

@@ -5,5 +5,5 @@ export { deriveRoleViews } from './roles';
 export { pickArchetype, defaultArchetype } from './archetype';
 export { composePage, slugify, type ComposeOpts } from './compose';
 export { imagePrompts, type ImagePrompt } from './images';
-export { nextQuestions, applyAnswer, computeConfidence, adaptFromEvents, FIELD_WEIGHTS, RuleEnricher, LlmEnricher, defaultEnricher, type Enricher, type NextQuestion, type Recommendation } from './intake';
+export { nextQuestions, applyAnswer, computeConfidence, subIndustries, adaptFromEvents, FIELD_WEIGHTS, RuleEnricher, LlmEnricher, defaultEnricher, type Enricher, type NextQuestion, type Recommendation } from './intake';
 export { tzForProspect, zonedInstant, slotGrid, findSlot, normalizeSlotIso, withRequested, previewSlots, slotInWords, dayLabel, timeLabel, DURATION_MIN, WORK_START_HOUR, WORK_END_HOUR, type Tz, type Slot, type SlotDay, type SlotGrid } from './slots';

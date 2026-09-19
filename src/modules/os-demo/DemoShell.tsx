@@ -26,6 +26,7 @@ import { useToast } from '../../components/molecule/Toast/Toast';
 import { Modal } from '../../components/organism/Modal/Modal';
 import { Drawer } from '../../components/organism/Drawer/Drawer';
 import { personFor, roleSlug, titleCase, viewSlug, findView } from './people';
+import { useDemoScale } from './useDemoScale';
 import './demo.css';
 
 export type SectionKey = 'home' | 'departments' | 'comms' | 'money' | 'life' | 'settings';
@@ -56,11 +57,14 @@ export function DemoShell({ code, section, children }: { code: string; section: 
   const { rows: pages } = useTable<PageRow>('pages', prospectId ? { where: { prospect_id: prospectId } } : { where: { prospect_id: '—' } });
   const pageId = pages[0]?.id ?? null;
   const [saveOpen, setSaveOpen] = useState(false);
+  const [shareUrl, setShareUrl] = useState<string | null>(null); // set only when the clipboard refuses: the link is then shown to copy by hand
   const [roleOpen, setRoleOpen] = useState(false); // phone: the role switcher lives in a sheet (top bar is one row under 600 px)
   const [saved, setSaved] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const root = useRef<HTMLDivElement>(null); const spatial = useSpatialNav(root); useGamepadNav(spatial); // P-04: their OS on a TV remote
+  const shareRef = useRef<HTMLInputElement>(null);
+  const scale = useDemoScale(); // Icon takes a px size, so the chrome's icons grow with the 10-foot bands (P-01)
   useDefaultLang(prospect?.lang); // their OS opens in their language unless the viewer chose one (P-13)
 
   const views = useMemo(() => (prospect ? deriveRoleViews(prospect) : []), [prospect]);
@@ -85,6 +89,24 @@ export function DemoShell({ code, section, children }: { code: string; section: 
   const go = (s: SectionKey) => nav(s === 'home' ? `${base}/role/${activeView ? viewSlug(activeView, views) : roleSlug(activeRole)}` : `${base}/${s}`);
   const openSave = () => { void track('cta_click', { cta: 'save_workspace', section: code }, ctx); setSaveOpen(true); };
   const book = () => { void track('cta_click', { cta: 'book_walkthrough', section: code }, ctx); nav(`/book/${prospectId ?? ''}`); };
+  /** The deep link of what is on screen: the role view on home (D-037), the section path everywhere else. */
+  const sharePath = () => (section === 'home'
+    ? `${base}/role/${activeView ? viewSlug(activeView, views) : roleSlug(activeRole)}`
+    : `${base}/${section}`);
+  const shareView = async () => {
+    const url = `${window.location.origin}${window.location.pathname}${window.location.search}#${sharePath()}`;
+    void track('cta_click', { cta: 'share_view', role: activeRole, section: code }, ctx);
+    try {
+      await navigator.clipboard.writeText(url);
+      setShareUrl(null);
+      toast.push({ tone: 'success', title: t('demo.share_copied'), body: url });
+    } catch {
+      setShareUrl(url); // visible fallback: the bar under the top bar shows the link, selected, to copy by hand
+      toast.push({ tone: 'warn', title: t('demo.share_manual'), body: t('demo.share_manual_body') });
+    }
+    return url;
+  };
+  useEffect(() => { if (shareUrl) { shareRef.current?.focus(); shareRef.current?.select(); } }, [shareUrl]);
   const submitSave = () => {
     void track('form_submit', { form: 'save_workspace', has_name: !!name.trim(), has_email: !!email.trim(), section: code }, ctx);
     setSaved(true); setSaveOpen(false);
@@ -95,6 +117,7 @@ export function DemoShell({ code, section, children }: { code: string; section: 
     'demo.saveWorkspace': () => openSave(),
     'demo.bookCall': () => book(),
     'demo.goto': (p) => go((String(p?.section ?? 'home') as SectionKey)),
+    'demo.shareView': () => shareView(),
   });
 
   if (!prospectId || !prospect) return (
@@ -137,10 +160,19 @@ export function DemoShell({ code, section, children }: { code: string; section: 
           <span className="demo-lang-full"><LangToggle size="sm" /></span>
           <span className="demo-lang-compact"><LangToggle size="sm" compact /></span>
           <div className="demo-cta">
+            <Button size="sm" variant="ghost" icon="link" className="demo-share" aria-label={t('demo.share')} title={t('demo.share')} onClick={() => void shareView()}>{t('demo.share')}</Button>
             <Button size="sm" variant="ghost" icon="calendar" onClick={book}>{t('demo.book')}</Button>
             <Button size="sm" variant="primary" icon={saved ? 'check' : 'heart'} onClick={openSave}>{saved ? t('demo.saved') : t('demo.save')}</Button>
           </div>
         </div>
+        {shareUrl && (
+          <div className="demo-sharebar">
+            <Field label={t('demo.share_manual')} hint={t('demo.share_manual_body')}>
+              <Input ref={shareRef} readOnly value={shareUrl} onFocus={(e) => e.currentTarget.select()} />
+            </Field>
+            <Button size="sm" variant="ghost" icon="close" onClick={() => setShareUrl(null)}>{t('demo.share_close')}</Button>
+          </div>
+        )}
       </header>
       <Drawer open={roleOpen} onClose={() => setRoleOpen(false)} title={t('demo.viewing_as')} width={360}>
         <div className="stack demo-rolesheet">
@@ -158,7 +190,7 @@ export function DemoShell({ code, section, children }: { code: string; section: 
         <nav className="demo-side" aria-label={t('demo.nav_label')}>
           {NAV.map((n) => (
             <button key={n.key} type="button" className={`demo-navitem ${n.key === section ? 'is-active' : ''}`} aria-current={n.key === section ? 'page' : undefined} onClick={() => go(n.key)}>
-              <Icon name={n.icon} size={20} /><span>{t(n.k)}</span>
+              <Icon name={n.icon} size={Math.round(20 * scale)} /><span>{t(n.k)}</span>
             </button>
           ))}
           <div className="demo-side-foot xs">{t('demo.side_foot', { business: prospect.business_name })}</div>
@@ -168,7 +200,7 @@ export function DemoShell({ code, section, children }: { code: string; section: 
       <nav className="demo-bottomnav" aria-label={t('demo.nav_label')}>
         {NAV.map((n) => (
           <button key={n.key} type="button" className={`demo-tabitem ${n.key === section ? 'is-active' : ''}`} aria-current={n.key === section ? 'page' : undefined} onClick={() => go(n.key)}>
-            <Icon name={n.icon} size={22} /><span className="demo-tablabel">{t(n.k)}</span>
+            <Icon name={n.icon} size={Math.round(22 * scale)} /><span className="demo-tablabel">{t(n.k)}</span>
           </button>
         ))}
       </nav>
@@ -178,6 +210,7 @@ export function DemoShell({ code, section, children }: { code: string; section: 
           <p className="small muted">{t('demo.save_body')}</p>
           <Field label={t('demo.name')}><Input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" placeholder={prospect.first_name} /></Field>
           <Field label={t('demo.email')} hint={t('demo.email_hint')}><Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" placeholder="you@example.com" /></Field>
+          <p className="xs muted">{t('demo.save_note')}</p>
         </div>
       </Modal>
     </div>

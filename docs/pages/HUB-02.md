@@ -62,3 +62,4 @@ Checked at: 390, 1280.
 ## Changelog
 
 - `docs/changelog/0001-foundation.md`
+- `docs/changelog/0023-integration-pass-3.md` (pass 3 integration: `useSpatialNav` + `useGamepadNav` on the page root, D-124)

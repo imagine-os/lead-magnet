@@ -118,11 +118,11 @@ export function ProspectsPage() {
   });
 
   const columns: Column<ProspectRow>[] = [
-    { key: 'name', header: t('studio.col_name'), render: (p) => <span className="st-strong">{fullName(p)}</span> },
-    { key: 'business_name', header: t('studio.col_business'), render: (p) => <span>{p.business_name}<span className="xs muted st-block">{p.city}</span></span> },
-    { key: 'industry', header: t('studio.col_industry'), render: (p) => <span className="xs">{industryLabel(p.industry, bi)}</span> },
-    { key: 'warmth', header: t('studio.col_warmth'), render: (p) => <Chip selected={p.warmth === 'hot'}>{t(`studio.warmth_${p.warmth}`)}</Chip> },
-    { key: 'confidence', header: t('studio.col_confidence'), width: '160px', render: (p) => <ProgressBar size="sm" label={t('studio.confidence')} value={Math.round(p.confidence * 100)} tone={p.confidence >= 0.6 ? 'success' : p.confidence >= 0.3 ? 'primary' : 'warn'} /> },
+    { key: 'name', header: t('studio.col_name'), sortable: true, accessor: (p) => fullName(p), render: (p) => <span className="st-strong">{fullName(p)}</span> },
+    { key: 'business_name', header: t('studio.col_business'), sortable: true, render: (p) => <span>{p.business_name}<span className="xs muted st-block">{p.city}</span></span> },
+    { key: 'industry', header: t('studio.col_industry'), sortable: true, accessor: (p) => industryLabel(p.industry, bi), render: (p) => <span className="xs">{industryLabel(p.industry, bi)}</span> },
+    { key: 'warmth', header: t('studio.col_warmth'), sortable: true, accessor: (p) => ({ cold: 0, warm: 1, hot: 2 } as Record<string, number>)[p.warmth] ?? null, render: (p) => <Chip selected={p.warmth === 'hot'}>{t(`studio.warmth_${p.warmth}`)}</Chip> },
+    { key: 'confidence', header: t('studio.col_confidence'), width: '160px', sortable: true, render: (p) => <ProgressBar size="sm" label={t('studio.confidence')} value={Math.round(p.confidence * 100)} tone={p.confidence >= 0.6 ? 'success' : p.confidence >= 0.3 ? 'primary' : 'warn'} /> },
     { key: 'page', header: t('studio.col_page'), render: (p) => {
       const pg = pageOf[p.id];
       if (!pg) return <span className="xs muted">{t('studio.no_page')}</span>;
@@ -131,7 +131,7 @@ export function ProspectsPage() {
     } },
     { key: 'last_event', header: t('studio.col_last_event'), render: (p) => <span className="xs muted">{lastEvent[p.id] ? shortTime(lastEvent[p.id], lang) : t('studio.never')}</span> },
     // the DataTable row link covers the whole row (.dt-rowlink::after), so a per-row control has to sit above it
-    { key: 'act', header: t('studio.col_act'), width: '130px', render: (p) => <Button size="sm" variant="ghost" icon="copy" disabled={!writable} onClick={() => void duplicate(p)} aria-label={t('studio.duplicate_name', { name: p.business_name })}>{t('studio.duplicate')}</Button> },
+    { key: 'act', header: t('studio.col_act'), width: '130px', srOnlyHeader: true, render: (p) => <Button size="sm" variant="ghost" icon="copy" disabled={!writable} onClick={() => void duplicate(p)} aria-label={t('studio.duplicate_name', { name: p.business_name })}>{t('studio.duplicate')}</Button> },
     { key: 'booking', header: t('studio.col_booking'), render: (p) => { const b = lastBooking[p.id]; return b ? <Badge size="sm" tone={b.status === 'confirmed' || b.status === 'completed' ? 'success' : b.status === 'cancelled' ? 'danger' : 'info'}>{t(`studio.booking_${b.status}`)}</Badge> : <span className="xs muted">{t('studio.no_booking')}</span>; } },
   ];
 

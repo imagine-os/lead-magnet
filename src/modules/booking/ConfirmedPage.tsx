@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useRow, useTable } from '../../data/DataContext';
 import type { BookingRow, PageRow, ProspectRow } from '../../data/schema/core';
@@ -13,10 +13,12 @@ import { Placeholder } from '../../components/atom/Placeholder/Placeholder';
 import { EmptyState } from '../../components/molecule/EmptyState/EmptyState';
 import { LangToggle } from '../../components/molecule/LangToggle/LangToggle';
 import { slotInWords, tzForProspect } from '../../engine/slots';
+import { useGamepadNav, useSpatialNav } from '../../a11y';
 import './booking.css';
 
 /** B-02 - confirmation. Reads the row back by id (R-B03) and sends them into the demo; .ics waits for T42. */
 export function ConfirmedPage() {
+  const root = useRef<HTMLDivElement>(null); const spatial = useSpatialNav(root); useGamepadNav(spatial); // P-04: arrows / d-pad move focus (pass-3 integration)
   const { prospectId } = useParams();
   const [params] = useSearchParams();
   const nav = useNavigate();
@@ -38,7 +40,7 @@ export function ConfirmedPage() {
   if (!prospect || !booking) return (<div className="bk"><main className="container page"><EmptyState icon="calendar" title={t('booking.none_title')} body={t('booking.none_body')} action={prospectId ? <Link to={`/book/${prospectId}`}><Button variant="primary">{t('booking.pick_time')}</Button></Link> : undefined} /></main></div>);
 
   const words = slotInWords(booking.slot, tz, lang);
-  return (<div className="bk" style={prospectStyle(prospect.style.palette, prospect.style.font)} lang={lang}>
+  return (<div className="bk" ref={root} style={prospectStyle(prospect.style.palette, prospect.style.font)} lang={lang}>
     <header className="bk-bar">
       <Link to={page ? `/p/${page.slug}` : `/book/${prospect.id}`} className="bk-mark">{prospect.business_name}</Link>
       <div className="row"><span className="xs bk-tz">{tz.abbr}</span><LangToggle size="sm" /></div>

@@ -23,7 +23,7 @@ Dark: `../screenshots/HUB-01/390-dark.jpg`, `../screenshots/HUB-01/1280-dark.jpg
 
 ## Sections (layout order)
 
-1. header (brand, EN/ES, theme, dev mode)
+1. header (brand, Commands + Speak, EN/ES, theme, dev mode)
 2. role switcher
 3. prospects: landing pages per archetype + demo
 4. OS demo in PhoneFrame
@@ -50,6 +50,8 @@ Dark: `../screenshots/HUB-01/390-dark.jpg`, `../screenshots/HUB-01/1280-dark.jpg
 | `hub.switchUser` | "sign in as {role}" | any |
 | `hub.openSurface` | "open {surface}" | any |
 | `hub.resetDemoData` | "reset the demo database" | `dev.tools` |
+| `hub.openCommands` | "open the command palette" | any |
+| `hub.voiceListen` | "listen for a voice command" (opens the palette; listens only inside a user gesture, else focuses the mic) | any |
 
 ## Rules
 
@@ -60,10 +62,12 @@ Dark: `../screenshots/HUB-01/390-dark.jpg`, `../screenshots/HUB-01/1280-dark.jpg
 
 - counts = routes / built / stubs / tables / rules / components from registries
 - prospect cards read live pages and the savings from the composed model
+- Commands / Speak open the `CommandPalette` (also Ctrl/Cmd+K on every shell); a typed or spoken phrase is ranked by `matchPhrase` (`src/a11y/voice.ts`) over `window.__leadmagnet.vocabulary`, role-gated with `can()`, and run through `runAction` (`docs/reference/control.md` §4)
+- arrows / gamepad d-pad move focus (`useSpatialNav` + `useGamepadNav`); Escape inside the role `select` parks focus so the next arrow moves on
 
 ## Components
 
-LangToggle, IconButton, Toggle, RoleSwitcher, PhoneFrame, Card, Badge, Stat, Button, Avatar, DeviceMockup
+LangToggle, IconButton, Toggle, RoleSwitcher, PhoneFrame, Card, Badge, Stat, Button, Avatar, DeviceMockup, CommandPalette
 
 ## Real vs mock
 
@@ -76,3 +80,6 @@ Checked at: 390, 1280.
 ## Changelog
 
 - `docs/changelog/0001-foundation.md`
+- `docs/changelog/0010-control.md` (spatial nav, TV hint)
+- `docs/changelog/0018-control.md` (Commands / Speak, hub.openCommands, hub.voiceListen)
+- `docs/changelog/0023-integration-pass-3.md` (pass 3 integration: the Speak button uses the `mic` icon)

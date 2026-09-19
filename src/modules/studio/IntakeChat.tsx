@@ -88,7 +88,7 @@ export function IntakeChat({ p, writable, onAnswer, onAskAi }: IntakeChatProps) 
   const control = () => {
     if (!q) return null;
     if (kind === 'style') return <Input readOnly aria-label={bi(q.question)} value={`${t(`studio.tone_${p.style.tone}`)} · ${p.style.palette.primary}`} />;
-    if (kind === 'select') return <Select value={draft} placeholder={t('studio.choose')} onChange={(e) => setDraft(e.target.value)} options={fieldOptions(q.field, t, bi)} />;
+    if (kind === 'select') return <Select value={draft} placeholder={t('studio.choose')} onChange={(e) => setDraft(e.target.value)} options={fieldOptions(q.field, t, bi, p)} />;
     return <Input type={kind === 'number' ? 'number' : 'text'} inputMode={kind === 'number' ? 'numeric' : undefined} value={draft} placeholder={kind === 'list' ? t('studio.comma_separated') : ''} onChange={(e) => setDraft(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') void save(); }} />;
   };
 

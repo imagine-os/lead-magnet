@@ -8,7 +8,7 @@ import { join } from 'node:path';
 const out = join(mkdtempSync(join(tmpdir(), 'lm-engine-')), 'engine.mjs');
 const r = await build({ entryPoints: [new URL('../src/engine/index.ts', import.meta.url).pathname], bundle: true, format: 'esm', platform: 'node', write: false, define: { 'import.meta.env.DEV': 'false' } });
 writeFileSync(out, r.outputFiles[0].text);
-const { guessStack, savings, deriveRoleViews, pickArchetype, composePage, imagePrompts, nextQuestions, applyAnswer, computeConfidence, adaptFromEvents, tzForProspect, slotGrid, previewSlots, withRequested, findSlot, slotInWords } = await import(out);
+const { guessStack, savings, deriveRoleViews, pickArchetype, composePage, imagePrompts, nextQuestions, applyAnswer, computeConfidence, subIndustries, adaptFromEvents, tzForProspect, slotGrid, previewSlots, withRequested, findSlot, slotInWords } = await import(out);
 const p = { id: 'pro_test', created_at: '', updated_at: '', first_name: 'Maya', last_name: 'C', business_name: 'Paws & Play', industry: 'pet_care', sub_industry: null, city: 'Austin', country: 'US', lang: 'en', website: null, team_size: 9, locations: 1, revenue_band: '250k_1m', warmth: 'warm', source: 'linkedin', style: { palette: { primary: '#F25F3A', accent: '#FFD23F', bg: '#FFF8F2', surface: '#fff', text: '#222' }, tone: 'playful', font: 'display', imagery: ['dogs'] }, life_roles: ['owner', 'spouse/partner', 'kids', 'accountant'], business_roles: ['owner', 'manager', 'front desk'], known_tools: ['Gingr'], confidence: 0.6, fields_known: ['industry', 'first_name', 'business_name'], notes: '', logo_url: null, photo_url: null };
 let n = 0; const ok = (name, fn) => { fn(); n++; console.log('ok', name); };
 ok('guessStack picks one tool per category, confirmed first', () => { const g = guessStack(p); assert.ok(g.length >= 5); assert.equal(new Set(g.map((x) => x.category)).size, g.length); assert.equal(g.find((x) => x.tool === 'Gingr')?.status, 'confirmed'); assert.ok(!g.find((x) => x.tool === 'PetExec')); });
@@ -18,7 +18,14 @@ ok('deriveRoleViews: one per role, 3 widgets', () => { const v = deriveRoleViews
 ok('pickArchetype warm -> reveal', () => { assert.equal(pickArchetype(p)[0].archetype, 'reveal'); assert.equal(pickArchetype({ ...p, warmth: 'cold' })[0].archetype, 'audit'); assert.equal(pickArchetype({ ...p, warmth: 'hot' })[0].archetype, 'letter'); assert.ok(pickArchetype(p)[0].reasons.length); });
 ok('composePage resolves EN+ES with tokens', () => { const m = composePage(p, 'reveal', { pageId: 'pg_1' }); assert.equal(m.sections[0].kind, 'hero_reveal'); assert.ok(m.sections[0].headline.en.includes('Paws & Play')); assert.ok(m.sections[0].headline.es.includes('Paws & Play')); assert.equal(m.cta.primary.to, '/demo/pro_test'); for (const a of ['audit', 'walkthrough', 'letter']) assert.ok(composePage(p, a).sections.length >= 4); });
 ok('imagePrompts covers every kind', () => { const k = new Set(imagePrompts(p).map((x) => x.kind)); for (const x of ['hero', 'device_phone', 'device_laptop', 'device_tv', 'role_card', 'og_image', 'video_frames']) assert.ok(k.has(x), x); });
-ok('intake: nextQuestions weights, applyAnswer recomputes', () => { const q = nextQuestions(p); assert.equal(q[0].field, 'team_size'); const p2 = applyAnswer(p, 'team_size', 12); assert.ok(p2.fields_known.includes('team_size')); assert.ok(p2.confidence > computeConfidence(p.fields_known)); assert.equal(computeConfidence([]), 0); });
+ok('intake: nextQuestions weights, applyAnswer recomputes', () => { const q = nextQuestions({ ...p, fields_known: [...p.fields_known, 'sub_industry'] }); assert.equal(q[0].field, 'team_size'); const p2 = applyAnswer(p, 'team_size', 12); assert.ok(p2.fields_known.includes('team_size')); assert.ok(p2.confidence > computeConfidence(p.fields_known)); assert.equal(computeConfidence([]), 0); });
+ok('intake T52: the sub-industry is asked right after the industry, only when the catalog has one; a new industry drops a stale key', () => {
+  assert.ok(subIndustries(p).length >= 2); assert.equal(nextQuestions(p)[0].field, 'sub_industry'); assert.ok(nextQuestions(p)[0].question.es.includes('mascotas') || nextQuestions(p)[0].question.en.includes('pet'));
+  const plain = { ...p, industry: 'other' }; assert.equal(subIndustries(plain).length, 0); assert.ok(!nextQuestions(plain, 20).some((q) => q.field === 'sub_industry'));
+  assert.ok(computeConfidence(p.fields_known, plain) > computeConfidence(p.fields_known, p), 'a field that does not apply leaves the denominator');
+  const p2 = applyAnswer(p, 'sub_industry', subIndustries(p)[0].key); assert.equal(p2.sub_industry, subIndustries(p)[0].key); assert.ok(p2.fields_known.includes('sub_industry'));
+  const p3 = applyAnswer(p2, 'industry', 'other'); assert.equal(p3.sub_industry, null); assert.ok(!p3.fields_known.includes('sub_industry'));
+});
 ok('adaptFromEvents recommends', () => { const page = { id: 'pg_1', archetype: 'reveal', prospect_id: p.id }; const ev = (type, meta, s = 's1') => ({ id: Math.random().toString(), page_id: 'pg_1', session_id: s, type, meta, ts: '' }); const recs = adaptFromEvents(page, [ev('view', {}), ev('section_view', { section: 'savings_stack', seconds: 45 }), ev('exit_intent', {})], p); assert.ok(recs.some((r) => r.kind === 'add_section' && r.section === 'letter')); assert.ok(recs.some((r) => r.section === 'stack_audit')); });
 ok('slots: one deterministic grid per prospect, preview is a subset, timezone from city', () => { const tz = tzForProspect({ city: 'Austin', country: 'US' }); assert.equal(tz.id, 'America/Chicago'); const from = new Date('2026-09-19T12:00:00Z'); const a = slotGrid('pro_test', tz, from); const b = slotGrid('pro_test', tz, from); assert.deepEqual(a, b); assert.equal(a.days.length, 7); assert.ok(a.days.filter((d) => !d.closed).every((d) => d.slots.some((s) => s.available))); const all = new Set(a.days.flatMap((d) => d.slots.filter((s) => s.available).map((s) => s.iso))); const pv = previewSlots(a); assert.ok(pv.some((d) => d.slots.length === 3)); for (const d of pv) for (const s of d.slots) assert.ok(all.has(s.iso), `preview slot ${s.iso} missing from B-01 grid`); assert.notDeepEqual(slotGrid('pro_other', tz, from).days.map((d) => d.slots.map((s) => s.available)), a.days.map((d) => d.slots.map((s) => s.available))); });
 ok('slots: ?slot= is honoured even outside the grid (marked requested), words are bilingual', () => { const tz = tzForProspect({ city: 'Miami', country: 'US' }); const from = new Date('2026-09-19T12:00:00Z'); const g = slotGrid('pro_test', tz, from); const odd = '2026-09-22T13:07:00.000Z'; assert.equal(findSlot(g, odd), null); const g2 = withRequested(g, odd); const s = findSlot(g2, odd); assert.ok(s && s.requested); assert.equal(g2.days.flatMap((d) => d.slots).length, g.days.flatMap((d) => d.slots).length + 1); const busy = g.days.flatMap((d) => d.slots).find((x) => !x.available); const g3 = withRequested(g, busy.iso); assert.ok(findSlot(g3, busy.iso)?.requested); assert.equal(withRequested(g, 'not-a-date'), g); assert.match(slotInWords(odd, tz, 'en'), /at .* ET$/); assert.match(slotInWords(odd, tz, 'es'), / a las /); });
@@ -126,6 +133,36 @@ ok('guessStack: rejected stays rejected and confirmed survives a re-guess', () =
   assert.equal(third.find((x) => x.tool === first[1].tool)?.status, 'confirmed');
   assert.ok(!third.some((x) => x.tool === drop.tool));
   assert.equal(savings(prospect, [...second, { ...drop, status: 'rejected' }]).items.length, second.length);
+});
+
+// --- catalog pass 2: price review dates + sub-industries (D-063, 2026-09-19) -----------------
+ok('catalog D-063: every industry has 4+ tools with EN/ES names, every tool is priced and dated', () => {
+  for (const key of INDUSTRY_KEYS) {
+    const ind = INDUSTRIES[key];
+    assert.ok(ind.stack.length >= 4, `${key}: needs 4+ tools, has ${ind.stack.length}`);
+    assert.ok(ind.label.en && ind.label.es, `${key}: industry needs an EN and ES name`);
+    for (const item of ind.stack) {
+      assert.ok(item.monthly_cost > 0, `${key}: ${item.tool} must have a price > 0 (got ${item.monthly_cost})`);
+      assert.ok(item.price_reviewed && /^\d{4}-\d{2}-\d{2}$/.test(item.price_reviewed), `${key}: ${item.tool} needs a price_reviewed date (YYYY-MM-DD)`);
+    }
+  }
+});
+
+ok('catalog D-063: sub-industry keys are unique per industry and every extra_tools id is in the catalog', () => {
+  let subIndustryCount = 0;
+  for (const key of INDUSTRY_KEYS) {
+    const ind = INDUSTRIES[key];
+    if (!ind.sub) continue;
+    assert.ok(ind.sub.length > 0, `${key}: sub, when present, must be non-empty`);
+    subIndustryCount += ind.sub.length;
+    const keys = ind.sub.map((sub) => sub.key);
+    assert.equal(new Set(keys).size, keys.length, `${key}: sub-industry keys must be unique within the industry`);
+    for (const subInd of ind.sub) {
+      assert.ok(subInd.name?.en && subInd.name?.es, `${key}/${subInd.key}: needs an EN and ES name`);
+      for (const tool of subInd.extra_tools ?? []) assert.ok(CATALOG_TOOLS.some((t) => t.tool === tool), `${key}/${subInd.key}: extra_tools "${tool}" is not in the tools catalog`);
+    }
+  }
+  assert.ok(subIndustryCount >= 20, `catalog: expected 20+ sub-industries across the catalog, found ${subIndustryCount}`);
 });
 
 console.log(`\n${n} engine checks passed`);

@@ -39,13 +39,13 @@ export function BookingsPage() {
   useActions('A-05', { 'admin.setBookingStatus': async (p) => { const id = String(p?.id ?? ''); if (!id) return 'pass id=<booking id> and status='; return api.current.setStatus(id, String(p?.status ?? '')); } });
 
   const columns: Column<BookingRow>[] = [
-    { key: 'slot', header: t('admin.bk_slot'), render: (r) => { const p = prospectById[r.prospect_id] as ProspectRow | undefined; return <span className="ad-strong ad-nowrap">{p ? slotInWords(r.slot, tzForProspect(p), lang) : when(r.slot)}</span>; } },
-    { key: 'prospect', header: t('admin.ev_prospect'), render: (r) => { const p = prospectById[r.prospect_id] as ProspectRow | undefined; return p ? <Link to={`/admin/prospects/${p.id}`}>{p.business_name}</Link> : <code className="ad-code">{r.prospect_id}</code>; } },
-    { key: 'duration_min', header: t('admin.bk_duration'), align: 'right', render: (r) => <span className="ad-num">{r.duration_min}′</span> },
-    { key: 'contact', header: t('admin.bk_contact'), render: (r) => <span className="stack-sm"><strong>{r.contact_name || '—'}</strong>{r.contact_email && <a className="xs" href={`mailto:${r.contact_email}`}>{r.contact_email}</a>}{r.contact_phone && <a className="xs muted" href={`tel:${r.contact_phone}`}>{r.contact_phone}</a>}</span> },
+    { key: 'slot', header: t('admin.bk_slot'), sortable: true, accessor: (r) => String(r.slot), render: (r) => { const p = prospectById[r.prospect_id] as ProspectRow | undefined; return <span className="ad-strong ad-nowrap">{p ? slotInWords(r.slot, tzForProspect(p), lang) : when(r.slot)}</span>; } },
+    { key: 'prospect', header: t('admin.ev_prospect'), sortable: true, accessor: (r) => (prospectById[r.prospect_id] as ProspectRow | undefined)?.business_name ?? null, render: (r) => { const p = prospectById[r.prospect_id] as ProspectRow | undefined; return p ? <Link to={`/admin/prospects/${p.id}`}>{p.business_name}</Link> : <code className="ad-code">{r.prospect_id}</code>; } },
+    { key: 'duration_min', header: t('admin.bk_duration'), align: 'right', sortable: true, render: (r) => <span className="ad-num">{r.duration_min}′</span> },
+    { key: 'contact', header: t('admin.bk_contact'), sortable: true, accessor: (r) => r.contact_name || null, render: (r) => <span className="stack-sm"><strong>{r.contact_name || '—'}</strong>{r.contact_email && <a className="xs" href={`mailto:${r.contact_email}`}>{r.contact_email}</a>}{r.contact_phone && <a className="xs muted" href={`tel:${r.contact_phone}`}>{r.contact_phone}</a>}</span> },
     { key: 'notes', header: t('admin.bk_notes'), render: (r) => <span className="xs muted">{r.notes || '—'}</span> },
-    { key: 'created_at', header: t('admin.bk_requested'), render: (r) => <span className="xs muted ad-nowrap">{when(r.created_at)}</span> },
-    { key: 'status', header: t('admin.bk_status'), render: (r) => (<span className="ad-status"><Badge size="sm" status={r.status}>{t(`booking.status_${r.status}`)}</Badge>
+    { key: 'created_at', header: t('admin.bk_requested'), sortable: true, render: (r) => <span className="xs muted ad-nowrap">{when(r.created_at)}</span> },
+    { key: 'status', header: t('admin.bk_status'), sortable: true, accessor: (r) => t(`booking.status_${r.status}`), render: (r) => (<span className="ad-status"><Badge size="sm" status={r.status}>{t(`booking.status_${r.status}`)}</Badge>
       <Select value={r.status} disabled={!writable} aria-label={t('admin.bk_set_status')} onChange={(e) => void setStatus(r.id, e.target.value)} options={BOOKING_STATUS.map((s) => ({ value: s, label: t(`booking.status_${s}`) }))} /></span>) },
   ];
 
@@ -58,9 +58,9 @@ export function BookingsPage() {
       <Stat label={t('booking.status_confirmed')} value={bookings.filter((b) => b.status === 'confirmed').length} tone="success" />
     </div>
     <Card className="stack-sm"><div className="row wrap"><h2>{t('admin.bk_upcoming')}</h2><Badge size="sm">{upcoming.length}</Badge></div>
-      <DataTable caption={t('admin.bk_upcoming')} rows={upcoming} columns={columns} empty={{ title: t('admin.bk_none_upcoming'), body: t('admin.bk_none_upcoming_body') }} /></Card>
+      <DataTable caption={t('admin.bk_upcoming')} rows={upcoming} columns={columns} defaultSort={{ key: 'slot', dir: 'asc' }} empty={{ title: t('admin.bk_none_upcoming'), body: t('admin.bk_none_upcoming_body') }} /></Card>
     <Card className="stack-sm"><div className="row wrap"><h2>{t('admin.bk_past')}</h2><Badge size="sm">{past.length}</Badge></div>
-      <DataTable caption={t('admin.bk_past')} dense rows={past} columns={columns} empty={{ title: t('admin.bk_none_past'), body: t('admin.bk_none_past_body') }} /></Card>
+      <DataTable caption={t('admin.bk_past')} dense rows={past} columns={columns} defaultSort={{ key: 'slot', dir: 'desc' }} empty={{ title: t('admin.bk_none_past'), body: t('admin.bk_none_past_body') }} /></Card>
     <p className="xs muted">{t('admin.bookings_note')} <Link to="/book/pro_maya">B-01</Link></p>
   </div>);
 }

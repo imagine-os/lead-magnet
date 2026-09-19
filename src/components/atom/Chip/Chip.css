@@ -1,5 +1,5 @@
 .chip { display: inline-flex; align-items: center; gap: 6px; min-height: calc(32px * var(--scale)); padding: 0 var(--sp-3); border-radius: var(--r-pill); border: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-text); font-size: var(--fs-xs); font-weight: var(--fw-medium); }
-button.chip, a.chip { cursor: pointer; min-height: 44px; min-width: 44px; justify-content: center; text-decoration: none; }
+button.chip, a.chip { cursor: pointer; min-height: calc(44px * var(--scale)); min-width: calc(44px * var(--scale)); justify-content: center; text-decoration: none; }
 .chip.is-selected { background: var(--color-primary-soft); border-color: var(--color-primary); color: var(--color-primary-text); }
 /* The remove button is a 44 px target (P-03) pulled into the 32 px chip with negative margins, so the chip's height and
    spacing do not change; the visible 24 px disc is drawn by ::before. */

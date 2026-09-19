@@ -1,0 +1,40 @@
+/* Categorical pair (identity, not order), validated with the dataviz checker in both themes:
+   light on --color-surface #FFFFFF: #4A66F0 (--electric-600) vs #6B9E22 - CVD deutan dE 33.3, tritan 10.1, both >= 3:1;
+   dark on --color-surface #161A2B:  #5B7CFF (--electric-500) vs #71A825 - CVD protan dE 32.8, tritan 8.9, both >= 3:1.
+   The two green steps are the --lime-700 / --lime-650 ramp tokens (the 500 / 600 steps are 1.79:1 on white, too light for a fill). */
+.pbc { margin: 0; display: flex; flex-direction: column; gap: var(--sp-3); --pbc-1: var(--electric-600); --pbc-2: var(--lime-700); }
+:root[data-theme="dark"] .pbc { --pbc-1: var(--electric-500); --pbc-2: var(--lime-650); }
+.pbc-cap { font-size: var(--fs-sm); font-weight: var(--fw-semibold); color: var(--color-heading); }
+.pbc-unit { font-weight: var(--fw-regular); color: var(--color-text-muted); }
+
+.pbc-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-4); }
+.pbc-legend-item { display: inline-flex; align-items: center; gap: var(--sp-2); font-size: var(--fs-xs); color: var(--color-text-secondary); }
+.pbc-legend-note { color: var(--color-text-muted); }
+.pbc-swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+.pbc-swatch.pbc-slot-1 { background: var(--pbc-1); } .pbc-swatch.pbc-slot-2 { background: var(--pbc-2); }
+
+.pbc-rows { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-3); }
+.pbc-row { display: grid; grid-template-columns: minmax(96px, 12em) minmax(0, 1fr); align-items: center; gap: var(--sp-3); }
+.pbc-stage { font-size: var(--fs-xs); color: var(--color-text-secondary); }
+/* 2 px of surface between the two bars of a pair, so adjacent fills never touch. */
+.pbc-pair { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.pbc-bar { display: grid; grid-template-columns: 1.4em minmax(0, 1fr) auto; align-items: center; gap: var(--sp-2); min-width: 0; }
+.pbc-tag { font-size: var(--fs-2xs); font-weight: var(--fw-semibold); color: var(--color-text-muted); font-variant-numeric: tabular-nums; }
+.pbc-plot { display: block; border-left: 1px solid var(--color-border); padding-left: 2px; min-width: 0; }
+.pbc-svg { display: block; overflow: visible; }
+.pbc-mark.pbc-slot-1 { fill: var(--pbc-1); } .pbc-mark.pbc-slot-2 { fill: var(--pbc-2); }
+.pbc-val { font-size: var(--fs-sm); font-weight: var(--fw-semibold); color: var(--color-text); font-variant-numeric: tabular-nums; min-width: 3ch; text-align: right; }
+
+.pbc-table { font-size: var(--fs-xs); }
+.pbc-table > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; color: var(--color-primary-text); }
+.pbc-table-body { padding-top: var(--sp-2); }
+
+@media (max-width: 720px) {
+  .pbc-row { grid-template-columns: minmax(0, 1fr); gap: var(--sp-1); }
+}
+@media (forced-colors: active) {
+  .pbc-mark { fill: CanvasText; }
+  .pbc-mark.pbc-slot-2 { fill: Highlight; }
+  .pbc-swatch.pbc-slot-1 { background: CanvasText; } .pbc-swatch.pbc-slot-2 { background: Highlight; }
+  .pbc-plot { border-left-color: CanvasText; }
+}

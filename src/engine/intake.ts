@@ -1,10 +1,12 @@
 import type { Prospect, Signals, Archetype } from './types';
 import type { EventRow, PageRow } from '../data/schema/core';
 import { pickArchetype } from './archetype';
+import { industry } from './catalog/industries';
 
 /** How much each field changes the page (0..1). The intake asks for the highest-weight unknown first. */
 export const FIELD_WEIGHTS: Record<string, { weight: number; question: { en: string; es: string } }> = {
   industry: { weight: 1.0, question: { en: 'What kind of business is {business}?', es: '¿Qué tipo de negocio es {business}?' } },
+  sub_industry: { weight: 0.85, question: { en: 'What kind of {industry} is {business}?', es: '¿Qué tipo de {industry} es {business}?' } },
   business_name: { weight: 0.95, question: { en: 'What is the business called?', es: '¿Cómo se llama el negocio?' } },
   first_name: { weight: 0.9, question: { en: 'Who are we talking to (first name)?', es: '¿Con quién hablamos (nombre)?' } },
   team_size: { weight: 0.8, question: { en: 'How many people work at {business}?', es: '¿Cuántas personas trabajan en {business}?' } },
@@ -22,21 +24,30 @@ export const FIELD_WEIGHTS: Record<string, { weight: number; question: { en: str
 };
 
 export interface NextQuestion { field: string; weight: number; question: { en: string; es: string } }
-/** Highest-value unknown fields first. */
+/** The catalog's sub-industries for a prospect's industry (T52); empty when the industry does not bend by sub-type. */
+export function subIndustries(p: Pick<Prospect, 'industry'>) { return industry(p.industry).sub ?? []; }
+/** Fields that do not apply to this prospect: `sub_industry` when the catalog lists none for the industry. */
+const notApplicable = (p?: Pick<Prospect, 'industry'>): Set<string> => new Set(p && !subIndustries(p).length ? ['sub_industry'] : []);
+/** Highest-value unknown fields first; the sub-industry is asked right after the industry, and only when the catalog has one. */
 export function nextQuestions(p: Prospect, limit = 3): NextQuestion[] {
-  const known = new Set(p.fields_known ?? []);
-  return Object.entries(FIELD_WEIGHTS).filter(([f]) => !known.has(f)).map(([field, v]) => ({ field, weight: v.weight, question: { en: v.question.en.replace('{business}', p.business_name || 'the business'), es: v.question.es.replace('{business}', p.business_name || 'el negocio') } })).sort((a, b) => b.weight - a.weight).slice(0, limit);
+  const known = new Set(p.fields_known ?? []); const skip = notApplicable(p);
+  const ind = industry(p.industry);
+  const fill = (s: string, lang: 'en' | 'es') => s.replace('{business}', p.business_name || (lang === 'en' ? 'the business' : 'el negocio')).replace('{industry}', ind.label[lang].toLowerCase());
+  return Object.entries(FIELD_WEIGHTS).filter(([f]) => !known.has(f) && !skip.has(f)).map(([field, v]) => ({ field, weight: v.weight, question: { en: fill(v.question.en, 'en'), es: fill(v.question.es, 'es') } })).sort((a, b) => b.weight - a.weight).slice(0, limit);
 }
-/** Confidence = weighted share of known fields. */
-export function computeConfidence(fields_known: string[]): number {
-  const total = Object.values(FIELD_WEIGHTS).reduce((s, v) => s + v.weight, 0);
-  const got = fields_known.reduce((s, f) => s + (FIELD_WEIGHTS[f]?.weight ?? 0), 0);
+/** Confidence = weighted share of known fields. With the prospect given, fields that do not apply to it leave the denominator. */
+export function computeConfidence(fields_known: string[], p?: Pick<Prospect, 'industry'>): number {
+  const skip = notApplicable(p);
+  const total = Object.entries(FIELD_WEIGHTS).filter(([f]) => !skip.has(f)).reduce((s, [, v]) => s + v.weight, 0);
+  const got = fields_known.filter((f) => !skip.has(f)).reduce((s, f) => s + (FIELD_WEIGHTS[f]?.weight ?? 0), 0);
   return Math.round((got / total) * 100) / 100;
 }
-/** Returns an updated prospect with the field set, fields_known extended and confidence recomputed (pure). */
+/** Returns an updated prospect with the field set, fields_known extended and confidence recomputed (pure). A new industry drops a sub-industry it does not list. */
 export function applyAnswer<K extends keyof Prospect>(p: Prospect, field: K, value: Prospect[K]): Prospect {
-  const fields_known = Array.from(new Set([...(p.fields_known ?? []), String(field)]));
-  return { ...p, [field]: value, fields_known, confidence: computeConfidence(fields_known) };
+  let next: Prospect = { ...p, [field]: value };
+  let fields_known = Array.from(new Set([...(p.fields_known ?? []), String(field)]));
+  if (field === 'industry' && next.sub_industry && !subIndustries(next).some((s) => s.key === next.sub_industry)) { next = { ...next, sub_industry: null }; fields_known = fields_known.filter((f) => f !== 'sub_industry'); }
+  return { ...next, fields_known, confidence: computeConfidence(fields_known, next) };
 }
 
 export interface Recommendation { kind: 'switch_archetype' | 'add_section' | 'shorten' | 'ask'; to?: Archetype; section?: string; reason: string; score: number }

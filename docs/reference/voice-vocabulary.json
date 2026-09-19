@@ -1,6 +1,6 @@
 {
  "title": "Lead Magnet voice vocabulary",
- "version": "0.2.0",
+ "version": "0.4.0",
  "generated": "2026-09-19",
  "note": "Intent phrase -> action id with param slots ({slot} in the phrase). The voice controller (T46) matches a spoken phrase to one entry and calls window.__leadmagnet.runAction(action, slots).",
  "phrases": [
@@ -25,6 +25,17 @@
    "permission": "events.read"
   },
   {
+   "phrase": "compare the A/B variants on {slug}",
+   "action": "admin.compareVariants",
+   "slots": {
+    "slug": "string"
+   },
+   "pages": [
+    "A-01"
+   ],
+   "permission": "events.read"
+  },
+  {
    "phrase": "dismiss recommendation {n}",
    "action": "admin.dismissRecommendation",
    "slots": {
@@ -36,13 +47,14 @@
    "permission": "prospects.write"
   },
   {
-   "phrase": "show {type} events for {prospect}",
+   "phrase": "show {type} events for {prospect} on variant {variant}",
    "action": "admin.filterEvents",
    "slots": {
     "type": "string",
     "page": "id",
     "session": "string",
-    "prospect": "id"
+    "prospect": "id",
+    "variant": "enum:A|B"
    },
    "pages": [
     "A-03"
@@ -50,11 +62,12 @@
    "permission": "events.read"
   },
   {
-   "phrase": "filter the funnel by {archetype} and {warmth}",
+   "phrase": "filter the funnel by {archetype}, {warmth} and the last {range} days",
    "action": "admin.filterFunnel",
    "slots": {
     "archetype": "enum:all|reveal|audit|walkthrough|letter",
-    "warmth": "enum:all|cold|warm|hot"
+    "warmth": "enum:all|cold|warm|hot",
+    "range": "enum:7|30|90|all"
    },
    "pages": [
     "A-01"
@@ -125,6 +138,15 @@
     "A-01"
    ],
    "permission": "pages.publish"
+  },
+  {
+   "phrase": "record the recommendation to promote the winning variant",
+   "action": "admin.recordAbWinner",
+   "slots": {},
+   "pages": [
+    "A-01"
+   ],
+   "permission": "prospects.write"
   },
   {
    "phrase": "record recommendation {n}",
@@ -379,6 +401,21 @@
    "permission": null
   },
   {
+   "phrase": "copy the link to this view",
+   "action": "demo.shareView",
+   "slots": {},
+   "pages": [
+    "C-01",
+    "C-02",
+    "C-03",
+    "C-04",
+    "C-05",
+    "C-06",
+    "C-07"
+   ],
+   "permission": "demo.open"
+  },
+  {
    "phrase": "view as {role}",
    "action": "demo.switchRole",
    "slots": {
@@ -443,6 +480,19 @@
    "permission": null
   },
   {
+   "phrase": "show {kind} feedback on {page} that is {status}",
+   "action": "dev.filterFeedback",
+   "slots": {
+    "kind": "enum:all|comment|request|bug|idea|question|praise",
+    "status": "enum:all|new|seen|waiting|done",
+    "page": "string"
+   },
+   "pages": [
+    "D-09"
+   ],
+   "permission": "feedback.read"
+  },
+  {
    "phrase": "show {surface} routes",
    "action": "dev.filterRoutes",
    "slots": {
@@ -463,6 +513,17 @@
     "D-05"
    ],
    "permission": null
+  },
+  {
+   "phrase": "send feedback {id} to Justin",
+   "action": "dev.needsJustin",
+   "slots": {
+    "id": "id"
+   },
+   "pages": [
+    "D-09"
+   ],
+   "permission": "feedback.read"
   },
   {
    "phrase": "open the {doc} document",
@@ -524,7 +585,8 @@
    "phrase": "run action {id}",
    "action": "dev.runAction",
    "slots": {
-    "id": "string"
+    "id": "string",
+    "params": "string"
    },
    "pages": [
     "D-04"
@@ -554,6 +616,15 @@
     "D-09"
    ],
    "permission": "feedback.read"
+  },
+  {
+   "phrase": "open the command palette",
+   "action": "hub.openCommands",
+   "slots": {},
+   "pages": [
+    "HUB-01"
+   ],
+   "permission": null
   },
   {
    "phrase": "open {surface}",
@@ -627,6 +698,15 @@
    "permission": null
   },
   {
+   "phrase": "listen for a voice command",
+   "action": "hub.voiceListen",
+   "slots": {},
+   "pages": [
+    "HUB-01"
+   ],
+   "permission": null
+  },
+  {
    "phrase": "book a walkthrough call",
    "action": "landing.bookCall",
    "slots": {},
@@ -649,6 +729,16 @@
     "L-02"
    ],
    "permission": null
+  },
+  {
+   "phrase": "let me correct the tools you guessed",
+   "action": "landing.correctStack",
+   "slots": {},
+   "pages": [
+    "L-01",
+    "L-03"
+   ],
+   "permission": "demo.open"
   },
   {
    "phrase": "go to step {step} of the story",
@@ -726,6 +816,17 @@
    "permission": null
   },
   {
+   "phrase": "undo my answer about {tool}",
+   "action": "landing.resetTool",
+   "slots": {
+    "tool": "string"
+   },
+   "pages": [
+    "L-02"
+   ],
+   "permission": null
+  },
+  {
    "phrase": "save my workspace with my email",
    "action": "landing.saveWorkspace",
    "slots": {},
@@ -763,6 +864,19 @@
    "permission": null
   },
   {
+   "phrase": "copy the link to the {role} view",
+   "action": "landing.shareRole",
+   "slots": {
+    "role": "string"
+   },
+   "pages": [
+    "L-01",
+    "L-02",
+    "L-03"
+   ],
+   "permission": "demo.open"
+  },
+  {
    "phrase": "answer {question}",
    "action": "landing.toggleFaq",
    "slots": {
@@ -796,6 +910,78 @@
     "L-01",
     "L-02",
     "L-03"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "list the open decisions in the ops manual",
+   "action": "manual.listDecisions",
+   "slots": {},
+   "pages": [
+    "M-01"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "go to the next chapter",
+   "action": "manual.nextChapter",
+   "slots": {},
+   "pages": [
+    "M-02",
+    "M-03",
+    "M-04",
+    "M-05"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "open the {chapter} chapter of the ops manual",
+   "action": "manual.openChapter",
+   "slots": {
+    "chapter": "string"
+   },
+   "pages": [
+    "M-01",
+    "M-02",
+    "M-03",
+    "M-04",
+    "M-05"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "go to the previous chapter",
+   "action": "manual.prevChapter",
+   "slots": {},
+   "pages": [
+    "M-02",
+    "M-03",
+    "M-04",
+    "M-05"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "print this chapter of the ops manual",
+   "action": "manual.print",
+   "slots": {},
+   "pages": [
+    "M-01",
+    "M-02",
+    "M-03",
+    "M-04",
+    "M-05"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "show the whole ops manual as one page",
+   "action": "manual.readAll",
+   "slots": {
+    "on": "string"
+   },
+   "pages": [
+    "M-01"
    ],
    "permission": null
   },
@@ -1033,6 +1219,17 @@
    "permission": "prospects.write"
   },
   {
+   "phrase": "apply the proposed {fact}",
+   "action": "studio.applyFact",
+   "slots": {
+    "fact": "string"
+   },
+   "pages": [
+    "S-02"
+   ],
+   "permission": "prospects.write"
+  },
+  {
    "phrase": "approve {asset}",
    "action": "studio.approveAsset",
    "slots": {
@@ -1064,6 +1261,17 @@
    "permission": null
   },
   {
+   "phrase": "copy the link that forces variant {variant}",
+   "action": "studio.copyVariantLink",
+   "slots": {
+    "variant": "enum:A|B"
+   },
+   "pages": [
+    "S-03"
+   ],
+   "permission": null
+  },
+  {
    "phrase": "create {business} in {industry}",
    "action": "studio.createProspect",
    "slots": {
@@ -1074,6 +1282,17 @@
     "S-01"
    ],
    "permission": "prospects.write"
+  },
+  {
+   "phrase": "dismiss the proposed {fact}",
+   "action": "studio.dismissFact",
+   "slots": {
+    "fact": "string"
+   },
+   "pages": [
+    "S-02"
+   ],
+   "permission": null
   },
   {
    "phrase": "draft a {channel} message",
@@ -1087,6 +1306,17 @@
    "permission": "prospects.write"
   },
   {
+   "phrase": "duplicate prospect {name} as a new prospect",
+   "action": "studio.duplicateProspect",
+   "slots": {
+    "name": "string"
+   },
+   "pages": [
+    "S-01"
+   ],
+   "permission": "prospects.write"
+  },
+  {
    "phrase": "expire the page",
    "action": "studio.expirePage",
    "slots": {},
@@ -1094,6 +1324,26 @@
     "S-03"
    ],
    "permission": "pages.publish"
+  },
+  {
+   "phrase": "expire variant {variant}",
+   "action": "studio.expireVariant",
+   "slots": {
+    "variant": "enum:A|B"
+   },
+   "pages": [
+    "S-03"
+   ],
+   "permission": "pages.publish"
+  },
+  {
+   "phrase": "extract the facts from the pasted text",
+   "action": "studio.extractFacts",
+   "slots": {},
+   "pages": [
+    "S-02"
+   ],
+   "permission": "prospects.write"
   },
   {
    "phrase": "fill the obvious gaps with the rule enricher",
@@ -1178,6 +1428,17 @@
    "permission": "pages.publish"
   },
   {
+   "phrase": "paste {text} into the facts box",
+   "action": "studio.pasteFacts",
+   "slots": {
+    "text": "string"
+   },
+   "pages": [
+    "S-02"
+   ],
+   "permission": "prospects.write"
+  },
+  {
    "phrase": "use the {archetype} archetype",
    "action": "studio.pickArchetype",
    "slots": {
@@ -1214,6 +1475,18 @@
    "phrase": "publish the page",
    "action": "studio.publishPage",
    "slots": {},
+   "pages": [
+    "S-03"
+   ],
+   "permission": "pages.publish"
+  },
+  {
+   "phrase": "publish variant {variant} as the {archetype} page",
+   "action": "studio.publishVariant",
+   "slots": {
+    "variant": "enum:A|B",
+    "archetype": "enum:reveal|audit|walkthrough|letter"
+   },
    "pages": [
     "S-03"
    ],
@@ -1313,6 +1586,15 @@
     "S-03"
    ],
    "permission": "pages.publish"
+  },
+  {
+   "phrase": "skip this question and ask the next one",
+   "action": "studio.skipQuestion",
+   "slots": {},
+   "pages": [
+    "S-02"
+   ],
+   "permission": null
   }
  ]
 }

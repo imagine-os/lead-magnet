@@ -78,7 +78,7 @@ export function CanvasPage() {
       </div>
       <div className="row wrap">{SURFACE_ORDER.map((s) => <Chip key={s} selected={surfaces.has(s)} onClick={() => setSurfaces((set) => { const n = new Set(set); if (n.has(s)) n.delete(s); else n.add(s); return n; })}>{SURFACE_LABEL[s]}</Chip>)}<span className="faint">|</span>{(['all', 'built', 'stub'] as const).map((s) => <Chip key={s} selected={status === s} onClick={() => setStatus(s)}>{s}</Chip>)}</div>
     </div>
-    <div ref={view} className="cv-view" tabIndex={0} role="region" aria-label="Page canvas. Zoom with plus and minus, fit with 0, pan with arrow keys or drag." onKeyDown={onKey} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}>
+    <div ref={view} className="cv-view" data-spatial="skip" tabIndex={0} role="region" aria-label="Page canvas. Zoom with plus and minus, fit with 0, pan with arrow keys or drag." onKeyDown={onKey} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}>
       <div className="cv-scroll" style={{ width: STAGE_W * zoom, height: stageH * zoom }}>
         <div ref={stage} className="cv-stage" style={{ width: STAGE_W, transform: `scale(${zoom})` }}>
           {groups.map((g) => (<section key={g.surface} className={`cv-group cv-group-${g.surface}`} aria-label={SURFACE_LABEL[g.surface]}>

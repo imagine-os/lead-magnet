@@ -1,4 +1,23 @@
 .stat { display: flex; flex-direction: column; gap: 4px; padding: var(--sp-4); border-radius: var(--r-card); background: var(--color-surface); border: 1px solid var(--color-border-subtle); min-width: 0; }
-.stat-value { font-size: var(--fs-2xl); line-height: 1.1; color: var(--color-heading); font-weight: var(--fw-bold); }
-.stat-lg .stat-value { font-size: var(--fs-3xl); }
+/* --stat-value-size lets a host (a themed landing page at 10 feet) set the display size without overriding .stat-value. */
+.stat-value { font-size: var(--stat-value-size, var(--fs-2xl)); line-height: 1.1; color: var(--color-heading); font-weight: var(--fw-bold); }
+.stat-lg .stat-value { font-size: var(--stat-value-size, var(--fs-3xl)); }
+.stat-sm { padding: var(--sp-3); gap: 2px; } .stat-sm .stat-value { font-size: var(--stat-value-size, var(--fs-xl)); }
 .stat-success .stat-value { color: var(--color-success); } .stat-warn .stat-value { color: var(--color-warn); } .stat-danger .stat-value { color: var(--color-danger); } .stat-accent .stat-value { color: var(--color-primary-text); }
+.stat-align-center { align-items: center; text-align: center; } .stat-align-end { align-items: flex-end; text-align: right; }
+.stat-align-center .stat-valuerow { justify-content: center; } .stat-align-end .stat-valuerow { justify-content: flex-end; }
+.stat-valuerow { display: flex; align-items: flex-end; gap: var(--sp-3); flex-wrap: wrap; }
+/* Sparkline: token colour via currentColor; the SVG is decoration, the sr-only span next to it says the trend. */
+.stat-spark { display: inline-flex; color: var(--color-primary-text); line-height: 0; }
+.stat-success .stat-spark { color: var(--color-success); } .stat-warn .stat-spark { color: var(--color-warn); } .stat-danger .stat-spark { color: var(--color-danger); }
+/* Delta: arrow + signed number always present, so the colour only reinforces. */
+.stat-delta { display: inline-flex; align-items: baseline; gap: 4px; font-weight: var(--fw-semibold); color: var(--color-text-secondary); }
+.stat-delta.is-good { color: var(--color-success); } .stat-delta.is-bad { color: var(--color-danger); } .stat-delta.is-flat { color: var(--color-text-muted); }
+.stat-delta-label { font-weight: var(--fw-regular, 400); }
+.stat-estimate { display: inline-block; margin-left: 6px; padding: 0 6px; border: 1px dashed currentColor; border-radius: var(--r-pill); text-transform: none; letter-spacing: 0; }
+.stat.is-estimate { border-style: dashed; } .stat.is-estimate .stat-value { font-style: italic; }
+/* tone="prospect": themed from the page's --lp-* properties with token fallbacks (replaces the landing / proposal .stat overrides). */
+.stat-prospect { background: var(--lp-surface, var(--color-surface)); border-color: color-mix(in srgb, var(--lp-text, var(--color-text)) 14%, var(--lp-bg, var(--color-bg))); color: var(--lp-text, var(--color-text)); }
+.stat-prospect .stat-value { color: var(--lp-primary, var(--color-primary-text)); font-family: var(--lp-font-display, var(--font-display)); }
+.stat-prospect .stat-label, .stat-prospect .stat-hint { color: color-mix(in srgb, var(--lp-text, var(--color-text)) 72%, var(--lp-bg, var(--color-bg))); }
+.stat-prospect .stat-spark { color: var(--lp-primary, var(--color-primary-text)); }

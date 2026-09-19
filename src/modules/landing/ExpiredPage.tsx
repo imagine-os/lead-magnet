@@ -3,8 +3,8 @@
  * workspace (a real `feedback` row of kind `request`, which the studio triages) and, when we still know whose page it
  * was, the calendar. Same chrome and, where we can, the same palette as the page they were promised.
  */
-import { useMemo, useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Button } from '../../components/atom/Button/Button';
 import { Input } from '../../components/atom/Input/Input';
 import { Textarea } from '../../components/atom/Textarea/Textarea';
@@ -17,13 +17,16 @@ import { useData, useTable } from '../../data/DataContext';
 import type { FeedbackRow, PageRow, ProspectRow } from '../../data/schema/core';
 import { prospectStyle } from '../../design/tokens';
 import { useI18n } from '../../i18n/I18nProvider';
-import { track } from '../../tracking';
+import { track, trackOnce } from '../../tracking';
 import { useLiveActions } from './hooks';
+import { useGamepadNav, useSpatialNav } from '../../a11y';
 import './landing.css';
 
 export function ExpiredPage() {
+  const root = useRef<HTMLDivElement>(null); const spatial = useSpatialNav(root, { onBack: () => window.scrollTo({ top: 0, behavior: 'auto' }) }); useGamepadNav(spatial); // P-04, same wiring as L-01..L-04 (Back = top of the page)
   const { slug } = useParams();
   const loc = useLocation();
+  const nav = useNavigate();
   const { t } = useI18n();
   const data = useData();
   const toast = useToast();
@@ -36,6 +39,22 @@ export function ExpiredPage() {
   const [sent, setSent] = useState(false);
   const [error, setError] = useState('');
   const style = useMemo(() => (prospect ? prospectStyle(prospect.style.palette, prospect.style.font) : undefined), [prospect]);
+  // The date it actually came down, so the honest-expiry promise the live page made is kept on the way out too.
+  const wentDown = page?.expires_at ? new Date(page.expires_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric' }) : null;
+
+  // L-05 is a page, so it emits a view like any other (R-C06). Once per session per slug.
+  useEffect(() => {
+    trackOnce(`expired:${slug ?? 'unknown'}`, 'view', { page: 'L-05', slug: slug ?? null, known: !!prospect }, { page_id: page?.id ?? null, prospect_id: prospect?.id ?? null });
+  }, [slug, page?.id, prospect?.id, prospect]);
+
+  /** The second chance on an expired link is the calendar, exactly as it is on a live one (playbook 7). */
+  const book = () => {
+    if (!prospect) return 'no prospect on this link yet';
+    void track('cta_click', { cta: 'secondary', action: 'landing.bookCall', section: 'expired', page: 'L-05' }, { page_id: page?.id ?? null, prospect_id: prospect.id });
+    void track('booking_started', { from: 'expired' }, { page_id: page?.id ?? null, prospect_id: prospect.id });
+    nav(`/book/${prospect.id}`);
+    return 'opening the booking page';
+  };
 
   const request = async () => {
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { setError(t('landing.save_email_err')); return 'invalid email'; }
@@ -54,11 +73,11 @@ export function ExpiredPage() {
   };
   useLiveActions('L-05', {
     'landing.requestRefresh': () => request(),
-    'landing.bookCall': () => (prospect ? `open /book/${prospect.id}` : 'no prospect on this link yet'),
+    'landing.bookCall': () => book(),
   });
 
   return (
-    <div className="lp lp-expired" style={style}>
+    <div className="lp lp-expired" ref={root} style={style}>
       <header className="lp-topbar">
         <div className="lp-wrap lp-topbar-in">
           <span className="lp-wordmark"><span className="lp-wordmark-dot" aria-hidden />{prospect?.business_name ?? 'Imagine'}</span>
@@ -69,6 +88,14 @@ export function ExpiredPage() {
         <p className="lp-eyebrow">{t('landing.expired_eyebrow')}</p>
         <h1 className="lp-h1">{prospect ? t('landing.expired_h1', { business: prospect.business_name }) : t('landing.expired_h1_unknown')}</h1>
         <p className="lp-lede">{t('landing.expired_body')}</p>
+        {wentDown && <p className="lp-expiry">{t('landing.expired_on', { date: wentDown })}</p>}
+        <div className="lp-expired-second">
+          <p className="lp-expired-second-h">{t('landing.expired_second')}</p>
+          {prospect
+            ? <Button size="lg" variant="primary" className="lp-btn-primary" icon="calendar" onClick={book}>{t('landing.expired_book')}</Button>
+            : <Placeholder will="book a call without a workspace link" by="booking module (T14)" button={{ label: t('landing.expired_book'), variant: 'primary', size: 'lg', icon: 'calendar' }} />}
+          <span className="lp-note">{t('landing.expired_second_note')}</span>
+        </div>
         <Card className="lp-expired-card">
           {sent ? (
             <div className="stack">
@@ -87,7 +114,7 @@ export function ExpiredPage() {
               <div className="lp-cta-row">
                 <Button variant="primary" className="lp-btn-primary" icon="refresh" onClick={() => void request()}>{t('landing.expired_request')}</Button>
                 {prospect
-                  ? <Link to={`/book/${prospect.id}`} className="lp-linkwrap"><Button variant="outline" className="lp-btn-secondary" icon="calendar">{t('landing.expired_book')}</Button></Link>
+                  ? <Button variant="outline" className="lp-btn-secondary" icon="calendar" onClick={book}>{t('landing.expired_book')}</Button>
                   : <Placeholder will="book a call without a workspace link" by="booking module (T14)" button={{ label: t('landing.expired_book'), variant: 'outline', icon: 'calendar' }} />}
               </div>
             </div>

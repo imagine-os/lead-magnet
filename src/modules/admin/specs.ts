@@ -5,17 +5,28 @@ const A = STAFF_ROLES;
 const W = [360, 390, 768, 1280, 1920, 2560, 3840];
 
 export const funnelSpec: PageSpec = defineSpec({
-  code: 'A-01', name: 'Funnel overview', purpose: 'The whole funnel on one screen: outreach_open -> view -> demo_open -> booking_started -> booking_confirmed counted as distinct sessions, the same five stages broken down by archetype, warmth and A/B variant, and the last twelve things that happened.',
-  layout: ['filters (archetype, warmth)', 'KPI row', 'funnel chart + table view', 'by archetype', 'by warmth', 'A/B by variant', 'recent activity'],
-  data: ['events', 'pages', 'prospects', 'bookings'], roles: A,
-  logic: ['a stage counts DISTINCT session_id, so one chatty session is one viewer (R-A01)', 'archetype and variant join through pages.page_id; warmth joins through prospects.prospect_id', 'A/B is only compared when two or more variants have live pages and events (R-A02)', 'conversion labels return an em dash instead of dividing by zero'],
-  integrations: [], components: ['Stat', 'FunnelChart', 'DataTable', 'Chip', 'Card', 'Badge', 'EmptyState', 'Button', 'Icon'],
+  code: 'A-01', name: 'Funnel overview', purpose: 'The whole funnel on one screen: outreach_open -> view -> demo_open -> booking_started -> booking_confirmed counted as distinct sessions over a 7 / 30 / 90-day range, the same five stages broken down by archetype and warmth, the A/B readout for a slug running a split, and the last twelve things that happened.',
+  layout: ['filters (archetype, warmth, date range)', 'KPI row', 'funnel chart + table view', 'by archetype', 'by warmth', 'A/B readout (slug select, two sides, paired chart, comparison table, verdict)', 'recent activity'],
+  data: ['events', 'pages', 'prospects', 'bookings', 'recommendations'], roles: A,
+  logic: [
+    'a stage counts DISTINCT session_id, so one chatty session is one viewer (R-A01)',
+    'archetype joins through pages.page_id; warmth joins through prospects.prospect_id; the A/B side is the pages row the event points at, falling back to meta.variant',
+    'the date range (7 / 30 / 90 / all) filters every number on the page, including the A/B readout',
+    'an A/B is exactly two live pages rows on one slug (D-061); the readout deliberately ignores the archetype and warmth filters, because variant B is usually a different archetype',
+    'both sides are drawn on ONE shared scale (PairedBarChart) - two self-normalised funnels would be the classic A/B misread',
+    'no side is called ahead below 30 view sessions per variant and a 10 % relative lift on view -> demo_open (R-A04); below that the card says how far off the sample is',
+    'when B is ahead, recording writes a `recommendations` row (kind promote_variant, status proposed) and nothing else; promoting is a Placeholder (R-A03 / D-044)',
+    'variants are never pooled across slugs; conversion labels return an em dash instead of dividing by zero',
+  ],
+  integrations: [], components: ['Stat', 'FunnelChart', 'PairedBarChart', 'DataTable', 'SegmentedControl', 'Select', 'Field', 'Chip', 'Card', 'Badge', 'EmptyState', 'Placeholder', 'Button', 'Icon'],
   actions: [
-    { id: 'admin.filterFunnel', label: 'Filter', intent: 'filter the funnel by {archetype} and {warmth}', params: { archetype: 'enum:all|reveal|audit|walkthrough|letter', warmth: 'enum:all|cold|warm|hot' }, permission: 'events.read' },
+    { id: 'admin.filterFunnel', label: 'Filter', intent: 'filter the funnel by {archetype}, {warmth} and the last {range} days', params: { archetype: 'enum:all|reveal|audit|walkthrough|letter', warmth: 'enum:all|cold|warm|hot', range: 'enum:7|30|90|all' }, permission: 'events.read' },
+    { id: 'admin.compareVariants', label: 'Compare variants', intent: 'compare the A/B variants on {slug}', params: { slug: 'string' }, permission: 'events.read' },
+    { id: 'admin.recordAbWinner', label: 'Record the A/B recommendation', intent: 'record the recommendation to promote the winning variant', permission: 'prospects.write' },
     { id: 'admin.openProspect', label: 'Open prospect', intent: 'open the timeline for {prospect}', params: { prospect: 'id' }, permission: 'prospects.read' },
     { id: 'admin.openStudio', label: 'Open the studio', intent: 'open the studio', permission: 'pages.publish' },
   ],
-  rules: ['R-A01', 'R-A02', 'R-C06'], states: ['loading', 'default', 'empty', 'filtered', 'A/B blocked'], checkedAt: W, tone: 'home',
+  rules: ['R-A01', 'R-A02', 'R-A03', 'R-A04', 'R-C06'], states: ['loading', 'default', 'empty', 'filtered', 'no live A/B', 'A/B below the sample', 'A/B too close', 'A/B leader', 'recommendation on file'], checkedAt: W, tone: 'home',
 });
 
 export const timelineSpec: PageSpec = defineSpec({
@@ -34,17 +45,17 @@ export const timelineSpec: PageSpec = defineSpec({
 });
 
 export const eventsSpec: PageSpec = defineSpec({
-  code: 'A-03', name: 'Events log', purpose: 'The raw tracking table, filterable by type, page, session and prospect, with the full meta JSON of any row one click away. This is where you check that a page really tracked what it claims.',
-  layout: ['filters (type, page, session, prospect)', 'events DataTable', 'meta drawer (JSON)'],
+  code: 'A-03', name: 'Events log', purpose: 'The raw tracking table, filterable by type, page, A/B variant, session and prospect, with the full meta JSON of any row one click away. This is where you check that a page really tracked what it claims.',
+  layout: ['filters (type, page, variant, session, prospect)', 'events DataTable', 'meta drawer (JSON)'],
   data: ['events', 'pages', 'prospects'], roles: A,
-  logic: ['newest first by ts', 'filters are AND-combined; an empty filter means all', 'session ids are read from the rows themselves, so a new visitor appears in the list without a schema change'],
+  logic: ['newest first by ts', 'filters are AND-combined; an empty filter means all', 'session ids are read from the rows themselves, so a new visitor appears in the list without a schema change', 'the variant column and filter resolve through events.page_id -> pages.variant, falling back to the meta.variant the landing page stamps (nothing invented)'],
   integrations: [], components: ['DataTable', 'Drawer', 'Select', 'Field', 'Badge', 'Button', 'Card', 'Icon'],
   actions: [
-    { id: 'admin.filterEvents', label: 'Filter', intent: 'show {type} events for {prospect}', params: { type: 'string', page: 'id', session: 'string', prospect: 'id' }, permission: 'events.read' },
+    { id: 'admin.filterEvents', label: 'Filter', intent: 'show {type} events for {prospect} on variant {variant}', params: { type: 'string', page: 'id', session: 'string', prospect: 'id', variant: 'enum:A|B' }, permission: 'events.read' },
     { id: 'admin.clearEventFilters', label: 'Clear filters', intent: 'clear the event filters', permission: 'events.read' },
     { id: 'admin.openEventMeta', label: 'JSON', intent: 'show the meta for event {id}', params: { id: 'id' }, permission: 'events.read' },
   ],
-  rules: ['R-A01', 'R-C06'], states: ['loading', 'default', 'filtered', 'empty', 'drawer open'], checkedAt: W, tone: 'list',
+  rules: ['R-A01', 'R-A02', 'R-C06'], states: ['loading', 'default', 'filtered', 'variant filtered', 'empty', 'drawer open'], checkedAt: W, tone: 'list',
 });
 
 export const outreachSpec: PageSpec = defineSpec({

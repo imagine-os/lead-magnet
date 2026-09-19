@@ -38,7 +38,8 @@ export function ProspectTimelinePage() {
 
   const items = useMemo(() => buildTimeline(events, touches, bookings), [events, touches, bookings]);
   const recs = useMemo(() => (page && prospect ? adaptFromEvents(page, events, prospect) : []), [page, events, prospect]);
-  const recordedByKey = useMemo(() => new Map(recorded.map((r) => [recKey({ kind: r.kind, to: r.to_archetype as Recommendation['to'], section: r.section ?? undefined }), r])), [recorded]);
+  // `promote_variant` rows come from A-01's A/B readout and have no engine counterpart, so they never key a card here.
+  const recordedByKey = useMemo(() => new Map(recorded.filter((r) => r.kind !== 'promote_variant').map((r) => [recKey({ kind: r.kind as Recommendation['kind'], to: r.to_archetype as Recommendation['to'], section: r.section ?? undefined }), r])), [recorded]);
   const guesses: StackGuess[] = useMemo(() => guessRows.map((g) => ({ tool: g.tool, category: g.category, monthly_cost: g.monthly_cost, confidence: g.confidence, status: g.status, replaced_by: g.replaced_by })), [guessRows]);
 
   /** R-A03: the recommendation exists as a row (status proposed) before anything is applied. */

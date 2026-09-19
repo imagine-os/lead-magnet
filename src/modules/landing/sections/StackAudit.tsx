@@ -12,7 +12,6 @@ import type { StackGuessRow } from '../../../data/schema/core';
 import { useI18n } from '../../../i18n/I18nProvider';
 import { savings as computeSavings } from '../../../engine';
 import type { Section, StackGuess } from '../../../engine/types';
-import { track } from '../../../tracking';
 import { useLanding } from '../context';
 import { useCountUp, useInView, useLiveActions } from '../hooks';
 import { usd } from '../format';
@@ -22,7 +21,7 @@ type Audit = Extract<Section, { kind: 'stack_audit' }>;
 
 export function StackAudit({ section }: { section: Audit }) {
   const { bi, t, lang } = useI18n();
-  const { prospect, guesses, trackCtx, pageCode } = useLanding();
+  const { prospect, guesses, track, pageCode } = useLanding();
   const data = useData();
   const { ref, inView } = useInView<HTMLDivElement>(0.3);
 
@@ -36,7 +35,7 @@ export function StackAudit({ section }: { section: Audit }) {
     const row = guesses.find((g) => g.tool.toLowerCase() === tool.toLowerCase());
     if (!row) return `no guess named "${tool}"`;
     await data.update<StackGuessRow>('stack_guesses', row.id, { status });
-    void track('form_submit', { form: 'stack_audit', tool: row.tool, answer: status, monthly_cost: row.monthly_cost }, trackCtx);
+    track('form_submit', { form: 'stack_audit', tool: row.tool, answer: status, monthly_cost: row.monthly_cost });
     return `${row.tool} marked ${status}`;
   };
   useLiveActions(pageCode, {

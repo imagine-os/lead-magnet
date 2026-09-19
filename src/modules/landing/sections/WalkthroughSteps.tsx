@@ -1,7 +1,9 @@
 /**
  * A pinned day-in-the-life story: the device sticks while the steps scroll past it, and the screen inside it changes
- * to the role whose scene you are reading. A progress rail shows where you are; prev / next buttons drive the same
- * state, so the story also works with a keyboard, a remote, or reduced motion where nothing animates at all.
+ * to the scene you are reading. With a generated sequence (`npm run frames`) the laptop plays the real desktop tour
+ * of their workspace, one frame per step; without one it falls back to the live <MiniOs> composition and the section
+ * is unchanged. A progress rail shows where you are; prev / next buttons drive the same state, so the story also
+ * works with a keyboard, a remote, or reduced motion, where nothing animates and the buttons are the whole story.
  */
 import { useEffect, useRef, useState } from 'react';
 import { DeviceMockup } from '../../../components/molecule/DeviceMockup/DeviceMockup';
@@ -10,7 +12,7 @@ import { useI18n } from '../../../i18n/I18nProvider';
 import { deriveRoleViews } from '../../../engine';
 import type { RoleView, Section } from '../../../engine/types';
 import { useLanding } from '../context';
-import { useLiveActions, useScrollTo } from '../hooks';
+import { useFrames, useLiveActions, useScrollTo } from '../hooks';
 import { cap } from '../format';
 import { SectionShell } from './SectionShell';
 import { MiniOs } from './MiniOs';
@@ -49,14 +51,21 @@ export function WalkthroughSteps({ section }: { section: Steps }) {
 
   const current = steps[active];
   const viewIndex = Math.max(0, allViews.findIndex((v) => v.role === current?.role));
+  // The desktop tour, mapped from the active step: step 1 is frame 0, the last step is the last frame.
+  const frames = useFrames(prospect.id);
+  const desk = frames?.desk ?? [];
+  const deskIdx = desk.length ? Math.min(desk.length - 1, Math.round((active / Math.max(1, steps.length - 1)) * (desk.length - 1))) : -1;
+  const deskAlt = deskIdx >= 0
+    ? t('landing.frames_alt', { business: prospect.business_name, n: deskIdx + 1, total: desk.length, label: frames?.deskLabels[deskIdx] ?? '' })
+    : `${prospect.business_name} OS - ${current ? cap(current.role) : ''}`;
 
   return (
     <SectionShell id={section.id} kind="walkthrough_steps" label={bi(section.headline)}>
       <div className="lp-head"><h2 className="lp-h2">{bi(section.headline)}</h2></div>
       <div className="lp-story">
         <div className="lp-story-stage">
-          <DeviceMockup kind="laptop" title={`${prospect.business_name} OS - ${current ? cap(current.role) : ''}`}>
-            <MiniOs prospect={prospect} views={allViews} device="laptop" index={viewIndex} />
+          <DeviceMockup kind="laptop" title={deskAlt} imageSrc={deskIdx >= 0 ? desk[deskIdx] : undefined}>
+            {deskIdx >= 0 ? null : <MiniOs prospect={prospect} views={allViews} device="laptop" index={viewIndex} />}
           </DeviceMockup>
           <div className="lp-story-now" aria-live="polite">
             <span className="lp-story-time">{current?.time}</span>

@@ -21,17 +21,23 @@ export function usePrefersReducedMotion(): boolean {
   return reduced;
 }
 
+const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
+
 /**
- * Maps the scroll progress of an element (0 when it enters the viewport, 1 when it has left the top) to a frame index.
- * This is the seam video-on-scroll plugs into (T41): once generated frame sequences exist, render `frames[frame]`
- * instead of a CSS transform and nothing else about the section changes.
+ * Two scroll measurements for one element, because the page needs both:
+ *  - `progress` (0 as the element enters the viewport, 1 once it has left the top) drives the CSS reveal, so the
+ *    devices are already visible on first paint at the top of the page.
+ *  - `scrub` maps the *section itself* to 0..1 (0 with its top at the top of the viewport, 1 when its bottom reaches
+ *    the bottom), which is what a frame sequence needs: frame 0 when you arrive, the last frame when you leave.
+ * `frame` is the scrub mapped onto `count` frames. Reduced motion pins the reveal open and the frame to the first one
+ * (P-03): the still is the poster, and the walkthrough's prev / next buttons still move through the tour.
  */
 export function useScrollFrames<T extends HTMLElement = HTMLDivElement>(count: number) {
   const ref = useRef<T | null>(null);
   const reduced = usePrefersReducedMotion();
-  const [progress, setProgress] = useState(reduced ? 1 : 0);
+  const [m, setM] = useState<{ progress: number; scrub: number }>(reduced ? { progress: 1, scrub: 0 } : { progress: 0, scrub: 0 });
   useEffect(() => {
-    if (reduced) { setProgress(1); return; }
+    if (reduced) { setM({ progress: 1, scrub: 0 }); return; }
     const el = ref.current;
     if (!el) return;
     let raf = 0;
@@ -40,7 +46,10 @@ export function useScrollFrames<T extends HTMLElement = HTMLDivElement>(count: n
       const r = el.getBoundingClientRect();
       const vh = window.innerHeight || 1;
       const span = r.height + vh;
-      setProgress(span <= 0 ? 0 : Math.min(1, Math.max(0, (vh - r.top) / span)));
+      const progress = span <= 0 ? 0 : clamp01((vh - r.top) / span);
+      // A section taller than the viewport scrubs through its own height; a short one reuses the enter mapping.
+      const scrub = r.height > vh + 8 ? clamp01(-r.top / Math.max(1, r.height - vh)) : progress;
+      setM((prev) => (Math.abs(prev.progress - progress) < 0.002 && Math.abs(prev.scrub - scrub) < 0.002 ? prev : { progress, scrub }));
     };
     const onScroll = () => { if (!raf) raf = window.requestAnimationFrame(measure); };
     measure();
@@ -49,8 +58,72 @@ export function useScrollFrames<T extends HTMLElement = HTMLDivElement>(count: n
     return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); if (raf) window.cancelAnimationFrame(raf); };
   }, [reduced]);
   const frames = Math.max(1, count);
-  const frame = Math.min(frames - 1, Math.max(0, Math.round(progress * (frames - 1))));
-  return { ref, frame, frames, progress, reduced };
+  const frame = Math.min(frames - 1, Math.max(0, Math.round(m.scrub * (frames - 1))));
+  return { ref, frame, frames, progress: m.progress, scrub: m.scrub, reduced };
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+ * Video-on-scroll frames (T41-lite)
+ * `npm run frames` walks the real OS demo and writes public/frames/<prospectId>/{NN.jpg, desk-NN.jpg, index.json}.
+ * This hook loads that index once per prospect, preloads the images, and returns null when the sequence was never
+ * generated - which is the whole fallback story: the sections keep rendering the live <MiniOs> composition.
+ * ------------------------------------------------------------------------------------------------------------- */
+
+export interface FrameIndex {
+  prospect_id: string; generated_at: string; roles: string[];
+  count: number; width: number; height: number; labels: string[];
+  desk_count: number; desk_width: number; desk_height: number; desk_labels: string[];
+  bytes: number;
+}
+export interface FrameSet { phone: string[]; desk: string[]; labels: string[]; deskLabels: string[]; index: FrameIndex }
+
+/** Where files from `public/` live at runtime. Vite's base is './', and HashRouter never changes the pathname. */
+export function assetBase(): string {
+  const b = import.meta.env.BASE_URL;
+  if (b && b !== './' && b !== '.') return b.endsWith('/') ? b : `${b}/`;
+  try { return new URL('.', window.location.href.split('#')[0]).href; } catch { return '/'; }
+}
+
+const pad2 = (n: number) => String(n).padStart(2, '0');
+const frameCache = new Map<string, FrameSet | null>();
+const framePending = new Map<string, Promise<FrameSet | null>>();
+
+function preload(srcs: string[]): Promise<void> {
+  if (typeof Image === 'undefined') return Promise.resolve();
+  // Await the first few so the first paint never flashes an empty screen; let the rest warm the cache behind them.
+  const head = srcs.slice(0, 4).map((src) => new Promise<void>((done) => { const img = new Image(); img.onload = img.onerror = () => done(); img.src = src; }));
+  for (const src of srcs.slice(4)) { const img = new Image(); img.decoding = 'async'; img.src = src; }
+  return Promise.all(head).then(() => undefined);
+}
+
+async function loadFrameSet(prospectId: string): Promise<FrameSet | null> {
+  const dir = `${assetBase()}frames/${prospectId}/`;
+  try {
+    const res = await fetch(`${dir}index.json`, { cache: 'force-cache' });
+    if (!res.ok) return null;
+    const index = (await res.json()) as FrameIndex;
+    if (!index || !Number.isFinite(index.count) || index.count < 1) return null;
+    const phone = Array.from({ length: index.count }, (_, i) => `${dir}${pad2(i)}.jpg`);
+    const desk = Array.from({ length: Math.max(0, index.desk_count ?? 0) }, (_, i) => `${dir}desk-${pad2(i)}.jpg`);
+    await preload([...phone.slice(0, 4), ...desk.slice(0, 2)]);
+    void preload([...phone, ...desk]);
+    return { phone, desk, labels: index.labels ?? [], deskLabels: index.desk_labels ?? [], index };
+  } catch { return null; } // no sequence generated for this prospect: the caller falls back to <MiniOs>
+}
+
+/** The generated tour for a prospect, or null while it loads / when it does not exist. */
+export function useFrames(prospectId: string | undefined | null): FrameSet | null {
+  const [set, setSet] = useState<FrameSet | null>(() => (prospectId ? frameCache.get(prospectId) ?? null : null));
+  useEffect(() => {
+    if (!prospectId) { setSet(null); return; }
+    if (frameCache.has(prospectId)) { setSet(frameCache.get(prospectId) ?? null); return; }
+    let alive = true;
+    let p = framePending.get(prospectId);
+    if (!p) { p = loadFrameSet(prospectId).then((r) => { frameCache.set(prospectId, r); framePending.delete(prospectId); return r; }); framePending.set(prospectId, p); }
+    void p.then((r) => { if (alive) setSet(r); });
+    return () => { alive = false; };
+  }, [prospectId]);
+  return set;
 }
 
 /** Observes an element and reports the first time it is meaningfully on screen (reveal + section_view tracking). */
@@ -107,7 +180,7 @@ export function useViewTracking(ctx: TrackCtx, meta: Record<string, unknown>, re
       const doc = document.documentElement;
       const scrollable = doc.scrollHeight - window.innerHeight;
       const depth = scrollable <= 0 ? 1 : Math.min(1, (window.scrollY + window.innerHeight) / doc.scrollHeight);
-      for (const d of [0.25, 0.5, 0.75, 1]) if (depth >= d - 0.01) trackOnce(`depth:${d}`, 'scroll_depth', { depth: d }, c);
+      for (const d of [0.25, 0.5, 0.75, 1]) if (depth >= d - 0.01) trackOnce(`depth:${d}`, 'scroll_depth', { ...metaRef.current, depth: d }, c);
     };
     const onScroll = () => { if (!raf) raf = window.requestAnimationFrame(measure); };
     measure();

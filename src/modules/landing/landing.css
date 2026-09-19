@@ -106,12 +106,23 @@
 .lp .modal-head { border-bottom-color: var(--lp-line); }
 .lp .modal-foot { border-top-color: var(--lp-line); }
 .lp .modal-head h2 { font-family: var(--lp-font-display); color: var(--lp-text); }
+/* Two long CTA labels do not fit one row on a phone; the footer wraps instead of clipping the secondary action.
+   (Foundation request: `.modal-foot` should wrap by default - see docs/changelog/_pending/landing.md.) */
+.lp .modal-foot { flex-wrap: wrap; }
+.lp .modal-foot > * { flex: 1 1 auto; justify-content: center; }
+@media (min-width: 480px) { .lp .modal-foot > * { flex: 0 0 auto; } }
 
 /* ---------- hero ---------- */
 .lp-hero { display: grid; gap: clamp(32px, 4vw, var(--sp-16)); align-items: center; }
 @media (min-width: 1100px) { .lp-hero { grid-template-columns: minmax(0, 46fr) minmax(0, 54fr); } }
 .lp-hero-copy { display: flex; flex-direction: column; gap: var(--sp-5); }
 .lp-hero-meta { font-size: var(--fs-xs); color: var(--lp-muted); margin: 0; max-width: 48ch; }
+/* The two facts that prove the page is theirs, above the fold (playbook 4). */
+.lp-facts { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-2); }
+.lp-fact { display: flex; align-items: flex-start; gap: var(--sp-2); font-size: clamp(15px, 1.2vw, calc(19px * var(--scale))); line-height: 1.45; color: var(--lp-text); }
+.lp-fact .icon { flex: 0 0 auto; margin-top: .15em; color: var(--lp-primary); }
+.lp-fact span { min-width: 0; }
+@media (min-width: 700px) { .lp-facts { flex-direction: row; flex-wrap: wrap; gap: var(--sp-3) var(--sp-6); } .lp-fact { max-width: 34ch; } }
 .lp-hero-devices { display: grid; gap: var(--sp-6); align-items: end; }
 @media (min-width: 700px) { .lp-hero-devices { grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); grid-template-areas: "tv tv" "laptop phone"; } }
 .lp-device { margin: 0; display: flex; flex-direction: column; gap: var(--sp-2); align-items: center; }
@@ -171,8 +182,14 @@
 .lp-stack-price s::after { content: ''; position: absolute; left: -4%; right: -4%; top: 52%; height: 2px; background: var(--lp-primary); transform: scaleX(0); transform-origin: left; }
 .lp-stack-row.is-cut .lp-stack-price s::after { transform: scaleX(1); }
 @media (prefers-reduced-motion: no-preference) {
-  .lp-stack-price s::after { transition: transform 420ms var(--ease-out); transition-delay: calc(var(--lp-delay, 0) * 1s); }
+  /* The sequence is JS state (one row every 160 ms), so the rule here is only the stroke drawing itself. */
+  .lp-stack-price s::after { transition: transform 340ms var(--ease-out); }
 }
+.lp-stack { display: flex; flex-direction: column; gap: var(--sp-4); min-width: 0; }
+/* The running total says in words what the strike-through says in colour (P-03). */
+.lp-running { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-2) var(--sp-4); margin: 0; padding: var(--sp-4) 0 0; border-top: 2px solid var(--lp-line); }
+.lp-running strong { font-family: var(--lp-font-display); font-size: clamp(20px, 2.2vw, calc(30px * var(--scale))); color: var(--lp-primary); font-variant-numeric: tabular-nums; }
+.lp-running span { font-size: var(--fs-sm); color: var(--lp-muted); font-variant-numeric: tabular-nums; }
 .lp-savings-side { display: flex; flex-direction: column; gap: var(--sp-3); position: sticky; top: calc(var(--h-topbar) + var(--sp-4)); }
 
 /* ---------- role views ---------- */
@@ -188,6 +205,7 @@
 .lp-role-name { font-family: var(--lp-font-display); font-size: var(--fs-lg); font-weight: var(--fw-bold); }
 .lp-role-headline { font-size: var(--fs-sm); color: var(--lp-muted); margin: 0; }
 .lp-role-widgets { display: grid; gap: var(--sp-2); font-size: calc(13px * var(--scale)); }
+.lp .lp-role-try { margin-top: auto; align-self: flex-start; }
 .lp-role-widgets .lp-w-title { font-size: calc(12px * var(--scale)); }
 
 /* ---------- walkthrough story ---------- */
@@ -233,6 +251,7 @@
 .lp-proof-title { font-family: var(--lp-font-display); font-size: var(--fs-lg); margin: 0; }
 .lp-proof-sample { margin-top: var(--sp-8); padding: var(--sp-6); border: 1px dashed var(--lp-line); border-radius: var(--r-lg); background: var(--lp-tint); display: flex; flex-direction: column; gap: var(--sp-4); }
 .lp-proof-sample-head { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; color: var(--lp-muted); }
+.lp-sample-title { font-family: var(--lp-font-display); color: var(--lp-text); }
 .lp-quote { margin: 0; font-family: var(--lp-font-display); font-size: clamp(18px, 2vw, calc(28px * var(--scale))); line-height: 1.35; }
 .lp-quote footer { margin-top: var(--sp-2); font-family: var(--lp-font-body); color: var(--lp-muted); text-transform: capitalize; }
 .lp-logos { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
@@ -269,9 +288,17 @@
 .lp .lp-book-slot:hover:not(:disabled), .lp .lp-book-slot:focus-visible { border-color: var(--lp-primary); color: var(--lp-primary); background: var(--lp-tint); }
 
 /* ---------- sticky CTA (phone) ---------- */
-.lp-sticky { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; gap: var(--sp-2); padding: var(--sp-3) var(--sp-4) calc(var(--sp-3) + env(safe-area-inset-bottom, 0px)); background: color-mix(in srgb, var(--lp-bg) 94%, transparent); backdrop-filter: blur(10px); border-top: 1px solid var(--lp-line); transform: translateY(130%); transition: transform var(--dur-slow) var(--ease-out); }
+.lp-sticky { display: none; flex-direction: column; position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; gap: var(--sp-2); padding: var(--sp-3) var(--sp-4) calc(var(--sp-3) + env(safe-area-inset-bottom, 0px)); background: color-mix(in srgb, var(--lp-bg) 94%, transparent); backdrop-filter: blur(10px); border-top: 1px solid var(--lp-line); transform: translateY(130%); transition: transform var(--dur-slow) var(--ease-out); }
 .lp-sticky.is-on { transform: none; }
-@media (max-width: 767px) { .lp-sticky { display: flex; } .lp-foot-in { padding-bottom: calc(var(--sp-16)); } }
+/* A bare button is an ask; the number beside it is the reason. */
+.lp-sticky-num { margin: 0; text-align: center; font-family: var(--lp-font-display); font-weight: var(--fw-bold); font-size: var(--fs-sm); color: var(--lp-primary); font-variant-numeric: tabular-nums; }
+.lp-sticky-row { display: flex; gap: var(--sp-2); align-items: stretch; }
+.lp-sticky-row > :first-child { flex: 1 1 auto; min-width: 0; }
+@media (max-width: 767px) { .lp-sticky { display: flex; } .lp-foot-in { padding-bottom: calc(var(--sp-20)); } }
+
+/* ---------- exit intent: the calendar itself, not a link to it (R-C02) ---------- */
+.lp-exit-lead { margin-top: var(--sp-4); font-weight: var(--fw-semibold); color: var(--lp-text); }
+.lp-exit-slots { display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: var(--sp-2); margin-top: var(--sp-3); }
 
 /* ---------- loading / expired ---------- */
 .lp-loading { min-height: 60vh; display: grid; place-items: center; color: var(--color-text-muted); }
@@ -283,4 +310,59 @@
 @media (min-width: 2560px) {
   .lp-proof { grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); }
   .lp-book { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+  .lp-roles { grid-template-columns: repeat(auto-fill, minmax(520px, 1fr)); }
 }
+/* 4K: the headline, the CTAs and the savings number are what has to land from ten feet; nothing tiny, nothing centred
+   in a narrow column. The wrap widens so the hero is not a stamp in the middle of the wall. */
+@media (min-width: 3840px) {
+  .lp-wrap { max-width: 3200px; }
+  .lp-h1 { font-size: clamp(32px, 5.6vw, 176px); max-width: 15ch; }
+  .lp-lede { font-size: 46px; max-width: 44ch; }
+  .lp-fact { font-size: 42px; }
+  .lp-running strong { font-size: 68px; }
+  .lp-running span { font-size: 34px; }
+  .lp-stack-tool, .lp-stack-price { font-size: 52px; }
+  .lp-stack-cat, .lp-stack-repl { font-size: 30px; }
+  .lp-note, .lp-hero-meta { font-size: 28px; }
+  .lp-urgency { font-size: 36px; }
+  .lp-device-phone .device { max-width: 460px; }
+}
+
+
+/* ---------- L-06 social card (the source of public/og/<slug>.jpg) ----------
+   The card is exactly 1200x630 so `npm run og` can screenshot the element straight; .og-fit scales it down on
+   narrower screens so this route never produces a horizontal scrollbar. */
+.og-route { padding: var(--sp-6) 0 var(--sp-12); align-items: flex-start; }
+/* --og-scale must be a plain number for transform: scale(), and CSS cannot divide a length by a length portably,
+   so the fit is a band ladder rather than a formula: every band is <= (100vw - 32px) / 1200, so it never overflows. */
+.og-fit { --og-scale: .27; width: 100%; height: calc(630px * var(--og-scale)); overflow: hidden; }
+@media (min-width: 420px) { .og-fit { --og-scale: .31; } }
+@media (min-width: 560px) { .og-fit { --og-scale: .43; } }
+@media (min-width: 700px) { .og-fit { --og-scale: .55; } }
+@media (min-width: 860px) { .og-fit { --og-scale: .68; } }
+@media (min-width: 1000px) { .og-fit { --og-scale: .8; } }
+@media (min-width: 1140px) { .og-fit { --og-scale: .92; } }
+@media (min-width: 1232px) { .og-fit { --og-scale: 1; } }
+.og-card {
+  width: 1200px; height: 630px; transform: scale(var(--og-scale)); transform-origin: top left;
+  display: grid; grid-template-columns: minmax(0, 52fr) minmax(0, 48fr); align-items: center; gap: 48px;
+  padding: 64px; box-sizing: border-box; background: linear-gradient(150deg, var(--lp-tint), var(--lp-bg) 62%);
+  color: var(--lp-text); font-family: var(--lp-font-body); border: 1px solid var(--lp-line); overflow: hidden;
+}
+.og-card-blank { grid-template-columns: minmax(0, 1fr); place-content: center; text-align: center; }
+.og-copy { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+.og-eyebrow { display: flex; align-items: center; gap: 14px; margin: 0; font-size: 26px; font-weight: 700; color: var(--lp-muted); }
+.og-mark { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 14px; background: var(--lp-primary); color: var(--lp-on-primary); font-family: var(--lp-font-display); font-weight: 800; font-size: 28px; flex: 0 0 auto; }
+.og-h { margin: 0; font-family: var(--lp-font-display); font-size: 62px; line-height: 1.04; letter-spacing: var(--ls-tight); font-weight: 800; }
+.og-card-blank .og-h { font-size: 54px; max-width: 24ch; margin-inline: auto; }
+.og-sub { margin: 0; font-size: 28px; color: var(--lp-muted); }
+.og-swatches { display: flex; gap: 12px; }
+.og-swatches span { width: 56px; height: 12px; border-radius: 999px; }
+.og-devices { position: relative; height: 502px; }
+.og-device { position: absolute; }
+.og-device-tv { top: 0; right: 0; width: 100%; }
+.og-device-laptop { bottom: 6px; left: -6%; width: 66%; }
+.og-device-phone { bottom: 0; right: 4%; width: 24%; }
+.og-devices .device-phone { max-width: none; }
+.og-cap { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3); padding: var(--sp-5) var(--sp-4) 0; max-width: 1200px; }
+.og-cap .lp-note { margin: 0; flex: 1 1 24ch; }

@@ -3,21 +3,33 @@ import type { RouteDef } from '../../specs/types';
 import { EVERYONE } from '../../auth/roles';
 import { LandingPage } from './LandingPage';
 import { ExpiredPage } from './ExpiredPage';
-import { revealSpec, auditSpec, walkthroughSpec, letterSpec, expiredSpec } from './specs';
+import { OgCard } from './OgCard';
+import { revealSpec, auditSpec, walkthroughSpec, letterSpec, expiredSpec, ogSpec } from './specs';
 
-/** L-01..L-05. Public surface: these pages own their chrome, there is no app shell around them. */
+/** L-01..L-06. Public surface: these pages own their chrome, there is no app shell around them. */
 export const routes: RouteDef[] = [
-  { path: '/p/:slug', element: h(LandingPage, { archetype: 'reveal', pageCode: 'L-01' }), spec: revealSpec, roles: EVERYONE, surface: 'public' },
+  // The default path follows the published row's archetype (reveal unless the strategist published something else),
+  // which is what lets variant B be a different archetype; the three explicit paths always force theirs.
+  { path: '/p/:slug', element: h(LandingPage, { archetype: 'reveal', pageCode: 'L-01', followRow: true }), spec: revealSpec, roles: EVERYONE, surface: 'public' },
   { path: '/p/:slug/audit', element: h(LandingPage, { archetype: 'audit', pageCode: 'L-02' }), spec: auditSpec, roles: EVERYONE, surface: 'public' },
   { path: '/p/:slug/story', element: h(LandingPage, { archetype: 'walkthrough', pageCode: 'L-03' }), spec: walkthroughSpec, roles: EVERYONE, surface: 'public' },
   { path: '/p/:slug/letter', element: h(LandingPage, { archetype: 'letter', pageCode: 'L-04' }), spec: letterSpec, roles: EVERYONE, surface: 'public' },
   { path: '/p/:slug/expired', element: h(ExpiredPage), spec: expiredSpec, roles: EVERYONE, surface: 'public' },
+  // L-06 is the source of public/og/<slug>.jpg, not a page we send anyone to: no nav entry, no link from the page.
+  { path: '/og/:slug', element: h(OgCard), spec: ogSpec, roles: EVERYONE, surface: 'public' },
 ];
 
 export const strings = {
   'landing.loading': { en: 'Opening your workspace...', es: 'Abriendo tu espacio...' },
   'landing.skip': { en: 'Skip to the page', es: 'Saltar al contenido' },
   'landing.hero_meta': { en: 'Built for {business} in {city}. Sample data in your industry, your real data moves in during onboarding.', es: 'Hecho para {business} en {city}. Datos de muestra de tu industria; tus datos reales entran en el onboarding.' },
+
+  // The two strongest facts, above the fold: where they are, and the thing their industry loses weeks to.
+  'landing.facts_label': { en: 'What we already know about you', es: 'Lo que ya sabemos de ti' },
+  'landing.fact_place': { en: '{city} · a team of {team}', es: '{city} · un equipo de {team}' },
+  'landing.fact_place_multi': { en: '{city} · {locations} locations · a team of {team}', es: '{city} · {locations} sucursales · un equipo de {team}' },
+  'landing.fact_pain': { en: 'Still true this week: {pain}', es: 'Todavía cierto esta semana: {pain}' },
+  'landing.frames_alt': { en: '{business}\u2019s workspace, frame {n} of {total}: {label}', es: 'El espacio de {business}, cuadro {n} de {total}: {label}' },
 
   'landing.replaced_by': { en: 'replaced by {module}', es: 'reemplazado por {module}' },
   'landing.cancelled': { en: 'cancelled', es: 'cancelado' },
@@ -28,6 +40,8 @@ export const strings = {
   'landing.vs_today': { en: '{now} a month today, {ours} with us', es: '{now} al mes hoy, {ours} con nosotros' },
   'landing.tools_cut': { en: 'Tools you can cancel', es: 'Herramientas que puedes cancelar' },
   'landing.tools_cut_hint': { en: 'One system replaces all of them', es: 'Un solo sistema las reemplaza' },
+  'landing.cut_running': { en: 'Cancelled so far: {money} a month', es: 'Cancelado hasta aquí: {money} al mes' },
+  'landing.cut_progress': { en: '{done} of {total} tools crossed off', es: '{done} de {total} herramientas tachadas' },
   'landing.savings_note': { en: 'Our guess from businesses your size. Correct it on the audit page and this number follows.', es: 'Nuestra estimación para negocios de tu tamaño. Corrígela en la página de auditoría y este número la sigue.' },
   'landing.see_it_instead': { en: 'See it instead of reading it', es: 'Míralo en vez de leerlo' },
   'landing.answered': { en: 'Answered', es: 'Respondidas' },
@@ -36,6 +50,8 @@ export const strings = {
 
   'landing.role_business': { en: 'Business', es: 'Negocio' },
   'landing.role_life': { en: 'Life', es: 'Vida' },
+  'landing.try_as_role': { en: 'Try it as {role}', es: 'Pruébalo como {role}' },
+  'landing.try_as_role_hint': { en: 'Opens the demo already switched to this view', es: 'Abre el demo ya cambiado a esta vista' },
   'landing.prev_role': { en: 'Previous role', es: 'Rol anterior' },
   'landing.next_role': { en: 'Next role', es: 'Rol siguiente' },
   'landing.prev': { en: 'Back', es: 'Atrás' },
@@ -47,6 +63,8 @@ export const strings = {
   'landing.sample_quote': { en: '"We cancelled six subscriptions in the first month and stopped re-typing the same booking three times."', es: '"Cancelamos seis suscripciones el primer mes y dejamos de re-escribir la misma reserva tres veces."' },
   'landing.sample_author': { en: 'Illustrative, a {industry} business of about your size', es: 'Ilustrativo, un negocio de {industry} de tu tamaño' },
   'landing.sample_logos': { en: 'Sample logo strip', es: 'Logos de muestra' },
+  'landing.sample_head': { en: 'Sample, not a customer', es: 'Muestra, no un cliente' },
+  'landing.sample_logos_note': { en: 'Placeholder marks, not customer logos. Real ones replace these the day we can name them.', es: 'Marcas de relleno, no logos de clientes. Las reales las sustituyen el día que podamos nombrarlas.' },
   'landing.see_case': { en: 'See the case study', es: 'Ver el caso' },
   'landing.play_note': { en: 'Play the 40-second note', es: 'Escuchar la nota de 40 s' },
 
@@ -67,6 +85,9 @@ export const strings = {
   'landing.exit_title': { en: 'One thing before you go, {first}', es: 'Una cosa antes de irte, {first}' },
   'landing.exit_body': { en: 'Fifteen minutes on a call and we will walk through {business}\'s workspace together, on your screen, with your questions. No deck.', es: 'Quince minutos en una llamada y recorremos juntos el espacio de {business}, en tu pantalla, con tus preguntas. Sin presentación.' },
   'landing.exit_stay': { en: 'Keep looking', es: 'Seguir viendo' },
+  'landing.exit_pick': { en: 'Pick a time and we will be there', es: 'Elige una hora y ahí estaremos' },
+  'landing.exit_none': { en: 'No free times this week - book a call and we will find one.', es: 'Sin horas libres esta semana: agenda y buscamos una.' },
+  'landing.sticky_savings': { en: 'Save {money} a year', es: 'Ahorra {money} al año' },
 
   'landing.save_title': { en: 'Save your workspace', es: 'Guarda tu espacio' },
   'landing.save_body': { en: 'Name and email only, so we can send you the link before it expires in {days} days. The demo stays open either way.', es: 'Solo nombre y correo, para enviarte el enlace antes de que expire en {days} días. El demo sigue abierto de cualquier forma.' },
@@ -91,4 +112,12 @@ export const strings = {
   'landing.expired_sent_body': { en: 'A strategist sees this in the studio inbox and rebuilds the workspace, usually the same day.', es: 'Un estratega lo ve en la bandeja del estudio y reconstruye el espacio, normalmente el mismo día.' },
   'landing.expired_foot': { en: 'Not sure what this is?', es: '¿No sabes qué es esto?' },
   'landing.expired_site': { en: 'See what we build', es: 'Mira lo que construimos' },
+
+  // L-06, the social card
+  'landing.og_sub': { en: 'Already built. Open it, no form.', es: 'Ya construido. Ábrelo, sin formularios.' },
+  'landing.og_fallback_h': { en: 'We already built {business}\u2019s operating system.', es: 'Ya construimos el sistema operativo de {business}.' },
+  'landing.og_unknown': { en: 'Imagine builds the system before the call.', es: 'Imagine construye el sistema antes de la llamada.' },
+  'landing.og_unknown_body': { en: 'No workspace matches "{slug}", so this is the generic card.', es: 'Ningún espacio coincide con "{slug}", así que esta es la tarjeta genérica.' },
+  'landing.og_cap': { en: 'This card is the source of public/og/<slug>.jpg (npm run og). The landing page points og:image at that file.', es: 'Esta tarjeta es el origen de public/og/<slug>.jpg (npm run og). La página apunta og:image a ese archivo.' },
+  'landing.og_open': { en: 'Open the page', es: 'Abrir la página' },
 };

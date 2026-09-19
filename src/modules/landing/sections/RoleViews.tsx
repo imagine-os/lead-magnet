@@ -2,11 +2,16 @@
  * "Every role of the people in their life gets their own view" (playbook 5). One card per business and life role with
  * its three widgets as small themed panels. Scroll-snap carousel on a phone, grid from tablet up; arrow keys, Home /
  * End and the prev / next buttons all move between cards, so nothing here is swipe-only (P-03).
+ *
+ * Every card ends in "Try it as <role>", which opens the live demo already switched to that person's view
+ * (`/demo/:id/role/:slug`). It is the primary CTA aimed one step deeper: the surprise of the section is that the
+ * groomer and the spouse each get their own screen, and the fastest way to believe it is to stand in one.
  */
 import { useRef, useState } from 'react';
 import { Card } from '../../../components/molecule/Card/Card';
 import { Badge } from '../../../components/atom/Badge/Badge';
 import { IconButton } from '../../../components/atom/IconButton/IconButton';
+import { Button } from '../../../components/atom/Button/Button';
 import { useI18n } from '../../../i18n/I18nProvider';
 import type { Section } from '../../../engine/types';
 import { useLanding } from '../context';
@@ -19,7 +24,7 @@ type Roles = Extract<Section, { kind: 'role_views' }>;
 
 export function RoleViews({ section }: { section: Roles }) {
   const { bi, t } = useI18n();
-  const { pageCode } = useLanding();
+  const { pageCode, openRole } = useLanding();
   const scrollTo = useScrollTo();
   const listRef = useRef<HTMLUListElement>(null);
   const [active, setActive] = useState(0);
@@ -38,7 +43,16 @@ export function RoleViews({ section }: { section: Roles }) {
     focusCard(i);
     return `showing the ${views[i].role} view`;
   };
-  useLiveActions(pageCode, { 'landing.viewRole': (p) => goToRole(String(p?.role ?? '')) });
+  const tryRole = (role: string) => {
+    const i = views.findIndex((v) => v.role.toLowerCase() === String(role).toLowerCase());
+    if (i < 0) return `no role view for "${role}"`;
+    openRole(section.id, views[i], views);
+    return `opening the demo as the ${views[i].role}`;
+  };
+  useLiveActions(pageCode, {
+    'landing.viewRole': (p) => goToRole(String(p?.role ?? '')),
+    'landing.tryAsRole': (p) => tryRole(String(p?.role ?? views[active]?.role ?? '')),
+  });
 
   return (
     <SectionShell id={section.id} kind="role_views" label={bi(section.headline)}>
@@ -73,6 +87,11 @@ export function RoleViews({ section }: { section: Roles }) {
               </div>
               <p className="lp-role-headline">{bi(v.headline)}</p>
               <div className="lp-role-widgets">{v.widgets.map((w) => <MiniWidget key={w.id} widget={w} />)}</div>
+              <Button
+                variant="outline" size="sm" iconRight="arrow-right" className="lp-btn-secondary lp-role-try"
+                title={t('landing.try_as_role_hint')}
+                onClick={() => openRole(section.id, v, views)}
+              >{t('landing.try_as_role', { role: cap(v.role) })}</Button>
             </Card>
           </li>
         ))}

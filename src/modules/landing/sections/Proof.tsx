@@ -27,9 +27,10 @@ export function ProofSection({ section }: { section: Proof }) {
           </Card>
         ))}
       </div>
-      <div className="lp-proof-sample">
+      <div className="lp-proof-sample" aria-label={t('landing.sample_head')}>
         <div className="lp-proof-sample-head">
           <Badge tone="warn" size="sm">{t('landing.sample_badge')}</Badge>
+          <strong className="lp-sample-title">{t('landing.sample_head')}</strong>
           <span className="xs">{t('landing.sample_note')}</span>
         </div>
         <blockquote className="lp-quote">
@@ -39,6 +40,7 @@ export function ProofSection({ section }: { section: Proof }) {
         <div className="lp-logos" aria-label={t('landing.sample_logos')}>
           {['A', 'B', 'C', 'D', 'E'].map((l) => <span key={l} className="lp-logo" aria-hidden>{l}</span>)}
         </div>
+        <p className="lp-note">{t('landing.sample_logos_note')}</p>
         <Placeholder will="open the full case study for a business like this one" by="content pass (T50)" button={{ label: t('landing.see_case'), variant: 'outline', size: 'sm' }} />
       </div>
     </SectionShell>

@@ -14,6 +14,8 @@
     "sql": "node --experimental-strip-types scripts/gen-sql.mjs",
     "test:engine": "node scripts/test-engine.mjs",
     "screenshots": "node scripts/screenshots.mjs",
+    "frames": "node scripts/frames.mjs",
+    "og": "node scripts/og.mjs",
     "qa:responsive": "node scripts/qa-responsive.mjs"
   },
   "dependencies": {

@@ -1,0 +1,3303 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "Lead Magnet actions manifest",
+ "version": "0.2.0",
+ "generated": "2026-09-19",
+ "source": "scripts/actions.mjs export (compiled PageSpec.actions)",
+ "routes": 51,
+ "declared": 179,
+ "tools": [
+  {
+   "name": "admin.applyRecommendation",
+   "description": "apply recommendation {n} — \"Apply\" on A-02 (needs pages.publish)",
+   "label": "Apply",
+   "intent": "apply recommendation {n}",
+   "permission": "pages.publish",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "n": {
+      "type": "number",
+      "description": "a number"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "A-02",
+     "path": "/admin/prospects/:id",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "admin.clearEventFilters",
+   "description": "clear the event filters — \"Clear filters\" on A-03 (needs events.read)",
+   "label": "Clear filters",
+   "intent": "clear the event filters",
+   "permission": "events.read",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "A-03",
+     "path": "/admin/events",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "admin.dismissRecommendation",
+   "description": "dismiss recommendation {n} — \"Dismiss\" on A-02 (needs prospects.write)",
+   "label": "Dismiss",
+   "intent": "dismiss recommendation {n}",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "n": {
+      "type": "number",
+      "description": "a number"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "A-02",
+     "path": "/admin/prospects/:id",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "admin.filterEvents",
+   "description": "show {type} events for {prospect} — \"Filter\" on A-03 (needs events.read)",
+   "label": "Filter",
+   "intent": "show {type} events for {prospect}",
+   "permission": "events.read",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "type": {
+      "type": "string",
+      "description": "free text"
+     },
+     "page": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     },
+     "session": {
+      "type": "string",
+      "description": "free text"
+     },
+     "prospect": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "A-03",
+     "path": "/admin/events",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "admin.filterFunnel",
+   "description": "filter the funnel by {archetype} and {warmth} — \"Filter\" on A-01 (needs events.read)",
+   "label": "Filter",
+   "intent": "filter the funnel by {archetype} and {warmth}",
+   "permission": "events.read",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "archetype": {
+      "type": "string",
+      "enum": [
+       "all",
+       "reveal",
+       "audit",
+       "walkthrough",
+       "letter"
+      ],
+      "description": "one of all, reveal, audit, walkthrough, letter"
+     },
+     "warmth": {
+      "type": "string",
+      "enum": [
+       "all",
+       "cold",
+       "warm",
+       "hot"
+      ],
+      "description": "one of all, cold, warm, hot"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "A-01",
+     "path": "/admin",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "admin.filterOutreach",
+   "description": "show only {channel} outreach — \"Filter channel\" on A-04 (needs events.read)",
+   "label": "Filter channel",
+   "intent": "show only {channel} outreach",
+   "permission": "events.read",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "channel": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "A-04",
+     "path": "/admin/outreach",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "admin.moveTouch",
+   "description": "mark {touch} as {status} — \"Move\" on A-04 (needs prospects.write)",
+   "label": "Move",
+   "intent": "mark {touch} as {status}",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "touch": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "draft",
+       "scheduled",
+       "sent",
+       "opened",
+       "clicked",
+       "replied",
+       "bounced"
+      ],
+      "description": "one of draft, scheduled, sent, opened, clicked, replied, bounced"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "A-04",
+     "path": "/admin/outreach",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "admin.openEventMeta",
+   "description": "show the meta for event {id} — \"JSON\" on A-03 (needs events.read)",
+   "label": "JSON",
+   "intent": "show the meta for event {id}",
+   "permission": "events.read",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "A-03",
+     "path": "/admin/events",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "admin.openFor",
+   "description": "open the {surface} for this prospect — \"Open\" on A-02 (needs prospects.read)",
+   "label": "Open",
+   "intent": "open the {surface} for this prospect",
+   "permission": "prospects.read",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "surface": {
+      "type": "string",
+      "enum": [
+       "studio",
+       "demo",
+       "page",
+       "booking"
+      ],
+      "description": "one of studio, demo, page, booking"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "A-02",
+     "path": "/admin/prospects/:id",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "admin.openProspect",
+   "description": "open the timeline for {prospect} — \"Open prospect\" on A-01 (needs prospects.read)",
+   "label": "Open prospect",
+   "intent": "open the timeline for {prospect}",
+   "permission": "prospects.read",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "prospect": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "A-01",
+     "path": "/admin",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "admin.openStudio",
+   "description": "open the studio — \"Open the studio\" on A-01 (needs pages.publish)",
+   "label": "Open the studio",
+   "intent": "open the studio",
+   "permission": "pages.publish",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "A-01",
+     "path": "/admin",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "admin.recordRecommendation",
+   "description": "record recommendation {n} — \"Record\" on A-02 (needs prospects.write)",
+   "label": "Record",
+   "intent": "record recommendation {n}",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "n": {
+      "type": "number",
+      "description": "a number"
+     },
+     "note": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "A-02",
+     "path": "/admin/prospects/:id",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "admin.setBookingStatus",
+   "description": "mark booking {id} {status} — \"Set status\" on A-05 (needs prospects.write)",
+   "label": "Set status",
+   "intent": "mark booking {id} {status}",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "requested",
+       "confirmed",
+       "cancelled",
+       "completed"
+      ],
+      "description": "one of requested, confirmed, cancelled, completed"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "A-05",
+     "path": "/admin/bookings",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "booking.addToCalendar",
+   "description": "add the call to my calendar — \"Add to calendar\" on B-02 (any role)",
+   "label": "Add to calendar",
+   "intent": "add the call to my calendar",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "B-02",
+     "path": "/book/:prospectId/confirmed",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "booking.clearSlot",
+   "description": "change the time — \"Change time\" on B-01 (needs booking.create)",
+   "label": "Change time",
+   "intent": "change the time",
+   "permission": "booking.create",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "B-01",
+     "path": "/book/:prospectId",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "booking.confirm",
+   "description": "confirm my booking — \"Confirm\" on B-01 (needs booking.create)",
+   "label": "Confirm",
+   "intent": "confirm my booking",
+   "permission": "booking.create",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "B-01",
+     "path": "/book/:prospectId",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "booking.openDemo",
+   "description": "open my demo — \"Open your demo\" on B-01, B-02 (needs demo.open)",
+   "label": "Open your demo",
+   "intent": "open my demo",
+   "permission": "demo.open",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "B-01",
+     "path": "/book/:prospectId",
+     "status": "built"
+    },
+    {
+     "code": "B-02",
+     "path": "/book/:prospectId/confirmed",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "booking.openPage",
+   "description": "go back to my page — \"Back to your page\" on B-02 (any role)",
+   "label": "Back to your page",
+   "intent": "go back to my page",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "B-02",
+     "path": "/book/:prospectId/confirmed",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "booking.pickSlot",
+   "description": "book {slot} — \"Pick a slot\" on B-01 (needs booking.create)",
+   "label": "Pick a slot",
+   "intent": "book {slot}",
+   "permission": "booking.create",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "slot": {
+      "type": "string",
+      "format": "date-time",
+      "description": "an ISO 8601 instant"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "B-01",
+     "path": "/book/:prospectId",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "booking.setLang",
+   "description": "switch language to {lang} — \"EN / ES\" on B-01, B-02 (any role)",
+   "label": "EN / ES",
+   "intent": "switch language to {lang}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "lang": {
+      "type": "string",
+      "enum": [
+       "en",
+       "es"
+      ],
+      "description": "one of en, es"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "B-01",
+     "path": "/book/:prospectId",
+     "status": "built"
+    },
+    {
+     "code": "B-02",
+     "path": "/book/:prospectId/confirmed",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "demo.bookCall",
+   "description": "book a walkthrough call — \"Book a walkthrough\" on C-01, C-02, C-03, C-04, C-05, C-06, C-07 (needs booking.create)",
+   "label": "Book a walkthrough",
+   "intent": "book a walkthrough call",
+   "permission": "booking.create",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "C-01",
+     "path": "/demo/:prospectId",
+     "status": "built"
+    },
+    {
+     "code": "C-02",
+     "path": "/demo/:prospectId/role/:role",
+     "status": "built"
+    },
+    {
+     "code": "C-03",
+     "path": "/demo/:prospectId/departments",
+     "status": "built"
+    },
+    {
+     "code": "C-04",
+     "path": "/demo/:prospectId/comms",
+     "status": "built"
+    },
+    {
+     "code": "C-05",
+     "path": "/demo/:prospectId/money",
+     "status": "built"
+    },
+    {
+     "code": "C-06",
+     "path": "/demo/:prospectId/life",
+     "status": "built"
+    },
+    {
+     "code": "C-07",
+     "path": "/demo/:prospectId/settings",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "demo.filterChannel",
+   "description": "show {channel} only — \"Filter channel\" on C-04 (any role)",
+   "label": "Filter channel",
+   "intent": "show {channel} only",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "channel": {
+      "type": "string",
+      "enum": [
+       "all",
+       "call",
+       "email",
+       "sms",
+       "whatsapp"
+      ],
+      "description": "one of all, call, email, sms, whatsapp"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "C-04",
+     "path": "/demo/:prospectId/comms",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "demo.goto",
+   "description": "open {section} — \"Go to section\" on C-01, C-02, C-03, C-04, C-05, C-06, C-07 (needs demo.open)",
+   "label": "Go to section",
+   "intent": "open {section}",
+   "permission": "demo.open",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "section": {
+      "type": "string",
+      "enum": [
+       "home",
+       "departments",
+       "comms",
+       "money",
+       "life",
+       "settings"
+      ],
+      "description": "one of home, departments, comms, money, life, settings"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "C-01",
+     "path": "/demo/:prospectId",
+     "status": "built"
+    },
+    {
+     "code": "C-02",
+     "path": "/demo/:prospectId/role/:role",
+     "status": "built"
+    },
+    {
+     "code": "C-03",
+     "path": "/demo/:prospectId/departments",
+     "status": "built"
+    },
+    {
+     "code": "C-04",
+     "path": "/demo/:prospectId/comms",
+     "status": "built"
+    },
+    {
+     "code": "C-05",
+     "path": "/demo/:prospectId/money",
+     "status": "built"
+    },
+    {
+     "code": "C-06",
+     "path": "/demo/:prospectId/life",
+     "status": "built"
+    },
+    {
+     "code": "C-07",
+     "path": "/demo/:prospectId/settings",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "demo.invite",
+   "description": "invite {person} — \"Invite\" on C-07 (any role)",
+   "label": "Invite",
+   "intent": "invite {person}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "person": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "C-07",
+     "path": "/demo/:prospectId/settings",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "demo.openDepartment",
+   "description": "open the {department} department — \"Open department\" on C-03 (needs demo.open)",
+   "label": "Open department",
+   "intent": "open the {department} department",
+   "permission": "demo.open",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "department": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "C-03",
+     "path": "/demo/:prospectId/departments",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "demo.openLifeRole",
+   "description": "open {role}'s view — \"Open view\" on C-06 (needs demo.open)",
+   "label": "Open view",
+   "intent": "open {role}'s view",
+   "permission": "demo.open",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "role": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "C-06",
+     "path": "/demo/:prospectId/life",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "demo.openPayment",
+   "description": "open payment {payment} — \"Open payment\" on C-05 (any role)",
+   "label": "Open payment",
+   "intent": "open payment {payment}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "payment": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "C-05",
+     "path": "/demo/:prospectId/money",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "demo.openRole",
+   "description": "open {role}'s view — \"Open view\" on C-07 (needs demo.open)",
+   "label": "Open view",
+   "intent": "open {role}'s view",
+   "permission": "demo.open",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "role": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "C-07",
+     "path": "/demo/:prospectId/settings",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "demo.openThread",
+   "description": "open the thread with {thread} — \"Open thread\" on C-04 (any role)",
+   "label": "Open thread",
+   "intent": "open the thread with {thread}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "thread": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "C-04",
+     "path": "/demo/:prospectId/comms",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "demo.openWidget",
+   "description": "open {widget} — \"Open\" on C-01, C-02 (needs demo.open)",
+   "label": "Open",
+   "intent": "open {widget}",
+   "permission": "demo.open",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "widget": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "C-01",
+     "path": "/demo/:prospectId",
+     "status": "built"
+    },
+    {
+     "code": "C-02",
+     "path": "/demo/:prospectId/role/:role",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "demo.quickAction",
+   "description": "run the quick action {action} — \"Quick action\" on C-01, C-02 (any role)",
+   "label": "Quick action",
+   "intent": "run the quick action {action}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "action": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "C-01",
+     "path": "/demo/:prospectId",
+     "status": "built"
+    },
+    {
+     "code": "C-02",
+     "path": "/demo/:prospectId/role/:role",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "demo.reply",
+   "description": "reply to {thread} — \"Reply\" on C-04 (any role)",
+   "label": "Reply",
+   "intent": "reply to {thread}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "thread": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "C-04",
+     "path": "/demo/:prospectId/comms",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "demo.saveWorkspace",
+   "description": "save my workspace — \"Save your workspace\" on C-01, C-02, C-03, C-04, C-05, C-06, C-07 (any role)",
+   "label": "Save your workspace",
+   "intent": "save my workspace",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "C-01",
+     "path": "/demo/:prospectId",
+     "status": "built"
+    },
+    {
+     "code": "C-02",
+     "path": "/demo/:prospectId/role/:role",
+     "status": "built"
+    },
+    {
+     "code": "C-03",
+     "path": "/demo/:prospectId/departments",
+     "status": "built"
+    },
+    {
+     "code": "C-04",
+     "path": "/demo/:prospectId/comms",
+     "status": "built"
+    },
+    {
+     "code": "C-05",
+     "path": "/demo/:prospectId/money",
+     "status": "built"
+    },
+    {
+     "code": "C-06",
+     "path": "/demo/:prospectId/life",
+     "status": "built"
+    },
+    {
+     "code": "C-07",
+     "path": "/demo/:prospectId/settings",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "demo.switchRole",
+   "description": "view as {role} — \"Switch role\" on C-01, C-02, C-03, C-04, C-05, C-06, C-07 (needs demo.open)",
+   "label": "Switch role",
+   "intent": "view as {role}",
+   "permission": "demo.open",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "role": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "C-01",
+     "path": "/demo/:prospectId",
+     "status": "built"
+    },
+    {
+     "code": "C-02",
+     "path": "/demo/:prospectId/role/:role",
+     "status": "built"
+    },
+    {
+     "code": "C-03",
+     "path": "/demo/:prospectId/departments",
+     "status": "built"
+    },
+    {
+     "code": "C-04",
+     "path": "/demo/:prospectId/comms",
+     "status": "built"
+    },
+    {
+     "code": "C-05",
+     "path": "/demo/:prospectId/money",
+     "status": "built"
+    },
+    {
+     "code": "C-06",
+     "path": "/demo/:prospectId/life",
+     "status": "built"
+    },
+    {
+     "code": "C-07",
+     "path": "/demo/:prospectId/settings",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "dev.canvasFit",
+   "description": "fit the canvas — \"Fit\" on D-07 (any role)",
+   "label": "Fit",
+   "intent": "fit the canvas",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "D-07",
+     "path": "/dev/canvas",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "dev.canvasOpen",
+   "description": "open page {code} — \"Open page\" on D-07 (any role)",
+   "label": "Open page",
+   "intent": "open page {code}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "code": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "D-07",
+     "path": "/dev/canvas",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "dev.canvasThumbnails",
+   "description": "toggle live thumbnails — \"Thumbnails\" on D-07 (any role)",
+   "label": "Thumbnails",
+   "intent": "toggle live thumbnails",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "D-07",
+     "path": "/dev/canvas",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "dev.canvasZoomIn",
+   "description": "zoom in the canvas — \"Zoom in\" on D-07 (any role)",
+   "label": "Zoom in",
+   "intent": "zoom in the canvas",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "D-07",
+     "path": "/dev/canvas",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "dev.canvasZoomOut",
+   "description": "zoom out the canvas — \"Zoom out\" on D-07 (any role)",
+   "label": "Zoom out",
+   "intent": "zoom out the canvas",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "D-07",
+     "path": "/dev/canvas",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "dev.filterRoutes",
+   "description": "show {surface} routes — \"Filter\" on D-01 (any role)",
+   "label": "Filter",
+   "intent": "show {surface} routes",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "surface": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "D-01",
+     "path": "/dev",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "dev.filterRules",
+   "description": "show {status} rules — \"Filter\" on D-05 (any role)",
+   "label": "Filter",
+   "intent": "show {status} rules",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "status": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "D-05",
+     "path": "/dev/rules",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "dev.openDoc",
+   "description": "open the {doc} document — \"Open doc\" on D-06, D-06 (needs docs.read)",
+   "label": "Open doc",
+   "intent": "open the {doc} document",
+   "permission": "docs.read",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "doc": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "D-06",
+     "path": "/docs",
+     "status": "built"
+    },
+    {
+     "code": "D-06",
+     "path": "/docs/pages/:code",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "dev.openTable",
+   "description": "open the {table} table — \"Open table\" on D-03, D-03 (needs tables.read)",
+   "label": "Open table",
+   "intent": "open the {table} table",
+   "permission": "tables.read",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "table": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "D-03",
+     "path": "/dev/tables",
+     "status": "built"
+    },
+    {
+     "code": "D-03",
+     "path": "/dev/tables/:table",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "dev.pickTier",
+   "description": "show {tier} components — \"Tier\" on D-02 (any role)",
+   "label": "Tier",
+   "intent": "show {tier} components",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "tier": {
+      "type": "string",
+      "enum": [
+       "atom",
+       "molecule",
+       "organism",
+       "template"
+      ],
+      "description": "one of atom, molecule, organism, template"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "D-02",
+     "path": "/dev/components",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "dev.previewRoute",
+   "description": "preview {route} at every width — \"Preview\" on D-08 (any role)",
+   "label": "Preview",
+   "intent": "preview {route} at every width",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "route": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "D-08",
+     "path": "/dev/qa",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "dev.resetDb",
+   "description": "reset the demo database — \"Reset demo data\" on D-03, D-03 (needs dev.tools)",
+   "label": "Reset demo data",
+   "intent": "reset the demo database",
+   "permission": "dev.tools",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "D-03",
+     "path": "/dev/tables",
+     "status": "built"
+    },
+    {
+     "code": "D-03",
+     "path": "/dev/tables/:table",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "dev.runAction",
+   "description": "run action {id} — \"Run\" on D-04 (needs dev.tools)",
+   "label": "Run",
+   "intent": "run action {id}",
+   "permission": "dev.tools",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "D-04",
+     "path": "/dev/actions",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "dev.setFeedbackStatus",
+   "description": "mark feedback {id} {status} — \"Set status\" on D-09 (needs feedback.read)",
+   "label": "Set status",
+   "intent": "mark feedback {id} {status}",
+   "permission": "feedback.read",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "new",
+       "seen",
+       "waiting",
+       "done"
+      ],
+      "description": "one of new, seen, waiting, done"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "D-09",
+     "path": "/dev/feedback",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "dev.triageFeedback",
+   "description": "triage feedback {id} as {triage} — \"Triage\" on D-09 (needs feedback.read)",
+   "label": "Triage",
+   "intent": "triage feedback {id} as {triage}",
+   "permission": "feedback.read",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     },
+     "triage": {
+      "type": "string",
+      "enum": [
+       "fix",
+       "ask",
+       "later",
+       "wontfix"
+      ],
+      "description": "one of fix, ask, later, wontfix"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "D-09",
+     "path": "/dev/feedback",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "hub.openSurface",
+   "description": "open {surface} — \"Open\" on HUB-01 (any role)",
+   "label": "Open",
+   "intent": "open {surface}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "surface": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "HUB-01",
+     "path": "/",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "hub.resetDemoData",
+   "description": "reset the demo database — \"Reset demo data\" on HUB-01 (needs dev.tools)",
+   "label": "Reset demo data",
+   "intent": "reset the demo database",
+   "permission": "dev.tools",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "HUB-01",
+     "path": "/",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "hub.setLang",
+   "description": "switch language to {lang} — \"EN / ES\" on HUB-01 (any role)",
+   "label": "EN / ES",
+   "intent": "switch language to {lang}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "lang": {
+      "type": "string",
+      "enum": [
+       "en",
+       "es"
+      ],
+      "description": "one of en, es"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "HUB-01",
+     "path": "/",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "hub.signInAs",
+   "description": "sign in as {role} — \"Sign in as\" on HUB-02 (any role)",
+   "label": "Sign in as",
+   "intent": "sign in as {role}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "role": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "HUB-02",
+     "path": "/no-access",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "hub.switchUser",
+   "description": "sign in as {role} — \"Sign in as\" on HUB-01 (any role)",
+   "label": "Sign in as",
+   "intent": "sign in as {role}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "role": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "HUB-01",
+     "path": "/",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "hub.toggleDevMode",
+   "description": "turn dev mode on — \"Dev mode\" on HUB-01 (needs dev.tools)",
+   "label": "Dev mode",
+   "intent": "turn dev mode on",
+   "permission": "dev.tools",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "HUB-01",
+     "path": "/",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "hub.toggleTheme",
+   "description": "switch to dark mode — \"Theme\" on HUB-01 (any role)",
+   "label": "Theme",
+   "intent": "switch to dark mode",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "HUB-01",
+     "path": "/",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "landing.bookCall",
+   "description": "book a walkthrough call — \"Book a 15-min walkthrough\" on L-01, L-02, L-03, L-04, L-05 (needs booking.create)",
+   "label": "Book a 15-min walkthrough",
+   "intent": "book a walkthrough call",
+   "permission": "booking.create",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "L-01",
+     "path": "/p/:slug",
+     "status": "built"
+    },
+    {
+     "code": "L-02",
+     "path": "/p/:slug/audit",
+     "status": "built"
+    },
+    {
+     "code": "L-03",
+     "path": "/p/:slug/story",
+     "status": "built"
+    },
+    {
+     "code": "L-04",
+     "path": "/p/:slug/letter",
+     "status": "built"
+    },
+    {
+     "code": "L-05",
+     "path": "/p/:slug/expired",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "landing.confirmTool",
+   "description": "confirm we use {tool} — \"Yes, we pay for this\" on L-02 (any role)",
+   "label": "Yes, we pay for this",
+   "intent": "confirm we use {tool}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "tool": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "L-02",
+     "path": "/p/:slug/audit",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "landing.goToStep",
+   "description": "go to step {step} of the story — \"Next / previous scene\" on L-03 (any role)",
+   "label": "Next / previous scene",
+   "intent": "go to step {step} of the story",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "step": {
+      "type": "number",
+      "description": "a number"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "L-03",
+     "path": "/p/:slug/story",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "landing.openDemo",
+   "description": "open {business} demo — \"Open your demo\" on L-01, L-02, L-03, L-04 (needs demo.open)",
+   "label": "Open your demo",
+   "intent": "open {business} demo",
+   "permission": "demo.open",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "L-01",
+     "path": "/p/:slug",
+     "status": "built"
+    },
+    {
+     "code": "L-02",
+     "path": "/p/:slug/audit",
+     "status": "built"
+    },
+    {
+     "code": "L-03",
+     "path": "/p/:slug/story",
+     "status": "built"
+    },
+    {
+     "code": "L-04",
+     "path": "/p/:slug/letter",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "landing.openPage",
+   "description": "open the landing page this card previews — \"Open the page\" on L-06 (any role)",
+   "label": "Open the page",
+   "intent": "open the landing page this card previews",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "L-06",
+     "path": "/og/:slug",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "landing.pickSlot",
+   "description": "book {slot} — \"Pick a slot\" on L-01, L-02, L-03, L-04 (needs booking.create)",
+   "label": "Pick a slot",
+   "intent": "book {slot}",
+   "permission": "booking.create",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "slot": {
+      "type": "string",
+      "format": "date-time",
+      "description": "an ISO 8601 instant"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "L-01",
+     "path": "/p/:slug",
+     "status": "built"
+    },
+    {
+     "code": "L-02",
+     "path": "/p/:slug/audit",
+     "status": "built"
+    },
+    {
+     "code": "L-03",
+     "path": "/p/:slug/story",
+     "status": "built"
+    },
+    {
+     "code": "L-04",
+     "path": "/p/:slug/letter",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "landing.playLetter",
+   "description": "play the voice note — \"Play the voice note\" on L-04 (any role)",
+   "label": "Play the voice note",
+   "intent": "play the voice note",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "L-04",
+     "path": "/p/:slug/letter",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "landing.rejectTool",
+   "description": "reject {tool} — \"No, not us\" on L-02 (any role)",
+   "label": "No, not us",
+   "intent": "reject {tool}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "tool": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "L-02",
+     "path": "/p/:slug/audit",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "landing.requestRefresh",
+   "description": "request a new workspace — \"Request a fresh workspace\" on L-05 (any role)",
+   "label": "Request a fresh workspace",
+   "intent": "request a new workspace",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "L-05",
+     "path": "/p/:slug/expired",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "landing.saveWorkspace",
+   "description": "save my workspace with my email — \"Save your workspace\" on L-01, L-02, L-03, L-04 (any role)",
+   "label": "Save your workspace",
+   "intent": "save my workspace with my email",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "L-01",
+     "path": "/p/:slug",
+     "status": "built"
+    },
+    {
+     "code": "L-02",
+     "path": "/p/:slug/audit",
+     "status": "built"
+    },
+    {
+     "code": "L-03",
+     "path": "/p/:slug/story",
+     "status": "built"
+    },
+    {
+     "code": "L-04",
+     "path": "/p/:slug/letter",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "landing.seeCaseStudy",
+   "description": "show me a case study — \"See the case study\" on L-01, L-02 (any role)",
+   "label": "See the case study",
+   "intent": "show me a case study",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "L-01",
+     "path": "/p/:slug",
+     "status": "built"
+    },
+    {
+     "code": "L-02",
+     "path": "/p/:slug/audit",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "landing.setLang",
+   "description": "switch language to {lang} — \"EN / ES\" on L-01, L-02, L-03, L-04, L-05 (any role)",
+   "label": "EN / ES",
+   "intent": "switch language to {lang}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "lang": {
+      "type": "string",
+      "enum": [
+       "en",
+       "es"
+      ],
+      "description": "one of en, es"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "L-01",
+     "path": "/p/:slug",
+     "status": "built"
+    },
+    {
+     "code": "L-02",
+     "path": "/p/:slug/audit",
+     "status": "built"
+    },
+    {
+     "code": "L-03",
+     "path": "/p/:slug/story",
+     "status": "built"
+    },
+    {
+     "code": "L-04",
+     "path": "/p/:slug/letter",
+     "status": "built"
+    },
+    {
+     "code": "L-05",
+     "path": "/p/:slug/expired",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "landing.toggleFaq",
+   "description": "answer {question} — \"Open a question\" on L-01 (any role)",
+   "label": "Open a question",
+   "intent": "answer {question}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "question": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "L-01",
+     "path": "/p/:slug",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "landing.tryAsRole",
+   "description": "open the demo as the {role} — \"Try it as this role\" on L-01, L-02, L-03 (needs demo.open)",
+   "label": "Try it as this role",
+   "intent": "open the demo as the {role}",
+   "permission": "demo.open",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "role": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "L-01",
+     "path": "/p/:slug",
+     "status": "built"
+    },
+    {
+     "code": "L-02",
+     "path": "/p/:slug/audit",
+     "status": "built"
+    },
+    {
+     "code": "L-03",
+     "path": "/p/:slug/story",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "landing.viewRole",
+   "description": "show me the {role} view — \"See a role view\" on L-01, L-02, L-03 (any role)",
+   "label": "See a role view",
+   "intent": "show me the {role} view",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "role": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "L-01",
+     "path": "/p/:slug",
+     "status": "built"
+    },
+    {
+     "code": "L-02",
+     "path": "/p/:slug/audit",
+     "status": "built"
+    },
+    {
+     "code": "L-03",
+     "path": "/p/:slug/story",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "plan.filter",
+   "description": "show {phase} tasks for {model} — \"Filter\" on K-01, K-02, K-03 (any role)",
+   "label": "Filter",
+   "intent": "show {phase} tasks for {model}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "phase": {
+      "type": "string",
+      "description": "free text"
+     },
+     "model": {
+      "type": "string",
+      "description": "free text"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "all",
+       "backlog",
+       "doing",
+       "done",
+       "blocked",
+       "awaiting_justin"
+      ],
+      "description": "one of all, backlog, doing, done, blocked, awaiting_justin"
+     },
+     "ready": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "K-01",
+     "path": "/plan",
+     "status": "built"
+    },
+    {
+     "code": "K-02",
+     "path": "/plan/list",
+     "status": "built"
+    },
+    {
+     "code": "K-03",
+     "path": "/plan/timeline",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "plan.focusTask",
+   "description": "focus task {task} — \"Focus\" on K-03 (any role)",
+   "label": "Focus",
+   "intent": "focus task {task}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "task": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "K-03",
+     "path": "/plan/timeline",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "plan.moveTask",
+   "description": "move {task} to {status} — \"Move\" on K-01 (needs plan.edit)",
+   "label": "Move",
+   "intent": "move {task} to {status}",
+   "permission": "plan.edit",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "task": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "backlog",
+       "doing",
+       "done",
+       "blocked",
+       "awaiting_justin"
+      ],
+      "description": "one of backlog, doing, done, blocked, awaiting_justin"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "K-01",
+     "path": "/plan",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "plan.openTask",
+   "description": "open task {task} — \"Open task\" on K-01, K-02, K-03, K-04 (any role)",
+   "label": "Open task",
+   "intent": "open task {task}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "task": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "K-01",
+     "path": "/plan",
+     "status": "built"
+    },
+    {
+     "code": "K-02",
+     "path": "/plan/list",
+     "status": "built"
+    },
+    {
+     "code": "K-03",
+     "path": "/plan/timeline",
+     "status": "built"
+    },
+    {
+     "code": "K-04",
+     "path": "/plan/tasks/:id",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "plan.setStatus",
+   "description": "set {task} to {status} — \"Set status\" on K-04 (needs plan.edit)",
+   "label": "Set status",
+   "intent": "set {task} to {status}",
+   "permission": "plan.edit",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "task": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "backlog",
+       "doing",
+       "done",
+       "blocked",
+       "awaiting_justin"
+      ],
+      "description": "one of backlog, doing, done, blocked, awaiting_justin"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "K-04",
+     "path": "/plan/tasks/:id",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "plan.sortList",
+   "description": "sort the plan by {column} — \"Sort\" on K-02 (any role)",
+   "label": "Sort",
+   "intent": "sort the plan by {column}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "column": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "K-02",
+     "path": "/plan/list",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "plan.syncBuildPlan",
+   "description": "write the plan back to docs/build-plan.md — \"Sync to build-plan.md\" on K-01 (any role)",
+   "label": "Sync to build-plan.md",
+   "intent": "write the plan back to docs/build-plan.md",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "K-01",
+     "path": "/plan",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "plan.zoomGraph",
+   "description": "zoom the dependency graph to {percent} — \"Zoom\" on K-03 (any role)",
+   "label": "Zoom",
+   "intent": "zoom the dependency graph to {percent}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "percent": {
+      "type": "number",
+      "description": "a number"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "K-03",
+     "path": "/plan/timeline",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "proposal.accept",
+   "description": "accept the proposal — \"Accept proposal\" on R-01 (any role)",
+   "label": "Accept proposal",
+   "intent": "accept the proposal",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "R-01",
+     "path": "/proposal/:prospectId",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "proposal.bookCall",
+   "description": "book the walkthrough call — \"Book the walkthrough\" on R-01 (needs booking.create)",
+   "label": "Book the walkthrough",
+   "intent": "book the walkthrough call",
+   "permission": "booking.create",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "R-01",
+     "path": "/proposal/:prospectId",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "proposal.openDemo",
+   "description": "open the live demo — \"Open their OS demo\" on R-01 (needs demo.open)",
+   "label": "Open their OS demo",
+   "intent": "open the live demo",
+   "permission": "demo.open",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "R-01",
+     "path": "/proposal/:prospectId",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "proposal.print",
+   "description": "print the proposal — \"Print\" on R-01 (needs proposal.read)",
+   "label": "Print",
+   "intent": "print the proposal",
+   "permission": "proposal.read",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "R-01",
+     "path": "/proposal/:prospectId",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "site.calcSavings",
+   "description": "estimate the saving for a {industry} with {team} people — \"Estimate my saving\" on W-03 (any role)",
+   "label": "Estimate my saving",
+   "intent": "estimate the saving for a {industry} with {team} people",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "industry": {
+      "type": "string",
+      "description": "free text"
+     },
+     "team": {
+      "type": "number",
+      "description": "a number"
+     },
+     "locations": {
+      "type": "number",
+      "description": "a number"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "W-03",
+     "path": "/site/pricing",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "site.checkout",
+   "description": "pay for the plan — \"Checkout\" on W-03 (any role)",
+   "label": "Checkout",
+   "intent": "pay for the plan",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "W-03",
+     "path": "/site/pricing",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "site.choosePlan",
+   "description": "choose the {band} plan — \"Choose plan\" on W-03 (any role)",
+   "label": "Choose plan",
+   "intent": "choose the {band} plan",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "band": {
+      "type": "string",
+      "enum": [
+       "starter",
+       "team",
+       "multi"
+      ],
+      "description": "one of starter, team, multi"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "W-03",
+     "path": "/site/pricing",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "site.openDemo",
+   "description": "open the sample OS demo — \"Open the demo\" on W-01 (needs demo.open)",
+   "label": "Open the demo",
+   "intent": "open the sample OS demo",
+   "permission": "demo.open",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "sample": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "W-01",
+     "path": "/site",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "site.seeSample",
+   "description": "open a sample landing page — \"See a sample\" on W-01, W-02 (any role)",
+   "label": "See a sample",
+   "intent": "open a sample landing page",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "sample": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "W-01",
+     "path": "/site",
+     "status": "built"
+    },
+    {
+     "code": "W-02",
+     "path": "/site/how",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "site.showSample",
+   "description": "show {sample} in the hero — \"Show sample\" on W-01 (any role)",
+   "label": "Show sample",
+   "intent": "show {sample} in the hero",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "sample": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "W-01",
+     "path": "/site",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "site.startPurchase",
+   "description": "start the purchase flow — \"Get yours\" on W-01, W-02 (any role)",
+   "label": "Get yours",
+   "intent": "start the purchase flow",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "W-01",
+     "path": "/site",
+     "status": "built"
+    },
+    {
+     "code": "W-02",
+     "path": "/site/how",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.addRole",
+   "description": "add the {role} {kind} role — \"Add role\" on S-02 (needs prospects.write)",
+   "label": "Add role",
+   "intent": "add the {role} {kind} role",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "role": {
+      "type": "string",
+      "description": "free text"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "business",
+       "life"
+      ],
+      "description": "one of business, life"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-02",
+     "path": "/studio/prospects/:id",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.answerQuestion",
+   "description": "answer {field} with {value} — \"Save answer\" on S-02 (needs prospects.write)",
+   "label": "Save answer",
+   "intent": "answer {field} with {value}",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "field": {
+      "type": "string",
+      "description": "free text"
+     },
+     "value": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-02",
+     "path": "/studio/prospects/:id",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.approveAsset",
+   "description": "approve {asset} — \"Approve\" on S-04 (needs prospects.write)",
+   "label": "Approve",
+   "intent": "approve {asset}",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "asset": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-04",
+     "path": "/studio/prospects/:id/assets",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.confirmTool",
+   "description": "confirm {tool} — \"Confirm tool\" on S-02 (needs prospects.write)",
+   "label": "Confirm tool",
+   "intent": "confirm {tool}",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "tool": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-02",
+     "path": "/studio/prospects/:id",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.copyPageLink",
+   "description": "copy the public link — \"Copy link\" on S-03 (any role)",
+   "label": "Copy link",
+   "intent": "copy the public link",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-03",
+     "path": "/studio/prospects/:id/compose",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.createProspect",
+   "description": "create {business} in {industry} — \"Create prospect\" on S-01 (needs prospects.write)",
+   "label": "Create prospect",
+   "intent": "create {business} in {industry}",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "business": {
+      "type": "string",
+      "description": "free text"
+     },
+     "industry": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-01",
+     "path": "/studio",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.draftTouch",
+   "description": "draft a {channel} message — \"Draft\" on S-05 (needs prospects.write)",
+   "label": "Draft",
+   "intent": "draft a {channel} message",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "channel": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-05",
+     "path": "/studio/prospects/:id/outreach",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.expirePage",
+   "description": "expire the page — \"Expire\" on S-03 (needs pages.publish)",
+   "label": "Expire",
+   "intent": "expire the page",
+   "permission": "pages.publish",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-03",
+     "path": "/studio/prospects/:id/compose",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.fillGaps",
+   "description": "fill the obvious gaps with the rule enricher — \"Fill obvious gaps\" on S-02 (needs prospects.write)",
+   "label": "Fill obvious gaps",
+   "intent": "fill the obvious gaps with the rule enricher",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-02",
+     "path": "/studio/prospects/:id",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.filterProspects",
+   "description": "show {warmth} prospects in {industry} — \"Filter\" on S-01 (any role)",
+   "label": "Filter",
+   "intent": "show {warmth} prospects in {industry}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "warmth": {
+      "type": "string",
+      "description": "free text"
+     },
+     "industry": {
+      "type": "string",
+      "description": "free text"
+     },
+     "live": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-01",
+     "path": "/studio",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.generateAsset",
+   "description": "generate the {kind} image — \"Generate\" on S-04 (any role)",
+   "label": "Generate",
+   "intent": "generate the {kind} image",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "kind": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-04",
+     "path": "/studio/prospects/:id/assets",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.markTouchSent",
+   "description": "mark {touch} as sent — \"Mark as sent\" on S-05 (needs prospects.write)",
+   "label": "Mark as sent",
+   "intent": "mark {touch} as sent",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "touch": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-05",
+     "path": "/studio/prospects/:id/outreach",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.newProspect",
+   "description": "create a prospect — \"New prospect\" on S-01 (needs prospects.write)",
+   "label": "New prospect",
+   "intent": "create a prospect",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-01",
+     "path": "/studio",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.openCompose",
+   "description": "compose the page — \"Compose the page\" on S-02 (needs pages.publish)",
+   "label": "Compose the page",
+   "intent": "compose the page",
+   "permission": "pages.publish",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-02",
+     "path": "/studio/prospects/:id",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.openProspect",
+   "description": "open prospect {name} — \"Open\" on S-01 (any role)",
+   "label": "Open",
+   "intent": "open prospect {name}",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-01",
+     "path": "/studio",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.overrideConfidence",
+   "description": "publish anyway under 30 % confidence — \"Override the gate\" on S-03 (needs pages.publish)",
+   "label": "Override the gate",
+   "intent": "publish anyway under 30 % confidence",
+   "permission": "pages.publish",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-03",
+     "path": "/studio/prospects/:id/compose",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.pickArchetype",
+   "description": "use the {archetype} archetype — \"Use this archetype\" on S-03 (needs pages.publish)",
+   "label": "Use this archetype",
+   "intent": "use the {archetype} archetype",
+   "permission": "pages.publish",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "archetype": {
+      "type": "string",
+      "enum": [
+       "reveal",
+       "audit",
+       "walkthrough",
+       "letter"
+      ],
+      "description": "one of reveal, audit, walkthrough, letter"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-03",
+     "path": "/studio/prospects/:id/compose",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.pickChannel",
+   "description": "write a {channel} message — \"Channel\" on S-05 (any role)",
+   "label": "Channel",
+   "intent": "write a {channel} message",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "channel": {
+      "type": "string",
+      "enum": [
+       "cold_email",
+       "linkedin_dm",
+       "whatsapp",
+       "sms",
+       "call",
+       "warm_intro"
+      ],
+      "description": "one of cold_email, linkedin_dm, whatsapp, sms, call, warm_intro"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-05",
+     "path": "/studio/prospects/:id/outreach",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.pickTemplate",
+   "description": "use the {template} template — \"Template\" on S-05 (any role)",
+   "label": "Template",
+   "intent": "use the {template} template",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "template": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-05",
+     "path": "/studio/prospects/:id/outreach",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.publishPage",
+   "description": "publish the page — \"Publish\" on S-03 (needs pages.publish)",
+   "label": "Publish",
+   "intent": "publish the page",
+   "permission": "pages.publish",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-03",
+     "path": "/studio/prospects/:id/compose",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.rejectAsset",
+   "description": "reject {asset} — \"Reject\" on S-04 (needs prospects.write)",
+   "label": "Reject",
+   "intent": "reject {asset}",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "asset": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-04",
+     "path": "/studio/prospects/:id/assets",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.rejectTool",
+   "description": "reject {tool} — \"Reject tool\" on S-02 (needs prospects.write)",
+   "label": "Reject tool",
+   "intent": "reject {tool}",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "tool": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-02",
+     "path": "/studio/prospects/:id",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.removeRole",
+   "description": "remove the {role} {kind} role — \"Remove role\" on S-02 (needs prospects.write)",
+   "label": "Remove role",
+   "intent": "remove the {role} {kind} role",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "role": {
+      "type": "string",
+      "description": "free text"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "business",
+       "life"
+      ],
+      "description": "one of business, life"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-02",
+     "path": "/studio/prospects/:id",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.runEnricher",
+   "description": "enrich this prospect — \"Enrich with AI\" on S-02 (needs prospects.write)",
+   "label": "Enrich with AI",
+   "intent": "enrich this prospect",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-02",
+     "path": "/studio/prospects/:id",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.saveNotes",
+   "description": "save the research notes — \"Save notes\" on S-02 (needs prospects.write)",
+   "label": "Save notes",
+   "intent": "save the research notes",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-02",
+     "path": "/studio/prospects/:id",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.savePrompt",
+   "description": "save the prompt for {asset} — \"Save prompt\" on S-04 (needs prospects.write)",
+   "label": "Save prompt",
+   "intent": "save the prompt for {asset}",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "asset": {
+      "type": "string",
+      "description": "a row id (never a screen position)"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-04",
+     "path": "/studio/prospects/:id/assets",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.sendTouch",
+   "description": "send the message — \"Send\" on S-05 (any role)",
+   "label": "Send",
+   "intent": "send the message",
+   "permission": null,
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-05",
+     "path": "/studio/prospects/:id/outreach",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.setStyle",
+   "description": "set {key} to {value} — \"Set style\" on S-02 (needs prospects.write)",
+   "label": "Set style",
+   "intent": "set {key} to {value}",
+   "permission": "prospects.write",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "key": {
+      "type": "string",
+      "description": "free text"
+     },
+     "value": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-02",
+     "path": "/studio/prospects/:id",
+     "status": "built"
+    }
+   ]
+  },
+  {
+   "name": "studio.setVariant",
+   "description": "set the variant to {variant} — \"Variant\" on S-03 (needs pages.publish)",
+   "label": "Variant",
+   "intent": "set the variant to {variant}",
+   "permission": "pages.publish",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "variant": {
+      "type": "string",
+      "description": "free text"
+     }
+    },
+    "required": [],
+    "additionalProperties": false
+   },
+   "hosts": [
+    {
+     "code": "S-03",
+     "path": "/studio/prospects/:id/compose",
+     "status": "built"
+    }
+   ]
+  }
+ ]
+}

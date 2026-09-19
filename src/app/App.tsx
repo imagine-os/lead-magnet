@@ -11,6 +11,7 @@ import { getRoutes, getStrings } from './registry';
 import { withShell } from './shells';
 import { ScrollToTop } from './ScrollToTop';
 import { publishManifest } from './manifest';
+import { ControlBridge } from './ControlBridge';
 
 export function App() {
   const allRoutes = getRoutes();
@@ -24,6 +25,7 @@ export function App() {
             <ToastProvider>
               <HashRouter>
                 <ScrollToTop />
+                <ControlBridge />
                 <Routes>
                   {allRoutes.map((r) => <Route key={r.path} path={r.path} element={<RequireRole roles={r.roles}>{withShell(r, <ErrorBoundary resetKey={r.path}>{r.element}</ErrorBoundary>)}</RequireRole>} />)}
                   <Route path="*" element={<Navigate to="/" replace />} />

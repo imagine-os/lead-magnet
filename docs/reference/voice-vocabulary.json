@@ -1,0 +1,1318 @@
+{
+ "title": "Lead Magnet voice vocabulary",
+ "version": "0.2.0",
+ "generated": "2026-09-19",
+ "note": "Intent phrase -> action id with param slots ({slot} in the phrase). The voice controller (T46) matches a spoken phrase to one entry and calls window.__leadmagnet.runAction(action, slots).",
+ "phrases": [
+  {
+   "phrase": "apply recommendation {n}",
+   "action": "admin.applyRecommendation",
+   "slots": {
+    "n": "number"
+   },
+   "pages": [
+    "A-02"
+   ],
+   "permission": "pages.publish"
+  },
+  {
+   "phrase": "clear the event filters",
+   "action": "admin.clearEventFilters",
+   "slots": {},
+   "pages": [
+    "A-03"
+   ],
+   "permission": "events.read"
+  },
+  {
+   "phrase": "dismiss recommendation {n}",
+   "action": "admin.dismissRecommendation",
+   "slots": {
+    "n": "number"
+   },
+   "pages": [
+    "A-02"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "show {type} events for {prospect}",
+   "action": "admin.filterEvents",
+   "slots": {
+    "type": "string",
+    "page": "id",
+    "session": "string",
+    "prospect": "id"
+   },
+   "pages": [
+    "A-03"
+   ],
+   "permission": "events.read"
+  },
+  {
+   "phrase": "filter the funnel by {archetype} and {warmth}",
+   "action": "admin.filterFunnel",
+   "slots": {
+    "archetype": "enum:all|reveal|audit|walkthrough|letter",
+    "warmth": "enum:all|cold|warm|hot"
+   },
+   "pages": [
+    "A-01"
+   ],
+   "permission": "events.read"
+  },
+  {
+   "phrase": "show only {channel} outreach",
+   "action": "admin.filterOutreach",
+   "slots": {
+    "channel": "string"
+   },
+   "pages": [
+    "A-04"
+   ],
+   "permission": "events.read"
+  },
+  {
+   "phrase": "mark {touch} as {status}",
+   "action": "admin.moveTouch",
+   "slots": {
+    "touch": "id",
+    "status": "enum:draft|scheduled|sent|opened|clicked|replied|bounced"
+   },
+   "pages": [
+    "A-04"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "show the meta for event {id}",
+   "action": "admin.openEventMeta",
+   "slots": {
+    "id": "id"
+   },
+   "pages": [
+    "A-03"
+   ],
+   "permission": "events.read"
+  },
+  {
+   "phrase": "open the {surface} for this prospect",
+   "action": "admin.openFor",
+   "slots": {
+    "surface": "enum:studio|demo|page|booking"
+   },
+   "pages": [
+    "A-02"
+   ],
+   "permission": "prospects.read"
+  },
+  {
+   "phrase": "open the timeline for {prospect}",
+   "action": "admin.openProspect",
+   "slots": {
+    "prospect": "id"
+   },
+   "pages": [
+    "A-01"
+   ],
+   "permission": "prospects.read"
+  },
+  {
+   "phrase": "open the studio",
+   "action": "admin.openStudio",
+   "slots": {},
+   "pages": [
+    "A-01"
+   ],
+   "permission": "pages.publish"
+  },
+  {
+   "phrase": "record recommendation {n}",
+   "action": "admin.recordRecommendation",
+   "slots": {
+    "n": "number",
+    "note": "string"
+   },
+   "pages": [
+    "A-02"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "mark booking {id} {status}",
+   "action": "admin.setBookingStatus",
+   "slots": {
+    "id": "id",
+    "status": "enum:requested|confirmed|cancelled|completed"
+   },
+   "pages": [
+    "A-05"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "add the call to my calendar",
+   "action": "booking.addToCalendar",
+   "slots": {},
+   "pages": [
+    "B-02"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "change the time",
+   "action": "booking.clearSlot",
+   "slots": {},
+   "pages": [
+    "B-01"
+   ],
+   "permission": "booking.create"
+  },
+  {
+   "phrase": "confirm my booking",
+   "action": "booking.confirm",
+   "slots": {},
+   "pages": [
+    "B-01"
+   ],
+   "permission": "booking.create"
+  },
+  {
+   "phrase": "open my demo",
+   "action": "booking.openDemo",
+   "slots": {},
+   "pages": [
+    "B-01",
+    "B-02"
+   ],
+   "permission": "demo.open"
+  },
+  {
+   "phrase": "go back to my page",
+   "action": "booking.openPage",
+   "slots": {},
+   "pages": [
+    "B-02"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "book {slot}",
+   "action": "booking.pickSlot",
+   "slots": {
+    "slot": "date"
+   },
+   "pages": [
+    "B-01"
+   ],
+   "permission": "booking.create"
+  },
+  {
+   "phrase": "switch language to {lang}",
+   "action": "booking.setLang",
+   "slots": {
+    "lang": "enum:en|es"
+   },
+   "pages": [
+    "B-01",
+    "B-02"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "book a walkthrough call",
+   "action": "demo.bookCall",
+   "slots": {},
+   "pages": [
+    "C-01",
+    "C-02",
+    "C-03",
+    "C-04",
+    "C-05",
+    "C-06",
+    "C-07"
+   ],
+   "permission": "booking.create"
+  },
+  {
+   "phrase": "show {channel} only",
+   "action": "demo.filterChannel",
+   "slots": {
+    "channel": "enum:all|call|email|sms|whatsapp"
+   },
+   "pages": [
+    "C-04"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "open {section}",
+   "action": "demo.goto",
+   "slots": {
+    "section": "enum:home|departments|comms|money|life|settings"
+   },
+   "pages": [
+    "C-01",
+    "C-02",
+    "C-03",
+    "C-04",
+    "C-05",
+    "C-06",
+    "C-07"
+   ],
+   "permission": "demo.open"
+  },
+  {
+   "phrase": "invite {person}",
+   "action": "demo.invite",
+   "slots": {
+    "person": "string"
+   },
+   "pages": [
+    "C-07"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "open the {department} department",
+   "action": "demo.openDepartment",
+   "slots": {
+    "department": "string"
+   },
+   "pages": [
+    "C-03"
+   ],
+   "permission": "demo.open"
+  },
+  {
+   "phrase": "open {role}'s view",
+   "action": "demo.openLifeRole",
+   "slots": {
+    "role": "string"
+   },
+   "pages": [
+    "C-06"
+   ],
+   "permission": "demo.open"
+  },
+  {
+   "phrase": "open payment {payment}",
+   "action": "demo.openPayment",
+   "slots": {
+    "payment": "id"
+   },
+   "pages": [
+    "C-05"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "open {role}'s view",
+   "action": "demo.openRole",
+   "slots": {
+    "role": "string"
+   },
+   "pages": [
+    "C-07"
+   ],
+   "permission": "demo.open"
+  },
+  {
+   "phrase": "open the thread with {thread}",
+   "action": "demo.openThread",
+   "slots": {
+    "thread": "id"
+   },
+   "pages": [
+    "C-04"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "open {widget}",
+   "action": "demo.openWidget",
+   "slots": {
+    "widget": "string"
+   },
+   "pages": [
+    "C-01",
+    "C-02"
+   ],
+   "permission": "demo.open"
+  },
+  {
+   "phrase": "run the quick action {action}",
+   "action": "demo.quickAction",
+   "slots": {
+    "action": "string"
+   },
+   "pages": [
+    "C-01",
+    "C-02"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "reply to {thread}",
+   "action": "demo.reply",
+   "slots": {
+    "thread": "id"
+   },
+   "pages": [
+    "C-04"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "save my workspace",
+   "action": "demo.saveWorkspace",
+   "slots": {},
+   "pages": [
+    "C-01",
+    "C-02",
+    "C-03",
+    "C-04",
+    "C-05",
+    "C-06",
+    "C-07"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "view as {role}",
+   "action": "demo.switchRole",
+   "slots": {
+    "role": "string"
+   },
+   "pages": [
+    "C-01",
+    "C-02",
+    "C-03",
+    "C-04",
+    "C-05",
+    "C-06",
+    "C-07"
+   ],
+   "permission": "demo.open"
+  },
+  {
+   "phrase": "fit the canvas",
+   "action": "dev.canvasFit",
+   "slots": {},
+   "pages": [
+    "D-07"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "open page {code}",
+   "action": "dev.canvasOpen",
+   "slots": {
+    "code": "string"
+   },
+   "pages": [
+    "D-07"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "toggle live thumbnails",
+   "action": "dev.canvasThumbnails",
+   "slots": {},
+   "pages": [
+    "D-07"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "zoom in the canvas",
+   "action": "dev.canvasZoomIn",
+   "slots": {},
+   "pages": [
+    "D-07"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "zoom out the canvas",
+   "action": "dev.canvasZoomOut",
+   "slots": {},
+   "pages": [
+    "D-07"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "show {surface} routes",
+   "action": "dev.filterRoutes",
+   "slots": {
+    "surface": "string"
+   },
+   "pages": [
+    "D-01"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "show {status} rules",
+   "action": "dev.filterRules",
+   "slots": {
+    "status": "string"
+   },
+   "pages": [
+    "D-05"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "open the {doc} document",
+   "action": "dev.openDoc",
+   "slots": {
+    "doc": "string"
+   },
+   "pages": [
+    "D-06",
+    "D-06"
+   ],
+   "permission": "docs.read"
+  },
+  {
+   "phrase": "open the {table} table",
+   "action": "dev.openTable",
+   "slots": {
+    "table": "string"
+   },
+   "pages": [
+    "D-03",
+    "D-03"
+   ],
+   "permission": "tables.read"
+  },
+  {
+   "phrase": "show {tier} components",
+   "action": "dev.pickTier",
+   "slots": {
+    "tier": "enum:atom|molecule|organism|template"
+   },
+   "pages": [
+    "D-02"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "preview {route} at every width",
+   "action": "dev.previewRoute",
+   "slots": {
+    "route": "string"
+   },
+   "pages": [
+    "D-08"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "reset the demo database",
+   "action": "dev.resetDb",
+   "slots": {},
+   "pages": [
+    "D-03",
+    "D-03"
+   ],
+   "permission": "dev.tools"
+  },
+  {
+   "phrase": "run action {id}",
+   "action": "dev.runAction",
+   "slots": {
+    "id": "string"
+   },
+   "pages": [
+    "D-04"
+   ],
+   "permission": "dev.tools"
+  },
+  {
+   "phrase": "mark feedback {id} {status}",
+   "action": "dev.setFeedbackStatus",
+   "slots": {
+    "id": "id",
+    "status": "enum:new|seen|waiting|done"
+   },
+   "pages": [
+    "D-09"
+   ],
+   "permission": "feedback.read"
+  },
+  {
+   "phrase": "triage feedback {id} as {triage}",
+   "action": "dev.triageFeedback",
+   "slots": {
+    "id": "id",
+    "triage": "enum:fix|ask|later|wontfix"
+   },
+   "pages": [
+    "D-09"
+   ],
+   "permission": "feedback.read"
+  },
+  {
+   "phrase": "open {surface}",
+   "action": "hub.openSurface",
+   "slots": {
+    "surface": "string"
+   },
+   "pages": [
+    "HUB-01"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "reset the demo database",
+   "action": "hub.resetDemoData",
+   "slots": {},
+   "pages": [
+    "HUB-01"
+   ],
+   "permission": "dev.tools"
+  },
+  {
+   "phrase": "switch language to {lang}",
+   "action": "hub.setLang",
+   "slots": {
+    "lang": "enum:en|es"
+   },
+   "pages": [
+    "HUB-01"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "sign in as {role}",
+   "action": "hub.signInAs",
+   "slots": {
+    "role": "string"
+   },
+   "pages": [
+    "HUB-02"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "sign in as {role}",
+   "action": "hub.switchUser",
+   "slots": {
+    "role": "string"
+   },
+   "pages": [
+    "HUB-01"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "turn dev mode on",
+   "action": "hub.toggleDevMode",
+   "slots": {},
+   "pages": [
+    "HUB-01"
+   ],
+   "permission": "dev.tools"
+  },
+  {
+   "phrase": "switch to dark mode",
+   "action": "hub.toggleTheme",
+   "slots": {},
+   "pages": [
+    "HUB-01"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "book a walkthrough call",
+   "action": "landing.bookCall",
+   "slots": {},
+   "pages": [
+    "L-01",
+    "L-02",
+    "L-03",
+    "L-04",
+    "L-05"
+   ],
+   "permission": "booking.create"
+  },
+  {
+   "phrase": "confirm we use {tool}",
+   "action": "landing.confirmTool",
+   "slots": {
+    "tool": "string"
+   },
+   "pages": [
+    "L-02"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "go to step {step} of the story",
+   "action": "landing.goToStep",
+   "slots": {
+    "step": "number"
+   },
+   "pages": [
+    "L-03"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "open {business} demo",
+   "action": "landing.openDemo",
+   "slots": {},
+   "pages": [
+    "L-01",
+    "L-02",
+    "L-03",
+    "L-04"
+   ],
+   "permission": "demo.open"
+  },
+  {
+   "phrase": "open the landing page this card previews",
+   "action": "landing.openPage",
+   "slots": {},
+   "pages": [
+    "L-06"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "book {slot}",
+   "action": "landing.pickSlot",
+   "slots": {
+    "slot": "date"
+   },
+   "pages": [
+    "L-01",
+    "L-02",
+    "L-03",
+    "L-04"
+   ],
+   "permission": "booking.create"
+  },
+  {
+   "phrase": "play the voice note",
+   "action": "landing.playLetter",
+   "slots": {},
+   "pages": [
+    "L-04"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "reject {tool}",
+   "action": "landing.rejectTool",
+   "slots": {
+    "tool": "string"
+   },
+   "pages": [
+    "L-02"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "request a new workspace",
+   "action": "landing.requestRefresh",
+   "slots": {},
+   "pages": [
+    "L-05"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "save my workspace with my email",
+   "action": "landing.saveWorkspace",
+   "slots": {},
+   "pages": [
+    "L-01",
+    "L-02",
+    "L-03",
+    "L-04"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "show me a case study",
+   "action": "landing.seeCaseStudy",
+   "slots": {},
+   "pages": [
+    "L-01",
+    "L-02"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "switch language to {lang}",
+   "action": "landing.setLang",
+   "slots": {
+    "lang": "enum:en|es"
+   },
+   "pages": [
+    "L-01",
+    "L-02",
+    "L-03",
+    "L-04",
+    "L-05"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "answer {question}",
+   "action": "landing.toggleFaq",
+   "slots": {
+    "question": "string"
+   },
+   "pages": [
+    "L-01"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "open the demo as the {role}",
+   "action": "landing.tryAsRole",
+   "slots": {
+    "role": "string"
+   },
+   "pages": [
+    "L-01",
+    "L-02",
+    "L-03"
+   ],
+   "permission": "demo.open"
+  },
+  {
+   "phrase": "show me the {role} view",
+   "action": "landing.viewRole",
+   "slots": {
+    "role": "string"
+   },
+   "pages": [
+    "L-01",
+    "L-02",
+    "L-03"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "show {phase} tasks for {model}",
+   "action": "plan.filter",
+   "slots": {
+    "phase": "string",
+    "model": "string",
+    "status": "enum:all|backlog|doing|done|blocked|awaiting_justin",
+    "ready": "string"
+   },
+   "pages": [
+    "K-01",
+    "K-02",
+    "K-03"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "focus task {task}",
+   "action": "plan.focusTask",
+   "slots": {
+    "task": "id"
+   },
+   "pages": [
+    "K-03"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "move {task} to {status}",
+   "action": "plan.moveTask",
+   "slots": {
+    "task": "id",
+    "status": "enum:backlog|doing|done|blocked|awaiting_justin"
+   },
+   "pages": [
+    "K-01"
+   ],
+   "permission": "plan.edit"
+  },
+  {
+   "phrase": "open task {task}",
+   "action": "plan.openTask",
+   "slots": {
+    "task": "id"
+   },
+   "pages": [
+    "K-01",
+    "K-02",
+    "K-03",
+    "K-04"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "set {task} to {status}",
+   "action": "plan.setStatus",
+   "slots": {
+    "task": "id",
+    "status": "enum:backlog|doing|done|blocked|awaiting_justin"
+   },
+   "pages": [
+    "K-04"
+   ],
+   "permission": "plan.edit"
+  },
+  {
+   "phrase": "sort the plan by {column}",
+   "action": "plan.sortList",
+   "slots": {
+    "column": "string"
+   },
+   "pages": [
+    "K-02"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "write the plan back to docs/build-plan.md",
+   "action": "plan.syncBuildPlan",
+   "slots": {},
+   "pages": [
+    "K-01"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "zoom the dependency graph to {percent}",
+   "action": "plan.zoomGraph",
+   "slots": {
+    "percent": "number"
+   },
+   "pages": [
+    "K-03"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "accept the proposal",
+   "action": "proposal.accept",
+   "slots": {},
+   "pages": [
+    "R-01"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "book the walkthrough call",
+   "action": "proposal.bookCall",
+   "slots": {},
+   "pages": [
+    "R-01"
+   ],
+   "permission": "booking.create"
+  },
+  {
+   "phrase": "open the live demo",
+   "action": "proposal.openDemo",
+   "slots": {},
+   "pages": [
+    "R-01"
+   ],
+   "permission": "demo.open"
+  },
+  {
+   "phrase": "print the proposal",
+   "action": "proposal.print",
+   "slots": {},
+   "pages": [
+    "R-01"
+   ],
+   "permission": "proposal.read"
+  },
+  {
+   "phrase": "estimate the saving for a {industry} with {team} people",
+   "action": "site.calcSavings",
+   "slots": {
+    "industry": "string",
+    "team": "number",
+    "locations": "number"
+   },
+   "pages": [
+    "W-03"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "pay for the plan",
+   "action": "site.checkout",
+   "slots": {},
+   "pages": [
+    "W-03"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "choose the {band} plan",
+   "action": "site.choosePlan",
+   "slots": {
+    "band": "enum:starter|team|multi"
+   },
+   "pages": [
+    "W-03"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "open the sample OS demo",
+   "action": "site.openDemo",
+   "slots": {
+    "sample": "string"
+   },
+   "pages": [
+    "W-01"
+   ],
+   "permission": "demo.open"
+  },
+  {
+   "phrase": "open a sample landing page",
+   "action": "site.seeSample",
+   "slots": {
+    "sample": "string"
+   },
+   "pages": [
+    "W-01",
+    "W-02"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "show {sample} in the hero",
+   "action": "site.showSample",
+   "slots": {
+    "sample": "string"
+   },
+   "pages": [
+    "W-01"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "start the purchase flow",
+   "action": "site.startPurchase",
+   "slots": {},
+   "pages": [
+    "W-01",
+    "W-02"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "add the {role} {kind} role",
+   "action": "studio.addRole",
+   "slots": {
+    "role": "string",
+    "kind": "enum:business|life"
+   },
+   "pages": [
+    "S-02"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "answer {field} with {value}",
+   "action": "studio.answerQuestion",
+   "slots": {
+    "field": "string",
+    "value": "string"
+   },
+   "pages": [
+    "S-02"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "approve {asset}",
+   "action": "studio.approveAsset",
+   "slots": {
+    "asset": "id"
+   },
+   "pages": [
+    "S-04"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "confirm {tool}",
+   "action": "studio.confirmTool",
+   "slots": {
+    "tool": "string"
+   },
+   "pages": [
+    "S-02"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "copy the public link",
+   "action": "studio.copyPageLink",
+   "slots": {},
+   "pages": [
+    "S-03"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "create {business} in {industry}",
+   "action": "studio.createProspect",
+   "slots": {
+    "business": "string",
+    "industry": "string"
+   },
+   "pages": [
+    "S-01"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "draft a {channel} message",
+   "action": "studio.draftTouch",
+   "slots": {
+    "channel": "string"
+   },
+   "pages": [
+    "S-05"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "expire the page",
+   "action": "studio.expirePage",
+   "slots": {},
+   "pages": [
+    "S-03"
+   ],
+   "permission": "pages.publish"
+  },
+  {
+   "phrase": "fill the obvious gaps with the rule enricher",
+   "action": "studio.fillGaps",
+   "slots": {},
+   "pages": [
+    "S-02"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "show {warmth} prospects in {industry}",
+   "action": "studio.filterProspects",
+   "slots": {
+    "warmth": "string",
+    "industry": "string",
+    "live": "string"
+   },
+   "pages": [
+    "S-01"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "generate the {kind} image",
+   "action": "studio.generateAsset",
+   "slots": {
+    "kind": "string"
+   },
+   "pages": [
+    "S-04"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "mark {touch} as sent",
+   "action": "studio.markTouchSent",
+   "slots": {
+    "touch": "id"
+   },
+   "pages": [
+    "S-05"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "create a prospect",
+   "action": "studio.newProspect",
+   "slots": {},
+   "pages": [
+    "S-01"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "compose the page",
+   "action": "studio.openCompose",
+   "slots": {},
+   "pages": [
+    "S-02"
+   ],
+   "permission": "pages.publish"
+  },
+  {
+   "phrase": "open prospect {name}",
+   "action": "studio.openProspect",
+   "slots": {
+    "name": "string"
+   },
+   "pages": [
+    "S-01"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "publish anyway under 30 % confidence",
+   "action": "studio.overrideConfidence",
+   "slots": {},
+   "pages": [
+    "S-03"
+   ],
+   "permission": "pages.publish"
+  },
+  {
+   "phrase": "use the {archetype} archetype",
+   "action": "studio.pickArchetype",
+   "slots": {
+    "archetype": "enum:reveal|audit|walkthrough|letter"
+   },
+   "pages": [
+    "S-03"
+   ],
+   "permission": "pages.publish"
+  },
+  {
+   "phrase": "write a {channel} message",
+   "action": "studio.pickChannel",
+   "slots": {
+    "channel": "enum:cold_email|linkedin_dm|whatsapp|sms|call|warm_intro"
+   },
+   "pages": [
+    "S-05"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "use the {template} template",
+   "action": "studio.pickTemplate",
+   "slots": {
+    "template": "string"
+   },
+   "pages": [
+    "S-05"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "publish the page",
+   "action": "studio.publishPage",
+   "slots": {},
+   "pages": [
+    "S-03"
+   ],
+   "permission": "pages.publish"
+  },
+  {
+   "phrase": "reject {asset}",
+   "action": "studio.rejectAsset",
+   "slots": {
+    "asset": "id"
+   },
+   "pages": [
+    "S-04"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "reject {tool}",
+   "action": "studio.rejectTool",
+   "slots": {
+    "tool": "string"
+   },
+   "pages": [
+    "S-02"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "remove the {role} {kind} role",
+   "action": "studio.removeRole",
+   "slots": {
+    "role": "string",
+    "kind": "enum:business|life"
+   },
+   "pages": [
+    "S-02"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "enrich this prospect",
+   "action": "studio.runEnricher",
+   "slots": {},
+   "pages": [
+    "S-02"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "save the research notes",
+   "action": "studio.saveNotes",
+   "slots": {},
+   "pages": [
+    "S-02"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "save the prompt for {asset}",
+   "action": "studio.savePrompt",
+   "slots": {
+    "asset": "id"
+   },
+   "pages": [
+    "S-04"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "send the message",
+   "action": "studio.sendTouch",
+   "slots": {},
+   "pages": [
+    "S-05"
+   ],
+   "permission": null
+  },
+  {
+   "phrase": "set {key} to {value}",
+   "action": "studio.setStyle",
+   "slots": {
+    "key": "string",
+    "value": "string"
+   },
+   "pages": [
+    "S-02"
+   ],
+   "permission": "prospects.write"
+  },
+  {
+   "phrase": "set the variant to {variant}",
+   "action": "studio.setVariant",
+   "slots": {
+    "variant": "string"
+   },
+   "pages": [
+    "S-03"
+   ],
+   "permission": "pages.publish"
+  }
+ ]
+}

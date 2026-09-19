@@ -1,0 +1,5 @@
+import type { Rule } from './index';
+export const rules: Rule[] = [
+  { id: 'R-W01', title: 'Website prices come only from the engine bands', description: 'W-01 and W-03 read PRICE_MONTHLY / priceBand() from src/engine/stack.ts and the savings calculator runs guessStack() + savings() over a synthetic prospect. No price, tool cost or saving is typed into the website; when D-014 changes, the site changes with it. Dev mode labels the bands as proposed.', category: 'website', status: 'implemented', pages: ['W-01', 'W-02', 'W-03'], source: 'D-014 (proposed)', implementedIn: 'src/modules/website/PricingPage.tsx' },
+  { id: 'R-W02', title: 'Every sample on the website links to a real seeded page', description: 'W-01 only lists prospects that have a row in `pages`, and links to that row\'s slug (/p/:slug) and its OS demo (/demo/:id). A sample never points at a slug that does not resolve, so the public site can never show a dead example.', category: 'website', status: 'implemented', pages: ['W-01'], source: 'org rules (placeholders are marked, links are real)', implementedIn: 'src/modules/website/HomePage.tsx' },
+];

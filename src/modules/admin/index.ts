@@ -97,7 +97,7 @@ export const strings = {
   // A-03
   'admin.events_h1': { en: 'Events', es: 'Eventos' },
   'admin.events_sub': { en: 'Every tracked interaction, raw. Filter it, then read the meta.', es: 'Cada interacción registrada, en crudo. Filtra y luego lee el meta.' },
-  'admin.ev_when': { en: 'When', es: 'Cuándo' }, 'admin.ev_type': { en: 'Type', es: 'Tipo' }, 'admin.ev_prospect': { en: 'Prospect', es: 'Prospecto' }, 'admin.ev_page': { en: 'Page', es: 'Página' }, 'admin.ev_session': { en: 'Session', es: 'Sesión' }, 'admin.ev_meta': { en: 'Meta', es: 'Meta' }, 'admin.ev_json': { en: 'Raw', es: 'Crudo' },
+  'admin.ev_when': { en: 'When', es: 'Cuándo' }, 'admin.ev_type': { en: 'Type', es: 'Tipo' }, 'admin.ev_prospect': { en: 'Prospect', es: 'Prospecto' }, 'admin.ev_page': { en: 'Page', es: 'Página' }, 'admin.ev_session': { en: 'Session', es: 'Sesión' }, 'admin.ev_meta': { en: 'Meta', es: 'Metadatos' }, 'admin.ev_json': { en: 'Raw', es: 'Crudo' },
   'admin.ev_count': { en: '{shown} of {all} events', es: '{shown} de {all} eventos' },
   // A-04
   'admin.outreach_h1': { en: 'Outreach', es: 'Outreach' },

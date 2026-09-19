@@ -34,6 +34,12 @@ create table if not exists public.bookings (
   slot timestamptz not null,
   duration_min integer not null,
   status text not null check (status in ('requested', 'confirmed', 'cancelled', 'completed')),
+  -- Name given on B-01
+  contact_name text not null,
+  -- Where the call link goes
+  contact_email text not null,
+  contact_phone text,
+  -- What the prospect wrote in the booking form
   notes text not null
 );
 create index if not exists bookings_prospect_id_idx on public.bookings(prospect_id);
@@ -143,6 +149,34 @@ create table if not exists public.prospects (
   photo_url text
 );
 create trigger prospects_touch before update on public.prospects for each row execute function public.touch_updated_at();
+
+-- pages · Page recommendations: What adaptFromEvents() suggested for a page, recorded before it is applied (R-A03): kind, target archetype or section, the reason, the score and who decided. A-02 writes these; the funnel reads them.
+-- access:
+--   · strategist read/write
+--   · analyst read
+create table if not exists public.recommendations (
+  -- Primary key
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  prospect_id uuid not null references public.prospects(id) on delete set null,
+  page_id uuid not null references public.pages(id) on delete set null,
+  kind text not null check (kind in ('switch_archetype', 'add_section', 'shorten', 'ask')),
+  to_archetype text check (to_archetype in ('reveal', 'audit', 'walkthrough', 'letter')),
+  -- Section kind for add_section
+  section text,
+  reason text not null,
+  -- Engine score, higher first
+  score numeric(12,2) not null,
+  status text not null check (status in ('proposed', 'applied', 'dismissed')),
+  -- Demo user id or role that decided
+  decided_by text not null,
+  decided_at timestamptz,
+  note text not null
+);
+create index if not exists recommendations_prospect_id_idx on public.recommendations(prospect_id);
+create index if not exists recommendations_page_id_idx on public.recommendations(page_id);
+create trigger recommendations_touch before update on public.recommendations for each row execute function public.touch_updated_at();
 
 -- prospects · Stack guesses: Software we think the prospect pays for, with monthly cost, confidence and what replaces it in their OS. Confirmed / rejected by the audit archetype and intake.
 create table if not exists public.stack_guesses (

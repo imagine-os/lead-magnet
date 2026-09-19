@@ -45,7 +45,7 @@ export interface ProspectRow extends BaseRow {
 export interface StackGuessRow extends BaseRow { prospect_id: string; tool: string; category: string; monthly_cost: number; confidence: number; status: (typeof GUESS_STATUS)[number]; replaced_by: string }
 export interface PageRow extends BaseRow { prospect_id: string; archetype: Archetype; slug: string; variant: string; status: (typeof PAGE_STATUS)[number]; published_at: string | null; expires_at: string | null; model: unknown }
 export interface EventRow extends BaseRow { page_id: string | null; prospect_id: string | null; session_id: string; type: EventType; meta: Record<string, unknown>; ts: string }
-export interface BookingRow extends BaseRow { prospect_id: string; page_id: string | null; slot: string; duration_min: number; status: (typeof BOOKING_STATUS)[number]; notes: string }
+export interface BookingRow extends BaseRow { prospect_id: string; page_id: string | null; slot: string; duration_min: number; status: (typeof BOOKING_STATUS)[number]; contact_name: string; contact_email: string; contact_phone: string | null; notes: string }
 export interface AssetRow extends BaseRow { prospect_id: string; kind: (typeof ASSET_KINDS)[number]; prompt: string; status: (typeof ASSET_STATUS)[number]; url: string | null; provider: string | null }
 export interface TouchRow extends BaseRow { prospect_id: string; channel: (typeof CHANNELS)[number]; subject: string; body_preview: string; sent_at: string | null; opened_at: string | null; clicked_at: string | null; page_id: string | null; status: (typeof TOUCH_STATUS)[number] }
 export interface TaskRow extends BaseRow { title: string; module: string; codes: string[]; model: ModelName; phase: number; depends_on: string[]; status: TaskStatus; owner: string; notes: string; done_at: string | null }
@@ -62,7 +62,7 @@ export const tables = defineTables([
   { name: 'events', label: 'Events', description: 'Every tracked interaction on landing pages, demos, bookings and outreach. Written by src/tracking/track().', group: 'tracking', source: 'playbook principle 9',
     columns: [ref('page_id', 'pages', true), ref('prospect_id', 'prospects', true), text('session_id'), en('type', EVENT_TYPES), json('meta'), ts('ts')] },
   { name: 'bookings', label: 'Bookings', description: 'Walkthrough calls requested from a landing page or the demo.', group: 'pages', source: 'B-01',
-    columns: [ref('prospect_id', 'prospects'), ref('page_id', 'pages', true), ts('slot'), int('duration_min'), en('status', BOOKING_STATUS), text('notes')] },
+    columns: [ref('prospect_id', 'prospects'), ref('page_id', 'pages', true), ts('slot'), int('duration_min'), en('status', BOOKING_STATUS), text('contact_name', false, 'Name given on B-01'), text('contact_email', false, 'Where the call link goes'), text('contact_phone', true), text('notes', false, 'What the prospect wrote in the booking form')] },
   { name: 'assets', label: 'Assets', description: 'Image / video prompts per prospect and their generation status. Provider not wired yet (T40).', group: 'pages', titleColumn: 'kind', source: 'engine imagePrompts()',
     columns: [ref('prospect_id', 'prospects'), en('kind', ASSET_KINDS), text('prompt'), en('status', ASSET_STATUS), text('url', true), text('provider', true)] },
   { name: 'touches', label: 'Outreach touches', description: 'Cold / warm outreach messages that point at a page; opens and clicks feed the funnel.', group: 'outreach', titleColumn: 'subject', source: 'S-05, A-04',

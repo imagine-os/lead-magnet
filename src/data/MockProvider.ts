@@ -4,8 +4,8 @@ import { applyQuery, type ChangeEvent, type DataProvider, type Query } from './p
 import { buildSeed } from './seed';
 
 export const DB_KEY = 'leadmagnet.db.v1';
-/** Bump when the seed shape changes so stale browsers reseed. */
-export const SEED_VERSION = 1;
+/** Bump when the seed shape changes so stale browsers reseed. 2: `recommendations` table + `bookings` contact columns (2026-09-19). */
+export const SEED_VERSION = 2;
 type Db = Record<string, BaseRow[]>;
 export const newId = (prefix = 'row'): string => `${prefix}_${Math.random().toString(36).slice(2, 10)}`;
 

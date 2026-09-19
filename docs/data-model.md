@@ -8,7 +8,7 @@ _Generated from `src/data/schema/*.ts` by `npm run sql`. The TypeScript files ar
 - **The engine is pure.** `stack_guesses`, `pages.model` and `assets.prompt` are outputs of `src/engine` functions from a `prospects` row; regenerate, do not hand-edit.
 - **Tracking is one table.** Every interaction is an `events` row written by `src/tracking/track()`.
 
-## Tables (9)
+## Tables (10)
 
 ### Prospects & stack
 
@@ -96,7 +96,10 @@ _Source: B-01_
 | `slot` | timestamptz |  |
 | `duration_min` | int |  |
 | `status` | enum (requested \| confirmed \| cancelled \| completed) |  |
-| `notes` | text |  |
+| `contact_name` | text | Name given on B-01 |
+| `contact_email` | text | Where the call link goes |
+| `contact_phone` | text, null |  |
+| `notes` | text | What the prospect wrote in the booking form |
 
 #### `pages`
 A composed landing page for a prospect: archetype, slug, variant (A/B), status and the PageModel snapshot the page renders.  
@@ -115,6 +118,29 @@ _Source: engine composePage()_
 | `published_at` | timestamptz, null |  |
 | `expires_at` | timestamptz, null |  |
 | `model` | json | PageModel snapshot |
+
+#### `recommendations`
+What adaptFromEvents() suggested for a page, recorded before it is applied (R-A03): kind, target archetype or section, the reason, the score and who decided. A-02 writes these; the funnel reads them.  
+_Source: A-02, engine adaptFromEvents()_
+
+| column | type | notes |
+| --- | --- | --- |
+| `id` | uuid | Primary key |
+| `created_at` | timestamptz |  |
+| `updated_at` | timestamptz |  |
+| `prospect_id` | uuid | -> `prospects`  |
+| `page_id` | uuid | -> `pages`  |
+| `kind` | enum (switch_archetype \| add_section \| shorten \| ask) |  |
+| `to_archetype` | enum (reveal \| audit \| walkthrough \| letter), null |  |
+| `section` | text, null | Section kind for add_section |
+| `reason` | text |  |
+| `score` | numeric | Engine score, higher first |
+| `status` | enum (proposed \| applied \| dismissed) |  |
+| `decided_by` | text | Demo user id or role that decided |
+| `decided_at` | timestamptz, null |  |
+| `note` | text |  |
+
+**Access:** strategist read/write; analyst read
 
 ### Tracking
 

@@ -48,7 +48,7 @@ export function seed(ctx: SeedCtx) {
       if (p.warmth === 'hot' && sIdx === 2) { ev('booking_started', {}, 8); ev('booking_confirmed', { slot: iso(addDays(now, 2)) }, 9); }
       if (p.warmth === 'cold') ev('exit_intent', {}, 2);
     }
-    if (p.warmth === 'hot') add('bookings', { id: `bk_${p.id.slice(4)}`, prospect_id: p.id, page_id: pageId, slot: iso(addDays(now, 2)), duration_min: 15, status: 'confirmed', notes: 'Wants the GM and the accountant on the call.' });
+    if (p.warmth === 'hot') add('bookings', { id: `bk_${p.id.slice(4)}`, prospect_id: p.id, page_id: pageId, slot: iso(addDays(now, 2)), duration_min: 15, status: 'confirmed', contact_name: `${p.first_name} ${p.last_name}`, contact_email: `${p.first_name.toLowerCase()}@example.com`, contact_phone: null, notes: 'Wants the GM and the accountant on the call.' });
   }
   add('feedback', { id: 'fb_seed_1', user_id: 'usr_strategist', user_name: 'Nora Vale', role: 'strategist', page_code: 'HUB-01', route: '/', kind: 'idea', text: 'Show the savings number on each prospect card in the hub.', element_path: null, component: 'Card', viewport: '1280', theme: 'light', status: 'new', triage: null, triage_note: null, decision_ref: null, owner_reply: null });
 }

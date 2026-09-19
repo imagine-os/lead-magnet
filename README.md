@@ -14,7 +14,7 @@
 | 11 tables | prospects, stack_guesses, pages, events, bookings (with contact columns), assets, touches, tasks, feedback, recommendations, intake_turns |
 | 42 components | `src/components/<tier>/<Name>/` with metas at `/#/dev/components`; every root carries `data-component="<Name>"` so annotation pins name the real component; `CommandPalette`, `ConfirmDialog`, `DateRange`, `PairedBarChart` since 0.4.0 |
 | 51 rules | `/#/dev/rules` (core R-C / R-P / R-E + plan R-K, studio R-S, landing R-L, demo R-D, booking R-B, admin R-A, proposal R-R, website R-W) |
-| 227 declared actions (144 unique ids = 144 WebMCP tools) | `/#/dev/actions`, the WebMCP surface and the voice vocabulary (`CommandPalette`, Ctrl/Cmd+K, typed or spoken); `npm run actions -- list | export | run`; handlers read the latest render |
+| 230 declared actions (144 unique ids = 144 WebMCP tools) | `/#/dev/actions`, the WebMCP surface and the voice vocabulary (`CommandPalette`, Ctrl/Cmd+K, typed or spoken); `npm run actions -- list | export | run`; handlers read the latest render |
 | 21 engine checks + 18 voice checks | `npm run test:engine` (engine, catalog coverage, sub-industry intake, the shared slot generator), `npm run test:voice` (the phrase matcher over the exported vocabulary) |
 | 3 seeded prospects | dog daycare (Austin, en, warm), two-location dental (Miami, es, cold), restaurant group (Denver, en, hot); one live page each plus a live variant B on two slugs with seeded sessions, stack guesses, assets, events, touches |
 | 4 archetypes | Reveal / Savings Audit / Walkthrough / Letter, `docs/reference/conversion-playbook.md` |

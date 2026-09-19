@@ -16,7 +16,7 @@ _Today:_ `:focus-visible` 3 px ring; Button 44 / 48 / 56; Placeholder and Toolti
 
 ## P-04 Inputs next: remote / gamepad d-pad, voice
 Never design against them: one obvious primary action per screen, no focus traps, spatial focus order that makes sense on a grid, every action addressable by an intent phrase.
-_Today:_ actions carry `intent`; layouts are grids. _Queued:_ `useSpatialNav` (T47), voice controller over actions (T46).
+_Today:_ actions carry `intent`; layouts are grids; `useSpatialNav` + `useGamepadNav` on every shell (T47, D-124) and the voice controller / `CommandPalette` over the actions manifest (T46, D-099..D-101) shipped in v0.4.0; `npm run qa:dpad` rehearses arrow-only reachability. _Queued:_ `qa:dpad --strict` as a gate (T58), ES-native intents (T57), a remote adapter with hold-to-talk.
 
 ## P-05 Actions manifest
 A page's buttons, menu items and form submits are its actions (`PageSpec.actions: ActionDef[]` with `id, label, intent, permission?, params?`). A new button without an action entry is incomplete; removing a button removes its entry in the same commit. While mounted the page registers handlers on the actions bus; `/#/dev/actions` lists every action with page, permission and handler-live. The manifest is the WebMCP surface (one tool per action) and the voice vocabulary. Actions are idempotent, take ids not screen positions, return a readable result.

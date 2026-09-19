@@ -2,7 +2,7 @@
 title: Componer y publicar
 role: estratega
 part: III
-version: 0.3.0
+version: 0.4.0
 updated: 2026-09-19
 summary: Elegir arquetipo, previsualizar la página real, la regla de los 14 días, URLs que nunca se mueven y cómo correr variantes.
 ---
@@ -23,7 +23,7 @@ Las puntuaciones de arriba se calculan en vivo para los prospectos cargados, con
 
 **El Recorrido** (`/p/:slug/story`) — "así es un martes en tu negocio, la semana que viene", una escena por rol de 7:10 a 21:00. Bueno para negocios de servicio tibios con muchos roles. Riesgo: se muere si la historia se alarga.
 
-**La Carta** (`/p/:slug/letter`) — una nota personal corta sobre su aplicación con su marca, y directo al CTA. Buena para caliente, referido y ticket alto. Riesgo: muy poca prueba para alguien frío. **Úsala solo cuando una persona ya haya hablado con ellos.**
+**La Carta** (`/p/:slug/letter`) — una nota personal corta sobre su aplicación con su marca, luego las cuatro objeciones de cambio respondidas de un tirón, y al CTA. Buena para caliente, referido y ticket alto. Riesgo: muy poca prueba para alguien frío. **Úsala solo cuando una persona ya haya hablado con ellos.**
 
 El compositor ordena los cuatro y muestra las razones. Sigue el orden salvo que sepas algo que el motor no sabe; y si sabes algo que el motor no sabe, eso va en el perfil, no en tu cabeza.
 

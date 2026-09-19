@@ -2,7 +2,7 @@
 title: Entrevista e investigación
 role: estratega
 part: II
-version: 0.3.0
+version: 0.4.0
 updated: 2026-09-19
 summary: Crear un prospecto, correr la entrevista adaptativa, subir la confianza y confirmar el stack antes de componer nada.
 ---
@@ -29,7 +29,7 @@ Elige la industria con cuidado. Es el campo más pesado de todos, y siembra los 
 
 La entrevista no es un formulario. Es un ciclo que pregunta primero **el campo desconocido más pesado** y recalcula la confianza después de cada respuesta. Puedes responder en cualquier orden, salir y volver, y responder el mismo campo otra vez con algo mejor.
 
-Pesos de los campos, de mayor a menor: industria, nombre del negocio, nombre de pila, tamaño del equipo, herramientas conocidas, sedes, roles del negocio, roles de vida, estilo, temperatura. La confianza es la proporción ponderada de lo que sabemos, de 0 a 1.
+Pesos de los campos, de mayor a menor: industria, nombre del negocio, nombre de pila, sub-industria (cuando el catálogo tiene una para esa industria), tamaño del equipo, herramientas conocidas, sedes, roles del negocio, roles de vida, estilo, temperatura. La confianza es la proporción ponderada de lo que sabemos, de 0 a 1. La sub-industria solo se pregunta cuando la industria realmente se ramifica (un consultorio dental, no un lavado de autos), y para los prospectos donde no aplica queda fuera del denominador por completo, así que su barra de confianza nunca se queda corta por una pregunta que nunca fue suya.
 
 Tres hábitos aceleran esto:
 

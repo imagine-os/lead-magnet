@@ -2,7 +2,7 @@
 title: Intake and research
 role: strategist
 part: II
-version: 0.3.0
+version: 0.4.0
 updated: 2026-09-19
 summary: Creating a prospect, running the adaptive intake, raising confidence, and confirming the tool stack before you compose anything.
 ---
@@ -29,7 +29,7 @@ Pick the industry carefully. It is the single heaviest field, and it seeds the r
 
 The intake is not a form. It is a loop that asks the **heaviest unknown field first** and recomputes confidence after every answer. You can answer in any order, leave and come back, and answer the same field again later with something better.
 
-Field weights, highest first: industry, business name, first name, team size, known tools, locations, business roles, life roles, style, warmth. Confidence is the weighted share of what we know, from 0 to 1.
+Field weights, highest first: industry, business name, first name, sub-industry (when the catalog has one for this industry), team size, known tools, locations, business roles, life roles, style, warmth. Confidence is the weighted share of what we know, from 0 to 1. Sub-industry only asks when the industry actually branches (a dental practice, not a car wash), and for prospects where it does not apply it drops out of the denominator entirely, so their confidence bar is never held back by a question that was never theirs to answer.
 
 Three habits make this fast:
 

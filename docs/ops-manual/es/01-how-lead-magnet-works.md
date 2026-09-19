@@ -2,7 +2,7 @@
 title: Cómo funciona Lead Magnet
 role: todos
 part: I
-version: 0.3.0
+version: 0.4.0
 updated: 2026-09-19
 summary: El embudo de principio a fin, quién hace qué, y una lista honesta de qué es real hoy frente a qué sigue siendo simulado.
 ---
@@ -66,7 +66,7 @@ Maya es tibia, habla inglés y tiene un equipo pequeño. Daniel es frío, habla 
 
 Ser honestos con esto es una regla, no una cortesía. Todo lo que todavía no funciona va envuelto en un marcador que lo dice al pasar el cursor, al enfocar con el teclado y al hacer clic; nunca un botón mudo.
 
-**Real hoy:** el motor de personalización (adivinar el stack, los ahorros, las vistas por rol, la puntuación de arquetipos, la composición de la página en dos idiomas), los cuatro arquetipos de página, la demo del OS, las reservas con una rejilla de horarios real, el studio completo, la analítica sobre eventos reales, el plan, la propuesta, la documentación, este manual, inglés y español en todas partes, y el sistema de diseño.
+**Real hoy:** el motor de personalización (adivinar el stack, los ahorros, las vistas por rol, la puntuación de arquetipos, la composición de la página en dos idiomas), los cuatro arquetipos de página, la demo del OS, las reservas con una rejilla de horarios real, el studio completo, la analítica sobre eventos reales (incluida la lectura A/B en A-01), el plan, la propuesta, la documentación, este manual, el bus de acciones con paleta de comandos y control por voz sobre cada acción, la navegación con flechas y d-pad de mando en cada shell, inglés y español en todas partes, y el sistema de diseño.
 
 **Simulado hoy:** la identidad (los usuarios son filas demo, no cuentas), el almacén de datos (un proveedor simulado en el navegador, así que tus cambios viven solo en tu navegador), la generación de imágenes y video, el enriquecimiento con IA desde su sitio web, el envío real por cualquier canal, el proveedor de calendario detrás de las reservas, y los pagos.
 
@@ -80,7 +80,7 @@ Ser honestos con esto es una regla, no una cortesía. Todo lo que todavía no fu
 - Una sola llamada a la acción principal, repetida; una secundaria con el calendario dentro de la página.
 - La fecha de caducidad es real. Nunca mostramos una cuenta regresiva falsa.
 - Un número que el sistema conoce nunca se escribe a mano en un capítulo de este manual. Se trae en vivo. Por eso las tablas de arriba no pueden quedar desactualizadas.
-- Cada botón del producto es una acción con nombre y una frase de intención, para que el mismo vocabulario sirva con ratón, teclado, control remoto y, pronto, voz.
+- Cada botón del producto es una acción con nombre y una frase de intención, para que el mismo vocabulario sirva con ratón, teclado, pantalla táctil o lápiz, el d-pad de un control remoto y comandos de voz, todo por el mismo bus de acciones.
 
 ## Bandas de precio
 

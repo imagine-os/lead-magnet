@@ -2,7 +2,7 @@
 title: Compose and publish
 role: strategist
 part: III
-version: 0.3.0
+version: 0.4.0
 updated: 2026-09-19
 summary: Choosing an archetype, previewing the real page, the 14-day rule, slugs that never move, and running variants.
 ---
@@ -23,7 +23,7 @@ The scores above are computed live for the seeded prospects, with the reasons th
 
 **The Walkthrough** (`/p/:slug/story`) — "this is Tuesday at your business, next week", one scene per role from 7:10 to 21:00. Best for warm relationship and service businesses with many roles. Risk: it dies if the story drags.
 
-**The Letter** (`/p/:slug/letter`) — a short personal note over their branded app, then straight to the CTA. Best for hot, referred, high-ticket. Risk: too little proof for anyone cold. **Only use it when a human has actually spoken to them.**
+**The Letter** (`/p/:slug/letter`) — a short personal note over their branded app, then the four switching objections answered in one breath, then the CTA. Best for hot, referred, high-ticket. Risk: too little proof for anyone cold. **Only use it when a human has actually spoken to them.**
 
 The composer ranks all four and shows the reasons. Follow the ranking unless you know something the engine does not — and if you do know something it does not, that belongs in the profile, not in your head.
 

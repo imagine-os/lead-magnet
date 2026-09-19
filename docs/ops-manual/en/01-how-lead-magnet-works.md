@@ -2,7 +2,7 @@
 title: How Lead Magnet works
 role: everyone
 part: I
-version: 0.3.0
+version: 0.4.0
 updated: 2026-09-19
 summary: The funnel end to end, who does what, and an honest list of what is real today versus what is still mock.
 ---
@@ -66,7 +66,7 @@ Maya is warm and English-first with a small team. Daniel is cold, Spanish-first,
 
 Being honest about this is a rule, not a courtesy. Anything that does not work yet is wrapped in a placeholder that says so on hover, on focus and on click — never a silent button.
 
-**Real today:** the personalization engine (stack guesses, savings, role views, archetype scoring, page composition in both languages), all four landing archetypes, the OS demo, booking with a real slot grid, the studio end to end, analytics over real tracked events, the plan, the proposal, the docs, this manual, English/Spanish everywhere, and the design system.
+**Real today:** the personalization engine (stack guesses, savings, role views, archetype scoring, page composition in both languages), all four landing archetypes, the OS demo, booking with a real slot grid, the studio end to end, analytics over real tracked events (including the A/B readout on A-01), the plan, the proposal, the docs, this manual, the actions bus with a command palette and voice control over every action, arrow-key and gamepad d-pad navigation on every shell, English/Spanish everywhere, and the design system.
 
 **Mock today:** identity (users are demo rows, not accounts), the data store (a local mock provider in the browser, so your changes live in your browser only), image and video generation, LLM enrichment of a prospect from their website, sending outreach on a real channel, the calendar provider behind bookings, and payments.
 
@@ -80,7 +80,7 @@ Being honest about this is a rule, not a courtesy. Anything that does not work y
 - One primary call to action, repeated; one secondary with the calendar inline.
 - The expiry date is real. We never show a fake countdown.
 - A number the system owns is never typed into a chapter of this manual. It is pulled live. That is why the tables above cannot go stale.
-- Every button in the product is a named action with an intent phrase, so the same vocabulary works for a mouse, a keyboard, a remote and, soon, a voice.
+- Every button in the product is a named action with an intent phrase, so the same vocabulary works for a mouse, a keyboard, a touch or pen surface, a remote's d-pad and a voice command, all through the same actions bus.
 
 ## Pricing bands
 

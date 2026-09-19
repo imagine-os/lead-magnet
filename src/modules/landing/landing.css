@@ -20,6 +20,8 @@
   --lp-muted: color-mix(in srgb, var(--lp-text) 72%, var(--lp-bg));
   /* Their primary as small text: pulled towards their text colour so a bright brand orange still reads at >= 4.5:1. */
   --lp-primary-text: color-mix(in srgb, var(--lp-primary) 70%, var(--lp-text));
+  /* The same primary as small text on a 16 % tinted chip needs 60 %: 70 % fell to 4.17:1 on the warm palette (pass 3 a11y run). */
+  --lp-primary-on-tint: color-mix(in srgb, var(--lp-primary) 60%, var(--lp-text));
   --lp-line: color-mix(in srgb, var(--lp-text) 14%, var(--lp-bg));
   --lp-line-soft: color-mix(in srgb, var(--lp-text) 8%, var(--lp-bg));
   --lp-tint: color-mix(in srgb, var(--lp-primary) 8%, var(--lp-bg));
@@ -79,7 +81,8 @@
 .lp .lp-btn-primary:hover:not(:disabled) { background: color-mix(in srgb, var(--lp-primary) 86%, #000); }
 .lp .lp-btn-secondary { background: transparent; color: var(--lp-text); border-color: color-mix(in srgb, var(--lp-text) 30%, var(--lp-bg)); }
 .lp .lp-btn-secondary:hover:not(:disabled) { border-color: var(--lp-primary); color: var(--lp-primary); background: var(--lp-tint); }
-.lp-sec-cta_band .lp-btn-primary { background: var(--lp-bg); color: var(--lp-primary); border-color: var(--lp-bg); }
+/* Their background as the button, their primary as its text - pulled towards their text colour (--lp-primary-text): the raw orange read 3.08:1 on the warm palette. */
+.lp-sec-cta_band .lp-btn-primary { background: var(--lp-bg); color: var(--lp-primary-text); border-color: var(--lp-bg); }
 .lp-sec-cta_band .lp-btn-secondary { color: var(--lp-on-primary); border-color: color-mix(in srgb, var(--lp-on-primary) 55%, transparent); }
 .lp-sec-cta_band .lp-btn-secondary:hover:not(:disabled) { background: color-mix(in srgb, #000 12%, transparent); color: var(--lp-on-primary); }
 .lp .card { background: var(--lp-surface); border-color: var(--lp-line); }
@@ -104,7 +107,7 @@
 .lp .field-label { color: var(--lp-text); }
 .lp .field-hint { color: var(--lp-muted); }
 .lp .badge { background: var(--lp-tint-2); color: var(--lp-text); }
-.lp .badge-primary { background: var(--lp-tint-2); color: var(--lp-primary-text); }
+.lp .badge-primary { background: var(--lp-tint-2); color: var(--lp-primary-on-tint); }
 .lp .badge-accent { background: var(--lp-accent); color: var(--lp-text); }
 .lp .modal-box { background: var(--lp-bg); color: var(--lp-text); }
 .lp .modal-head { border-bottom-color: var(--lp-line); }

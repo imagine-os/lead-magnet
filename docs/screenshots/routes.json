@@ -38,7 +38,10 @@
     "variant A",
     "variant B",
     "frames present",
-    "frames missing (MiniOs fallback)"
+    "frames missing (MiniOs fallback)",
+    "role link copied",
+    "clipboard refused (link selected)",
+    "no expires_at"
    ],
    "checkedAt": [
     360,
@@ -57,9 +60,9 @@
     "top bar (wordmark, EN/ES, primary CTA)",
     "hero_reveal (3 devices, scroll-driven)",
     "savings_stack (struck-through prices, count-up)",
-    "role_views (snap carousel / grid)",
-    "proof",
-    "faq",
+    "role_views (snap carousel / grid, per-role share link)",
+    "proof (facts + three checkable claims + labelled sample)",
+    "faq (composed questions + four switching objections)",
     "cta_band (honest urgency)",
     "booking_inline (7-day grid)",
     "sticky CTA (phone)",
@@ -77,8 +80,13 @@
     "/p/:slug renders the archetype the chosen row was published with (so variant B can test a different archetype); /audit, /story and /letter force theirs over the snapshot",
     "every event carries { variant, page_id, archetype, slug } in its meta, so A-01 can compare variants without joining the pages table",
     "usePageMeta sets document.title, meta[name=description] and og:* per prospect and language; og:image points at public/og/<slug>.jpg (L-06)",
+    "honest expiry (R-C04) is one component, <ExpiryLine>, rendered under the hero CTAs, in the CTA band, under the booking grid, in the letter and in the sticky bar: the real expires_at as a date plus days left, never a countdown; a row with no expiry says so",
+    "exit intent, once per session: fine pointer = the pointer leaves through the top; coarse pointer = the back gesture, a fast flick back up the page past a quarter of it, or 45 s idle. Nothing hover-only (P-03)",
+    "useSpatialNav(rootRef) on the page root: arrow keys / d-pad move focus geometrically, Enter activates, Back returns to the top of the page (a public page has no level above it). Cards keep their own Left / Right, inputs keep their arrows, an open dialog turns it off",
     "hero devices scrub a real frame sequence captured from the live demo: useFrames(prospectId) loads public/frames/<id>/index.json and preloads it, useScrollFrames(count) maps the hero section to a frame (phone = NN.jpg, laptop = desk-NN.jpg), and when the index is missing the devices render the live <MiniOs> composition instead",
-    "reduced motion pins the first frame and never animates; the TV always holds the live composition"
+    "reduced motion pins the first frame and never animates; the TV always holds the live composition",
+    "every role card copies /#/demo/:prospectId/role/:slug with the async clipboard API and shows the link in a selected read-only field either way (cta_click { cta: share_role, role })",
+    "the FAQ appends four switching objections from the module strings table on top of the composed questions"
    ],
    "components": [
     "DeviceMockup",
@@ -139,6 +147,21 @@
      "permission": "demo.open"
     },
     {
+     "id": "landing.shareRole",
+     "label": "Send this role view",
+     "intent": "copy the link to the {role} view",
+     "params": {
+      "role": "string"
+     },
+     "permission": "demo.open"
+    },
+    {
+     "id": "landing.correctStack",
+     "label": "Correct the stack",
+     "intent": "let me correct the tools you guessed",
+     "permission": "demo.open"
+    },
+    {
      "id": "landing.toggleFaq",
      "label": "Open a question",
      "intent": "answer {question}",
@@ -172,7 +195,10 @@
     "R-L02",
     "R-L03",
     "R-L04",
-    "R-L05"
+    "R-L05",
+    "R-L07",
+    "R-L08",
+    "R-L09"
    ]
   }
  },
@@ -215,7 +241,10 @@
     "variant A",
     "variant B",
     "frames present",
-    "frames missing (MiniOs fallback)"
+    "frames missing (MiniOs fallback)",
+    "role link copied",
+    "clipboard refused (link selected)",
+    "no expires_at"
    ],
    "checkedAt": [
     360,
@@ -233,10 +262,11 @@
    "layout": [
     "top bar",
     "hero (money headline)",
-    "stack_audit (Yes / No per tool, live counter)",
+    "stack_audit (Yes / No / undo per tool, live counter)",
     "savings_stack",
     "role_views",
     "proof",
+    "faq (composed questions + four switching objections)",
     "cta_band",
     "booking_inline",
     "sticky CTA (phone)",
@@ -253,7 +283,11 @@
     "/p/:slug renders the archetype the chosen row was published with (so variant B can test a different archetype); /audit, /story and /letter force theirs over the snapshot",
     "every event carries { variant, page_id, archetype, slug } in its meta, so A-01 can compare variants without joining the pages table",
     "usePageMeta sets document.title, meta[name=description] and og:* per prospect and language; og:image points at public/og/<slug>.jpg (L-06)",
-    "each answer writes stack_guesses.status by id through the provider and a form_submit event; savings() recomputes from the live rows, never from the snapshot"
+    "honest expiry (R-C04) is one component, <ExpiryLine>, rendered under the hero CTAs, in the CTA band, under the booking grid, in the letter and in the sticky bar: the real expires_at as a date plus days left, never a countdown; a row with no expiry says so",
+    "exit intent, once per session: fine pointer = the pointer leaves through the top; coarse pointer = the back gesture, a fast flick back up the page past a quarter of it, or 45 s idle. Nothing hover-only (P-03)",
+    "useSpatialNav(rootRef) on the page root: arrow keys / d-pad move focus geometrically, Enter activates, Back returns to the top of the page (a public page has no level above it). Cards keep their own Left / Right, inputs keep their arrows, an open dialog turns it off",
+    "each answer writes stack_guesses.status by id through the provider and a form_submit event; savings() recomputes from the live rows, never from the snapshot",
+    "pressing the answer a row already carries returns it to `guessed` (form_submit with undo: true), so a mis-tap is never permanent"
    ],
    "components": [
     "Stat",
@@ -278,6 +312,14 @@
      "id": "landing.rejectTool",
      "label": "No, not us",
      "intent": "reject {tool}",
+     "params": {
+      "tool": "string"
+     }
+    },
+    {
+     "id": "landing.resetTool",
+     "label": "Undo this answer",
+     "intent": "undo my answer about {tool}",
      "params": {
       "tool": "string"
      }
@@ -325,6 +367,23 @@
      "permission": "demo.open"
     },
     {
+     "id": "landing.shareRole",
+     "label": "Send this role view",
+     "intent": "copy the link to the {role} view",
+     "params": {
+      "role": "string"
+     },
+     "permission": "demo.open"
+    },
+    {
+     "id": "landing.toggleFaq",
+     "label": "Open a question",
+     "intent": "answer {question}",
+     "params": {
+      "question": "string"
+     }
+    },
+    {
      "id": "landing.seeCaseStudy",
      "label": "See the case study",
      "intent": "show me a case study"
@@ -351,7 +410,10 @@
     "R-L03",
     "R-L04",
     "R-L05",
-    "R-L06"
+    "R-L06",
+    "R-L07",
+    "R-L08",
+    "R-L09"
    ]
   }
  },
@@ -394,7 +456,10 @@
     "variant A",
     "variant B",
     "frames present",
-    "frames missing (MiniOs fallback)"
+    "frames missing (MiniOs fallback)",
+    "role link copied",
+    "clipboard refused (link selected)",
+    "no expires_at"
    ],
    "checkedAt": [
     360,
@@ -415,6 +480,7 @@
     "walkthrough_steps (pinned device, progress rail, prev / next)",
     "role_views",
     "savings_stack",
+    "faq (composed questions + four switching objections)",
     "cta_band (\"Make it next Tuesday\")",
     "booking_inline",
     "sticky CTA (phone)"
@@ -430,6 +496,9 @@
     "/p/:slug renders the archetype the chosen row was published with (so variant B can test a different archetype); /audit, /story and /letter force theirs over the snapshot",
     "every event carries { variant, page_id, archetype, slug } in its meta, so A-01 can compare variants without joining the pages table",
     "usePageMeta sets document.title, meta[name=description] and og:* per prospect and language; og:image points at public/og/<slug>.jpg (L-06)",
+    "honest expiry (R-C04) is one component, <ExpiryLine>, rendered under the hero CTAs, in the CTA band, under the booking grid, in the letter and in the sticky bar: the real expires_at as a date plus days left, never a countdown; a row with no expiry says so",
+    "exit intent, once per session: fine pointer = the pointer leaves through the top; coarse pointer = the back gesture, a fast flick back up the page past a quarter of it, or 45 s idle. Nothing hover-only (P-03)",
+    "useSpatialNav(rootRef) on the page root: arrow keys / d-pad move focus geometrically, Enter activates, Back returns to the top of the page (a public page has no level above it). Cards keep their own Left / Right, inputs keep their arrows, an open dialog turns it off",
     "an IntersectionObserver band at the middle of the viewport sets the active step; prev / next set the same state and scroll to it, so keyboard, remote and reduced motion all work",
     "the pinned laptop plays the desktop frame sequence (public/frames/<id>/desk-NN.jpg) mapped from the active step, falling back to the live <MiniOs> composition when no sequence was generated"
    ],
@@ -493,6 +562,29 @@
      "permission": "demo.open"
     },
     {
+     "id": "landing.shareRole",
+     "label": "Send this role view",
+     "intent": "copy the link to the {role} view",
+     "params": {
+      "role": "string"
+     },
+     "permission": "demo.open"
+    },
+    {
+     "id": "landing.correctStack",
+     "label": "Correct the stack",
+     "intent": "let me correct the tools you guessed",
+     "permission": "demo.open"
+    },
+    {
+     "id": "landing.toggleFaq",
+     "label": "Open a question",
+     "intent": "answer {question}",
+     "params": {
+      "question": "string"
+     }
+    },
+    {
      "id": "landing.pickSlot",
      "label": "Pick a slot",
      "intent": "book {slot}",
@@ -512,7 +604,10 @@
     "R-L02",
     "R-L03",
     "R-L04",
-    "R-L05"
+    "R-L05",
+    "R-L07",
+    "R-L08",
+    "R-L09"
    ]
   }
  },
@@ -555,7 +650,10 @@
     "variant A",
     "variant B",
     "frames present",
-    "frames missing (MiniOs fallback)"
+    "frames missing (MiniOs fallback)",
+    "role link copied",
+    "clipboard refused (link selected)",
+    "no expires_at"
    ],
    "checkedAt": [
     360,
@@ -574,6 +672,7 @@
     "top bar",
     "letter (greeting, 3 paragraphs, signoff, sender)",
     "hero_reveal (their app behind it)",
+    "faq (four switching objections)",
     "cta_band",
     "booking_inline",
     "sticky CTA (phone)"
@@ -589,6 +688,9 @@
     "/p/:slug renders the archetype the chosen row was published with (so variant B can test a different archetype); /audit, /story and /letter force theirs over the snapshot",
     "every event carries { variant, page_id, archetype, slug } in its meta, so A-01 can compare variants without joining the pages table",
     "usePageMeta sets document.title, meta[name=description] and og:* per prospect and language; og:image points at public/og/<slug>.jpg (L-06)",
+    "honest expiry (R-C04) is one component, <ExpiryLine>, rendered under the hero CTAs, in the CTA band, under the booking grid, in the letter and in the sticky bar: the real expires_at as a date plus days left, never a countdown; a row with no expiry says so",
+    "exit intent, once per session: fine pointer = the pointer leaves through the top; coarse pointer = the back gesture, a fast flick back up the page past a quarter of it, or 45 s idle. Nothing hover-only (P-03)",
+    "useSpatialNav(rootRef) on the page root: arrow keys / d-pad move focus geometrically, Enter activates, Back returns to the top of the page (a public page has no level above it). Cards keep their own Left / Right, inputs keep their arrows, an open dialog turns it off",
     "no fabricated audio: the voice note is a Placeholder (P-09) until the content pass records one"
    ],
    "components": [
@@ -631,6 +733,14 @@
      "intent": "play the voice note"
     },
     {
+     "id": "landing.toggleFaq",
+     "label": "Open a question",
+     "intent": "answer {question}",
+     "params": {
+      "question": "string"
+     }
+    },
+    {
      "id": "landing.pickSlot",
      "label": "Pick a slot",
      "intent": "book {slot}",
@@ -649,7 +759,9 @@
     "R-L01",
     "R-L02",
     "R-L04",
-    "R-L05"
+    "R-L05",
+    "R-L08",
+    "R-L09"
    ]
   }
  },
@@ -685,7 +797,9 @@
    "states": [
     "expired page",
     "unknown slug",
-    "request sent"
+    "request sent",
+    "known prospect (booking offered)",
+    "unknown slug (booking is a Placeholder)"
    ],
    "checkedAt": [
     360,
@@ -745,7 +859,8 @@
    ],
    "rules": [
     "R-C05",
-    "R-L05"
+    "R-L05",
+    "R-L08"
    ]
   }
  },
@@ -766,7 +881,7 @@
    "name": "OS demo shell",
    "purpose": "The prospect's operating system, themed to them: role switcher for every business + life role, phone / desktop / 10-foot layouts, EN/ES, and a save / book pair that never gates the demo.",
    "layout": [
-    "top bar (wordmark, role switcher, EN/ES, save + book)",
+    "top bar (wordmark, role switcher, EN/ES, share this view, save + book)",
     "sidebar / bottom nav",
     "headline",
     "today strip",
@@ -788,7 +903,7 @@
    "logic": [
     "deriveRoleViews(prospect) gives one view per business + life role (R-D02)",
     "the role lives in the URL (/role/:slug); missing role falls back to the first business role",
-    "demo_open once per session, demo_role_switch on change, section_view per page, cta_click + form_submit for save / book"
+    "demo_open once per session, demo_role_switch on change, section_view per page, cta_click + form_submit for save / book / share_view"
    ],
    "integrations": [
     "comms provider (T42, Placeholder)",
@@ -841,6 +956,12 @@
      "label": "Book a walkthrough",
      "intent": "book a walkthrough call",
      "permission": "booking.create"
+    },
+    {
+     "id": "demo.shareView",
+     "label": "Share this view",
+     "intent": "copy the link to this view",
+     "permission": "demo.open"
     },
     {
      "id": "demo.openWidget",
@@ -903,7 +1024,7 @@
    "name": "Role home",
    "purpose": "One role's view: the widgets deriveRoleViews gives that role, rendered by kind and themed to the industry, plus today and quick actions.",
    "layout": [
-    "top bar (wordmark, role switcher, EN/ES, save + book)",
+    "top bar (wordmark, role switcher, EN/ES, share this view, save + book)",
     "sidebar / bottom nav",
     "headline",
     "today strip",
@@ -925,7 +1046,7 @@
    "logic": [
     "deriveRoleViews(prospect) gives one view per business + life role (R-D02)",
     "the role lives in the URL (/role/:slug); missing role falls back to the first business role",
-    "demo_open once per session, demo_role_switch on change, section_view per page, cta_click + form_submit for save / book"
+    "demo_open once per session, demo_role_switch on change, section_view per page, cta_click + form_submit for save / book / share_view"
    ],
    "integrations": [
     "comms provider (T42, Placeholder)",
@@ -978,6 +1099,12 @@
      "label": "Book a walkthrough",
      "intent": "book a walkthrough call",
      "permission": "booking.create"
+    },
+    {
+     "id": "demo.shareView",
+     "label": "Share this view",
+     "intent": "copy the link to this view",
+     "permission": "demo.open"
     },
     {
      "id": "demo.openWidget",
@@ -1103,6 +1230,12 @@
      "permission": "booking.create"
     },
     {
+     "id": "demo.shareView",
+     "label": "Share this view",
+     "intent": "copy the link to this view",
+     "permission": "demo.open"
+    },
+    {
      "id": "demo.openDepartment",
      "label": "Open department",
      "intent": "open the {department} department",
@@ -1150,12 +1283,12 @@
   "spec": {
    "code": "C-04",
    "name": "Comms inbox",
-   "purpose": "Unified inbox: calls, email, SMS and WhatsApp in one thread list with themed sample messages; the composer is an honest Placeholder.",
+   "purpose": "Unified inbox: calls, email, SMS and WhatsApp in one thread list with themed sample messages; the composer box and its send button are both honest Placeholders.",
    "layout": [
     "channel tabs",
     "thread list",
     "thread pane",
-    "composer (Placeholder)"
+    "composer box + send (Placeholder)"
    ],
    "data": [
     "prospects",
@@ -1217,6 +1350,12 @@
      "label": "Book a walkthrough",
      "intent": "book a walkthrough call",
      "permission": "booking.create"
+    },
+    {
+     "id": "demo.shareView",
+     "label": "Share this view",
+     "intent": "copy the link to this view",
+     "permission": "demo.open"
     },
     {
      "id": "demo.filterChannel",
@@ -1347,6 +1486,12 @@
      "permission": "booking.create"
     },
     {
+     "id": "demo.shareView",
+     "label": "Share this view",
+     "intent": "copy the link to this view",
+     "permission": "demo.open"
+    },
+    {
      "id": "demo.openPayment",
      "label": "Open payment",
      "intent": "open payment {payment}",
@@ -1457,6 +1602,12 @@
      "label": "Book a walkthrough",
      "intent": "book a walkthrough call",
      "permission": "booking.create"
+    },
+    {
+     "id": "demo.shareView",
+     "label": "Share this view",
+     "intent": "copy the link to this view",
+     "permission": "demo.open"
     },
     {
      "id": "demo.openLifeRole",
@@ -1571,6 +1722,12 @@
      "label": "Book a walkthrough",
      "intent": "book a walkthrough call",
      "permission": "booking.create"
+    },
+    {
+     "id": "demo.shareView",
+     "label": "Share this view",
+     "intent": "copy the link to this view",
+     "permission": "demo.open"
     },
     {
      "id": "demo.invite",
@@ -1878,7 +2035,7 @@
     "live page per prospect = the row with status live, else the most recently published",
     "last event = max(ts) over events for that prospect",
     "booking = the latest bookings row by slot",
-    "create: insert prospects with the industry catalog roles + the default palette, confidence = computeConfidence(fields_known), then insert guessStack() rows, then navigate to S-02",
+    "create: insert prospects with the industry catalog roles + the default palette, confidence = computeConfidence(fields_known, { industry }) (the same denominator S-02 uses: a sub-industry the catalog does not have is left out), then insert guessStack() rows, then navigate to S-02",
     "summary strip = studioSummary(prospects, pages, bookings): warmth split, live pages (and how many slugs run an A/B split), bookings within a week either side of now, the live page expiring first",
     "duplicate: copy the profile, roles, style and fields_known under a new name, re-guess the stack, and leave pages / events / bookings behind (R-S07)"
    ],
@@ -2009,7 +2166,7 @@
     "Ask the AI runs defaultEnricher (rules) and records source = rule; the LLM enricher stays a Placeholder (T43)",
     "Paste facts runs extractFacts() over pasted text (city, team size, locations, catalog tool names, language, website) and PROPOSES each one with its evidence; nothing is applied without a person pressing Apply (R-S05)",
     "save = applyAnswer(p, field, value) then update(\"prospects\", id, { field, fields_known, confidence }) - R-S03",
-    "confidence = computeConfidence(fields_known) (R-E03); the recommendation is pickArchetype(p)[0] and re-ranks on every answer",
+    "confidence = computeConfidence(fields_known, prospect) (R-E03; fields that do not apply to the prospect leave the denominator); the recommendation is pickArchetype(p)[0] and re-ranks on every answer",
     "confirm / reject writes stack_guesses.status by id; savings(p, guesses) ignores rejected rows",
     "the mini preview uses prospectStyle(palette, font) -> --lp-* custom properties, never forked tokens",
     "defaultEnricher (rules) fills obvious gaps; the LLM enricher is not wired (T43)"
@@ -2552,21 +2709,22 @@
   "spec": {
    "code": "A-01",
    "name": "Funnel overview",
-   "purpose": "The whole funnel on one screen: outreach_open -> view -> demo_open -> booking_started -> booking_confirmed counted as distinct sessions, the same five stages broken down by archetype, warmth and A/B variant, and the last twelve things that happened.",
+   "purpose": "The whole funnel on one screen: outreach_open -> view -> demo_open -> booking_started -> booking_confirmed counted as distinct sessions over a 7 / 30 / 90-day range, the same five stages broken down by archetype and warmth, the A/B readout for a slug running a split, and the last twelve things that happened.",
    "layout": [
-    "filters (archetype, warmth)",
+    "filters (archetype, warmth, date range)",
     "KPI row",
     "funnel chart + table view",
     "by archetype",
     "by warmth",
-    "A/B by variant",
+    "A/B readout (slug select, two sides, paired chart, comparison table, verdict)",
     "recent activity"
    ],
    "data": [
     "events",
     "pages",
     "prospects",
-    "bookings"
+    "bookings",
+    "recommendations"
    ],
    "roles": [
     "super_admin",
@@ -2575,19 +2733,28 @@
    ],
    "logic": [
     "a stage counts DISTINCT session_id, so one chatty session is one viewer (R-A01)",
-    "archetype and variant join through pages.page_id; warmth joins through prospects.prospect_id",
-    "A/B is only compared when two or more variants have live pages and events (R-A02)",
-    "conversion labels return an em dash instead of dividing by zero"
+    "archetype joins through pages.page_id; warmth joins through prospects.prospect_id; the A/B side is the pages row the event points at, falling back to meta.variant",
+    "the date range (7 / 30 / 90 / all) filters every number on the page, including the A/B readout",
+    "an A/B is exactly two live pages rows on one slug (D-061); the readout deliberately ignores the archetype and warmth filters, because variant B is usually a different archetype",
+    "both sides are drawn on ONE shared scale (PairedBarChart) - two self-normalised funnels would be the classic A/B misread",
+    "no side is called ahead below 30 view sessions per variant and a 10 % relative lift on view -> demo_open (R-A04); below that the card says how far off the sample is",
+    "when B is ahead, recording writes a `recommendations` row (kind promote_variant, status proposed) and nothing else; promoting is a Placeholder (R-A03 / D-044)",
+    "variants are never pooled across slugs; conversion labels return an em dash instead of dividing by zero"
    ],
    "integrations": [],
    "components": [
     "Stat",
     "FunnelChart",
+    "PairedBarChart",
     "DataTable",
+    "SegmentedControl",
+    "Select",
+    "Field",
     "Chip",
     "Card",
     "Badge",
     "EmptyState",
+    "Placeholder",
     "Button",
     "Icon"
    ],
@@ -2595,12 +2762,28 @@
     {
      "id": "admin.filterFunnel",
      "label": "Filter",
-     "intent": "filter the funnel by {archetype} and {warmth}",
+     "intent": "filter the funnel by {archetype}, {warmth} and the last {range} days",
      "params": {
       "archetype": "enum:all|reveal|audit|walkthrough|letter",
-      "warmth": "enum:all|cold|warm|hot"
+      "warmth": "enum:all|cold|warm|hot",
+      "range": "enum:7|30|90|all"
      },
      "permission": "events.read"
+    },
+    {
+     "id": "admin.compareVariants",
+     "label": "Compare variants",
+     "intent": "compare the A/B variants on {slug}",
+     "params": {
+      "slug": "string"
+     },
+     "permission": "events.read"
+    },
+    {
+     "id": "admin.recordAbWinner",
+     "label": "Record the A/B recommendation",
+     "intent": "record the recommendation to promote the winning variant",
+     "permission": "prospects.write"
     },
     {
      "id": "admin.openProspect",
@@ -2621,6 +2804,8 @@
    "rules": [
     "R-A01",
     "R-A02",
+    "R-A03",
+    "R-A04",
     "R-C06"
    ],
    "states": [
@@ -2628,7 +2813,11 @@
     "default",
     "empty",
     "filtered",
-    "A/B blocked"
+    "no live A/B",
+    "A/B below the sample",
+    "A/B too close",
+    "A/B leader",
+    "recommendation on file"
    ],
    "checkedAt": [
     360,
@@ -2768,9 +2957,9 @@
   "spec": {
    "code": "A-03",
    "name": "Events log",
-   "purpose": "The raw tracking table, filterable by type, page, session and prospect, with the full meta JSON of any row one click away. This is where you check that a page really tracked what it claims.",
+   "purpose": "The raw tracking table, filterable by type, page, A/B variant, session and prospect, with the full meta JSON of any row one click away. This is where you check that a page really tracked what it claims.",
    "layout": [
-    "filters (type, page, session, prospect)",
+    "filters (type, page, variant, session, prospect)",
     "events DataTable",
     "meta drawer (JSON)"
    ],
@@ -2787,7 +2976,8 @@
    "logic": [
     "newest first by ts",
     "filters are AND-combined; an empty filter means all",
-    "session ids are read from the rows themselves, so a new visitor appears in the list without a schema change"
+    "session ids are read from the rows themselves, so a new visitor appears in the list without a schema change",
+    "the variant column and filter resolve through events.page_id -> pages.variant, falling back to the meta.variant the landing page stamps (nothing invented)"
    ],
    "integrations": [],
    "components": [
@@ -2804,12 +2994,13 @@
     {
      "id": "admin.filterEvents",
      "label": "Filter",
-     "intent": "show {type} events for {prospect}",
+     "intent": "show {type} events for {prospect} on variant {variant}",
      "params": {
       "type": "string",
       "page": "id",
       "session": "string",
-      "prospect": "id"
+      "prospect": "id",
+      "variant": "enum:A|B"
      },
      "permission": "events.read"
     },
@@ -2831,12 +3022,14 @@
    ],
    "rules": [
     "R-A01",
+    "R-A02",
     "R-C06"
    ],
    "states": [
     "loading",
     "default",
     "filtered",
+    "variant filtered",
     "empty",
     "drawer open"
    ],
@@ -4596,7 +4789,8 @@
     "flattens spec.actions across routes",
     "live = registered on the actions bus (open the page first)",
     "one WebMCP tool per unique action id: name = id, description = intent, inputSchema from params, permission via can()",
-    "Run goes through the same runAction the CLI, Playwright and voice use; opens the host page first when the handler is not mounted"
+    "Run goes through the same runAction the CLI, Playwright and voice use; opens the host page first when the handler is not mounted",
+    "the Voice phrase column is what matchPhrase (src/a11y/voice.ts) ranks: Ctrl/Cmd+K or the TopBar Commands button opens the CommandPalette over the same tools (T46)"
    ],
    "components": [
     "DataTable",
@@ -5029,7 +5223,7 @@
    "name": "Testing hub",
    "purpose": "Start here: switch language, theme, dev mode and role; open every surface (prospect landing pages, OS demo live in a phone, studio, analytics, plan, proposal, website, docs, manual, dev tools) and see the build counts.",
    "layout": [
-    "header (brand, EN/ES, theme, dev mode)",
+    "header (brand, EN/ES, theme, dev mode, Commands + Speak)",
     "role switcher",
     "prospects: landing pages per archetype + demo",
     "OS demo in PhoneFrame",
@@ -5052,7 +5246,8 @@
    ],
    "logic": [
     "counts = routes / built / stubs / tables / rules / components from registries",
-    "prospect cards read live pages and the savings from the composed model"
+    "prospect cards read live pages and the savings from the composed model",
+    "Commands / Speak open the CommandPalette (also Ctrl/Cmd+K on every shell); a spoken or typed phrase is ranked by src/a11y/voice.ts matchPhrase over window.__leadmagnet.vocabulary and run through runAction"
    ],
    "integrations": [],
    "components": [
@@ -5066,7 +5261,8 @@
     "Stat",
     "Button",
     "Avatar",
-    "DeviceMockup"
+    "DeviceMockup",
+    "CommandPalette"
    ],
    "actions": [
     {
@@ -5109,6 +5305,16 @@
      "label": "Reset demo data",
      "intent": "reset the demo database",
      "permission": "dev.tools"
+    },
+    {
+     "id": "hub.openCommands",
+     "label": "Commands",
+     "intent": "open the command palette"
+    },
+    {
+     "id": "hub.voiceListen",
+     "label": "Speak",
+     "intent": "listen for a voice command"
     }
    ],
    "rules": [

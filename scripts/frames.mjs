@@ -96,7 +96,7 @@ async function walk(browser, { id, roles, tour, viewport, prefix, quality, dir }
   const labels = []; let bytes = 0; let n = 0;
   for (const step of tour) {
     await page.goto(`${BASE}${urlFor(id, step.stop, roles)}`, { waitUntil: 'load', timeout: 20000 });
-    await page.waitForSelector('#root > *', { timeout: 10000 });
+    await page.waitForSelector('#root > *:not(dialog)', { timeout: 10000 });
     await page.waitForTimeout(420);
     for (const y of step.scroll) {
       await scrollTo(page, y);
@@ -134,7 +134,7 @@ async function main() {
       const probe = await probeCtx.newPage();
       await probe.route(/^https?:\/\/(?!localhost)/, (r) => r.abort());
       await probe.goto(`${BASE}/demo/${id}`, { waitUntil: 'load', timeout: 20000 });
-      await probe.waitForSelector('#root > *', { timeout: 10000 });
+      await probe.waitForSelector('#root > *:not(dialog)', { timeout: 10000 });
       await probe.waitForTimeout(400);
       const roles = await roleSlugs(probe);
       await probeCtx.close();

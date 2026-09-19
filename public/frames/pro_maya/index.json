@@ -1,6 +1,6 @@
 {
  "prospect_id": "pro_maya",
- "generated_at": "2026-09-19T02:51:19.129Z",
+ "generated_at": "2026-09-19T20:58:43.173Z",
  "roles": [
   "owner",
   "manager",
@@ -52,5 +52,5 @@
   "Life",
   "Life"
  ],
- "bytes": 1638201
+ "bytes": 1483908
 }

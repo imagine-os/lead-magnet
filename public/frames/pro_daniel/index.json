@@ -1,6 +1,6 @@
 {
  "prospect_id": "pro_daniel",
- "generated_at": "2026-09-19T02:51:33.880Z",
+ "generated_at": "2026-09-19T20:58:59.663Z",
  "roles": [
   "owner-dentist",
   "office-manager",
@@ -52,5 +52,5 @@
   "Life",
   "Life"
  ],
- "bytes": 1625012
+ "bytes": 1507364
 }

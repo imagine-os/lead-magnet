@@ -33,6 +33,36 @@ async function startServer(port, timeoutMs = 20000) {
   server.kill(); throw new Error(`vite ${mode} did not answer on :${port} within ${timeoutMs} ms`);
 }
 
+/**
+ * Waits until the page has settled: same-origin iframes have booted (their `#root > *:not(dialog)`), and every finite CSS
+ * animation / transition in the document and those frames has finished (capped at `capMs`). Axe and the walk otherwise
+ * measure a section mid-fade (`.lp-sec` opacity 0 -> 1 over 700 ms) and report the whole page as low-contrast, which is
+ * what happened under CPU contention in the pass-3 sweep; infinite animations (spinners) are ignored.
+ */
+async function settle(page, capMs = 4000) {
+  await page.evaluate(async (cap) => {
+    const deadline = Date.now() + cap;
+    const frameDoc = (f) => { try { return f.contentDocument; } catch { return null; } };
+    const frames = () => [...document.querySelectorAll('iframe')].map(frameDoc).filter(Boolean);
+    // A same-origin frame is booted when its app has rendered; `about:blank` is the frame still loading (or a lazy frame
+    // outside the viewport, which never loads and counts as settled), not a booted page.
+    const inViewport = (f) => { const r = f.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth; };
+    const booted = (f) => { const d = frameDoc(f); if (!d) return true; if (d.location.href === 'about:blank') return f.loading === 'lazy' && !inViewport(f); return d.readyState === 'complete' && (!d.querySelector('#root') || !!d.querySelector('#root > *:not(dialog)')); };
+    const allBooted = () => [...document.querySelectorAll('iframe')].every(booted);
+    const running = () => [document, ...frames()].flatMap((d) => (d.getAnimations ? d.getAnimations() : [])).filter((a) => a.playState === 'running' && a.effect?.getTiming?.().iterations !== Infinity);
+    // A landing section below the fold waits as `.is-pre` (opacity 0, skipped by axe) until it scrolls in or its 1.2 s fallback
+    // reveals it; a preview iframe never scrolls, so the fallback fires DURING axe and the fade is measured. Wait it out.
+    const revealing = () => [document, ...frames()].some((d) => d.querySelector('.is-pre'));
+    // The class comes off one frame before its transition registers, so a settled state must hold across two checks 300 ms apart.
+    let stable = 0;
+    while (Date.now() < deadline) {
+      const pending = running();
+      if (allBooted() && pending.length === 0 && !revealing()) { if (++stable >= 2) break; } else stable = 0;
+      await Promise.race([Promise.all(pending.map((a) => a.finished.catch(() => {}))), new Promise((r) => setTimeout(r, 300))]);
+    }
+  }, capMs);
+}
+
 /** Tabs through up to MAX_TABS focusable elements, checking a visible focus indicator and a 44x44 hit target
  * (skipped for inline text links, per P-01: "nothing hover-only or drag-only" is about pointer input, not this,
  * but a text link sized to its glyphs is not a P-01 target-size violation the way a button/icon control is). */
@@ -50,6 +80,9 @@ async function keyboardWalk(page) {
       if (el.tagName === 'IFRAME') { try { const inner = el.contentDocument?.activeElement; if (inner && inner !== el.contentDocument.body) { ring = inner; delegated = true; } } catch { /* cross-origin: judge the frame */ } }
       const cs = getComputedStyle(ring);
       const r = el.getBoundingClientRect();
+      // Measured to 0.1 px: a 44 px control under an ancestor's fractional translate (a card mid-transition) reads 43.99999 in
+      // double arithmetic; that is 44, not a target-size failure.
+      const w10 = Math.round(r.width * 10) / 10, h10 = Math.round(r.height * 10) / 10;
       const outlineVisible = cs.outlineStyle !== 'none' && parseFloat(cs.outlineWidth) > 0;
       const boxShadowVisible = cs.boxShadow !== 'none' && cs.boxShadow !== '';
       // Inline text: a span or link rendered inline, or a link whose content is only text (a flex / grid parent blockifies
@@ -65,7 +98,7 @@ async function keyboardWalk(page) {
         hasFocusRing: outlineVisible || boxShadowVisible || (isFrame && !delegated),
         delegated,
         inlineText,
-        meetsTarget: inlineText || isFrame || (r.width >= 44 && r.height >= 44),
+        meetsTarget: inlineText || isFrame || (w10 >= 44 && h10 >= 44),
       };
     });
     if (!info) { stallCount++; if (stallCount > 2) break; continue; }
@@ -94,8 +127,9 @@ async function main() {
       let cell = { violations: [], violationCount: 0, byImpact: {}, focusFailures: [], targetFailures: [], stepsWalked: 0, error: null };
       try {
         await page.goto(`${BASE}${url}`, { waitUntil: 'load', timeout: 20000 });
-        await page.waitForSelector('#root > *', { timeout: 10000 });
+        await page.waitForSelector('#root > *:not(dialog)', { timeout: 10000 }); // the palette's closed <dialog> is the first child of #root on every route and is not a rendered page
         await page.waitForTimeout(500);
+        await settle(page);
         const results = await new AxeBuilder({ page }).withTags(AXE_TAGS).analyze();
         const violations = results.violations.map((v) => ({ id: v.id, impact: v.impact, help: v.help, nodes: v.nodes.length, targets: v.nodes.slice(0, 3).map((n) => n.target.join(' ')) }));
         const byImpact = {}; for (const v of violations) byImpact[v.impact ?? 'unknown'] = (byImpact[v.impact ?? 'unknown'] || 0) + v.nodes;
@@ -122,7 +156,7 @@ async function main() {
   }
   const topRules = [...ruleCounts.entries()].sort((a, b) => b[1].nodes - a[1].nodes).slice(0, 10);
 
-  let md = `# Accessibility QA report\n\ngenerated: ${report.generatedAt}\nserver: ${report.serverMode}\nroutes: ${report.routes.length} (built only)\nwidths: ${WIDTHS.join(', ')}\ntheme: light, role: super admin, dev mode: off\n\n_Written by \`npm run qa:a11y\`. axe-core tags: ${AXE_TAGS.join(', ')}. Keyboard walk: Tab through the first ${MAX_TABS} focusable elements per route, checking a visible focus ring (computed outline or box-shadow) and a 44x44 hit target. Inline text (a span or link rendered inline, or a text-only link) is exempt from the target size (WCAG 2.5.8 inline exception). When Tab lands in a same-origin iframe the ring is read on the element focused inside the frame, because Chromium never matches iframe:focus; a frame whose document has nothing focused (an unloaded lazy thumbnail) is counted as focused-frame, not as a failure. SVG g controls are judged on their own outline, so the plan graph nodes carry a real ring._\n\n## Totals\n\n- axe violation instances: **${totalViolationNodes}** by impact: ${Object.entries(impactTotals).map(([k, v]) => `${k} ${v}`).join(', ') || 'none'}\n- focus-ring failures (no visible indicator on Tab): **${totalFocusFailures}**\n- hit-target failures (< 44x44, not inline text): **${totalTargetFailures}**\n\n## Top rules\n\n| rule | impact | routes hit | node instances |\n| --- | --- | --- | --- |\n`;
+  let md = `# Accessibility QA report\n\ngenerated: ${report.generatedAt}\nserver: ${report.serverMode}\nroutes: ${report.routes.length} (built only)\nwidths: ${WIDTHS.join(', ')}\ntheme: light, role: super admin, dev mode: off\n\n_Written by \`npm run qa:a11y\`. axe-core tags: ${AXE_TAGS.join(', ')}. Keyboard walk: Tab through the first ${MAX_TABS} focusable elements per route, checking a visible focus ring (computed outline or box-shadow) and a 44x44 hit target. Inline text (a span or link rendered inline, or a text-only link) is exempt from the target size (WCAG 2.5.8 inline exception). When Tab lands in a same-origin iframe the ring is read on the element focused inside the frame, because Chromium never matches iframe:focus; a frame whose document has nothing focused (an unloaded lazy thumbnail) is counted as focused-frame, not as a failure. SVG g controls are judged on their own outline, so the plan graph nodes carry a real ring. Boot = the first non-dialog child of #root (the command palette's closed dialog is mounted on every route); axe and the walk run after the page has settled (same-origin iframes booted, reveal-pending sections revealed, finite animations and transitions finished, capped at 4 s), so a section mid-fade is never measured; target sizes are read to 0.1 px, so a 44 px control offset by a fractional transform counts as 44. Residue rule (pass 3, D-125): colour-contrast nodes reported INSIDE a same-origin preview iframe whose landing sections are mid-reveal (S-03 and W-01 preview frames: the sections' 1.2 s reveal fallback runs on the frame's own throttled timers and the fade can still be under way when axe reads the frame) are checker timing, not a page defect - the same nodes pass on their own route (L-01..L-04) and in a standalone probe six seconds after load. They are counted in the totals and named per route below; a contrast node on the host page itself, or inside a frame that has finished revealing, is a real finding._\n\n## Totals\n\n- axe violation instances: **${totalViolationNodes}** by impact: ${Object.entries(impactTotals).map(([k, v]) => `${k} ${v}`).join(', ') || 'none'}\n- focus-ring failures (no visible indicator on Tab): **${totalFocusFailures}**\n- hit-target failures (< 44x44, not inline text): **${totalTargetFailures}**\n\n## Top rules\n\n| rule | impact | routes hit | node instances |\n| --- | --- | --- | --- |\n`;
   for (const [id, c] of topRules) md += `| \`${id}\` - ${c.help} | ${c.impact ?? 'unknown'} | ${c.routes.size} | ${c.nodes} |\n`;
   md += `\n## Per-route\n\n| Code | Route | ${WIDTHS.map((w) => `${w}px violations`).join(' | ')} | ${WIDTHS.map((w) => `${w}px focus/target fails`).join(' | ')} |\n| --- | --- | ${WIDTHS.map(() => '---').join(' | ')} | ${WIDTHS.map(() => '---').join(' | ')} |\n`;
   for (const r of report.routes) {

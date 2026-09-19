@@ -1,34 +1,28 @@
 {
- "generated": "2026-09-19T20:02:26.419Z",
+ "generated": "2026-09-19T21:20:19.246Z",
  "width": 1920,
- "server": "external",
+ "server": "preview",
  "maxSteps": 400,
  "totals": {
   "routes": 51,
-  "hookMounted": 42,
+  "hookMounted": 49,
   "noHook": [
-   "L-05",
-   "B-01",
    "B-02",
-   "W-01",
-   "W-02",
-   "W-03",
-   "R-01",
-   "HUB-02",
    "L-06"
   ],
-  "unreachedPrimaries": 10,
-  "deadEnds": 3,
-  "arrowOwners": 96,
+  "unreachedPrimaries": 3,
+  "deadEnds": 0,
+  "arrowOwners": 106,
   "budgetExhausted": [
    "A-04",
+   "A-05",
    "K-01",
    "K-02",
    "M-01",
    "D-04",
    "D-05"
   ],
-  "avgCoverage": 55,
+  "avgCoverage": 67,
   "errors": 0,
   "consoleErrors": 0
  },
@@ -37,9 +31,9 @@
    "route": "/p/paws-and-play-austin",
    "code": "L-01",
    "surface": "public",
-   "candidates": 67,
-   "reachable": 47,
-   "coverage": 70,
+   "candidates": 37,
+   "reachable": 35,
+   "coverage": 95,
    "budgetExhausted": false,
    "primaries": 4,
    "unreachedPrimaries": [],
@@ -51,17 +45,17 @@
     "after": "#/p/paws-and-play-austin",
     "moved": false
    },
-   "steps": 189,
+   "steps": 141,
    "stale": 0,
-   "edges": 181
+   "edges": 135
   },
   {
    "route": "/p/paws-and-play-austin/audit",
    "code": "L-02",
    "surface": "public",
-   "candidates": 85,
-   "reachable": 65,
-   "coverage": 76,
+   "candidates": 62,
+   "reachable": 60,
+   "coverage": 97,
    "budgetExhausted": false,
    "primaries": 6,
    "unreachedPrimaries": [],
@@ -73,17 +67,17 @@
     "after": "#/p/paws-and-play-austin/audit",
     "moved": false
    },
-   "steps": 261,
+   "steps": 241,
    "stale": 0,
-   "edges": 253
+   "edges": 235
   },
   {
    "route": "/p/paws-and-play-austin/story",
    "code": "L-03",
    "surface": "public",
-   "candidates": 61,
-   "reachable": 41,
-   "coverage": 67,
+   "candidates": 38,
+   "reachable": 36,
+   "coverage": 95,
    "budgetExhausted": false,
    "primaries": 4,
    "unreachedPrimaries": [],
@@ -95,17 +89,17 @@
     "after": "#/p/paws-and-play-austin/story",
     "moved": false
    },
-   "steps": 169,
-   "stale": 0,
-   "edges": 161
+   "steps": 145,
+   "stale": 1,
+   "edges": 139
   },
   {
    "route": "/p/paws-and-play-austin/letter",
    "code": "L-04",
    "surface": "public",
-   "candidates": 28,
-   "reachable": 26,
-   "coverage": 93,
+   "candidates": 35,
+   "reachable": 33,
+   "coverage": 94,
    "budgetExhausted": false,
    "primaries": 4,
    "unreachedPrimaries": [],
@@ -117,26 +111,20 @@
     "after": "#/p/paws-and-play-austin/letter",
     "moved": false
    },
-   "steps": 105,
+   "steps": 133,
    "stale": 0,
-   "edges": 99
+   "edges": 127
   },
   {
    "route": "/p/paws-and-play-austin/expired",
    "code": "L-05",
    "surface": "public",
    "candidates": 10,
-   "reachable": 0,
-   "coverage": 0,
+   "reachable": 5,
+   "coverage": 50,
    "budgetExhausted": false,
    "primaries": 2,
    "unreachedPrimaries": [
-    {
-     "text": "Book a call",
-     "comp": "Button",
-     "x": 559,
-     "y": 1125
-    },
     {
      "text": "Request a fresh workspace",
      "comp": "Button",
@@ -145,12 +133,22 @@
     }
    ],
    "deadEnds": [],
-   "arrowOwners": [],
-   "hookMounted": false,
-   "back": null,
-   "steps": 2,
+   "arrowOwners": [
+    {
+     "text": "",
+     "comp": "Textarea",
+     "tag": "textarea"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/p/paws-and-play-austin/expired",
+    "after": "#/p/paws-and-play-austin/expired",
+    "moved": false
+   },
+   "steps": 21,
    "stale": 0,
-   "edges": 0
+   "edges": 10
   },
   {
    "route": "/demo/pro_maya",
@@ -204,9 +202,9 @@
     "after": "#/",
     "moved": true
    },
-   "steps": 125,
+   "steps": 121,
    "stale": 0,
-   "edges": 112
+   "edges": 109
   },
   {
    "route": "/demo/pro_maya/departments",
@@ -234,15 +232,15 @@
    },
    "steps": 129,
    "stale": 0,
-   "edges": 117
+   "edges": 116
   },
   {
    "route": "/demo/pro_maya/comms",
    "code": "C-04",
    "surface": "demo",
    "candidates": 25,
-   "reachable": 7,
-   "coverage": 28,
+   "reachable": 5,
+   "coverage": 20,
    "budgetExhausted": false,
    "primaries": 2,
    "unreachedPrimaries": [],
@@ -260,9 +258,9 @@
     "after": "#/",
     "moved": true
    },
-   "steps": 129,
-   "stale": 1,
-   "edges": 117
+   "steps": 125,
+   "stale": 0,
+   "edges": 113
   },
   {
    "route": "/demo/pro_maya/money",
@@ -297,36 +295,8 @@
    "code": "C-06",
    "surface": "demo",
    "candidates": 26,
-   "reachable": 6,
-   "coverage": 23,
-   "budgetExhausted": false,
-   "primaries": 2,
-   "unreachedPrimaries": [],
-   "deadEnds": [],
-   "arrowOwners": [
-    {
-     "text": "Business · OwnerBusiness · ManagerBusiness · Front DeskBusin",
-     "comp": "Select",
-     "tag": "select"
-    }
-   ],
-   "hookMounted": true,
-   "back": {
-    "before": "#/demo/pro_maya/role/owner",
-    "after": "#/",
-    "moved": true
-   },
-   "steps": 129,
-   "stale": 0,
-   "edges": 117
-  },
-  {
-   "route": "/demo/pro_maya/settings",
-   "code": "C-07",
-   "surface": "demo",
-   "candidates": 32,
    "reachable": 5,
-   "coverage": 16,
+   "coverage": 19,
    "budgetExhausted": false,
    "primaries": 2,
    "unreachedPrimaries": [],
@@ -349,22 +319,54 @@
    "edges": 113
   },
   {
+   "route": "/demo/pro_maya/settings",
+   "code": "C-07",
+   "surface": "demo",
+   "candidates": 32,
+   "reachable": 6,
+   "coverage": 19,
+   "budgetExhausted": false,
+   "primaries": 2,
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
+    {
+     "text": "Business · OwnerBusiness · ManagerBusiness · Front DeskBusin",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
+   "hookMounted": true,
+   "back": {
+    "before": "#/demo/pro_maya/role/owner",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 129,
+   "stale": 0,
+   "edges": 117
+  },
+  {
    "route": "/book/pro_maya",
    "code": "B-01",
    "surface": "public",
    "candidates": 75,
-   "reachable": 0,
-   "coverage": 0,
+   "reachable": 67,
+   "coverage": 89,
    "budgetExhausted": false,
    "primaries": 0,
    "unreachedPrimaries": [],
    "deadEnds": [],
    "arrowOwners": [],
-   "hookMounted": false,
-   "back": null,
-   "steps": 2,
+   "hookMounted": true,
+   "back": {
+    "before": "#/book/pro_maya",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 269,
    "stale": 0,
-   "edges": 0
+   "edges": 248
   },
   {
    "route": "/book/pro_maya/confirmed",
@@ -395,9 +397,9 @@
    "route": "/studio",
    "code": "S-01",
    "surface": "studio",
-   "candidates": 38,
-   "reachable": 32,
-   "coverage": 84,
+   "candidates": 43,
+   "reachable": 37,
+   "coverage": 86,
    "budgetExhausted": false,
    "primaries": 1,
    "unreachedPrimaries": [],
@@ -415,24 +417,24 @@
     "after": "#/",
     "moved": true
    },
-   "steps": 149,
+   "steps": 169,
    "stale": 0,
-   "edges": 122
+   "edges": 142
   },
   {
    "route": "/studio/prospects/pro_maya",
    "code": "S-02",
    "surface": "studio",
    "candidates": 81,
-   "reachable": 43,
-   "coverage": 53,
+   "reachable": 45,
+   "coverage": 56,
    "budgetExhausted": false,
    "primaries": 5,
    "unreachedPrimaries": [],
    "deadEnds": [],
    "arrowOwners": [
     {
-     "text": "Choose…Under $250k$250k - $1M$1M - $5M$5M+",
+     "text": "Choose…GroomingBoarding & daycareVet-adjacent (transport, we",
      "comp": "Select",
      "tag": "select"
     },
@@ -458,9 +460,9 @@
     "after": "#/",
     "moved": true
    },
-   "steps": 177,
+   "steps": 185,
    "stale": 0,
-   "edges": 137
+   "edges": 144
   },
   {
    "route": "/studio/prospects/pro_maya/compose",
@@ -556,9 +558,9 @@
     "after": "#/studio/prospects/pro_maya",
     "moved": true
    },
-   "steps": 137,
+   "steps": 145,
    "stale": 0,
-   "edges": 105
+   "edges": 112
   },
   {
    "route": "/admin",
@@ -614,9 +616,9 @@
    "route": "/admin/events",
    "code": "A-03",
    "surface": "admin",
-   "candidates": 713,
-   "reachable": 24,
-   "coverage": 3,
+   "candidates": 726,
+   "reachable": 30,
+   "coverage": 4,
    "budgetExhausted": false,
    "primaries": 0,
    "unreachedPrimaries": [],
@@ -629,6 +631,11 @@
     },
     {
      "text": "AllPaws & Play AustinSonrisa Dental MiamiHighline Hospitalit",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Allpaws-and-play-austin · Asonrisa-dental-miami · Ahighline-",
      "comp": "Select",
      "tag": "select"
     },
@@ -649,9 +656,9 @@
     "after": "#/admin",
     "moved": true
    },
-   "steps": 253,
-   "stale": 2,
-   "edges": 192
+   "steps": 217,
+   "stale": 6,
+   "edges": 164
   },
   {
    "route": "/admin/outreach",
@@ -865,14 +872,44 @@
    "route": "/admin/bookings",
    "code": "A-05",
    "surface": "admin",
-   "candidates": 25,
-   "reachable": 21,
+   "candidates": 31,
+   "reachable": 26,
    "coverage": 84,
-   "budgetExhausted": false,
+   "budgetExhausted": true,
    "primaries": 0,
    "unreachedPrimaries": [],
    "deadEnds": [],
    "arrowOwners": [
+    {
+     "text": "Set status",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Set status",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Set status",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Set status",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Set status",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Set status",
+     "comp": "Select",
+     "tag": "select"
+    },
     {
      "text": "Set status",
      "comp": "Select",
@@ -915,17 +952,17 @@
     "after": "#/admin",
     "moved": true
    },
-   "steps": 145,
+   "steps": 400,
    "stale": 0,
-   "edges": 95
+   "edges": 326
   },
   {
    "route": "/plan",
    "code": "K-01",
    "surface": "plan",
-   "candidates": 235,
-   "reachable": 89,
-   "coverage": 38,
+   "candidates": 274,
+   "reachable": 88,
+   "coverage": 32,
    "budgetExhausted": true,
    "primaries": 0,
    "unreachedPrimaries": [],
@@ -952,11 +989,6 @@
      "tag": "select"
     },
     {
-     "text": "Status of T47",
-     "comp": "Select",
-     "tag": "select"
-    },
-    {
      "text": "Status of T02",
      "comp": "Select",
      "tag": "select"
@@ -967,12 +999,7 @@
      "tag": "select"
     },
     {
-     "text": "Status of T46",
-     "comp": "Select",
-     "tag": "select"
-    },
-    {
-     "text": "Status of T47",
+     "text": "Status of T55",
      "comp": "Select",
      "tag": "select"
     },
@@ -982,12 +1009,22 @@
      "tag": "select"
     },
     {
-     "text": "Status of T46",
+     "text": "Status of T01",
      "comp": "Select",
      "tag": "select"
     },
     {
-     "text": "Status of T01",
+     "text": "Status of T02",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Status of T57",
+     "comp": "Select",
+     "tag": "select"
+    },
+    {
+     "text": "Status of T43",
      "comp": "Select",
      "tag": "select"
     }
@@ -999,16 +1036,16 @@
     "moved": true
    },
    "steps": 400,
-   "stale": 1,
-   "edges": 334
+   "stale": 2,
+   "edges": 331
   },
   {
    "route": "/plan/list",
    "code": "K-02",
    "surface": "plan",
-   "candidates": 138,
-   "reachable": 102,
-   "coverage": 74,
+   "candidates": 165,
+   "reachable": 104,
+   "coverage": 63,
    "budgetExhausted": true,
    "primaries": 0,
    "unreachedPrimaries": [],
@@ -1022,7 +1059,7 @@
    },
    "steps": 400,
    "stale": 0,
-   "edges": 379
+   "edges": 380
   },
   {
    "route": "/plan/timeline",
@@ -1073,112 +1110,94 @@
    "code": "W-01",
    "surface": "public",
    "candidates": 42,
-   "reachable": 0,
-   "coverage": 0,
+   "reachable": 31,
+   "coverage": 74,
    "budgetExhausted": false,
    "primaries": 2,
-   "unreachedPrimaries": [
-    {
-     "text": "Get yours",
-     "comp": "Button",
-     "x": 147,
-     "y": 511
-    },
-    {
-     "text": "Get yours",
-     "comp": "Button",
-     "x": 1606,
-     "y": 2201
-    }
-   ],
+   "unreachedPrimaries": [],
    "deadEnds": [],
    "arrowOwners": [],
-   "hookMounted": false,
-   "back": null,
-   "steps": 2,
+   "hookMounted": true,
+   "back": {
+    "before": "#/site",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 129,
    "stale": 0,
-   "edges": 0
+   "edges": 115
   },
   {
    "route": "/site/how",
    "code": "W-02",
    "surface": "public",
    "candidates": 17,
-   "reachable": 0,
-   "coverage": 0,
+   "reachable": 12,
+   "coverage": 71,
    "budgetExhausted": false,
    "primaries": 1,
-   "unreachedPrimaries": [
-    {
-     "text": "Get yours",
-     "comp": "Button",
-     "x": 1394,
-     "y": 2503
-    }
-   ],
+   "unreachedPrimaries": [],
    "deadEnds": [],
    "arrowOwners": [],
-   "hookMounted": false,
-   "back": null,
-   "steps": 2,
+   "hookMounted": true,
+   "back": {
+    "before": "#/site/how",
+    "after": "#/site",
+    "moved": true
+   },
+   "steps": 49,
    "stale": 0,
-   "edges": 0
+   "edges": 40
   },
   {
    "route": "/site/pricing",
    "code": "W-03",
    "surface": "public",
    "candidates": 21,
-   "reachable": 0,
-   "coverage": 0,
+   "reachable": 12,
+   "coverage": 57,
    "budgetExhausted": false,
    "primaries": 1,
-   "unreachedPrimaries": [
+   "unreachedPrimaries": [],
+   "deadEnds": [],
+   "arrowOwners": [
     {
-     "text": "Choose plan",
-     "comp": "Button",
-     "x": 711,
-     "y": 729
+     "text": "Pet care (daycare, boarding, grooming)Dental practiceRestaur",
+     "comp": "Select",
+     "tag": "select"
     }
    ],
-   "deadEnds": [],
-   "arrowOwners": [],
-   "hookMounted": false,
-   "back": null,
-   "steps": 2,
+   "hookMounted": true,
+   "back": {
+    "before": "#/site/pricing",
+    "after": "#/site",
+    "moved": true
+   },
+   "steps": 49,
    "stale": 0,
-   "edges": 0
+   "edges": 41
   },
   {
    "route": "/proposal/pro_maya",
    "code": "R-01",
    "surface": "public",
    "candidates": 11,
-   "reachable": 0,
-   "coverage": 0,
+   "reachable": 7,
+   "coverage": 64,
    "budgetExhausted": false,
    "primaries": 2,
-   "unreachedPrimaries": [
-    {
-     "text": "Book the walkthrough",
-     "comp": "Button",
-     "x": 347,
-     "y": 4646
-    },
-    {
-     "text": "Accept proposal",
-     "comp": "Button",
-     "x": 633,
-     "y": 4646
-    }
-   ],
+   "unreachedPrimaries": [],
    "deadEnds": [],
    "arrowOwners": [],
-   "hookMounted": false,
-   "back": null,
-   "steps": 2,
+   "hookMounted": true,
+   "back": {
+    "before": "#/proposal/pro_maya",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 29,
    "stale": 0,
-   "edges": 0
+   "edges": 19
   },
   {
    "route": "/manual",
@@ -1241,7 +1260,7 @@
    },
    "steps": 400,
    "stale": 0,
-   "edges": 342
+   "edges": 340
   },
   {
    "route": "/manual/intake",
@@ -1382,22 +1401,28 @@
    "code": "D-02",
    "surface": "dev",
    "candidates": 159,
-   "reachable": 46,
-   "coverage": 29,
+   "reachable": 56,
+   "coverage": 35,
    "budgetExhausted": false,
    "primaries": 8,
    "unreachedPrimaries": [],
    "deadEnds": [],
-   "arrowOwners": [],
+   "arrowOwners": [
+    {
+     "text": "Archetype",
+     "comp": "Select",
+     "tag": "select"
+    }
+   ],
    "hookMounted": true,
    "back": {
     "before": "#/dev/components",
     "after": "#/dev",
     "moved": true
    },
-   "steps": 185,
+   "steps": 225,
    "stale": 0,
-   "edges": 165
+   "edges": 198
   },
   {
    "route": "/dev/tables",
@@ -1447,7 +1472,7 @@
    "route": "/dev/actions",
    "code": "D-04",
    "surface": "dev",
-   "candidates": 476,
+   "candidates": 482,
    "reachable": 102,
    "coverage": 21,
    "budgetExhausted": true,
@@ -1470,8 +1495,8 @@
    "code": "D-05",
    "surface": "dev",
    "candidates": 172,
-   "reachable": 106,
-   "coverage": 62,
+   "reachable": 104,
+   "coverage": 60,
    "budgetExhausted": true,
    "primaries": 0,
    "unreachedPrimaries": [],
@@ -1485,7 +1510,7 @@
    },
    "steps": 400,
    "stale": 0,
-   "edges": 377
+   "edges": 380
   },
   {
    "route": "/docs",
@@ -1528,36 +1553,20 @@
     "moved": true
    },
    "steps": 121,
-   "stale": 4,
+   "stale": 5,
    "edges": 90
   },
   {
    "route": "/dev/canvas",
    "code": "D-07",
    "surface": "dev",
-   "candidates": 191,
-   "reachable": 9,
-   "coverage": 5,
+   "candidates": 37,
+   "reachable": 35,
+   "coverage": 95,
    "budgetExhausted": false,
    "primaries": 0,
    "unreachedPrimaries": [],
-   "deadEnds": [
-    {
-     "text": "Page canvas. Zoom with plus and minus, fit with 0, pan with ",
-     "comp": "DesktopShell",
-     "tag": "div"
-    },
-    {
-     "text": "C-05Load live thumbnail",
-     "comp": "DesktopShell",
-     "tag": "button"
-    },
-    {
-     "text": "Money/demo/:prospectId/moneyTheir crossed-out stack with the",
-     "comp": "DesktopShell",
-     "tag": "a"
-    }
-   ],
+   "deadEnds": [],
    "arrowOwners": [],
    "hookMounted": true,
    "back": {
@@ -1565,9 +1574,9 @@
     "after": "#/dev",
     "moved": true
    },
-   "steps": 37,
+   "steps": 141,
    "stale": 0,
-   "edges": 18
+   "edges": 120
   },
   {
    "route": "/dev/qa",
@@ -1668,18 +1677,22 @@
    "code": "HUB-02",
    "surface": "public",
    "candidates": 9,
-   "reachable": 0,
-   "coverage": 0,
+   "reachable": 7,
+   "coverage": 78,
    "budgetExhausted": false,
    "primaries": 0,
    "unreachedPrimaries": [],
    "deadEnds": [],
    "arrowOwners": [],
-   "hookMounted": false,
-   "back": null,
-   "steps": 2,
+   "hookMounted": true,
+   "back": {
+    "before": "#/no-access",
+    "after": "#/",
+    "moved": true
+   },
+   "steps": 29,
    "stale": 0,
-   "edges": 0
+   "edges": 17
   },
   {
    "route": "/og/paws-and-play-austin",

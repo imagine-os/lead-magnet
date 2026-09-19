@@ -15,7 +15,9 @@
 .pl-lane-head { display: flex; align-items: center; gap: var(--sp-2); }
 .pl-lane-title { font-size: var(--fs-sm); text-transform: uppercase; letter-spacing: var(--ls-eyebrow); color: var(--color-heading); margin: 0; }
 .pl-lane-body { display: flex; flex-direction: column; gap: var(--sp-3); }
-.pl-lane-empty { opacity: .6; }
+/* An empty lane is quiet through its decoration, never by fading its text (the 60 % opacity put the heading under 4.5:1 at 390). */
+.pl-lane-empty .empty { padding: var(--sp-6) var(--sp-4); border-color: var(--color-border-subtle); }
+.pl-lane-empty .empty-icon { opacity: .6; }
 .pl-lane-doing { border-color: var(--status-doing-fg); }
 .pl-lane-blocked { border-color: var(--status-blocked-fg); }
 .pl-lane-awaiting_justin { border-color: var(--status-awaiting_justin-fg); }

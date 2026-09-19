@@ -28,7 +28,7 @@ async function main() {
       await ctx.addInitScript(...initScript(theme, path, { devMode: devFor(code) }));
       const page = await ctx.newPage(); await page.route(/^https?:\/\/(?!localhost)/, (r) => r.abort());
       const errors = []; page.on('pageerror', (e) => errors.push(e.message)); page.on('console', (m) => { if (m.type() === 'error' && !NOISE.test(m.text())) errors.push(m.text()); });
-      try { await page.goto(`${BASE}${url}`, { waitUntil: 'load', timeout: 20000 }); await page.waitForSelector('#root > *', { timeout: 10000 }); await page.waitForTimeout(width >= 600 ? 1700 : 700); // full-page shots wait for the landing reveal fallback (1.2 s)
+      try { await page.goto(`${BASE}${url}`, { waitUntil: 'load', timeout: 20000 }); await page.waitForSelector('#root > *:not(dialog)', { timeout: 10000 }); await page.waitForTimeout(width >= 600 ? 1700 : 700); // full-page shots wait for the landing reveal fallback (1.2 s)
         if (!SMOKE) { const dir = new URL(`../docs/screenshots/${code}/`, import.meta.url); mkdirSync(dir, { recursive: true }); await page.screenshot({ path: new URL(fileName(width, theme, LABEL), dir).pathname, fullPage: width >= 600, type: 'jpeg', quality: QUALITY }); captured++; }
       } catch (e) { errors.push(String(e.message).split('\n')[0]); }
       if (errors.length) problems.push({ path, width, theme, errors: [...new Set(errors)].slice(0, 3) });

@@ -31,4 +31,5 @@
 .btn-prospect.btn-outline:hover:not(:disabled), .btn-prospect.btn-outline:focus-visible { color: var(--lp-primary, var(--color-primary-text)); border-color: var(--lp-primary, var(--color-primary)); }
 .btn-prospect.btn-ghost { color: var(--lp-text, var(--color-text)); }
 .btn-prospect.btn-ghost:hover:not(:disabled) { background: color-mix(in srgb, var(--lp-primary, var(--color-primary)) 8%, var(--lp-bg, var(--color-bg))); color: var(--lp-primary, var(--color-primary-text)); }
-.btn-prospect.btn-link { color: var(--lp-primary, var(--color-primary-text)); }
+/* Link text is small: the raw brand primary fell to 4.16:1 on a warm background, so it is pulled 70 % towards the prospect's text (the landing's --lp-primary-text when the root defines it). */
+.btn-prospect.btn-link { color: var(--lp-primary-text, color-mix(in srgb, var(--lp-primary, var(--color-primary)) 70%, var(--lp-text, var(--color-text)))); }

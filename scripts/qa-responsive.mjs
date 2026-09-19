@@ -28,7 +28,7 @@ async function main() {
       const page = await ctx.newPage(); await page.route(/^https?:\/\/(?!localhost)/, (x) => x.abort());
       const errors = []; page.on('pageerror', (e) => errors.push(e.message)); page.on('console', (m) => { if (m.type() === 'error' && !NOISE.test(m.text())) errors.push(m.text()); });
       let cell = { hscroll: false, scrollWidth: 0, offenders: [], smallText: 0, smallTextSamples: [], blank: false, redirectedTo: null, errors: [] };
-      try { await page.goto(`${BASE}${url}`, { waitUntil: 'load', timeout: 20000 }); await page.waitForSelector('#root > *', { timeout: 10000 }); await page.waitForTimeout(500); const res = await page.evaluate(scan, width); const landed = res.hash.replace(/^#/, '').split('?')[0].replace(/\/$/, '') || '/'; delete res.hash; cell = { ...res, redirectedTo: landed !== url ? landed : null, errors: [...new Set(errors)].slice(0, 5) }; } catch (e) { cell.errors = [String(e.message).split('\n')[0]]; }
+      try { await page.goto(`${BASE}${url}`, { waitUntil: 'load', timeout: 20000 }); await page.waitForSelector('#root > *:not(dialog)', { timeout: 10000 }); await page.waitForTimeout(500); const res = await page.evaluate(scan, width); const landed = res.hash.replace(/^#/, '').split('?')[0].replace(/\/$/, '') || '/'; delete res.hash; cell = { ...res, redirectedTo: landed !== url ? landed : null, errors: [...new Set(errors)].slice(0, 5) }; } catch (e) { cell.errors = [String(e.message).split('\n')[0]]; }
       entry.cells[`${width}-${theme}`] = cell; await ctx.close();
     }
     const fails = Object.values(entry.cells).filter(isFail).length; process.stdout.write(`${r.code.padEnd(8)} ${r.path.padEnd(34)} ${fails ? `FAIL x${fails}` : 'ok'}\n`); report.routes.push(entry);

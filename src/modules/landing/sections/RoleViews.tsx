@@ -28,7 +28,9 @@ import { SectionShell } from './SectionShell';
 import { MiniWidget } from './MiniOs';
 
 type Roles = Extract<Section, { kind: 'role_views' }>;
-interface ShareState { role: string; url: string; copied: boolean }
+interface ShareState { key: string; url: string; copied: boolean }
+/** One card per (kind, role): `owner` is usually both a business and a life role, so the role name alone is not a key. */
+const viewKey = (v: RoleView) => `${v.kind}-${v.role}`;
 
 export function RoleViews({ section }: { section: Roles }) {
   const { bi, t } = useI18n();
@@ -49,13 +51,13 @@ export function RoleViews({ section }: { section: Roles }) {
     scrollTo(el, 'nearest');
   };
   const goToRole = (role: string) => {
-    const i = views.findIndex((v) => v.role.toLowerCase() === String(role).toLowerCase());
+    const i = findView(role);
     if (i < 0) return `no role view for "${role}"`;
     focusCard(i);
     return `showing the ${views[i].role} view`;
   };
   const tryRole = (role: string) => {
-    const i = views.findIndex((v) => v.role.toLowerCase() === String(role).toLowerCase());
+    const i = findView(role);
     if (i < 0) return `no role view for "${role}"`;
     openRole(section.id, views[i], views);
     return `opening the demo as the ${views[i].role}`;
@@ -65,14 +67,16 @@ export function RoleViews({ section }: { section: Roles }) {
   const shareRole = async (v: RoleView) => {
     const url = roleShareUrl(prospect.id, viewSlug(v, views));
     const copied = await copyText(url);
-    setShare({ role: v.role, url, copied });
+    setShare({ key: viewKey(v), url, copied });
     track('cta_click', { cta: 'share_role', action: 'landing.shareRole', section: section.id, role: v.role, role_kind: v.kind, copied });
     // Focus and select either way: it confirms what was copied, and it is the whole fallback when the copy failed.
     window.setTimeout(() => { urlRef.current?.focus(); urlRef.current?.select(); }, 0);
     return copied ? `copied the ${v.role} view link` : `the ${v.role} view link is selected, press Ctrl/Cmd+C`;
   };
+  /** By name ("owner") or by key ("life-owner"), so both owner cards are reachable by voice. */
+  const findView = (role: string) => { const r = String(role).toLowerCase(); const byKey = views.findIndex((v) => viewKey(v).toLowerCase() === r); return byKey >= 0 ? byKey : views.findIndex((v) => v.role.toLowerCase() === r); };
   const shareByName = async (role: string) => {
-    const i = views.findIndex((v) => v.role.toLowerCase() === String(role).toLowerCase());
+    const i = findView(role);
     if (i < 0) return `no role view for "${role}"`;
     focusCard(i);
     return shareRole(views[i]);
@@ -98,9 +102,9 @@ export function RoleViews({ section }: { section: Roles }) {
       </div>
       <ul className="lp-roles" ref={listRef} data-spatial="skip">
         {views.map((v, i) => {
-          const open = share?.role === v.role;
+          const open = share?.key === viewKey(v);
           return (
-            <li key={`${v.kind}-${v.role}`} className="lp-role-item">
+            <li key={viewKey(v)} className="lp-role-item">
               <Card
                 className={`lp-role ${i === active ? 'is-active' : ''}`}
                 data-role-card=""

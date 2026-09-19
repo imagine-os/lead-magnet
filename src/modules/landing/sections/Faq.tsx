@@ -20,12 +20,12 @@ export function FaqSection({ section }: { section: Faq }) {
   const { bi } = useI18n();
   const { pageCode } = useLanding();
   const [open, setOpen] = useState<number[]>([0]);
-  const items = section.items.map((it) => ({ key: it.q.en, q: bi(it.q), a: bi(it.a) }));
+  const items = section.items.map((it) => ({ key: it.q.en, q: bi(it.q), a: bi(it.a), both: `${it.q.en} ${it.q.es}`.toLowerCase() }));
   const toggle = (i: number) => setOpen((o) => (o.includes(i) ? o.filter((x) => x !== i) : [...o, i]));
   useLiveActions(pageCode, {
     'landing.toggleFaq': (p) => {
       const q = String(p?.question ?? '').toLowerCase();
-      const i = items.findIndex((it) => it.q.toLowerCase().includes(q));
+      const i = items.findIndex((it) => it.both.includes(q)); // EN and ES: the vocabulary phrasing is English even on an ES page
       if (i < 0) return `no question matching "${q}"`;
       toggle(i);
       return items[i].a;

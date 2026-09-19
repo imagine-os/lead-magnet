@@ -64,8 +64,9 @@ export function useVoice({ lang, onResult, onError }: VoiceOptions): VoiceContro
       for (let i = e.resultIndex; i < e.results.length; i++) { text += e.results[i][0].transcript; if (e.results[i].isFinal) final = true; }
       text = text.trim(); setTranscript(text); cb.current.onResult(text, final);
     };
-    r.onerror = (e) => { const denied = e.error === 'not-allowed' || e.error === 'service-not-allowed'; setError(e.error); setState(denied ? 'denied' : 'idle'); cb.current.onError?.(e.error); };
-    r.onend = () => { setState((s) => (s === 'denied' ? s : 'idle')); rec.current = null; };
+    // Guards: an aborted previous instance still fires onerror / onend asynchronously and must not clobber the new session.
+    r.onerror = (e) => { if (rec.current !== r) return; const denied = e.error === 'not-allowed' || e.error === 'service-not-allowed'; setError(e.error); setState(denied ? 'denied' : 'idle'); cb.current.onError?.(e.error); };
+    r.onend = () => { if (rec.current !== r) return; setState((s) => (s === 'denied' ? s : 'idle')); rec.current = null; };
     try { r.start(); return true; } catch (e) { setError(String((e as Error).message ?? e)); setState('idle'); return false; }
   }, [lang, state]);
 

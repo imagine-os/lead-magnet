@@ -22,6 +22,8 @@ import './CommandPalette.css';
 
 /** A voice match this confident, this far ahead of the runner-up and with every slot filled runs without a click. */
 const AUTO_RUN_SCORE = 0.8; const AUTO_RUN_GAP = 0.15;
+/** Rows shown after the permission filter; matching asks for more so a role's hidden actions do not consume the slots. */
+const SHOW = 12; const MATCH_LIMIT = 64;
 const toEntry = (t: Tool): VoiceVocabularyEntry => ({ phrase: t.intent, action: t.name, slots: t.params, pages: t.hosts.map((h) => h.code), permission: t.permission ?? null });
 const MicIcon = ({ on }: { on: boolean }) => <Icon name="mic" size={18} stroke={2} className={`cmdp-mic ${on ? 'is-on' : ''}`} />;
 
@@ -29,8 +31,10 @@ const MicIcon = ({ on }: { on: boolean }) => <Icon name="mic" size={18} stroke={
  * The command palette (T46): every declared action is reachable by a typed or spoken phrase. Ctrl/Cmd+K, the TopBar
  * "Commands" button, the hub's Commands / Speak buttons and the `hub.openCommands` / `hub.voiceListen` actions open the
  * one instance `ControlBridge` mounts on every shell. Matching is `matchPhrase` over the live WebMCP tool set (same data as
- * `window.__leadmagnet.vocabulary`), role-gated with `can(permission)`; running goes through `runAction`, so the palette,
- * the CLI and an agent share one path. The microphone never starts on its own (useVoice.start needs a user gesture).
+ * `window.__leadmagnet.vocabulary`), role-gated with `can(permission)` BEFORE the list is cut to 12, so a guest's slots are
+ * never spent on staff-only actions; running goes through `runAction`, so the palette, the CLI and an agent share one path.
+ * The microphone never starts on its own: a `voice` request only starts it when it carries `fromGesture` (the visible
+ * buttons and the shortcut), and `useVoice.start` checks `navigator.userActivation` as well.
  */
 export function CommandPalette() {
   const palette = usePaletteState();
@@ -49,16 +53,17 @@ export function CommandPalette() {
   const focusMic = () => micWrap.current?.querySelector<HTMLElement>('button')?.focus();
 
   useEffect(() => onToolsChange(() => setTools([...getTools()])), []);
-  useEffect(() => { const onKey = (e: KeyboardEvent) => { if (isPaletteShortcut(e)) { e.preventDefault(); togglePalette(); } }; window.addEventListener('keydown', onKey); return () => window.removeEventListener('keydown', onKey); }, []);
+  useEffect(() => { const onKey = (e: KeyboardEvent) => { if (isPaletteShortcut(e) && e.isTrusted) { e.preventDefault(); togglePalette(); } }; window.addEventListener('keydown', onKey); return () => window.removeEventListener('keydown', onKey); }, []);
 
   const pageCode = useMemo(() => getRoutes().find((r) => matchPath({ path: r.path, end: true }, pathname))?.spec.code, [pathname]);
   const vocabulary = useMemo(() => tools.map(toEntry), [tools]);
   const matches = useMemo<Match[]>(() => {
-    if (query.trim()) return matchPhrase(query, vocabulary, { lang, page: pageCode, route: pathname, live: isLive, limit: 12 });
+    if (query.trim()) return matchPhrase(query, vocabulary, { lang, page: pageCode, route: pathname, live: isLive, limit: MATCH_LIMIT });
     return vocabulary.filter((v) => isLive(v.action)).map((entry) => ({ entry, action: entry.action, score: 1, params: {}, missing: Object.keys(entry.slots), sources: {}, phraseFilled: entry.phrase, onPage: true, live: true, coverage: 1 }));
   }, [query, vocabulary, lang, pageCode, pathname]);
-  const allowed = useMemo(() => matches.filter((m) => !m.entry.permission || can(m.entry.permission as Permission)), [matches, can]);
-  const hidden = matches.length - allowed.length;
+  const permitted = useMemo(() => matches.filter((m) => !m.entry.permission || can(m.entry.permission as Permission)), [matches, can]);
+  const allowed = useMemo(() => (query.trim() ? permitted.slice(0, SHOW) : permitted), [permitted, query]);
+  const hidden = matches.length - permitted.length;
   const current = allowed[Math.min(selected, Math.max(0, allowed.length - 1))];
   const currentTool = current ? tools.find((x) => x.name === current.action) : undefined;
   const slots = current ? Object.entries(current.entry.slots) : [];
@@ -87,12 +92,13 @@ export function CommandPalette() {
     onError: (code) => setNotice(code === 'not-allowed' || code === 'service-not-allowed' ? t('control.denied') : code),
   });
 
-  // Open / voice requests from the store: focus the input, and start listening only inside a user gesture.
+  // Open / voice requests from the store: focus the input, and start listening only when the request came from a UI gesture
+  // (an agent / CLI run of hub.voiceListen opens the palette with the microphone button focused instead).
   useEffect(() => {
     if (!palette.open) return;
     setQuery(palette.query); setResult(null); setNotice(null);
     const id = window.setTimeout(() => {
-      if (palette.voice) { if (!voice.start()) { focusMic(); setNotice(voice.state === 'unsupported' ? t('control.unsupported') : voice.state === 'denied' ? t('control.denied') : t('control.gesture')); } }
+      if (palette.voice) { if (!palette.fromGesture || !voice.start()) { focusMic(); setNotice(voice.state === 'unsupported' ? t('control.unsupported') : voice.state === 'denied' ? t('control.denied') : t('control.gesture')); } }
       else inputRef.current?.focus();
     }, 0);
     return () => window.clearTimeout(id);

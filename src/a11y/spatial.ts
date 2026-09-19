@@ -11,11 +11,13 @@ const ARROW_OWNERS = 'input, select, textarea, [contenteditable="true"], [role="
 const HORIZONTAL_OWNERS = '[role="tablist"], [role="radiogroup"], [role="menubar"]';
 const VERTICAL_OWNERS = '[role="listbox"], [role="menu"], [role="tree"]';
 const NON_TEXT_INPUTS = new Set(['button', 'submit', 'reset', 'checkbox', 'radio', 'file', 'image', 'color']);
+/** Inputs whose native Up / Down do work (spinner, date / time segments, slider): they own all four arrows like a textarea. */
+const STEPPING_INPUTS = new Set(['number', 'date', 'time', 'datetime-local', 'month', 'week', 'range']);
 const isHorizontal = (dir?: Direction) => dir === 'left' || dir === 'right';
 
 /**
  * Does `el` (or an ancestor) own the arrow key `dir`? Text fields own Left / Right (caret) but not Up / Down (a single-line input
- * does nothing with them); textareas, selects, sliders, combos, grids, iframes and `[data-spatial="skip"]` own all four;
+ * does nothing with them); number / date / time / range inputs step with Up / Down and own all four; textareas, selects, sliders, combos, grids, iframes and `[data-spatial="skip"]` own all four;
  * horizontal composites (tablist, radiogroup, menubar) own Left / Right only, vertical ones (listbox, menu, tree) Up / Down only.
  * Without `dir` (Enter / Space / Backspace) any owner counts.
  */
@@ -26,7 +28,7 @@ export function consumesArrows(el: Element | null, dir?: Direction): boolean {
   if (dir == null) return !(el instanceof HTMLInputElement && NON_TEXT_INPUTS.has(el.type) && !el.closest('[data-spatial="skip"], [role="radiogroup"]'));
   if (el instanceof HTMLInputElement) {
     if (NON_TEXT_INPUTS.has(el.type)) return !!el.closest('[data-spatial="skip"]') || (!!el.closest('[role="radiogroup"]') && isHorizontal(dir));
-    if (el.closest('[data-spatial="skip"]')) return true;
+    if (el.closest('[data-spatial="skip"]') || STEPPING_INPUTS.has(el.type)) return true;
     return isHorizontal(dir); // single-line text field: Up / Down leave it
   }
   if (owner.matches(HORIZONTAL_OWNERS) && !owner.closest('[data-spatial="skip"]') && !el.closest('select, textarea, [contenteditable="true"], iframe')) return isHorizontal(dir);

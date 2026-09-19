@@ -43,7 +43,7 @@ export function HubPage() {
   const root = useRef<HTMLDivElement>(null); const spatial = useSpatialNav(root); useGamepadNav(spatial); const tv = useViewportAtLeast(1920); // P-04: arrows / d-pad move focus on the hub
   const built = routes.filter((r) => routeStatus(r) === 'built').length;
   const done = tasks.filter((x) => x.status === 'done').length;
-  useActions('HUB-01', { 'hub.setLang': (p) => setLang((p?.lang as 'en' | 'es') ?? 'en'), 'hub.toggleTheme': () => toggleTheme(), 'hub.toggleDevMode': () => setDevMode(!devMode), 'hub.switchUser': (p) => switchUser(String(p?.role ?? 'guest')), 'hub.openSurface': (p) => nav(String(p?.surface ?? '/')), 'hub.resetDemoData': () => data.reset?.(), 'hub.openCommands': (p) => { openPalette({ query: p?.query == null ? '' : String(p.query) }); return { ok: true, open: true }; }, 'hub.voiceListen': () => { openPalette({ voice: true }); return { ok: true, open: true, voice: true }; } });
+  useActions('HUB-01', { 'hub.setLang': (p) => setLang((p?.lang as 'en' | 'es') ?? 'en'), 'hub.toggleTheme': () => toggleTheme(), 'hub.toggleDevMode': () => setDevMode(!devMode), 'hub.switchUser': (p) => switchUser(String(p?.role ?? 'guest')), 'hub.openSurface': (p) => nav(String(p?.surface ?? '/')), 'hub.resetDemoData': () => data.reset?.(), 'hub.openCommands': (p) => { openPalette({ query: p?.query == null ? '' : String(p.query) }); return { ok: true, open: true }; }, 'hub.voiceListen': () => { openPalette({ voice: true }); return { ok: true, open: true, voice: true, note: 'the microphone starts only from a UI gesture: the palette is open with the Speak button focused' }; } });
   const firstProspect = prospects[0];
   const surfaces: { to: string; icon: IconName; title: string; body: string; code: string }[] = [
     { to: '/studio', icon: 'sparkles', title: t('hub.studio'), body: t('hub.studio_body'), code: 'S-01' }, { to: '/admin', icon: 'chart', title: t('hub.admin'), body: t('hub.admin_body'), code: 'A-01' }, { to: '/plan', icon: 'kanban', title: t('hub.plan'), body: t('hub.plan_body'), code: 'K-01' },
@@ -55,7 +55,7 @@ export function HubPage() {
       <div className="hub-brand"><span className="shell-mark" aria-hidden>LM</span><div><div className="hub-title font-display">Lead Magnet</div><div className="xs muted">{t('hub.tagline')} · v{__APP_VERSION__}</div></div></div>
       <div className="row wrap hub-controls">
         <Button variant="outline" icon="search" onClick={() => openPalette()} title={t('control.shortcut')}>{t('control.open')}</Button>
-        <Button variant="outline" icon="mic" onClick={() => openPalette({ voice: true })}>{t('control.speak')}</Button>
+        <Button variant="outline" icon="mic" onClick={(e) => openPalette({ voice: true, fromGesture: e.isTrusted })}>{t('control.speak')}</Button>
         <LangToggle />
         <IconButton icon={theme === 'dark' ? 'sun' : 'moon'} label={theme === 'dark' ? t('hub.light') : t('hub.dark')} variant="outline" onClick={toggleTheme} />
         {isSuperAdmin && <Toggle checked={devMode} onChange={setDevMode} label={t('hub.devmode')} />}

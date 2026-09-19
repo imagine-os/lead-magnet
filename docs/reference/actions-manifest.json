@@ -5,7 +5,7 @@
  "generated": "2026-09-19",
  "source": "scripts/actions.mjs export (compiled PageSpec.actions)",
  "routes": 51,
- "declared": 227,
+ "declared": 230,
  "tools": [
   {
    "name": "admin.applyRecommendation",
@@ -2267,7 +2267,7 @@
   },
   {
    "name": "landing.toggleFaq",
-   "description": "answer {question} — \"Open a question\" on L-01 (any role)",
+   "description": "answer {question} — \"Open a question\" on L-01, L-02, L-03, L-04 (any role)",
    "label": "Open a question",
    "intent": "answer {question}",
    "permission": null,
@@ -2286,6 +2286,21 @@
     {
      "code": "L-01",
      "path": "/p/:slug",
+     "status": "built"
+    },
+    {
+     "code": "L-02",
+     "path": "/p/:slug/audit",
+     "status": "built"
+    },
+    {
+     "code": "L-03",
+     "path": "/p/:slug/story",
+     "status": "built"
+    },
+    {
+     "code": "L-04",
+     "path": "/p/:slug/letter",
      "status": "built"
     }
    ]

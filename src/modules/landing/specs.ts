@@ -57,30 +57,30 @@ export const revealSpec: PageSpec = defineSpec({
 export const auditSpec: PageSpec = defineSpec({
   ...COMMON, code: 'L-02', name: 'Savings audit landing',
   purpose: 'Leads with money: the tool stack we think they pay for, pre-checked, corrected with one tap per line, and a savings counter that moves as they answer. A number they can correct beats a number they must believe.',
-  layout: ['top bar', 'hero (money headline)', 'stack_audit (Yes / No / undo per tool, live counter)', 'savings_stack', 'role_views', 'proof', 'cta_band', 'booking_inline', 'sticky CTA (phone)', 'exit intent modal'],
+  layout: ['top bar', 'hero (money headline)', 'stack_audit (Yes / No / undo per tool, live counter)', 'savings_stack', 'role_views', 'proof', 'faq (composed questions + four switching objections)', 'cta_band', 'booking_inline', 'sticky CTA (phone)', 'exit intent modal'],
   logic: [...MECHANICS, 'each answer writes stack_guesses.status by id through the provider and a form_submit event; savings() recomputes from the live rows, never from the snapshot', 'pressing the answer a row already carries returns it to `guessed` (form_submit with undo: true), so a mis-tap is never permanent'],
   components: ['Stat', 'Button', 'Badge', 'Card', 'DeviceMockup', 'Modal', 'LangToggle', 'Placeholder'],
-  actions: [confirmTool, rejectTool, resetTool, openDemo, bookCall, saveWorkspace, setLang, viewRole, tryAsRole, shareRole, seeCase, pickSlot],
+  actions: [confirmTool, rejectTool, resetTool, openDemo, bookCall, saveWorkspace, setLang, viewRole, tryAsRole, shareRole, toggleFaq, seeCase, pickSlot],
   rules: ['R-C01', 'R-C02', 'R-C03', 'R-C04', 'R-C05', 'R-C06', 'R-L01', 'R-L02', 'R-L03', 'R-L04', 'R-L05', 'R-L06', 'R-L07', 'R-L08', 'R-L09'],
 });
 
 export const walkthroughSpec: PageSpec = defineSpec({
   ...COMMON, code: 'L-03', name: 'Walkthrough landing',
   purpose: 'A pinned day-in-the-life story: 7:10 to 21:00 at their business, one scene per role, the device screen changing as you scroll - and prev / next buttons so the story is never scroll-only.',
-  layout: ['top bar', 'hero (story headline)', 'walkthrough_steps (pinned device, progress rail, prev / next)', 'role_views', 'savings_stack', 'cta_band ("Make it next Tuesday")', 'booking_inline', 'sticky CTA (phone)'],
+  layout: ['top bar', 'hero (story headline)', 'walkthrough_steps (pinned device, progress rail, prev / next)', 'role_views', 'savings_stack', 'faq (composed questions + four switching objections)', 'cta_band ("Make it next Tuesday")', 'booking_inline', 'sticky CTA (phone)'],
   logic: [...MECHANICS, 'an IntersectionObserver band at the middle of the viewport sets the active step; prev / next set the same state and scroll to it, so keyboard, remote and reduced motion all work', 'the pinned laptop plays the desktop frame sequence (public/frames/<id>/desk-NN.jpg) mapped from the active step, falling back to the live <MiniOs> composition when no sequence was generated'],
   components: ['DeviceMockup', 'Card', 'Button', 'Stat', 'Modal', 'LangToggle'],
-  actions: [goToStep, openDemo, bookCall, saveWorkspace, setLang, viewRole, tryAsRole, shareRole, correctStack, pickSlot],
+  actions: [goToStep, openDemo, bookCall, saveWorkspace, setLang, viewRole, tryAsRole, shareRole, correctStack, toggleFaq, pickSlot],
   rules: ['R-C01', 'R-C02', 'R-C04', 'R-C05', 'R-C06', 'R-L01', 'R-L02', 'R-L03', 'R-L04', 'R-L05', 'R-L07', 'R-L08', 'R-L09'],
 });
 
 export const letterSpec: PageSpec = defineSpec({
   ...COMMON, code: 'L-04', name: 'Letter landing',
   purpose: 'For hot and referred prospects: a short personal note over their own app, one primary CTA, the calendar underneath. The voice note is a Placeholder until it is really recorded.',
-  layout: ['top bar', 'letter (greeting, 3 paragraphs, signoff, sender)', 'hero_reveal (their app behind it)', 'cta_band', 'booking_inline', 'sticky CTA (phone)'],
+  layout: ['top bar', 'letter (greeting, 3 paragraphs, signoff, sender)', 'hero_reveal (their app behind it)', 'faq (four switching objections)', 'cta_band', 'booking_inline', 'sticky CTA (phone)'],
   logic: [...MECHANICS, 'no fabricated audio: the voice note is a Placeholder (P-09) until the content pass records one'],
   components: ['Avatar', 'DeviceMockup', 'Button', 'Placeholder', 'Modal', 'LangToggle'],
-  actions: [openDemo, bookCall, saveWorkspace, setLang, playLetter, pickSlot],
+  actions: [openDemo, bookCall, saveWorkspace, setLang, playLetter, toggleFaq, pickSlot],
   rules: ['R-C01', 'R-C02', 'R-C04', 'R-C05', 'R-C06', 'R-L01', 'R-L02', 'R-L04', 'R-L05', 'R-L08', 'R-L09'],
 });
 

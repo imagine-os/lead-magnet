@@ -210,17 +210,23 @@ export function useExitIntent(onFire: () => void, enabled: boolean) {
   useEffect(() => {
     if (!enabled) return;
     try { if (sessionStorage.getItem(EXIT_KEY) === '1') return; } catch { /* private mode */ }
-    const fire = () => {
+    // The coarse-pointer back gesture is caught with a pushed history entry; when the intent fires another way (idle, flick)
+    // or the page unmounts, that entry is popped again so Back never needs pressing twice.
+    const ours = () => { try { return (history.state as { lm?: string } | null)?.lm === 'exit'; } catch { return false; } };
+    let pushed = false;
+    const consumeEntry = () => { if (pushed && ours()) { pushed = false; try { history.back(); } catch { /* ignore */ } } };
+    const fire = (viaPop = false) => {
       if (fired.current) return;
       fired.current = true;
+      if (viaPop) pushed = false; else consumeEntry();
       try { sessionStorage.setItem(EXIT_KEY, '1'); } catch { /* private mode */ }
       cb.current();
     };
     const coarse = (() => { try { return window.matchMedia('(pointer: coarse)').matches; } catch { return false; } })();
     const onMouseOut = (e: MouseEvent) => { if (!e.relatedTarget && e.clientY <= 4) fire(); };
     let idle = 0;
-    const resetIdle = () => { window.clearTimeout(idle); idle = window.setTimeout(fire, 45000); };
-    const onPop = () => { fire(); };
+    const resetIdle = () => { window.clearTimeout(idle); idle = window.setTimeout(() => fire(), 45000); };
+    const onPop = () => { if (pushed) { pushed = false; fire(true); } };
 
     // Fast scroll-up intent (touch). Sampled on scroll, so it costs nothing and needs no touch listeners.
     let lastY = window.scrollY, lastT = performance.now(), ups = 0;
@@ -235,7 +241,7 @@ export function useExitIntent(onFire: () => void, enabled: boolean) {
     };
 
     if (coarse) {
-      try { history.pushState({ lm: 'exit' }, ''); } catch { /* ignore */ }
+      try { history.pushState({ lm: 'exit' }, ''); pushed = true; } catch { /* ignore */ }
       window.addEventListener('popstate', onPop);
       window.addEventListener('scroll', onScrollUp, { passive: true });
       for (const ev of ['touchstart', 'scroll', 'keydown'] as const) window.addEventListener(ev, resetIdle, { passive: true });
@@ -249,6 +255,7 @@ export function useExitIntent(onFire: () => void, enabled: boolean) {
       window.removeEventListener('scroll', onScrollUp);
       for (const ev of ['touchstart', 'scroll', 'keydown'] as const) window.removeEventListener(ev, resetIdle);
       window.clearTimeout(idle);
+      consumeEntry();
     };
   }, [enabled]);
 }

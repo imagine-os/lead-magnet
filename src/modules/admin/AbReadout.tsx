@@ -41,7 +41,9 @@ export function AbReadout({ pages, events, prospectById, slug, onSlug }: { pages
   const promotable = readout?.verdict === 'leader' && readout.leader === 'B' && !!bSide;
 
   /** R-A03 / D-044: the recommendation becomes a row (proposed) - promoting B is a separate, human act. */
-  async function recordWinner(): Promise<string> {
+  const inFlight = useRef<Promise<string> | null>(null);
+  const recordWinner = (): Promise<string> => { if (inFlight.current) return inFlight.current; const p = recordWinnerOnce().finally(() => { inFlight.current = null; }); inFlight.current = p; return p; };
+  async function recordWinnerOnce(): Promise<string> {
     if (!readout || !promotable || !bSide) return 'no recommendation to record';
     if (onFile) return onFile.id;
     const a = readout.sides.find((s) => s.variant === 'A');

@@ -72,7 +72,7 @@ export function ProspectsPage() {
         city: f.city.trim(), country: 'US', lang: f.lang, website: null, team_size: Math.max(1, Number(f.team_size) || 1), locations: 1,
         revenue_band: 'lt250k', warmth: f.warmth, source: f.source, style: defaultStyle(),
         business_roles: cat.business_roles.slice(0, 4), life_roles: cat.life_roles.slice(0, 4), known_tools: [],
-        confidence: computeConfidence(fields_known), fields_known, notes: '', logo_url: null, photo_url: null,
+        confidence: computeConfidence(fields_known, { industry: f.industry }), fields_known, notes: '', logo_url: null, photo_url: null,
       };
       const created = await data.insert<ProspectRow>('prospects', row);
       for (const g of guessStack(created)) await data.insert('stack_guesses', { prospect_id: created.id, ...g });

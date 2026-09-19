@@ -157,7 +157,19 @@ const isStop = (t: string, lang: VoiceLang) => STOP_EN.has(t) || (lang === 'es' 
 
 // --- extraction ------------------------------------------------------------------------------------------------
 /** Quoted spans in the ORIGINAL phrase ("Paws & Play", 'x', «x»), in order. */
-export function quoted(phrase: string): string[] { return [...phrase.matchAll(/["«]([^"»]+)["»]|'([^']+)'/g)].map((m) => (m[1] ?? m[2]).trim()).filter(Boolean); }
+export function quoted(phrase: string): string[] { return [...phrase.matchAll(/["«]([^"»]+)["»]|(?:^|[\s(])'([^']+)'(?=$|[\s).,!?])/g)].map((m) => (m[1] ?? m[2]).trim()).filter(Boolean); }
+/** Known id prefixes -> the slot they fill (`pro_maya` -> prospect, `pg_maya` -> page, `T45` -> task); unknown prefixes only fill a slot whose name starts with them. */
+const ID_KIND: Record<string, string> = { pro: 'prospect', pg: 'page', t: 'task', d: 'decision', sg: 'guess', ev: 'event', bk: 'booking', fb: 'feedback', rec: 'recommendation', tch: 'touch', as: 'asset', th: 'thread', pay: 'payment', usr: 'user' };
+const idPrefix = (id: string) => id.split(/[_-]/)[0].replace(/\d+$/, '').toLowerCase();
+/** The route id that fits an id-typed slot by name: a known prefix wins, then a slot name that starts with the prefix; `id` (generic) takes the last id; otherwise none. */
+export function routeIdFor(slot: string, ids: string[]): string | null {
+  const base = slot.replace(/Id$/, '').toLowerCase();
+  if (!ids.length) return null;
+  if (base === 'id') return ids[ids.length - 1];
+  const known = ids.find((id) => ID_KIND[idPrefix(id)] === base); if (known) return known;
+  const loose = ids.find((id) => { const p = idPrefix(id); return p.length >= 2 && !ID_KIND[p] && base.startsWith(p); }); if (loose) return loose;
+  return null;
+}
 /** Ids present in a hash route: `/studio/prospects/pro_maya` -> ['pro_maya']; `/plan/tasks/T45` -> ['T45']. */
 export function routeIds(route?: string): string[] { return (route ?? '').replace(/^#/, '').split('?')[0].split('/').filter((seg) => ID_RE.test(seg) || /^[a-z0-9]+(?:-[a-z0-9]+){2,}$/i.test(seg)); }
 const enumValues = (type: string) => (type.startsWith('enum:') ? type.slice(5).split('|') : null);
@@ -220,7 +232,7 @@ function extractSlot(name: string, type: string, span: string[] | undefined, raw
     if (anywhere) return { value: anywhere, source: 'phrase' };
     const ids = routeIds(route);
     const deictic = rawAll.some((t) => DEICTIC.has(t.toLowerCase()));
-    if (ids.length && (deictic || content.length === 0)) { const pick = ids.find((id) => new RegExp(name.replace(/Id$/, ''), 'i').test(id.split('_')[0]) ) ?? ids[ids.length - 1]; return { value: pick, source: 'route' }; }
+    if (ids.length && (deictic || content.length === 0)) { const pick = routeIdFor(name, ids); if (pick) return { value: pick, source: 'route' }; }
     const q = quotes.findIndex((_, i) => !usedQuotes.has(i)); if (q >= 0) { usedQuotes.add(q); return { value: quotes[q], source: 'quoted' }; }
     return null;
   }

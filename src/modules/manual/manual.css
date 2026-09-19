@@ -1,0 +1,78 @@
+/* Module `manual` (M-01..M-05). Tokens only; phone (360) to 4K TV (3840); prints as a document. */
+
+.mn-page { max-width: min(var(--w-content), 100%); }
+.mn-head { display: flex; flex-direction: column; gap: var(--sp-2); padding-bottom: var(--sp-4); border-bottom: 1px solid var(--color-border-subtle); }
+.mn-head-top { gap: var(--sp-2); align-items: center; flex-wrap: wrap; }
+.mn-head h1 { margin: 0; }
+.mn-summary { margin: 0; color: var(--color-text-secondary); font-size: var(--fs-lg); line-height: var(--lh-body); max-width: 62ch; }
+.mn-meta { margin: 0; }
+.mn-warn { color: var(--status-blocked-fg, var(--color-warn)); }
+.mn-h2 { margin: 0; font-size: var(--fs-xl); }
+
+/* ---- chapter navigation ---- */
+.mn-nav { gap: var(--sp-3); flex-wrap: wrap; position: sticky; top: 0; z-index: 3; padding: var(--sp-2) 0; background: var(--color-bg); }
+.mn-nav-left, .mn-nav-right { gap: var(--sp-2); align-items: center; flex-wrap: wrap; }
+.mn-langhint { white-space: nowrap; }
+.mn-switch { min-width: 220px; max-width: 420px; height: var(--h-control-sm); }
+.mn-nav-gap { display: none; }
+.mn-footnav { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); margin-top: var(--sp-6); padding-top: var(--sp-4); border-top: 1px solid var(--color-border-subtle); }
+.mn-footnav-link { display: flex; flex-direction: column; gap: var(--sp-1); min-height: 44px; padding: var(--sp-3); border: 1px solid var(--color-border); border-radius: var(--r-lg); color: var(--color-heading); }
+.mn-footnav-link:hover, .mn-footnav-link:focus-visible { background: var(--color-surface-tint); text-decoration: none; }
+.mn-footnav-link.is-next { text-align: right; align-items: flex-end; }
+
+/* ---- chapter body ---- */
+.mn-body { display: flex; flex-direction: column; gap: var(--sp-5); }
+.mn-body .prose { max-width: 72ch; }
+.mn-body .prose > :first-child { margin-top: 0; }
+.mn-body .prose > :last-child { margin-bottom: 0; }
+
+/* ---- live-data blocks (R-M01) ---- */
+.mn-live { margin: 0; display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-4); border: 1px solid var(--color-border); border-left: 3px solid var(--color-primary); border-radius: var(--r-lg); background: var(--color-surface-2); }
+.mn-live-cap { color: var(--color-label); }
+.mn-live-unknown { border-left-color: var(--color-warn); }
+.mn-stats { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--sp-3); }
+
+/* ---- figures ---- */
+.mn-figure { margin: 0; display: flex; flex-direction: column; gap: var(--sp-2); }
+.mn-figure img { width: 100%; height: auto; border-radius: var(--r-lg); border: 1px solid var(--color-border); display: block; }
+.mn-figure figcaption { color: var(--color-text-muted); display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+.mn-figure-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sp-2); min-height: 180px; padding: var(--sp-5); border: 2px dashed var(--color-border-strong); border-radius: var(--r-lg); color: var(--color-text-muted); background: var(--color-surface-2); text-align: center; }
+
+/* ---- open decisions ---- */
+.mn-decision { border-left: 3px solid var(--color-warn); display: flex; flex-direction: column; gap: var(--sp-2); }
+.mn-decision-head { gap: var(--sp-2); align-items: center; flex-wrap: wrap; }
+.mn-decision p { margin: 0; }
+
+/* ---- M-01 index ---- */
+.mn-index { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--sp-4); align-items: start; }
+.mn-index-card { display: flex; flex-direction: column; gap: var(--sp-2); }
+.mn-index-top { gap: var(--sp-2); align-items: center; }
+.mn-index-title { margin: 0; font-size: var(--fs-lg); line-height: var(--lh-title); }
+.mn-index-title a { color: var(--color-heading); }
+.mn-index-card p { margin: 0; }
+.mn-all { gap: var(--sp-10); }
+.mn-allchapter { display: flex; flex-direction: column; gap: var(--sp-5); }
+
+@media (max-width: 680px) {
+  .mn-footnav { grid-template-columns: 1fr; }
+  .mn-footnav-link.is-next { text-align: left; align-items: flex-start; }
+  .mn-nav { position: static; }
+  .mn-langhint { white-space: nowrap; }
+.mn-switch { min-width: 0; width: 100%; }
+  .mn-nav-left { width: 100%; }
+}
+@media (min-width: 1920px) { .mn-page { max-width: min(var(--w-content-wide), 100%); } .mn-body .prose { max-width: 80ch; } }
+@media (min-width: 2560px) { .mn-body { gap: var(--sp-8); } }
+
+/* ---- print: the manual is a document (P-12) ---- */
+@media print {
+  .mn-nav, .mn-footnav { display: none !important; }
+  .mn-page { max-width: none; padding: 0; }
+  .mn-live { break-inside: avoid; background: none; border-color: #999; }
+  .mn-figure, .mn-decision, .mn-index-card { break-inside: avoid; }
+  .mn-figure-empty { display: none; }
+  .mn-allchapter { break-before: page; }
+  .mn-allchapter:first-child { break-before: auto; }
+  .mn-head { border-bottom: 1px solid #999; }
+  .mn-body .prose { max-width: none; }
+}

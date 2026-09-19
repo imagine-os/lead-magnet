@@ -7,7 +7,7 @@ export function Modal({ open, onClose, title, children, footer, size = 'md' }: M
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => { const d = ref.current; if (!d) return; if (open && !d.open) d.showModal(); if (!open && d.open) d.close(); }, [open]);
   useEffect(() => { const d = ref.current; if (!d) return; const onCancel = (e: Event) => { e.preventDefault(); onClose(); }; d.addEventListener('cancel', onCancel); return () => d.removeEventListener('cancel', onCancel); }, [onClose]);
-  return (<dialog ref={ref} className={`modal modal-${size}`} aria-labelledby="modal-title" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+  return (<dialog ref={ref} data-component="Modal" role="dialog" aria-modal="true" className={`modal modal-${size}`} aria-labelledby="modal-title" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
     <div className="modal-box"><header className="modal-head"><h2 id="modal-title">{title}</h2><IconButton icon="close" label="Close" onClick={onClose} /></header><div className="modal-body">{children}</div>{footer && <footer className="modal-foot">{footer}</footer>}</div>
   </dialog>);
 }

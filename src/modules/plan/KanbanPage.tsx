@@ -64,7 +64,7 @@ export function KanbanPage() {
   return (<div className="container container-wide page stack">
     <div className="page-head">
       <div className="stack-sm"><h1>K-01 · {t('plan.k01_title')}</h1><p className="muted small">{t('plan.tagline')}</p></div>
-      <nav className="row wrap xs" aria-label={t('plan.views')}><Link to="/plan/list">{t('plan.view_list')}</Link><span className="faint">·</span><Link to="/plan/timeline">{t('plan.view_timeline')}</Link></nav>
+      <nav className="pl-views row wrap xs" aria-label={t('plan.views')}><Link to="/plan/list">{t('plan.view_list')}</Link><span className="faint">·</span><Link to="/plan/timeline">{t('plan.view_timeline')}</Link></nav>
     </div>
 
     <div className="grid grid-4 pl-stats">

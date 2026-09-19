@@ -14,7 +14,7 @@ export function PageStub({ spec }: { spec: PageSpec }) {
   const { devMode } = useSession();
   const rules = rulesForPage(spec.code);
   const by = spec.notes?.find((n) => n.startsWith('Built by')) ?? '';
-  return (<div className="container page"><Card className="stub" padding="lg">
+  return (<div className="container page"><Card data-component="PageStub" className="stub" padding="lg">
     <div className="row wrap"><code className="stub-code">{spec.code}</code><Badge status="stub">Coming soon</Badge><span className="xs faint">{surfaceOfCode(spec.code)}</span></div>
     <h1 className="stub-title">{spec.name}</h1>
     <p className="muted">{spec.purpose}</p>

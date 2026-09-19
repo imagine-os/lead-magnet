@@ -11,7 +11,7 @@ export interface TopBarProps { title?: string; onMenu?: () => void }
 /** Staff top bar: menu (narrow), title, language, theme, user. */
 export function TopBar({ title, onMenu }: TopBarProps) {
   const { user, role, viewAs, devMode } = useSession(); const { theme, toggleTheme } = useTheme();
-  return (<header className="topbar">
+  return (<header data-component="TopBar" className="topbar">
     {onMenu && <IconButton icon="menu" label="Open menu" onClick={onMenu} />}
     {title && <h1 className="topbar-title">{title}</h1>}
     <div className="grow" />

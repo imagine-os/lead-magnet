@@ -5,16 +5,24 @@
 .dt td:first-child { white-space: nowrap; }
 .dt tbody tr:nth-child(even) td { background: var(--color-table-zebra); }
 .dt tr.is-clickable { cursor: pointer; } .dt tr.is-clickable:hover td { background: var(--color-surface-tint); }
-.dt-rowlink { color: inherit; font-weight: var(--fw-medium); }
+/* Row link: the anchor is the first cell's text, its ::after stretches over the whole row so the row is one target,
+   and the anchor's own box is the full row height (44 px, P-03). Any cell that holds a control of its own (button, link,
+   input, select) is lifted above that overlay, so a per-row action is clickable by mouse, touch and pen without the page
+   adding a z-index wrapper. */
+.dt-rowlink { display: inline-flex; align-items: center; min-height: var(--h-row); min-width: 44px; color: inherit; font-weight: var(--fw-medium); }
 .dt-rowlink::after { content: ''; position: absolute; inset: 0; }
 .dt tbody tr { position: relative; }
+.dt td:first-child:has(> .dt-rowlink) { padding-block: 0; }
+.dt td:has(button, a:not(.dt-rowlink), input, select, textarea, [role="button"]) { position: relative; z-index: 1; }
 .is-dense .dt td { height: 36px; padding: 4px var(--sp-3); }
+.is-dense .dt-rowlink { min-height: 36px; }
 @media (max-width: 768px) {
   .dt thead { display: none; }
   .dt, .dt tbody, .dt tr, .dt td { display: block; width: 100%; }
   .dt tr { padding: var(--sp-3) var(--sp-4); border-top: 1px solid var(--color-border); }
   .dt tr:first-child { border-top: 0; }
   .dt td { border: 0; height: auto; min-height: 0; padding: 4px 0; display: flex; justify-content: space-between; gap: var(--sp-3); text-align: right !important; }
+  .dt td:first-child:has(> .dt-rowlink) { padding-block: 0; }
   .dt td::before { content: attr(data-label); color: var(--color-label); font-size: var(--fs-xs); font-weight: var(--fw-semibold); text-align: left; flex: 0 0 40%; }
   .dt td.hide-card { display: none; }
   .dt tbody tr:nth-child(even) td { background: transparent; }

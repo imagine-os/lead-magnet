@@ -1,6 +1,11 @@
 /* T49 annotation pins. Tokens only. The layer is transparent to the pointer (R-F03); only pins and the bar take a click. */
 
-.annot-bar { position: fixed; right: var(--sp-4); bottom: calc(var(--sp-4) + 56px); z-index: 60; display: flex; align-items: center; gap: var(--sp-2); }
+/* --annot-lift is the height of whatever bottom bar the current page owns (FeedbackButton by default); a page with its own
+   sticky bar raises it below, so the toggle never sits on a CTA. */
+.annot-bar { --annot-lift: 56px; position: fixed; right: var(--sp-4); bottom: calc(var(--sp-4) + var(--annot-lift)); z-index: 60; display: flex; align-items: center; gap: var(--sp-2); }
+/* Landing pages (L-01..L-05) show a sticky CTA bar under 768 px (.lp-sticky.is-on, ~110 px); the bar and the hint clear it. */
+body:has(.lp-sticky.is-on) .annot-bar { --annot-lift: 124px; }
+body:has(.lp-sticky.is-on) .annot-hint { bottom: calc(var(--sp-4) + 116px); }
 .annot-toggle, .annot-count {
   display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2);
   min-height: 44px; min-width: 44px; padding: 0 var(--sp-3);
@@ -18,20 +23,21 @@
 
 /* pins: absolutely positioned in document space so they scroll with the page */
 .annot-layer { position: absolute; inset: 0; pointer-events: none; z-index: 55; }
+/* The pin button IS the 44 px target (P-03); the coloured 28 px dot is drawn by ::before behind the number. */
 .annot-pin {
-  position: absolute; pointer-events: auto; transform: translate(-50%, -50%);
-  width: 28px; height: 28px; min-width: 0; padding: 0; display: grid; place-items: center;
-  border-radius: var(--r-round); border: 2px solid var(--color-surface); background: var(--color-primary); color: var(--color-text-on-primary);
-  font: inherit; font-size: var(--fs-xs); font-weight: var(--fw-bold); font-variant-numeric: tabular-nums;
-  box-shadow: var(--shadow-md); cursor: pointer;
+  --pin-bg: var(--color-primary); --pin-size: 28px;
+  position: absolute; pointer-events: auto; transform: translate(-50%, -50%); isolation: isolate;
+  width: 44px; height: 44px; min-width: 0; padding: 0; display: grid; place-items: center;
+  border-radius: var(--r-round); border: 0; background: transparent; color: var(--color-text-on-primary);
+  font: inherit; font-size: var(--fs-xs); font-weight: var(--fw-bold); font-variant-numeric: tabular-nums; cursor: pointer;
 }
-/* the 44 px target lives in a transparent halo so the dot can stay small (P-03) */
-.annot-pin::before { content: ''; position: absolute; inset: -8px; border-radius: var(--r-round); }
-.annot-pin-bug { background: var(--color-danger); }
-.annot-pin-request { background: var(--color-warn); color: var(--color-ink); }
-.annot-pin-idea, .annot-pin-question { background: var(--color-accent); color: var(--color-accent-text); }
+.annot-pin::before { content: ''; position: absolute; z-index: -1; width: var(--pin-size); height: var(--pin-size); left: 50%; top: 50%; translate: -50% -50%; border-radius: var(--r-round); border: 2px solid var(--color-surface); background: var(--pin-bg); box-shadow: var(--shadow-md); }
+.annot-pin-bug { --pin-bg: var(--color-danger); }
+.annot-pin-request { --pin-bg: var(--color-warn); color: var(--color-ink); }
+.annot-pin-idea, .annot-pin-question { --pin-bg: var(--color-accent); color: var(--color-accent-text); }
 .annot-pin.is-done { opacity: .55; }
-.annot-pin.is-open, .annot-pin:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+.annot-pin.is-open::before, .annot-pin:focus-visible::before { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+.annot-pin:focus-visible { outline: none; }
 
 /* annotate mode: everything hoverable AND focusable is outlined, so this is not a hover-only affordance */
 body[data-annotating='true'] { cursor: crosshair; }
@@ -46,6 +52,6 @@ body[data-annotating='true'] { cursor: crosshair; }
 .annot-reply { padding: var(--sp-2) var(--sp-3); border-left: 3px solid var(--color-primary); background: var(--color-surface-2); border-radius: var(--r-sm); }
 .annot-ctx { word-break: break-all; }
 
-@media (max-width: 680px) { .annot-bar { right: var(--sp-3); bottom: calc(var(--sp-3) + 56px); } .annot-toggle-label, .annot-count-label { display: none; } }
-@media (min-width: 2560px) { .annot-pin { width: 36px; height: 36px; } }
+@media (max-width: 680px) { .annot-bar { right: var(--sp-3); bottom: calc(var(--sp-3) + var(--annot-lift)); } .annot-toggle-label, .annot-count-label { display: none; } }
+@media (min-width: 2560px) { .annot-pin { --pin-size: 36px; width: 52px; height: 52px; } }
 @media print { .annot-bar, .annot-layer, .annot-hint { display: none !important; } }

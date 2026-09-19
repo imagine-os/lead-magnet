@@ -5,7 +5,7 @@ export interface DeviceMockupProps { kind: DeviceKind; children?: ReactNode; src
 /** CSS-only phone / laptop / TV frames for landing pages and the hub. Slot children, a same-origin iframe `src`, or an `imageSrc` (generated asset). */
 export function DeviceMockup({ kind, children, src, imageSrc, title, className = '', style }: DeviceMockupProps) {
   const screen = imageSrc ? <img src={imageSrc} alt={title} className="device-img" /> : src ? <iframe src={src} title={title} className="device-iframe" loading="lazy" /> : children;
-  return (<div className={`device device-${kind} ${className}`} role="group" aria-label={title} style={style}>
+  return (<div data-component="DeviceMockup" className={`device device-${kind} ${className}`} role="group" aria-label={title} style={style}>
     {kind === 'phone' && <span className="device-notch" aria-hidden />}
     <div className="device-screen">{screen}</div>
     {kind === 'laptop' && <span className="device-base" aria-hidden />}

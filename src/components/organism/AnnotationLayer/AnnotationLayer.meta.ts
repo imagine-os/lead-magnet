@@ -1,7 +1,7 @@
 import { createElement as h } from 'react';
 import { defineMeta } from '../../../design/meta';
 import { AnnotationLayer } from './AnnotationLayer';
-import { COMPONENT_CLASS_HINTS, stableSelector, nearestComponent } from './elementPath';
+import { stableSelector, nearestComponent } from './elementPath';
 
 export default defineMeta({
   tier: 'organism', name: 'AnnotationLayer',
@@ -15,7 +15,7 @@ export default defineMeta({
     title: 'Live on this page',
     render: () => h('div', { className: 'stack' },
       h('p', { className: 'small muted' }, 'Mounted by DevTools on every route: the Annotate toggle sits above the Feedback button, bottom right. Turn it on and click any element.'),
-      h('p', { className: 'xs mono faint' }, `${COMPONENT_CLASS_HINTS.length} class hints map an unlabelled element to a library component until every component carries data-component.`),
+      h('p', { className: 'xs mono faint' }, `Every library component root carries data-component="<Name>", so the component column is exact; module markup records its tag name.`),
       h(AnnotationLayer, { pageCode: 'D-02', route: '/dev/components' })),
   }, {
     title: 'What a click records',
@@ -25,7 +25,7 @@ export default defineMeta({
     },
   }],
   a11y: [
-    'The toggle and every pin are real buttons with 44 px targets (the pin keeps a transparent 44 px halo around a 28 px dot).',
+    'The toggle and every pin are real buttons with 44 px targets (the pin button is 44 px; the coloured 28 px dot is drawn inside it).',
     'Annotate mode is keyboard-complete: Tab to an element and press Enter to file against it; Escape leaves the mode.',
     'Outlines in annotate mode show on :hover AND :focus-visible, so the mode is not hover-only (P-03).',
     'The layer is pointer-transparent and hides pins whose element is gone, so it can never cover a control (R-F03).',

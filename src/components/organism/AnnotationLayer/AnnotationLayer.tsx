@@ -129,7 +129,7 @@ export function AnnotationLayer({ pageCode, route }: AnnotationLayerProps) {
   const open = anchors.find((a) => a.row.id === openPin) ?? null;
 
   return (<>
-    <div className="annot-bar" role="group" aria-label={t('annot.tools')}>
+    <div data-component="AnnotationLayer" className="annot-bar" role="group" aria-label={t('annot.tools')}>
       <button type="button" className={`annot-toggle ${on ? 'is-on' : ''}`} aria-pressed={on} onClick={() => { setOn((v) => !v); setOpenPin(null); }} title={t('annot.toggle_hint')}>
         <span aria-hidden>◎</span><span className="annot-toggle-label">{on ? t('annot.annotating') : t('annot.annotate')}</span>
       </button>

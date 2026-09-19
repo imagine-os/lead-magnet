@@ -7,7 +7,7 @@ export function Drawer({ open, onClose, title, children, side = 'right', width =
   useEffect(() => { if (!open) return; const k = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); }; window.addEventListener('keydown', k); return () => window.removeEventListener('keydown', k); }, [open, onClose]);
   if (!open) return null;
   return (<div className="drawer-scrim" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-    <aside className={`drawer drawer-${side}`} role="dialog" aria-modal="true" aria-label={title} style={{ width: `min(${width}px, 100vw)` }}>
+    <aside data-component="Drawer" className={`drawer drawer-${side}`} role="dialog" aria-modal="true" aria-label={title} style={{ width: `min(${width}px, 100vw)` }}>
       <header className="drawer-head"><h2>{title}</h2><IconButton icon="close" label="Close" onClick={onClose} /></header><div className="drawer-body">{children}</div>
     </aside></div>);
 }

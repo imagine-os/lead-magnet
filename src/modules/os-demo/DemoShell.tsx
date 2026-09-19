@@ -3,7 +3,7 @@
  * phone, 10-foot layout at >= 1920. Themed from the prospect palette via prospectStyle (R-D01) and by mapping the
  * design tokens the library components use onto --lp-*, so Card / Button / DataTable are theirs without being forked.
  */
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDefaultLang, useI18n } from '../../i18n/I18nProvider';
 import { useRow, useTable } from '../../data/DataContext';
@@ -13,6 +13,7 @@ import type { Industry, Prospect, RoleView } from '../../engine/types';
 import { prospectStyle } from '../../design/tokens';
 import { track, trackOnce } from '../../tracking';
 import { useActions } from '../../actions';
+import { useGamepadNav, useSpatialNav } from '../../a11y';
 import { Button } from '../../components/atom/Button/Button';
 import { Icon, type IconName } from '../../components/atom/Icon/Icon';
 import { Input } from '../../components/atom/Input/Input';
@@ -23,6 +24,7 @@ import { LangToggle } from '../../components/molecule/LangToggle/LangToggle';
 import { EmptyState } from '../../components/molecule/EmptyState/EmptyState';
 import { useToast } from '../../components/molecule/Toast/Toast';
 import { Modal } from '../../components/organism/Modal/Modal';
+import { Drawer } from '../../components/organism/Drawer/Drawer';
 import { personFor, roleSlug, titleCase, viewSlug, findView } from './people';
 import './demo.css';
 
@@ -54,9 +56,11 @@ export function DemoShell({ code, section, children }: { code: string; section: 
   const { rows: pages } = useTable<PageRow>('pages', prospectId ? { where: { prospect_id: prospectId } } : { where: { prospect_id: '—' } });
   const pageId = pages[0]?.id ?? null;
   const [saveOpen, setSaveOpen] = useState(false);
+  const [roleOpen, setRoleOpen] = useState(false); // phone: the role switcher lives in a sheet (top bar is one row under 600 px)
   const [saved, setSaved] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const root = useRef<HTMLDivElement>(null); const spatial = useSpatialNav(root); useGamepadNav(spatial); // P-04: their OS on a TV remote
   useDefaultLang(prospect?.lang); // their OS opens in their language unless the viewer chose one (P-13)
 
   const views = useMemo(() => (prospect ? deriveRoleViews(prospect) : []), [prospect]);
@@ -76,7 +80,7 @@ export function DemoShell({ code, section, children }: { code: string; section: 
     lastRoleSeen[prospect.id] = activeRole;
   }, [activeRole, prospect?.id, pageId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const goView = (v: RoleView) => nav(`${base}/role/${viewSlug(v, views)}`);
+  const goView = (v: RoleView) => { setRoleOpen(false); nav(`${base}/role/${viewSlug(v, views)}`); };
   const goRole = (r: string) => { const v = findView(views, r) ?? views.find((x) => x.role === r); if (v) goView(v); else nav(`${base}/role/${roleSlug(r)}`); };
   const go = (s: SectionKey) => nav(s === 'home' ? `${base}/role/${activeView ? viewSlug(activeView, views) : roleSlug(activeRole)}` : `${base}/${s}`);
   const openSave = () => { void track('cta_click', { cta: 'save_workspace', section: code }, ctx); setSaveOpen(true); };
@@ -110,9 +114,11 @@ export function DemoShell({ code, section, children }: { code: string; section: 
   const activeSlug = activeView ? viewSlug(activeView, views) : '';
 
   return (
-    <div className="demo" style={prospectStyle(prospect.style.palette, prospect.style.font)} data-demo-section={section}>
+    <div className="demo" ref={root} style={prospectStyle(prospect.style.palette, prospect.style.font)} data-demo-section={section}>
       <a href="#demo-main" className="demo-skip">{t('demo.skip')}</a>
       <header className="demo-top">
+        {/* >= 600 px: one row with the role Select, EN | ES and both CTAs. Under 600 px: one 44 px row (wordmark, "Viewing as <role>"
+            opening a sheet, compact EN/ES) plus a second row of two 44 px CTAs; about 108 px of chrome instead of four wrapped rows. */}
         <div className="demo-top-row">
           <Link to={`${base}/role/${biz[0] ? viewSlug(biz[0], views) : roleSlug(activeRole)}`} className="demo-wordmark">
             <span className="demo-mark" aria-hidden>{prospect.business_name.slice(0, 1)}</span>
@@ -125,13 +131,29 @@ export function DemoShell({ code, section, children }: { code: string; section: 
               <Select options={roleOptions} value={activeSlug} onChange={(e) => goRole(e.target.value)} />
             </Field>
           </div>
-          <LangToggle size="sm" />
+          <Button size="sm" variant="outline" icon="user" className="demo-rolebtn" onClick={() => setRoleOpen(true)} aria-haspopup="dialog" aria-expanded={roleOpen}>
+            <span className="sr-only">{t('demo.viewing_as')} </span>{titleCase(activeRole)}
+          </Button>
+          <span className="demo-lang-full"><LangToggle size="sm" /></span>
+          <span className="demo-lang-compact"><LangToggle size="sm" compact /></span>
           <div className="demo-cta">
             <Button size="sm" variant="ghost" icon="calendar" onClick={book}>{t('demo.book')}</Button>
             <Button size="sm" variant="primary" icon={saved ? 'check' : 'heart'} onClick={openSave}>{saved ? t('demo.saved') : t('demo.save')}</Button>
           </div>
         </div>
       </header>
+      <Drawer open={roleOpen} onClose={() => setRoleOpen(false)} title={t('demo.viewing_as')} width={360}>
+        <div className="stack demo-rolesheet">
+          {[{ k: 'demo.group_biz', list: biz }, { k: 'demo.group_life', list: life }].map((g) => g.list.length > 0 && (
+            <div key={g.k} className="stack demo-rolegroup">
+              <div className="eyebrow">{t(g.k)}</div>
+              {g.list.map((v) => { const on = activeView === v; return (
+                <Button key={`${v.kind}-${v.role}`} block variant={on ? 'primary' : 'ghost'} icon={on ? 'check' : 'user'} aria-current={on ? 'true' : undefined} className="demo-roleopt" onClick={() => goView(v)}>{titleCase(v.role)}</Button>
+              ); })}
+            </div>
+          ))}
+        </div>
+      </Drawer>
       <div className="demo-body">
         <nav className="demo-side" aria-label={t('demo.nav_label')}>
           {NAV.map((n) => (

@@ -8,7 +8,7 @@ export function ViewportFrame({ route, width, height = 800, label, fit = true, o
   const [scale, setScale] = useState(1);
   useEffect(() => { if (!fit || !box.current) return; const el = box.current; const ro = new ResizeObserver(() => setScale(Math.min(1, (el.clientWidth - 2) / width))); ro.observe(el); return () => ro.disconnect(); }, [fit, width]);
   const src = `${window.location.pathname}${window.location.search}#${route}`;
-  return (<figure className="vpf" ref={box}>
+  return (<figure data-component="ViewportFrame" className="vpf" ref={box}>
     <figcaption className="vpf-cap"><span>{label ?? route}</span><Badge size="sm" tone="primary">{width} px</Badge>{scale < 1 && <span className="xs faint">{Math.round(scale * 100)} %</span>}</figcaption>
     <div className="vpf-stage" style={{ height: height * scale }}><iframe title={`${label ?? route} at ${width}px`} src={src} width={width} height={height} style={{ transform: `scale(${scale})` }} loading="lazy" onLoad={(e) => onLoad?.((e.target as HTMLIFrameElement).contentDocument)} /></div>
   </figure>);

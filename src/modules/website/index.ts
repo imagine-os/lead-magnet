@@ -82,6 +82,7 @@ export const strings = {
   'site.cta_sub': { en: 'Tell us the business; we build it and send you the link.', es: 'Dinos cuál es el negocio; lo construimos y te mandamos el enlace.' },
   // W-02
   'site.how_eyebrow': { en: 'The method', es: 'El método' },
+  'site.how_diagram_label': { en: 'How the system is built, as a diagram. Scrolls sideways on small screens.', es: 'Cómo se construye el sistema, en diagrama. Se desplaza de lado en pantallas pequeñas.' },
   'site.how_h1': { en: 'How we build your system before you ask.', es: 'Cómo construimos tu sistema antes de que lo pidas.' },
   'site.how_lede': { en: 'Six steps. The first five happen before you spend a minute with us; the sixth never stops.', es: 'Seis pasos. Los primeros cinco ocurren antes de que nos dediques un minuto; el sexto nunca se detiene.' },
   'site.how_steps_h2': { en: 'The loop', es: 'El ciclo' },

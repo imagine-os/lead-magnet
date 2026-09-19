@@ -11,6 +11,10 @@ h1 { font-size: var(--fs-xl); font-family: var(--font-display); letter-spacing: 
 .font-display { font-family: var(--font-display); letter-spacing: var(--ls-tight); }
 p { margin: 0; }
 a { color: var(--color-primary-text); text-decoration: none; } a:hover { text-decoration: underline; }
+/* A link inside running text is underlined, so it never relies on colour alone (WCAG 1.4.1). Links that are controls (a class, a badge, a card) keep their own styling. */
+:where(p, li, td, dd, figcaption, small, .small, .xs, .muted, .prose) a:not([class]) { text-decoration: underline; text-underline-offset: 2px; }
+/* A link that wraps only a badge or a chip is a 44 px target; the negative block margin keeps the line box where it was (P-03). */
+a:has(> .badge:only-child) { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; margin-block: -12px; vertical-align: middle; }
 button, input, select, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; }
 img, svg { max-width: 100%; } img { display: block; }
@@ -18,8 +22,9 @@ code, pre, kbd { font-family: var(--font-mono); font-size: max(var(--fs-xs), 0.9
 kbd { border: 1px solid var(--color-border); border-bottom-width: 2px; border-radius: var(--r-sm); padding: 0 6px; background: var(--color-surface-2); }
 small { font-size: max(var(--fs-xs), 0.875em); }
 pre { background: var(--color-surface-2); padding: var(--sp-3); border-radius: var(--r-md); overflow: auto; }
-/* P-03: visible 3 px ring everywhere, never outline: none without a replacement */
-:focus-visible { outline: var(--ring) solid var(--color-focus); outline-offset: 2px; }
+/* P-03: visible 3 px ring everywhere, never outline: none without a replacement. An iframe takes the ring on :focus
+   (focus-visible does not match while the focus is inside the frame), so previews and thumbnails show where Tab went. */
+:focus-visible, iframe:focus { outline: var(--ring) solid var(--color-focus); outline-offset: 2px; }
 ::selection { background: var(--color-primary-soft); }
 h1, h2, h3, h4, p, li, td, th, label, summary, dd, dt { overflow-wrap: anywhere; }
 pre, table, img, svg, video, iframe { max-width: 100%; }

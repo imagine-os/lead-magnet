@@ -14,8 +14,11 @@
 | `changelog/NNNN-slug.md` | every change set (header keys: version, date, prompt, intent, decision, rejected, files, codes); `changelog/_pending/<module>.md` drafts merged by the integrator |
 | `pages/<CODE>.md` | one per page code from `pages/_TEMPLATE.md` (status stub / built); regenerate skeletons with `node scripts/gen-page-docs.mjs` |
 | `screenshots/<CODE>/<width>[-dark].jpg` + `routes.json` | `npm run screenshots` output; `routes.json` is the served route manifest |
-| `qa/` | `responsive-report.{md,json}` from `npm run qa:responsive` |
+| `qa/` | `responsive-report.{md,json}` from `npm run qa:responsive`; `a11y-report.{md,json}` from `npm run qa:a11y` (axe WCAG 2.1 AA + keyboard walk) |
 | `reference/surfaces.md` | routes, DataProvider, npm scripts, HTTP API, MCP / WebMCP: what exists, what is planned; update the same turn as any change |
+| `reference/control.md` | the control model: actions manifest -> WebMCP tools -> `runAction` (browser, CLI `npm run actions`, voice vocabulary), spatial / gamepad navigation; generated `actions-manifest.json` + `voice-vocabulary.json` beside it |
+| `reference/annotations-triage.md` | how testers annotate on the element (T49) and how an agent triages `feedback` rows (R-F01..R-F03) before changing anything |
+| `ops-manual/<lang>/NN-slug.md` | the ops manual chapters (M-01..M-05) in English and Spanish, rendered in-app at `/#/manual`; numbers come from live-data directives, never typed (R-M01) |
 | `reference/conversion-playbook.md` | the offer, the highest-converting principles, the four archetypes and the `pickArchetype` scoring |
 | `reference/house-pattern.md` | the imagine-os house pattern brief (Petrock / Hoy shapes we follow) |
 | `reference/company-os.md` | reference only; nothing wires in until Justin says so |

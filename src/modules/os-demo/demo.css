@@ -12,16 +12,17 @@
   --color-text: var(--lp-text);
   --color-heading: var(--lp-text);
   --color-text-secondary: color-mix(in srgb, var(--lp-text) 80%, transparent);
-  --color-text-muted: color-mix(in srgb, var(--lp-text) 64%, transparent);
-  --color-label: color-mix(in srgb, var(--lp-text) 58%, transparent);
-  --color-text-faint: color-mix(in srgb, var(--lp-text) 48%, transparent);
+  /* Alphas chosen so muted / label / faint stay >= 4.5:1 on the prospect's surface (64 / 58 / 48 % did not). */
+  --color-text-muted: color-mix(in srgb, var(--lp-text) 76%, transparent);
+  --color-label: color-mix(in srgb, var(--lp-text) 72%, transparent);
+  --color-text-faint: color-mix(in srgb, var(--lp-text) 68%, transparent);
   --color-primary: var(--lp-primary);
   --color-primary-hover: color-mix(in srgb, var(--lp-primary) 84%, #000);
   --color-primary-soft: color-mix(in srgb, var(--lp-primary) 14%, var(--lp-surface));
-  --color-primary-text: color-mix(in srgb, var(--lp-primary) 78%, var(--lp-text));
-  --color-text-on-primary: #fff;
+  --color-primary-text: color-mix(in srgb, var(--lp-primary) 64%, var(--lp-text));
+  --color-text-on-primary: var(--lp-on-primary, #fff);
   --color-accent: var(--lp-accent);
-  --color-accent-text: var(--lp-text);
+  --color-accent-text: var(--lp-on-accent, var(--lp-text));
   --color-accent-soft: color-mix(in srgb, var(--lp-accent) 24%, var(--lp-surface));
   --color-ink: var(--lp-text);
   --color-ink-text: var(--lp-surface);
@@ -45,7 +46,7 @@
 .demo :focus-visible { outline: 3px solid var(--lp-primary); outline-offset: 2px; border-radius: var(--r-sm); }
 .demo-empty { display: grid; place-items: center; padding: var(--sp-16) var(--sp-4); }
 
-.demo-skip { position: absolute; left: -9999px; top: var(--sp-2); z-index: 40; background: var(--lp-surface); color: var(--lp-text); padding: var(--sp-2) var(--sp-4); border-radius: var(--r-md); border: 1px solid var(--color-border); }
+.demo-skip { position: absolute; left: -9999px; top: var(--sp-2); z-index: 40; display: inline-flex; align-items: center; min-height: 44px; background: var(--lp-surface); color: var(--lp-text); padding: var(--sp-2) var(--sp-4); border-radius: var(--r-md); border: 1px solid var(--color-border); }
 .demo-skip:focus { left: var(--sp-4); }
 
 /* top bar ------------------------------------------------------------- */
@@ -62,6 +63,27 @@
 .demo-role .select { min-width: 200px; }
 .demo-role .field { margin: 0; }
 .demo-cta { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+/* The phone-only controls (role button, compact EN/ES) are hidden from 600 px up; the Select, the EN | ES group and the inline
+   CTAs are hidden below it. display:none keeps the hidden set out of the accessibility tree. */
+.demo-rolebtn, .demo-lang-compact { display: none; }
+.demo-lang-full { display: inline-flex; }
+.demo-roleopt { justify-content: flex-start; }
+.demo-rolesheet { gap: var(--sp-5); }
+.demo-rolegroup { gap: var(--sp-1); }
+@media (max-width: 599px) {
+  .demo-top-row { flex-wrap: wrap; gap: var(--sp-2); padding: 6px var(--demo-gutter); }
+  .demo-wordmark { gap: var(--sp-2); min-width: 0; flex: 1 1 0; }
+  .demo-mark { width: 36px; height: 36px; font-size: var(--fs-md); }
+  .demo-biz { font-size: var(--fs-md); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .demo-sub { display: none; }
+  .demo-top-spacer, .demo-role, .demo-lang-full { display: none; }
+  .demo-rolebtn { display: inline-flex; flex: 0 1 auto; min-width: 0; max-width: 46%; padding: 0 var(--sp-3); }
+  .demo-rolebtn .btn-label { overflow: hidden; text-overflow: ellipsis; }
+  .demo-lang-compact { display: inline-flex; }
+  .demo-cta { flex: 1 1 100%; min-width: 0; flex-wrap: nowrap; }
+  .demo-cta > .btn { flex: 1 1 0; min-width: 0; padding: 0 var(--sp-3); }
+  .demo-cta > .btn .btn-label { overflow: hidden; text-overflow: ellipsis; }
+}
 
 /* body, sidebar, bottom nav ------------------------------------------- */
 .demo-body { display: block; }

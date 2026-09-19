@@ -1,8 +1,10 @@
 .toggle { display: inline-flex; align-items: center; gap: var(--sp-3); min-height: 44px; cursor: pointer; }
 .toggle.is-disabled { opacity: .55; cursor: not-allowed; }
-.toggle-track { position: relative; width: 44px; height: 26px; border-radius: var(--r-pill); border: 0; background: var(--color-border-strong); padding: 0; transition: background var(--dur-fast); flex: 0 0 auto; }
-.toggle-track[aria-checked="true"] { background: var(--color-primary); }
-.toggle-thumb { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform var(--dur-fast) var(--ease-out); box-shadow: var(--shadow-sm); }
+/* The switch is a 44 x 44 px button (P-03); the 44 x 26 px track it looks like is drawn by ::before. */
+.toggle-track { position: relative; width: 44px; height: 44px; border: 0; background: transparent; padding: 0; flex: 0 0 auto; cursor: inherit; }
+.toggle-track::before { content: ''; position: absolute; left: 0; top: 9px; width: 44px; height: 26px; border-radius: var(--r-pill); background: var(--color-border-strong); transition: background var(--dur-fast); }
+.toggle-track[aria-checked="true"]::before { background: var(--color-primary); }
+.toggle-thumb { position: absolute; top: 12px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform var(--dur-fast) var(--ease-out); box-shadow: var(--shadow-sm); }
 .toggle-track[aria-checked="true"] .toggle-thumb { transform: translateX(18px); }
 .toggle-text { display: flex; flex-direction: column; line-height: var(--lh-title); }
 .toggle-label { font-weight: var(--fw-medium); }

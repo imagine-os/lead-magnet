@@ -1,5 +1,9 @@
 .chip { display: inline-flex; align-items: center; gap: 6px; min-height: calc(32px * var(--scale)); padding: 0 var(--sp-3); border-radius: var(--r-pill); border: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-text); font-size: var(--fs-xs); font-weight: var(--fw-medium); }
-button.chip { cursor: pointer; min-height: 44px; }
+button.chip, a.chip { cursor: pointer; min-height: 44px; min-width: 44px; justify-content: center; text-decoration: none; }
 .chip.is-selected { background: var(--color-primary-soft); border-color: var(--color-primary); color: var(--color-primary-text); }
-.chip-x { display: inline-flex; border: 0; background: transparent; color: inherit; padding: 4px; margin-right: -6px; border-radius: 50%; min-width: 24px; min-height: 24px; }
-.chip-x:hover { background: var(--color-surface-3); }
+/* The remove button is a 44 px target (P-03) pulled into the 32 px chip with negative margins, so the chip's height and
+   spacing do not change; the visible 24 px disc is drawn by ::before. */
+.chip-x { position: relative; display: inline-flex; align-items: center; justify-content: center; border: 0; background: transparent; color: inherit; padding: 0; min-width: 44px; min-height: 44px; margin: calc((24px - 44px) / 2) calc(-6px - (44px - 24px) / 2) calc((24px - 44px) / 2) calc((24px - 44px) / 2); border-radius: 50%; cursor: pointer; }
+.chip-x::before { content: ''; position: absolute; width: 24px; height: 24px; left: 50%; top: 50%; translate: -50% -50%; border-radius: 50%; }
+.chip-x:hover::before { background: var(--color-surface-3); }
+.chip-x > .icon { position: relative; }

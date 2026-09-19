@@ -5,5 +5,7 @@
 .modal-sm .modal-box { width: min(420px, calc(100vw - 32px)); } .modal-lg .modal-box { width: min(880px, calc(100vw - 32px)); }
 .modal-head { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); padding: var(--sp-4) var(--sp-5); border-bottom: 1px solid var(--color-border); }
 .modal-body { padding: var(--sp-5); overflow: auto; }
-.modal-foot { display: flex; justify-content: flex-end; gap: var(--sp-2); padding: var(--sp-4) var(--sp-5); border-top: 1px solid var(--color-border); }
+.modal-foot { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--sp-2); padding: var(--sp-4) var(--sp-5); border-top: 1px solid var(--color-border); }
+/* Two full CTA labels do not fit one row at 390: the footer wraps and each action takes the row instead of clipping. */
+@media (max-width: 479px) { .modal-foot > * { flex: 1 1 auto; justify-content: center; } }
 @media (max-width: 600px) { .modal[open] { place-items: end center; } .modal-box { width: 100vw; max-height: 92vh; border-radius: var(--r-lg) var(--r-lg) 0 0; } }

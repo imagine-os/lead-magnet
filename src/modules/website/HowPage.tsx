@@ -60,7 +60,7 @@ export function HowPage() {
     <section className="site-section container container-wide stack">
       <h2 className="site-h2 font-display">{t('site.how_diagram_h2')}</h2>
       <p className="small muted">{t('site.how_diagram_sub')}</p>
-      <Card padding="lg" className="site-diagram-card">
+      <Card padding="lg" className="site-diagram-card" tabIndex={0} role="region" aria-label={t('site.how_diagram_label')}>
         <svg className="site-diagram" viewBox="0 0 980 230" role="img" aria-labelledby="dgt dgd" preserveAspectRatio="xMidYMid meet">
           <title id="dgt">{t('site.how_diagram_title')}</title>
           <desc id="dgd">{t('site.how_diagram_desc')}</desc>

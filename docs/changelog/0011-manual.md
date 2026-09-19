@@ -1,4 +1,4 @@
-# manual (M-01..M-05)
+# 0011 - Ops manual chapters EN/ES with live-data directives (T33, M-01..M-05)
 
 version: 0.3.0
 date: 2026-09-19
@@ -39,10 +39,10 @@ codes: M-01 M-02 M-03 M-04 M-05 (stub -> built)
 
 | id | date | decision | source | status |
 | --- | --- | --- | --- | --- |
-| D-0xx | 2026-09-19 | **Ops manual chapters live as markdown in `docs/ops-manual/<lang>/NN-slug.md`, not as strings in TSX.** The app is the reader; the repo is the source. Front matter carries the mandatory six keys (`title, role, part, version, updated, summary`). Rejected: prose in `useT()` keys (unreviewable), MDX (a dependency, and unreadable in the D-06 viewer). | T33, house pattern (Hoy chapter front matter) | proposed |
-| D-0xx | 2026-09-19 | **R-M01: a number the system owns is never typed into a chapter.** Counts, routes, roles, prices, archetype scores and KPIs appear only as live-data directives rendered from the running app. Prose may explain a number, never state it. Rejected: hand-written numbers with a "last checked" date. | T33, P-11 | proposed |
-| D-0xx | 2026-09-19 | **R-M02: every chapter is an `en` / `es` filename pair, and Spanish is a faithful translation, not a stub.** A missing mirror falls back to English, shows an "English fallback" badge and is listed on M-01. Rejected: shipping English-only chapters and treating Spanish as a later pass (P-13 says from the start). | T33, P-13 | proposed |
-| D-0xx | 2026-09-19 | **`> DECISION NEEDED:` in a chapter is the manual's half of "Awaiting Justin".** Blocks render inline and are collected on M-01; five are open today (calendar provider, automatic vs on-demand AI enrichment, A/B on one slug vs two links, which sending provider first, paid single-role pilot as a standard next step). | T33, house pattern | proposed |
+| D-068 | 2026-09-19 | **Ops manual chapters live as markdown in `docs/ops-manual/<lang>/NN-slug.md`, not as strings in TSX.** The app is the reader; the repo is the source. Front matter carries the mandatory six keys (`title, role, part, version, updated, summary`). Rejected: prose in `useT()` keys (unreviewable), MDX (a dependency, and unreadable in the D-06 viewer). | T33, house pattern (Hoy chapter front matter) | proposed |
+| D-069 | 2026-09-19 | **R-M01: a number the system owns is never typed into a chapter.** Counts, routes, roles, prices, archetype scores and KPIs appear only as live-data directives rendered from the running app. Prose may explain a number, never state it. Rejected: hand-written numbers with a "last checked" date. | T33, P-11 | proposed |
+| D-070 | 2026-09-19 | **R-M02: every chapter is an `en` / `es` filename pair, and Spanish is a faithful translation, not a stub.** A missing mirror falls back to English, shows an "English fallback" badge and is listed on M-01. Rejected: shipping English-only chapters and treating Spanish as a later pass (P-13 says from the start). | T33, P-13 | proposed |
+| D-071 | 2026-09-19 | **`> DECISION NEEDED:` in a chapter is the manual's half of "Awaiting Justin".** Blocks render inline and are collected on M-01; five are open today (calendar provider, automatic vs on-demand AI enrichment, A/B on one slug vs two links, which sending provider first, paid single-role pilot as a standard next step). | T33, house pattern | proposed |
 
 ## Proposed surfaces.md rows
 

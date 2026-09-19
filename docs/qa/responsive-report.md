@@ -1,10 +1,10 @@
 # Responsive QA report
 
-generated: 2026-09-19T01:00:19.251Z
-routes: 50
+generated: 2026-09-19T02:40:26.771Z
+routes: 51
 widths: 360, 390, 768, 1280, 1920, 2560, 3840
 themes: light, dark
-cells: 700
+cells: 714
 failing_cells: 0
 
 _Written by `npm run qa:responsive`. Fail = horizontal scroll, console error, visible text under 12 px, or a blank page. Runs as the super admin with dev mode off._
@@ -63,3 +63,4 @@ _Written by `npm run qa:responsive`. Fail = horizontal scroll, console error, vi
 | `D-09` | `/dev/feedback` | ok / ok | ok / ok | ok / ok | ok / ok | ok / ok | ok / ok | ok / ok |
 | `HUB-01` | `/` | ok / ok | ok / ok | ok / ok | ok / ok | ok / ok | ok / ok | ok / ok |
 | `HUB-02` | `/no-access` | ok / ok | ok / ok | ok / ok | ok / ok | ok / ok | ok / ok | ok / ok |
+| `L-06` | `/og/:slug` | ok / ok | ok / ok | ok / ok | ok / ok | ok / ok | ok / ok | ok / ok |

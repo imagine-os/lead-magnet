@@ -3,6 +3,6 @@
 .toast-static { animation: none; }
 .toast-success { border-left-color: var(--color-success); } .toast-warn { border-left-color: var(--color-warn); } .toast-danger { border-left-color: var(--color-danger); }
 .toast-text { flex: 1; min-width: 0; font-size: var(--fs-sm); }
-.toast-x { border: 0; background: transparent; color: inherit; padding: 4px; min-width: 32px; min-height: 32px; border-radius: var(--r-sm); display: inline-flex; align-items: center; justify-content: center; }
+.toast-x { border: 0; background: transparent; color: inherit; padding: 0; min-width: 44px; min-height: 44px; margin: -6px -6px -6px 0; border-radius: var(--r-sm); display: inline-flex; align-items: center; justify-content: center; } /* 44 px target (P-03) inside a 32 px row */
 .toast-x:hover { background: rgba(255,255,255,.12); }
 @keyframes toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }

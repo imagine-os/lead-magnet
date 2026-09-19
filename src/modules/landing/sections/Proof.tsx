@@ -37,7 +37,7 @@ export function ProofSection({ section }: { section: Proof }) {
           <p>{t('landing.sample_quote')}</p>
           <footer className="xs">{t('landing.sample_author', { industry: prospect.industry.replace(/_/g, ' ') })}</footer>
         </blockquote>
-        <div className="lp-logos" aria-label={t('landing.sample_logos')}>
+        <div className="lp-logos" role="group" aria-label={t('landing.sample_logos')}>
           {['A', 'B', 'C', 'D', 'E'].map((l) => <span key={l} className="lp-logo" aria-hidden>{l}</span>)}
         </div>
         <p className="lp-note">{t('landing.sample_logos_note')}</p>

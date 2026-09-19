@@ -18,7 +18,7 @@ export function InspectorPanel({ spec, open, onClose, routePath, initialTab }: I
   const rules = rulesForPage(spec.code);
   const list = (items: string[] | undefined, empty: string) => (items?.length ? <ul className="insp-list">{items.map((x) => <li key={x}>{x}</li>)}</ul> : <p className="muted xs">{empty}</p>);
   return (<Drawer open={open} onClose={onClose} title={`${spec.code} · ${spec.name}`} width={460}>
-    <div className="insp">
+    <div data-component="InspectorPanel" className="insp">
       <div className="row wrap xs"><code>{routePath}</code>{spec.roles.map((r) => <Badge key={r} size="sm">{r}</Badge>)}</div>
       <ProgressBar value={c.score} label="Spec completeness" tone={c.score >= 80 ? 'success' : 'warn'} size="sm" />
       {c.missing.length > 0 && <p className="xs muted">Missing: {c.missing.join(', ')}</p>}

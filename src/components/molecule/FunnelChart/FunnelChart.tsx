@@ -24,7 +24,7 @@ const pct = (a: number, b: number) => (b > 0 ? Math.round((a / b) * 1000) / 10 :
  */
 export function FunnelChart({ stages, caption, unitLabel, tableFallback, tableLabel = 'Table view', stepLabel }: FunnelChartProps) {
   const top = Math.max(...stages.map((s) => s.value), 0);
-  return (<figure className="funnel">
+  return (<figure data-component="FunnelChart" className="funnel">
     <figcaption className="funnel-cap">{caption}{unitLabel && <span className="funnel-unit"> · {unitLabel}</span>}</figcaption>
     <ol className="funnel-rows">
       {stages.map((s, i) => {

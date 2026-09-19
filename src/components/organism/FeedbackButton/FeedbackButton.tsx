@@ -21,7 +21,7 @@ export function FeedbackButton({ pageCode, route }: { pageCode: string; route: s
     setBusy(false); setOpen(false); setText(''); setComponent(''); toast.push({ tone: 'success', title: 'Thanks, noted', body: `${kind} on ${pageCode} is in the inbox (D-09)` });
   };
   return (<>
-    <button type="button" className="fbbtn" onClick={() => setOpen(true)} aria-label="Leave feedback on this page" title="Leave feedback on this page"><span aria-hidden>✎</span><span className="fbbtn-label">Feedback</span></button>
+    <button type="button" data-component="FeedbackButton" className="fbbtn" onClick={() => setOpen(true)} aria-label="Leave feedback on this page" title="Leave feedback on this page"><span aria-hidden>✎</span><span className="fbbtn-label">Feedback</span></button>
     <Modal open={open} onClose={() => setOpen(false)} title={`Feedback on ${pageCode}`} footer={<><Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button><Button onClick={submit} loading={busy} disabled={!text.trim()}>Send</Button></>}>
       <div className="stack">
         <Field label="Kind"><Select options={FEEDBACK_KINDS.map((k) => ({ value: k, label: k }))} value={kind} onChange={(e) => setKind(e.target.value)} /></Field>

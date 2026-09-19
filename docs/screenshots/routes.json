@@ -26,7 +26,7 @@
     "events"
    ],
    "integrations": [
-    "none yet: image / video assets (T40, T41), booking provider (T50), Supabase (T44)"
+    "generated frame sequences from the live demo (`npm run frames`, public/frames/<prospectId>/) and the social card (`npm run og`, public/og/<slug>.jpg) are real; image generation (T40), booking provider (T50) and Supabase (T44) are not wired"
    ],
    "states": [
     "loading",
@@ -34,7 +34,11 @@
     "expired -> L-05",
     "reduced motion",
     "phone sticky CTA",
-    "exit intent shown"
+    "exit intent shown",
+    "variant A",
+    "variant B",
+    "frames present",
+    "frames missing (MiniOs fallback)"
    ],
    "checkedAt": [
     360,
@@ -69,7 +73,12 @@
     "tracking: view on mount, section_view once per section, scroll_depth at 25/50/75/100, cta_click with cta + section, demo_open, booking_started, exit_intent, form_submit",
     "sticky CTA bar on phone once the hero has scrolled past; exit intent once per session (pointer leaves the top, or back / 45 s idle on touch)",
     "save your workspace asks for name + email only after a demo open or a long press on the sticky CTA (R-C01)",
-    "hero devices are driven by useScrollFrames(12): the same frame index a generated video-on-scroll sequence will use (T41)"
+    "A/B: every live pages row for the slug is a candidate; the visitor bucket is hash(sessionId + slug) % candidates, stable for the session, and ?variant=A|B forces one (studio preview)",
+    "/p/:slug renders the archetype the chosen row was published with (so variant B can test a different archetype); /audit, /story and /letter force theirs over the snapshot",
+    "every event carries { variant, page_id, archetype, slug } in its meta, so A-01 can compare variants without joining the pages table",
+    "usePageMeta sets document.title, meta[name=description] and og:* per prospect and language; og:image points at public/og/<slug>.jpg (L-06)",
+    "hero devices scrub a real frame sequence captured from the live demo: useFrames(prospectId) loads public/frames/<id>/index.json and preloads it, useScrollFrames(count) maps the hero section to a frame (phone = NN.jpg, laptop = desk-NN.jpg), and when the index is missing the devices render the live <MiniOs> composition instead",
+    "reduced motion pins the first frame and never animates; the TV always holds the live composition"
    ],
    "components": [
     "DeviceMockup",
@@ -119,6 +128,15 @@
      "params": {
       "role": "string"
      }
+    },
+    {
+     "id": "landing.tryAsRole",
+     "label": "Try it as this role",
+     "intent": "open the demo as the {role}",
+     "params": {
+      "role": "string"
+     },
+     "permission": "demo.open"
     },
     {
      "id": "landing.toggleFaq",
@@ -185,7 +203,7 @@
     "events"
    ],
    "integrations": [
-    "none yet: image / video assets (T40, T41), booking provider (T50), Supabase (T44)"
+    "generated frame sequences from the live demo (`npm run frames`, public/frames/<prospectId>/) and the social card (`npm run og`, public/og/<slug>.jpg) are real; image generation (T40), booking provider (T50) and Supabase (T44) are not wired"
    ],
    "states": [
     "loading",
@@ -193,7 +211,11 @@
     "expired -> L-05",
     "reduced motion",
     "phone sticky CTA",
-    "exit intent shown"
+    "exit intent shown",
+    "variant A",
+    "variant B",
+    "frames present",
+    "frames missing (MiniOs fallback)"
    ],
    "checkedAt": [
     360,
@@ -227,6 +249,10 @@
     "tracking: view on mount, section_view once per section, scroll_depth at 25/50/75/100, cta_click with cta + section, demo_open, booking_started, exit_intent, form_submit",
     "sticky CTA bar on phone once the hero has scrolled past; exit intent once per session (pointer leaves the top, or back / 45 s idle on touch)",
     "save your workspace asks for name + email only after a demo open or a long press on the sticky CTA (R-C01)",
+    "A/B: every live pages row for the slug is a candidate; the visitor bucket is hash(sessionId + slug) % candidates, stable for the session, and ?variant=A|B forces one (studio preview)",
+    "/p/:slug renders the archetype the chosen row was published with (so variant B can test a different archetype); /audit, /story and /letter force theirs over the snapshot",
+    "every event carries { variant, page_id, archetype, slug } in its meta, so A-01 can compare variants without joining the pages table",
+    "usePageMeta sets document.title, meta[name=description] and og:* per prospect and language; og:image points at public/og/<slug>.jpg (L-06)",
     "each answer writes stack_guesses.status by id through the provider and a form_submit event; savings() recomputes from the live rows, never from the snapshot"
    ],
    "components": [
@@ -290,6 +316,15 @@
      }
     },
     {
+     "id": "landing.tryAsRole",
+     "label": "Try it as this role",
+     "intent": "open the demo as the {role}",
+     "params": {
+      "role": "string"
+     },
+     "permission": "demo.open"
+    },
+    {
      "id": "landing.seeCaseStudy",
      "label": "See the case study",
      "intent": "show me a case study"
@@ -347,7 +382,7 @@
     "events"
    ],
    "integrations": [
-    "none yet: image / video assets (T40, T41), booking provider (T50), Supabase (T44)"
+    "generated frame sequences from the live demo (`npm run frames`, public/frames/<prospectId>/) and the social card (`npm run og`, public/og/<slug>.jpg) are real; image generation (T40), booking provider (T50) and Supabase (T44) are not wired"
    ],
    "states": [
     "loading",
@@ -355,7 +390,11 @@
     "expired -> L-05",
     "reduced motion",
     "phone sticky CTA",
-    "exit intent shown"
+    "exit intent shown",
+    "variant A",
+    "variant B",
+    "frames present",
+    "frames missing (MiniOs fallback)"
    ],
    "checkedAt": [
     360,
@@ -387,7 +426,12 @@
     "tracking: view on mount, section_view once per section, scroll_depth at 25/50/75/100, cta_click with cta + section, demo_open, booking_started, exit_intent, form_submit",
     "sticky CTA bar on phone once the hero has scrolled past; exit intent once per session (pointer leaves the top, or back / 45 s idle on touch)",
     "save your workspace asks for name + email only after a demo open or a long press on the sticky CTA (R-C01)",
-    "an IntersectionObserver band at the middle of the viewport sets the active step; prev / next set the same state and scroll to it, so keyboard, remote and reduced motion all work"
+    "A/B: every live pages row for the slug is a candidate; the visitor bucket is hash(sessionId + slug) % candidates, stable for the session, and ?variant=A|B forces one (studio preview)",
+    "/p/:slug renders the archetype the chosen row was published with (so variant B can test a different archetype); /audit, /story and /letter force theirs over the snapshot",
+    "every event carries { variant, page_id, archetype, slug } in its meta, so A-01 can compare variants without joining the pages table",
+    "usePageMeta sets document.title, meta[name=description] and og:* per prospect and language; og:image points at public/og/<slug>.jpg (L-06)",
+    "an IntersectionObserver band at the middle of the viewport sets the active step; prev / next set the same state and scroll to it, so keyboard, remote and reduced motion all work",
+    "the pinned laptop plays the desktop frame sequence (public/frames/<id>/desk-NN.jpg) mapped from the active step, falling back to the live <MiniOs> composition when no sequence was generated"
    ],
    "components": [
     "DeviceMockup",
@@ -440,6 +484,15 @@
      }
     },
     {
+     "id": "landing.tryAsRole",
+     "label": "Try it as this role",
+     "intent": "open the demo as the {role}",
+     "params": {
+      "role": "string"
+     },
+     "permission": "demo.open"
+    },
+    {
      "id": "landing.pickSlot",
      "label": "Pick a slot",
      "intent": "book {slot}",
@@ -490,7 +543,7 @@
     "events"
    ],
    "integrations": [
-    "none yet: image / video assets (T40, T41), booking provider (T50), Supabase (T44)"
+    "generated frame sequences from the live demo (`npm run frames`, public/frames/<prospectId>/) and the social card (`npm run og`, public/og/<slug>.jpg) are real; image generation (T40), booking provider (T50) and Supabase (T44) are not wired"
    ],
    "states": [
     "loading",
@@ -498,7 +551,11 @@
     "expired -> L-05",
     "reduced motion",
     "phone sticky CTA",
-    "exit intent shown"
+    "exit intent shown",
+    "variant A",
+    "variant B",
+    "frames present",
+    "frames missing (MiniOs fallback)"
    ],
    "checkedAt": [
     360,
@@ -528,6 +585,10 @@
     "tracking: view on mount, section_view once per section, scroll_depth at 25/50/75/100, cta_click with cta + section, demo_open, booking_started, exit_intent, form_submit",
     "sticky CTA bar on phone once the hero has scrolled past; exit intent once per session (pointer leaves the top, or back / 45 s idle on touch)",
     "save your workspace asks for name + email only after a demo open or a long press on the sticky CTA (R-C01)",
+    "A/B: every live pages row for the slug is a candidate; the visitor bucket is hash(sessionId + slug) % candidates, stable for the session, and ?variant=A|B forces one (studio preview)",
+    "/p/:slug renders the archetype the chosen row was published with (so variant B can test a different archetype); /audit, /story and /letter force theirs over the snapshot",
+    "every event carries { variant, page_id, archetype, slug } in its meta, so A-01 can compare variants without joining the pages table",
+    "usePageMeta sets document.title, meta[name=description] and og:* per prospect and language; og:image points at public/og/<slug>.jpg (L-06)",
     "no fabricated audio: the voice note is a Placeholder (P-09) until the content pass records one"
    ],
    "components": [
@@ -619,7 +680,7 @@
     "events"
    ],
    "integrations": [
-    "none yet: image / video assets (T40, T41), booking provider (T50), Supabase (T44)"
+    "generated frame sequences from the live demo (`npm run frames`, public/frames/<prospectId>/) and the social card (`npm run og`, public/og/<slug>.jpg) are real; image generation (T40), booking provider (T50) and Supabase (T44) are not wired"
    ],
    "states": [
     "expired page",
@@ -1798,12 +1859,12 @@
    "code": "S-01",
    "name": "Prospects list",
    "tone": "list",
-   "purpose": "Every prospect with warmth, confidence, the live page (archetype, status, expiry), the last tracked event and the booking state; filter by warmth, industry and whether a page is live; create a prospect and go straight into intake.",
+   "purpose": "Every prospect with warmth, confidence, the live page (archetype, status, expiry), the last tracked event and the booking state, under a summary strip that says what to look at next; filter by warmth, industry and whether a page is live; create or duplicate a prospect and go straight into intake.",
    "layout": [
     "page head + New prospect",
-    "KPI row",
+    "strategist summary strip (warmth split, live pages, bookings this week, next expiring page)",
     "filters (warmth chips, industry select, live-page toggle)",
-    "DataTable (cards under 768)",
+    "DataTable (cards under 768) with a duplicate action",
     "new prospect Modal"
    ],
    "data": [
@@ -1817,7 +1878,9 @@
     "live page per prospect = the row with status live, else the most recently published",
     "last event = max(ts) over events for that prospect",
     "booking = the latest bookings row by slot",
-    "create: insert prospects with the industry catalog roles + the default palette, confidence = computeConfidence(fields_known), then insert guessStack() rows, then navigate to S-02"
+    "create: insert prospects with the industry catalog roles + the default palette, confidence = computeConfidence(fields_known), then insert guessStack() rows, then navigate to S-02",
+    "summary strip = studioSummary(prospects, pages, bookings): warmth split, live pages (and how many slugs run an A/B split), bookings within a week either side of now, the live page expiring first",
+    "duplicate: copy the profile, roles, style and fields_known under a new name, re-guess the stack, and leave pages / events / bookings behind (R-S07)"
    ],
    "components": [
     "DataTable",
@@ -1868,10 +1931,20 @@
      "params": {
       "name": "string"
      }
+    },
+    {
+     "id": "studio.duplicateProspect",
+     "label": "Duplicate",
+     "intent": "duplicate prospect {name} as a new prospect",
+     "params": {
+      "name": "string"
+     },
+     "permission": "prospects.write"
     }
    ],
    "rules": [
     "R-S03",
+    "R-S07",
     "R-E01",
     "R-E03"
    ],
@@ -1911,14 +1984,14 @@
    "code": "S-02",
    "name": "Prospect profile + AI intake",
    "tone": "form",
-   "purpose": "Everything we know about one prospect and the adaptive intake that closes the gaps: nextQuestions() as real fields, applyAnswer() on save, confidence and the recommended archetype recomputing live, stack guesses to confirm or reject with the savings total, role and style editors with a themed mini preview.",
+   "purpose": "Everything we know about one prospect and the conversational intake that closes the gaps: one question at a time with the reason it matters and what it would change, every answer kept as a transcript turn, applyAnswer() on save, confidence and the recommended archetype recomputing live, stack guesses to confirm or reject with the savings total, and a paste-facts box that proposes answers a person confirms.",
    "layout": [
     "prospect nav",
     "header (palette swatches, tone, warmth, language)",
     "confidence meter + recommendation",
+    "intake chat (transcript, current question, suggestions, paste facts + proposals)",
+    "stack guesses + savings with likely / possible tiers",
     "what we know / still unknown",
-    "adaptive intake questions",
-    "stack guesses + savings",
     "roles editor",
     "style editor + mini preview",
     "enrichment"
@@ -1926,10 +1999,15 @@
    "data": [
     "prospects (read/write)",
     "stack_guesses (read/write)",
+    "intake_turns (read/write)",
     "pages (read)"
    ],
    "logic": [
-    "nextQuestions(p, 4) drives the form; each field renders the control its type deserves (select for enums, number for counts, comma list for arrays)",
+    "nextQuestions(p, 12) is the queue; exactly one question is asked at a time, with the confidence points it would add and the sentence saying what it changes, and Skip moves to the next without losing it",
+    "each field renders the control its type deserves (select for enums, number for counts, comma list for arrays) with one-tap suggestion chips from the industry catalog",
+    "every answer appends an intake_turns row (field, question as asked, answer as saved, source manual | rule | llm, confidence after) - R-S06",
+    "Ask the AI runs defaultEnricher (rules) and records source = rule; the LLM enricher stays a Placeholder (T43)",
+    "Paste facts runs extractFacts() over pasted text (city, team size, locations, catalog tool names, language, website) and PROPOSES each one with its evidence; nothing is applied without a person pressing Apply (R-S05)",
     "save = applyAnswer(p, field, value) then update(\"prospects\", id, { field, fields_known, confidence }) - R-S03",
     "confidence = computeConfidence(fields_known) (R-E03); the recommendation is pickArchetype(p)[0] and re-ranks on every answer",
     "confirm / reject writes stack_guesses.status by id; savings(p, guesses) ignores rejected rows",
@@ -1946,11 +2024,11 @@
     "Badge",
     "Button",
     "Stat",
-    "DataTable",
     "Textarea",
     "Placeholder",
     "Avatar",
-    "EmptyState"
+    "EmptyState",
+    "Toast"
    ],
    "actions": [
     {
@@ -2034,17 +2112,58 @@
      "label": "Compose the page",
      "intent": "compose the page",
      "permission": "pages.publish"
+    },
+    {
+     "id": "studio.skipQuestion",
+     "label": "Skip",
+     "intent": "skip this question and ask the next one"
+    },
+    {
+     "id": "studio.pasteFacts",
+     "label": "Paste facts",
+     "intent": "paste {text} into the facts box",
+     "params": {
+      "text": "string"
+     },
+     "permission": "prospects.write"
+    },
+    {
+     "id": "studio.extractFacts",
+     "label": "Extract facts",
+     "intent": "extract the facts from the pasted text",
+     "permission": "prospects.write"
+    },
+    {
+     "id": "studio.applyFact",
+     "label": "Apply",
+     "intent": "apply the proposed {fact}",
+     "params": {
+      "fact": "string"
+     },
+     "permission": "prospects.write"
+    },
+    {
+     "id": "studio.dismissFact",
+     "label": "Dismiss",
+     "intent": "dismiss the proposed {fact}",
+     "params": {
+      "fact": "string"
+     }
     }
    ],
    "rules": [
     "R-S03",
+    "R-S05",
+    "R-S06",
     "R-E01",
     "R-E03"
    ],
    "states": [
     "loading",
-    "default",
+    "asking",
+    "facts proposed",
     "fully known",
+    "skipped questions",
     "not found"
    ]
   }
@@ -2076,25 +2195,27 @@
    "code": "S-03",
    "name": "Page composer",
    "tone": "form",
-   "purpose": "Rank the four archetypes with their reasons, pick one, preview the real landing route at 390 and 1280, set the A/B variant and publish a 14-day page (or expire it).",
+   "purpose": "Rank the four archetypes with their reasons, pick one, preview the real landing route at 390 and 1280, and publish up to two live variants of the same slug - A and B, same or different archetype - each with its own PageModel snapshot, forced link and expiry.",
    "layout": [
     "prospect nav",
     "live page status",
+    "variants A / B cards (archetype, published, expiry, forced link, copy, expire)",
     "archetype ranking cards with score bars",
-    "segmented picker",
-    "variant + slug",
-    "previews (390 / 1280)",
+    "segmented archetype + variant picker",
+    "previews (390 / 1280) of the selected variant",
     "publish / expire"
    ],
    "data": [
     "prospects (read)",
     "stack_guesses (read)",
-    "pages (read/write)"
+    "pages (read/write, one row per variant)"
    ],
    "logic": [
     "pickArchetype(p) gives score + reasons; the top score sets the card order",
     "the preview iframes the real public route for the archetype (/p/:slug, /p/:slug/audit, /p/:slug/story, /p/:slug/letter)",
     "publish writes pages: status live, published_at now, expires_at +14 days (R-S02), model = composePage() snapshot, slug from the existing row or slugify(business)",
+    "a slug can carry two live rows, variant A and variant B, each with its own archetype and its own model snapshot; the landing module splits sessions between them and honours ?variant=A|B (R-S04)",
+    "publishing variant X updates that variant's row if it exists and inserts one otherwise; expiry and copy-link are per variant",
     "publish is blocked under 0.3 confidence unless the override is on (R-S01)",
     "expire sets status expired and leaves the snapshot in place"
    ],
@@ -2106,7 +2227,6 @@
     "Badge",
     "ProgressBar",
     "Field",
-    "Input",
     "Toggle",
     "Stat",
     "Chip"
@@ -2152,12 +2272,40 @@
      "id": "studio.copyPageLink",
      "label": "Copy link",
      "intent": "copy the public link"
+    },
+    {
+     "id": "studio.publishVariant",
+     "label": "Publish variant",
+     "intent": "publish variant {variant} as the {archetype} page",
+     "params": {
+      "variant": "enum:A|B",
+      "archetype": "enum:reveal|audit|walkthrough|letter"
+     },
+     "permission": "pages.publish"
+    },
+    {
+     "id": "studio.expireVariant",
+     "label": "Expire variant",
+     "intent": "expire variant {variant}",
+     "params": {
+      "variant": "enum:A|B"
+     },
+     "permission": "pages.publish"
+    },
+    {
+     "id": "studio.copyVariantLink",
+     "label": "Copy variant link",
+     "intent": "copy the link that forces variant {variant}",
+     "params": {
+      "variant": "enum:A|B"
+     }
     }
    ],
    "rules": [
     "R-S01",
     "R-S02",
     "R-S03",
+    "R-S04",
     "R-C05",
     "R-E02"
    ],
@@ -2166,6 +2314,7 @@
     "no page yet",
     "draft",
     "live",
+    "A/B split running",
     "expired",
     "blocked by confidence"
    ]
@@ -3664,38 +3813,108 @@
   "path": "/manual",
   "code": "M-01",
   "surface": "manual",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
    "analyst"
   ],
   "spec": {
-   "code": "M-01",
-   "name": "Ops manual home",
-   "purpose": "How we run Lead Magnet: chapters EN/ES rendered from docs/ops-manual.",
-   "layout": [
-    "chapter list"
-   ],
-   "data": [],
    "roles": [
     "super_admin",
     "strategist",
     "analyst"
    ],
-   "logic": [],
-   "integrations": [],
-   "components": [
-    "Card"
+   "data": [
+    "prospects",
+    "pages",
+    "events",
+    "touches",
+    "bookings",
+    "docs/ops-manual/**"
    ],
-   "actions": [],
+   "integrations": [
+    "react-markdown",
+    "docs/screenshots (Vite asset glob)"
+   ],
+   "logic": [
+    "the chapter body is markdown in docs/ops-manual/<lang>/NN-slug.md; the app never stores chapter prose",
+    "language follows the app toggle; a missing es/ chapter falls back to en and the header says so (R-M02)",
+    "live-data directives on their own line render from the running app, never from typed prose (R-M01)",
+    "[screenshot: CODE — caption] resolves docs/screenshots/CODE/1280.jpg, else a dashed placeholder naming the file",
+    "> DECISION NEEDED: blocks render inline and are collected on M-01",
+    "open decisions are parsed from every chapter of the current language, not a hand-kept list",
+    "translation gaps and unrouted chapter files are surfaced as warnings (R-M02)",
+    "read-all renders every chapter in part order so one print gives the whole manual"
+   ],
+   "components": [
+    "Card",
+    "Badge",
+    "Button",
+    "Select",
+    "Stat",
+    "DataTable",
+    "EmptyState"
+   ],
+   "rules": [
+    "R-M01",
+    "R-M02"
+   ],
    "states": [
     "loading",
-    "default",
-    "empty"
+    "chapter",
+    "no translation (en fallback)",
+    "missing chapter",
+    "print"
    ],
-   "notes": [
-    "Built by module manual (T33)"
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "code": "M-01",
+   "name": "Ops manual home",
+   "tone": "home",
+   "purpose": "How we run Lead Magnet. The chapter index with part, role and summary; every open decision collected from every chapter; the manual health (translation coverage, front-matter completeness); and chapter I rendered in place, with a \"read the whole manual\" mode that prints as one document.",
+   "layout": [
+    "chapter head",
+    "switcher + language + print",
+    "chapter index cards",
+    "open decisions",
+    "manual health",
+    "chapter I (or the whole manual)"
+   ],
+   "actions": [
+    {
+     "id": "manual.openChapter",
+     "label": "Open chapter",
+     "intent": "open the {chapter} chapter of the ops manual",
+     "params": {
+      "chapter": "string"
+     }
+    },
+    {
+     "id": "manual.print",
+     "label": "Print",
+     "intent": "print this chapter of the ops manual"
+    },
+    {
+     "id": "manual.readAll",
+     "label": "Read the whole manual",
+     "intent": "show the whole ops manual as one page",
+     "params": {
+      "on": "string"
+     }
+    },
+    {
+     "id": "manual.listDecisions",
+     "label": "List open decisions",
+     "intent": "list the open decisions in the ops manual"
+    }
    ]
   }
  },
@@ -3703,39 +3922,101 @@
   "path": "/manual/intake",
   "code": "M-02",
   "surface": "manual",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
    "analyst"
   ],
   "spec": {
-   "code": "M-02",
-   "name": "Chapter: intake & research",
-   "purpose": "How to research a prospect and run the adaptive intake.",
-   "layout": [
-    "chapter"
-   ],
-   "data": [],
    "roles": [
     "super_admin",
     "strategist",
     "analyst"
    ],
-   "logic": [],
-   "integrations": [],
+   "data": [
+    "prospects",
+    "pages",
+    "events",
+    "touches",
+    "bookings",
+    "docs/ops-manual/**"
+   ],
+   "integrations": [
+    "react-markdown",
+    "docs/screenshots (Vite asset glob)"
+   ],
+   "logic": [
+    "the chapter body is markdown in docs/ops-manual/<lang>/NN-slug.md; the app never stores chapter prose",
+    "language follows the app toggle; a missing es/ chapter falls back to en and the header says so (R-M02)",
+    "live-data directives on their own line render from the running app, never from typed prose (R-M01)",
+    "[screenshot: CODE — caption] resolves docs/screenshots/CODE/1280.jpg, else a dashed placeholder naming the file",
+    "> DECISION NEEDED: blocks render inline and are collected on M-01",
+    "the intake KPI block reads live prospect confidence and engine savings"
+   ],
    "components": [
     "Card",
-    "Button"
+    "Badge",
+    "Button",
+    "Select",
+    "Stat",
+    "DataTable",
+    "EmptyState"
    ],
-   "actions": [],
+   "rules": [
+    "R-M01",
+    "R-M02"
+   ],
    "states": [
     "loading",
-    "default",
-    "empty"
+    "chapter",
+    "no translation (en fallback)",
+    "missing chapter",
+    "print"
    ],
-   "notes": [
-    "Built by module manual (T33)"
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "code": "M-02",
+   "name": "Chapter: intake & research",
+   "purpose": "How to research a prospect and run the adaptive intake: creating the prospect, the weighted question loop, the 30 % confidence gate, and confirming or rejecting the guessed tool stack before composing anything.",
+   "tone": "list",
+   "layout": [
+    "chapter head (code, part, title, summary, provenance)",
+    "switcher + language + prev / next + print",
+    "chapter body (prose, live blocks, figures, decisions)",
+    "prev / next footer"
+   ],
+   "actions": [
+    {
+     "id": "manual.openChapter",
+     "label": "Open chapter",
+     "intent": "open the {chapter} chapter of the ops manual",
+     "params": {
+      "chapter": "string"
+     }
+    },
+    {
+     "id": "manual.nextChapter",
+     "label": "Next chapter",
+     "intent": "go to the next chapter"
+    },
+    {
+     "id": "manual.prevChapter",
+     "label": "Previous chapter",
+     "intent": "go to the previous chapter"
+    },
+    {
+     "id": "manual.print",
+     "label": "Print",
+     "intent": "print this chapter of the ops manual"
+    }
    ]
   }
  },
@@ -3743,39 +4024,101 @@
   "path": "/manual/compose",
   "code": "M-03",
   "surface": "manual",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
    "analyst"
   ],
   "spec": {
-   "code": "M-03",
-   "name": "Chapter: compose & publish",
-   "purpose": "Choosing an archetype, previewing, publishing, the 14-day rule.",
-   "layout": [
-    "chapter"
-   ],
-   "data": [],
    "roles": [
     "super_admin",
     "strategist",
     "analyst"
    ],
-   "logic": [],
-   "integrations": [],
+   "data": [
+    "prospects",
+    "pages",
+    "events",
+    "touches",
+    "bookings",
+    "docs/ops-manual/**"
+   ],
+   "integrations": [
+    "react-markdown",
+    "docs/screenshots (Vite asset glob)"
+   ],
+   "logic": [
+    "the chapter body is markdown in docs/ops-manual/<lang>/NN-slug.md; the app never stores chapter prose",
+    "language follows the app toggle; a missing es/ chapter falls back to en and the header says so (R-M02)",
+    "live-data directives on their own line render from the running app, never from typed prose (R-M01)",
+    "[screenshot: CODE — caption] resolves docs/screenshots/CODE/1280.jpg, else a dashed placeholder naming the file",
+    "> DECISION NEEDED: blocks render inline and are collected on M-01",
+    "the archetype block scores the seeded prospects with pickArchetype() and shows the engine reasons"
+   ],
    "components": [
     "Card",
-    "Button"
+    "Badge",
+    "Button",
+    "Select",
+    "Stat",
+    "DataTable",
+    "EmptyState"
    ],
-   "actions": [],
+   "rules": [
+    "R-M01",
+    "R-M02"
+   ],
    "states": [
     "loading",
-    "default",
-    "empty"
+    "chapter",
+    "no translation (en fallback)",
+    "missing chapter",
+    "print"
    ],
-   "notes": [
-    "Built by module manual (T33)"
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "code": "M-03",
+   "name": "Chapter: compose & publish",
+   "purpose": "Choosing an archetype from the live ranking, previewing the real public route, the 14-day expiry rule, frozen slugs, snapshots versus recomposition, and running A/B variants honestly.",
+   "tone": "list",
+   "layout": [
+    "chapter head (code, part, title, summary, provenance)",
+    "switcher + language + prev / next + print",
+    "chapter body (prose, live blocks, figures, decisions)",
+    "prev / next footer"
+   ],
+   "actions": [
+    {
+     "id": "manual.openChapter",
+     "label": "Open chapter",
+     "intent": "open the {chapter} chapter of the ops manual",
+     "params": {
+      "chapter": "string"
+     }
+    },
+    {
+     "id": "manual.nextChapter",
+     "label": "Next chapter",
+     "intent": "go to the next chapter"
+    },
+    {
+     "id": "manual.prevChapter",
+     "label": "Previous chapter",
+     "intent": "go to the previous chapter"
+    },
+    {
+     "id": "manual.print",
+     "label": "Print",
+     "intent": "print this chapter of the ops manual"
+    }
    ]
   }
  },
@@ -3783,39 +4126,101 @@
   "path": "/manual/outreach",
   "code": "M-04",
   "surface": "manual",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
    "analyst"
   ],
   "spec": {
-   "code": "M-04",
-   "name": "Chapter: outreach & follow-up",
-   "purpose": "Channels, cadences, what to say, reading the funnel.",
-   "layout": [
-    "chapter"
-   ],
-   "data": [],
    "roles": [
     "super_admin",
     "strategist",
     "analyst"
    ],
-   "logic": [],
-   "integrations": [],
+   "data": [
+    "prospects",
+    "pages",
+    "events",
+    "touches",
+    "bookings",
+    "docs/ops-manual/**"
+   ],
+   "integrations": [
+    "react-markdown",
+    "docs/screenshots (Vite asset glob)"
+   ],
+   "logic": [
+    "the chapter body is markdown in docs/ops-manual/<lang>/NN-slug.md; the app never stores chapter prose",
+    "language follows the app toggle; a missing es/ chapter falls back to en and the header says so (R-M02)",
+    "live-data directives on their own line render from the running app, never from typed prose (R-M01)",
+    "[screenshot: CODE — caption] resolves docs/screenshots/CODE/1280.jpg, else a dashed placeholder naming the file",
+    "> DECISION NEEDED: blocks render inline and are collected on M-01",
+    "the channel block counts real touches per channel; the funnel KPIs read tracked events"
+   ],
    "components": [
     "Card",
-    "Button"
+    "Badge",
+    "Button",
+    "Select",
+    "Stat",
+    "DataTable",
+    "EmptyState"
    ],
-   "actions": [],
+   "rules": [
+    "R-M01",
+    "R-M02"
+   ],
    "states": [
     "loading",
-    "default",
-    "empty"
+    "chapter",
+    "no translation (en fallback)",
+    "missing chapter",
+    "print"
    ],
-   "notes": [
-    "Built by module manual (T33)"
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "code": "M-04",
+   "name": "Chapter: outreach & follow-up",
+   "purpose": "Which channel fits which prospect, the four-sentence message, the fourteen-day behaviour-driven cadence, sending honestly while the transport is a placeholder, and reading the funnel without lying to yourself.",
+   "tone": "list",
+   "layout": [
+    "chapter head (code, part, title, summary, provenance)",
+    "switcher + language + prev / next + print",
+    "chapter body (prose, live blocks, figures, decisions)",
+    "prev / next footer"
+   ],
+   "actions": [
+    {
+     "id": "manual.openChapter",
+     "label": "Open chapter",
+     "intent": "open the {chapter} chapter of the ops manual",
+     "params": {
+      "chapter": "string"
+     }
+    },
+    {
+     "id": "manual.nextChapter",
+     "label": "Next chapter",
+     "intent": "go to the next chapter"
+    },
+    {
+     "id": "manual.prevChapter",
+     "label": "Previous chapter",
+     "intent": "go to the previous chapter"
+    },
+    {
+     "id": "manual.print",
+     "label": "Print",
+     "intent": "print this chapter of the ops manual"
+    }
    ]
   }
  },
@@ -3823,39 +4228,101 @@
   "path": "/manual/calls",
   "code": "M-05",
   "surface": "manual",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
    "analyst"
   ],
   "spec": {
-   "code": "M-05",
-   "name": "Chapter: walkthrough calls",
-   "purpose": "Running the 15-minute walkthrough and the proposal.",
-   "layout": [
-    "chapter"
-   ],
-   "data": [],
    "roles": [
     "super_admin",
     "strategist",
     "analyst"
    ],
-   "logic": [],
-   "integrations": [],
+   "data": [
+    "prospects",
+    "pages",
+    "events",
+    "touches",
+    "bookings",
+    "docs/ops-manual/**"
+   ],
+   "integrations": [
+    "react-markdown",
+    "docs/screenshots (Vite asset glob)"
+   ],
+   "logic": [
+    "the chapter body is markdown in docs/ops-manual/<lang>/NN-slug.md; the app never stores chapter prose",
+    "language follows the app toggle; a missing es/ chapter falls back to en and the header says so (R-M02)",
+    "live-data directives on their own line render from the running app, never from typed prose (R-M01)",
+    "[screenshot: CODE — caption] resolves docs/screenshots/CODE/1280.jpg, else a dashed placeholder naming the file",
+    "> DECISION NEEDED: blocks render inline and are collected on M-01",
+    "the price band block reads priceBand() and PRICE_MONTHLY so nobody quotes from memory"
+   ],
    "components": [
     "Card",
-    "Button"
+    "Badge",
+    "Button",
+    "Select",
+    "Stat",
+    "DataTable",
+    "EmptyState"
    ],
-   "actions": [],
+   "rules": [
+    "R-M01",
+    "R-M02"
+   ],
    "states": [
     "loading",
-    "default",
-    "empty"
+    "chapter",
+    "no translation (en fallback)",
+    "missing chapter",
+    "print"
    ],
-   "notes": [
-    "Built by module manual (T33)"
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "code": "M-05",
+   "name": "Chapter: walkthrough calls",
+   "purpose": "The fifteen-minute walkthrough minute by minute, the five objections and their answers, printing the proposal, and what has to be written back into the profile the same day.",
+   "tone": "list",
+   "layout": [
+    "chapter head (code, part, title, summary, provenance)",
+    "switcher + language + prev / next + print",
+    "chapter body (prose, live blocks, figures, decisions)",
+    "prev / next footer"
+   ],
+   "actions": [
+    {
+     "id": "manual.openChapter",
+     "label": "Open chapter",
+     "intent": "open the {chapter} chapter of the ops manual",
+     "params": {
+      "chapter": "string"
+     }
+    },
+    {
+     "id": "manual.nextChapter",
+     "label": "Next chapter",
+     "intent": "go to the next chapter"
+    },
+    {
+     "id": "manual.prevChapter",
+     "label": "Previous chapter",
+     "intent": "go to the previous chapter"
+    },
+    {
+     "id": "manual.print",
+     "label": "Print",
+     "intent": "print this chapter of the ops manual"
+    }
    ]
   }
  },
@@ -4120,20 +4587,27 @@
    "name": "Actions registry",
    "purpose": "Every declared action with page, permission, params and handler-live status. This manifest is the WebMCP surface and the voice vocabulary (P-05).",
    "layout": [
-    "counts",
+    "counts (declared, live, tools, registered via)",
     "DataTable",
-    "run panel"
+    "run modal (hosts, phrase, params form, JSON Schema, result)"
    ],
    "data": [],
    "logic": [
     "flattens spec.actions across routes",
-    "live = registered on the actions bus (open the page first)"
+    "live = registered on the actions bus (open the page first)",
+    "one WebMCP tool per unique action id: name = id, description = intent, inputSchema from params, permission via can()",
+    "Run goes through the same runAction the CLI, Playwright and voice use; opens the host page first when the handler is not mounted"
    ],
    "components": [
     "DataTable",
     "Badge",
     "Button",
-    "Stat"
+    "Stat",
+    "Modal",
+    "Field",
+    "Input",
+    "Select",
+    "Card"
    ],
    "actions": [
     {
@@ -4141,7 +4615,8 @@
      "label": "Run",
      "intent": "run action {id}",
      "params": {
-      "id": "string"
+      "id": "string",
+      "params": "string"
      },
      "permission": "dev.tools"
     }
@@ -4449,22 +4924,31 @@
     "empty"
    ],
    "checkedAt": [
+    360,
     390,
-    1280
+    768,
+    1280,
+    1920,
+    2560,
+    3840
    ],
    "code": "D-09",
    "name": "Feedback inbox",
    "purpose": "Annotations triage: every feedback row; set triage (fix / ask / later / wontfix), status and decision_ref before changing anything (P-08).",
    "layout": [
+    "KPI row",
     "status tabs",
+    "filters (kind, page)",
     "DataTable",
-    "row editor"
+    "triage panel (row editor)"
    ],
    "data": [
     "feedback"
    ],
    "logic": [
-    "writes by id through the provider"
+    "writes by id through the provider",
+    "status = done refused until triage and decision_ref are on the row (R-F01)",
+    "author weight drives the suggested triage (R-F02)"
    ],
    "components": [
     "Tabs",
@@ -4473,7 +4957,11 @@
     "Input",
     "Button",
     "Badge",
-    "EmptyState"
+    "EmptyState",
+    "Card",
+    "Field",
+    "Stat",
+    "Toast"
    ],
    "actions": [
     {
@@ -4495,7 +4983,32 @@
       "status": "enum:new|seen|waiting|done"
      },
      "permission": "feedback.read"
+    },
+    {
+     "id": "dev.needsJustin",
+     "label": "Needs Justin",
+     "intent": "send feedback {id} to Justin",
+     "params": {
+      "id": "id"
+     },
+     "permission": "feedback.read"
+    },
+    {
+     "id": "dev.filterFeedback",
+     "label": "Filter",
+     "intent": "show {kind} feedback on {page} that is {status}",
+     "params": {
+      "kind": "enum:all|comment|request|bug|idea|question|praise",
+      "status": "enum:all|new|seen|waiting|done",
+      "page": "string"
+     },
+     "permission": "feedback.read"
     }
+   ],
+   "rules": [
+    "R-F01",
+    "R-F02",
+    "R-F03"
    ]
   }
  },
@@ -4667,6 +5180,79 @@
    "checkedAt": [
     390,
     1280
+   ]
+  }
+ },
+ {
+  "path": "/og/:slug",
+  "code": "L-06",
+  "surface": "public",
+  "status": "built",
+  "roles": [
+   "super_admin",
+   "strategist",
+   "analyst",
+   "prospect",
+   "guest"
+  ],
+  "spec": {
+   "roles": [
+    "super_admin",
+    "strategist",
+    "analyst",
+    "prospect",
+    "guest"
+   ],
+   "data": [
+    "pages",
+    "prospects"
+   ],
+   "integrations": [
+    "generated frame sequences from the live demo (`npm run frames`, public/frames/<prospectId>/) and the social card (`npm run og`, public/og/<slug>.jpg) are real; image generation (T40), booking provider (T50) and Supabase (T44) are not wired"
+   ],
+   "states": [
+    "known slug",
+    "unknown slug",
+    "scaled to fit"
+   ],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "tone": "landing",
+   "code": "L-06",
+   "name": "Social card (OG image source)",
+   "purpose": "The 1200x630 link preview for one prospect's page, rendered as a real themed page rather than drawn by hand: the business, the headline from their own PageModel, their palette and their OS on three devices. `npm run og` screenshots the card to public/og/<slug>.jpg and the landing page points og:image at it. Hidden from navigation; a human who opens the URL gets the card plus a link to the page.",
+   "layout": [
+    "og-card 1200x630 (scaled down to fit narrow viewports, never a horizontal scrollbar)",
+    "caption + \"Open the page\" below the card, outside the capture"
+   ],
+   "logic": [
+    "reads the pages row by slug and its prospect; prospectStyle(palette, font) themes the card through --lp-*",
+    "headline comes from the published pages.model hero section, so the card and the page never disagree",
+    "the card is exactly 1200x630 px; .og-fit scales it by min(1, 100vw / 1240) so it fits a phone without overflow, and scripts/og.mjs captures the element at scale 1",
+    "unknown slug renders a neutral Imagine card instead of an error (same spirit as R-C05)"
+   ],
+   "components": [
+    "DeviceMockup",
+    "Badge",
+    "Button"
+   ],
+   "actions": [
+    {
+     "id": "landing.openPage",
+     "label": "Open the page",
+     "intent": "open the landing page this card previews"
+    }
+   ],
+   "rules": [
+    "R-L04",
+    "R-L05"
    ]
   }
  }

@@ -14,6 +14,8 @@ import './canvas.css';
 
 const SURFACE_ORDER: Surface[] = ['public', 'demo', 'studio', 'admin', 'plan', 'docs', 'manual', 'dev'];
 const CARD_W = 300, THUMB_W = 1280, THUMB_H = 800, MIN = 0.2, MAX = 2.5;
+/** Fit never shrinks a card's controls under 44 px (P-03): the card body link is ~105 px tall at zoom 1, so 0.45 is the floor; on a phone the canvas pans instead. */
+const FIT_MIN = 0.45;
 const STAGE_W = 1720;
 
 function Thumb({ route, load, onLoad }: { route: RouteDef; load: boolean; onLoad: () => void }) {
@@ -43,7 +45,7 @@ export function CanvasPage() {
     if (v && cx != null && cy != null) { const rect = v.getBoundingClientRect(); const px = (v.scrollLeft + cx - rect.left) / zoom, py = (v.scrollTop + cy - rect.top) / zoom; setZoom(nz); requestAnimationFrame(() => { v.scrollLeft = px * nz - (cx - rect.left); v.scrollTop = py * nz - (cy - rect.top); }); }
     else setZoom(nz);
   }, [zoom]);
-  const fit = useCallback(() => { const v = view.current; if (!v) return; setZoom(Math.min(MAX, Math.max(MIN, (v.clientWidth - 24) / STAGE_W))); v.scrollTo(0, 0); }, []);
+  const fit = useCallback(() => { const v = view.current; if (!v) return; setZoom(Math.min(MAX, Math.max(MIN, FIT_MIN, (v.clientWidth - 24) / STAGE_W))); v.scrollTo(0, 0); }, []);
   useEffect(() => { fit(); }, [fit]);
   const pan = (dx: number, dy: number) => view.current?.scrollBy({ left: dx, top: dy, behavior: 'smooth' });
   const openCode = useCallback((code: string) => { const r = routes.find((x) => x.spec.code === code); if (r) nav(fillParams(r.path)); }, [routes, nav]);

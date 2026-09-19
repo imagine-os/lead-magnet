@@ -57,7 +57,7 @@ export function TaskPage() {
         <div className="row wrap xs"><Link to="/plan">{t('plan.view_kanban')}</Link><span className="faint">/</span><code>{task.id}</code></div>
         <h1>{task.title}</h1>
       </div>
-      <nav className="row wrap xs" aria-label={t('plan.views')}><Link to="/plan/list">{t('plan.view_list')}</Link><span className="faint">·</span><Link to="/plan/timeline">{t('plan.view_timeline')}</Link></nav>
+      <nav className="pl-views row wrap xs" aria-label={t('plan.views')}><Link to="/plan/list">{t('plan.view_list')}</Link><span className="faint">·</span><Link to="/plan/timeline">{t('plan.view_timeline')}</Link></nav>
     </div>
 
     <div className="row wrap pl-task-badges">

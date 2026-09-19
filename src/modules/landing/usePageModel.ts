@@ -4,7 +4,7 @@
  * snapshot, they never recompute it. The one exception: when the URL asks for a different archetype than the snapshot
  * was composed with (all four variants are reachable for every slug), we recompose that archetype from the same inputs.
  *
- * A/B (D-0xx proposed): a slug may have more than one live `pages` row - the studio publishes variant B beside A, with
+ * A/B (D-078 proposed): a slug may have more than one live `pages` row - the studio publishes variant B beside A, with
  * its own archetype and its own model. Which one a visitor sees is decided by hashing their tracking session id, so it
  * is stable for the whole visit (and across reloads in that tab) without a cookie, a server or a random flip that
  * would make the events uncomparable. `?variant=A|B` forces one, which is what the studio preview links use.

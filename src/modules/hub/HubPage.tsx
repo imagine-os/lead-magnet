@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSession } from '../../auth/SessionProvider';
 import { ROLE_HOME, ROLE_LABEL, ROLES } from '../../auth/roles';
@@ -11,6 +12,7 @@ import { tables } from '../../data/schema';
 import { rules } from '../../rules';
 import { componentLibrary } from '../../design/library';
 import { useActions } from '../../actions';
+import { useGamepadNav, useSpatialNav, useViewportAtLeast } from '../../a11y';
 import { LangToggle } from '../../components/molecule/LangToggle/LangToggle';
 import { IconButton } from '../../components/atom/IconButton/IconButton';
 import { Toggle } from '../../components/atom/Toggle/Toggle';
@@ -37,6 +39,7 @@ export function HubPage() {
   const { rows: guesses } = useTable<StackGuessRow>('stack_guesses');
   const { rows: tasks } = useTable<TaskRow>('tasks');
   const routes = getRoutes();
+  const root = useRef<HTMLDivElement>(null); const spatial = useSpatialNav(root); useGamepadNav(spatial); const tv = useViewportAtLeast(1920); // P-04: arrows / d-pad move focus on the hub
   const built = routes.filter((r) => routeStatus(r) === 'built').length;
   const done = tasks.filter((x) => x.status === 'done').length;
   useActions('HUB-01', { 'hub.setLang': (p) => setLang((p?.lang as 'en' | 'es') ?? 'en'), 'hub.toggleTheme': () => toggleTheme(), 'hub.toggleDevMode': () => setDevMode(!devMode), 'hub.switchUser': (p) => switchUser(String(p?.role ?? 'guest')), 'hub.openSurface': (p) => nav(String(p?.surface ?? '/')), 'hub.resetDemoData': () => data.reset?.() });
@@ -46,7 +49,7 @@ export function HubPage() {
     { to: firstProspect ? `/proposal/${firstProspect.id}` : '/proposal/x', icon: 'doc', title: t('hub.proposal'), body: t('hub.proposal_body'), code: 'R-01' }, { to: '/site', icon: 'globe', title: t('hub.site'), body: t('hub.site_body'), code: 'W-01' }, { to: '/docs', icon: 'book', title: t('hub.docs'), body: t('hub.docs_body'), code: 'D-06' }, { to: '/manual', icon: 'book', title: t('hub.manual'), body: t('hub.manual_body'), code: 'M-01' },
   ];
   const devLinks = routes.filter((r) => r.surface === 'dev' && !r.path.includes(':')).sort((a, b) => a.spec.code.localeCompare(b.spec.code));
-  return (<div className="hub">
+  return (<div className="hub" ref={root}>
     <header className="hub-head container container-wide">
       <div className="hub-brand"><span className="shell-mark" aria-hidden>LM</span><div><div className="hub-title font-display">Lead Magnet</div><div className="xs muted">{t('hub.tagline')} · v{__APP_VERSION__}</div></div></div>
       <div className="row wrap hub-controls">
@@ -81,6 +84,6 @@ export function HubPage() {
         {isSuperAdmin && <div className="row wrap"><Button variant="outline" size="sm" icon="refresh" onClick={async () => { await data.reset?.(); toast.push({ tone: 'success', title: t('hub.reset_done') }); }}>{t('hub.reset')}</Button></div>}
       </section>
     </main>
-    <footer className="hub-foot container container-wide"><div className="grid grid-4 hub-counts"><Stat label={t('hub.routes')} value={routes.length} hint={`${built} ${t('hub.built')} · ${routes.length - built} ${t('hub.stubs')}`} /><Stat label={t('hub.tables')} value={tables.length} hint={`${rules.length} ${t('hub.rules')}`} /><Stat label={t('hub.components')} value={componentLibrary.length} /><Stat label={t('hub.plan_progress')} value={`${done} / ${tasks.length}`} hint={t('hub.tasks_done')} /></div><p className="xs muted">{lang === 'es' ? 'Hecho por Imagine.' : 'Made by Imagine.'} <a href="https://github.com/imagine-os/lead-magnet">GitHub</a> · <Link to="/docs">Docs</Link></p></footer>
+    <footer className="hub-foot container container-wide"><div className="grid grid-4 hub-counts"><Stat label={t('hub.routes')} value={routes.length} hint={`${built} ${t('hub.built')} · ${routes.length - built} ${t('hub.stubs')}`} /><Stat label={t('hub.tables')} value={tables.length} hint={`${rules.length} ${t('hub.rules')}`} /><Stat label={t('hub.components')} value={componentLibrary.length} /><Stat label={t('hub.plan_progress')} value={`${done} / ${tasks.length}`} hint={t('hub.tasks_done')} /></div>{tv && <p className="xs muted" data-tv-hint>{t('hub.tv_hint')}</p>}<p className="xs muted">{lang === 'es' ? 'Hecho por Imagine.' : 'Made by Imagine.'} <a href="https://github.com/imagine-os/lead-magnet">GitHub</a> · <Link to="/docs">Docs</Link></p></footer>
   </div>);
 }

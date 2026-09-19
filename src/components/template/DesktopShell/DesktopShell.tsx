@@ -28,7 +28,7 @@ export function DesktopShell({ surfaces, routes, title, children, feedback = tru
   const current = routes.find((r) => matchPath({ path: r.path, end: true }, pathname));
   const header = <Link to="/" className="shell-brand" title="Lead Magnet · testing hub"><span className="shell-mark" aria-hidden>LM</span><span className="shell-brandname">Lead Magnet</span><span className="xs faint">{title}</span></Link>;
   const sidebar = <Sidebar groups={groups} header={header} showCodes={devMode} onNavigate={() => setDrawer(false)} footer={<Link to="/" className="shell-hublink">Hub</Link>} />;
-  return (<div className="shell">
+  return (<div data-component="DesktopShell" className="shell">
     {!narrow && <div className="shell-side">{sidebar}</div>}
     {narrow && drawer && <div className="shell-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) setDrawer(false); }}><div className="shell-overlay-panel">{sidebar}<IconButton icon="close" label="Close menu" className="shell-overlay-close" variant="outline" onClick={() => setDrawer(false)} /></div></div>}
     <div className="shell-main"><TopBar title={title} onMenu={narrow ? () => setDrawer(true) : undefined} /><main className="shell-content" id="main">{children}</main></div>

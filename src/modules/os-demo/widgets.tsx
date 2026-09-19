@@ -44,7 +44,7 @@ export function WeekStrip({ events, label }: { events: CalEvent[]; label: string
   const today = new Date().getDay(); // 0 = Sunday
   const todayIdx = (today + 6) % 7;
   return (
-    <div className="dw-week" role="group" aria-label={label}>
+    <div className="dw-week" role="group" aria-label={label} tabIndex={0}>
       {days.map((day, i) => (
         <div key={day} className={`dw-day ${i === todayIdx ? 'is-today' : ''}`}>
           <div className="dw-day-head xs"><span>{day}</span>{i === todayIdx && <span className="dw-dot" aria-hidden />}</div>

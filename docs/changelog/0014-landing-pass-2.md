@@ -1,4 +1,4 @@
-# landing pass 2 (T41-lite + polish) - L-01..L-06
+# 0014 - Landing pass 2: real video-on-scroll, A/B variants, per-page meta and social card (T41-lite, L-01..L-06)
 
 version: 0.3.0
 date: 2026-09-19
@@ -97,19 +97,19 @@ codes: L-01 L-02 L-03 L-04 L-05 (pass 2) · L-06 (new)
 
 ## Proposed decisions
 
-- **D-0xx (proposed): video-on-scroll is screenshots of the running product, committed as static files.**
+- **D-077 (proposed): video-on-scroll is screenshots of the running product, committed as static files.**
   `npm run frames` walks the real demo and commits the JPEG sequence; pages degrade to the live composition when it is
   absent. Rejected: generated / AI video (T40 is not wired and a rendered fake of a product that exists is the one
   dishonest thing we could put above the fold), a `<video>` element (a JPEG sequence scrubs, seeks and respects
   reduced motion with no extra code), and generating in CI (product screenshots should change in a reviewable commit).
   Cost: ~4.4 MB in the repo and a regeneration step whenever the demo's look changes.
-- **D-0xx (proposed): the A/B bucket is `hash(sessionId() + slug) % live rows`.** Deterministic per visitor, spread
+- **D-078 (proposed): the A/B bucket is `hash(sessionId() + slug) % live rows`.** Deterministic per visitor, spread
   across visitors, no cookie, no server. Rejected: random per view (uncomparable events, page changes under the
   visitor) and a stored flag (nothing to serve from yet).
-- **D-0xx (proposed): `/p/:slug` renders the archetype the published row carries; the explicit paths force theirs.**
+- **D-079 (proposed): `/p/:slug` renders the archetype the published row carries; the explicit paths force theirs.**
   This is a refinement of the pass-1 decision that "the archetype in the URL wins over the snapshot" - the bare path
   has no archetype in it. Without it, a variant B published as an audit renders as a reveal and the test is void.
-- **D-0xx (proposed): static prerender of `/p/<slug>` at build time (a later task).** A HashRouter route cannot give a
+- **D-080 (proposed): static prerender of `/p/<slug>` at build time (a later task).** A HashRouter route cannot give a
   crawler that does not run JavaScript per-page `og:` tags, so today every prospect link unfurls with `index.html`'s
   tags. Prerendering each live slug to a real HTML file (with its title, description and `og:image` baked in, the SPA
   taking over on load) fixes it. Alternative rejected: switching to `BrowserRouter` (GitHub Pages has no rewrite rule,

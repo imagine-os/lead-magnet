@@ -14,8 +14,12 @@
   --lp-text: var(--color-text);
   --lp-font-display: var(--font-display);
   --lp-font-body: var(--font-sans);
-  --lp-on-primary: #fff;
-  --lp-muted: color-mix(in srgb, var(--lp-text) 62%, var(--lp-bg));
+  --lp-on-primary: #fff; /* prospectStyle() computes the real value per palette */
+  --lp-on-accent: var(--lp-text);
+  /* 72 % of the prospect's text keeps muted copy >= 4.5:1 on their background (62 % fell to 4.4 on a warm palette). */
+  --lp-muted: color-mix(in srgb, var(--lp-text) 72%, var(--lp-bg));
+  /* Their primary as small text: pulled towards their text colour so a bright brand orange still reads at >= 4.5:1. */
+  --lp-primary-text: color-mix(in srgb, var(--lp-primary) 70%, var(--lp-text));
   --lp-line: color-mix(in srgb, var(--lp-text) 14%, var(--lp-bg));
   --lp-line-soft: color-mix(in srgb, var(--lp-text) 8%, var(--lp-bg));
   --lp-tint: color-mix(in srgb, var(--lp-primary) 8%, var(--lp-bg));
@@ -47,7 +51,7 @@
 .lp-main { flex: 1 1 auto; }
 .lp-foot { border-top: 1px solid var(--lp-line-soft); background: var(--lp-tint); margin-top: var(--sp-10); }
 .lp-foot-in { display: flex; flex-wrap: wrap; gap: var(--sp-3); justify-content: space-between; padding-top: var(--sp-6); padding-bottom: var(--sp-6); font-size: var(--fs-xs); color: var(--lp-muted); }
-.lp-linkbtn { background: none; border: 0; padding: 0; min-height: 44px; color: var(--lp-primary); font: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.lp-linkbtn { background: none; border: 0; padding: 0; min-height: 44px; color: var(--lp-primary-text); font: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .lp-linkwrap, .lp-linkwrap:hover { text-decoration: none; }
 
 /* ---------- section rhythm and type ---------- */
@@ -65,7 +69,7 @@
 .lp-lede { font-size: clamp(16px, 1.5vw, calc(22px * var(--scale))); line-height: 1.5; color: var(--lp-muted); max-width: 52ch; margin: 0; }
 .lp-sub { font-size: var(--fs-md); line-height: 1.55; color: var(--lp-muted); margin: 0; }
 .lp-sec-cta_band .lp-sub { color: color-mix(in srgb, var(--lp-on-primary) 84%, transparent); }
-.lp-eyebrow { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: var(--ls-eyebrow); font-weight: var(--fw-bold); color: var(--lp-primary); margin: 0 0 var(--sp-3); }
+.lp-eyebrow { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: var(--ls-eyebrow); font-weight: var(--fw-bold); color: var(--lp-primary-text); margin: 0 0 var(--sp-3); }
 .lp-note { font-size: var(--fs-xs); color: var(--lp-muted); margin: var(--sp-4) 0 0; max-width: 62ch; }
 .lp-cta-row { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; }
 
@@ -82,7 +86,7 @@
 .lp .stat { background: var(--lp-surface); border-color: var(--lp-line); }
 .lp .stat-value { font-family: var(--lp-font-display); color: var(--lp-primary); }
 .lp .stat-label, .lp .stat-hint { color: var(--lp-muted); }
-.lp .btn-link { color: var(--lp-primary); }
+.lp .btn-link { color: var(--lp-primary-text); }
 
 /* A prospect's palette is a light surface whatever theme the app is in, so the library controls this page uses are
    repainted from --lp-* here rather than by redefining --color-* (which would fork the tokens per prospect, P-02).
@@ -100,17 +104,12 @@
 .lp .field-label { color: var(--lp-text); }
 .lp .field-hint { color: var(--lp-muted); }
 .lp .badge { background: var(--lp-tint-2); color: var(--lp-text); }
-.lp .badge-primary { background: var(--lp-tint-2); color: var(--lp-primary); }
+.lp .badge-primary { background: var(--lp-tint-2); color: var(--lp-primary-text); }
 .lp .badge-accent { background: var(--lp-accent); color: var(--lp-text); }
 .lp .modal-box { background: var(--lp-bg); color: var(--lp-text); }
 .lp .modal-head { border-bottom-color: var(--lp-line); }
 .lp .modal-foot { border-top-color: var(--lp-line); }
 .lp .modal-head h2 { font-family: var(--lp-font-display); color: var(--lp-text); }
-/* Two long CTA labels do not fit one row on a phone; the footer wraps instead of clipping the secondary action.
-   (Foundation request: `.modal-foot` should wrap by default - see docs/changelog/_pending/landing.md.) */
-.lp .modal-foot { flex-wrap: wrap; }
-.lp .modal-foot > * { flex: 1 1 auto; justify-content: center; }
-@media (min-width: 480px) { .lp .modal-foot > * { flex: 0 0 auto; } }
 
 /* ---------- hero ---------- */
 .lp-hero { display: grid; gap: clamp(32px, 4vw, var(--sp-16)); align-items: center; }
@@ -132,7 +131,7 @@
 .lp-device-phone .device { max-width: 220px; }
 .lp-device-cap { font-size: var(--fs-2xs); text-transform: uppercase; letter-spacing: var(--ls-eyebrow); color: var(--lp-muted); }
 @media (prefers-reduced-motion: no-preference) {
-  .lp-device { opacity: calc(var(--lp-progress, 1) * 2.4 - var(--lp-delay, 0)); transform: translateY(calc((1 - var(--lp-progress, 1)) * 48px)) scale(calc(.93 + var(--lp-progress, 1) * .07)); transition: opacity 240ms linear, transform 240ms linear; }
+  .lp-device { opacity: clamp(0, calc((var(--lp-progress, 1) * 2.4 - var(--lp-delay, 0)) * 3 - 1), 1); transform: translateY(calc((1 - var(--lp-progress, 1)) * 48px)) scale(calc(.93 + var(--lp-progress, 1) * .07)); transition: opacity 240ms linear, transform 240ms linear; }
 }
 
 /* ---------- the mini OS inside a device ---------- */
@@ -142,7 +141,7 @@
 .lp-os-bar { display: flex; align-items: center; gap: .6em; padding: .7em 1em; background: var(--lp-primary); color: var(--lp-on-primary); flex: 0 0 auto; }
 .lp-os-mark { display: grid; place-items: center; width: 1.9em; height: 1.9em; border-radius: var(--r-sm); background: var(--lp-accent); color: var(--lp-text); font-weight: var(--fw-bold); }
 .lp-os-name { font-family: var(--lp-font-display); font-weight: var(--fw-bold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.lp-os-city { margin-left: auto; opacity: .8; white-space: nowrap; }
+.lp-os-city { margin-left: auto; opacity: .92; white-space: nowrap; }
 .lp-os-body { display: flex; flex: 1 1 auto; min-height: 0; }
 .lp-os-rail { display: none; flex-direction: column; gap: .35em; padding: .8em .7em; background: var(--lp-tint); border-right: 1px solid var(--lp-line-soft); min-width: 7em; }
 .lp-os-laptop .lp-os-rail, .lp-os-tv .lp-os-rail { display: flex; }
@@ -161,7 +160,7 @@
 .lp-w-list li { padding-left: .8em; position: relative; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .lp-w-list li::before { content: ''; position: absolute; left: 0; top: .5em; width: .35em; height: .35em; border-radius: var(--r-round); background: var(--lp-primary); }
 .lp-w-chat li { background: var(--lp-tint); border-radius: var(--r-sm); padding: .3em .5em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.lp-w-chat b { color: var(--lp-primary); }
+.lp-w-chat b { color: var(--lp-primary-text); }
 .lp-w-table { width: 100%; border-collapse: collapse; }
 .lp-w-table td { padding: .2em 0; border-bottom: 1px solid var(--lp-line-soft); }
 .lp-w-table td:last-child { text-align: right; font-weight: var(--fw-semibold); }
@@ -291,7 +290,7 @@
 .lp-sticky { display: none; flex-direction: column; position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; gap: var(--sp-2); padding: var(--sp-3) var(--sp-4) calc(var(--sp-3) + env(safe-area-inset-bottom, 0px)); background: color-mix(in srgb, var(--lp-bg) 94%, transparent); backdrop-filter: blur(10px); border-top: 1px solid var(--lp-line); transform: translateY(130%); transition: transform var(--dur-slow) var(--ease-out); }
 .lp-sticky.is-on { transform: none; }
 /* A bare button is an ask; the number beside it is the reason. */
-.lp-sticky-num { margin: 0; text-align: center; font-family: var(--lp-font-display); font-weight: var(--fw-bold); font-size: var(--fs-sm); color: var(--lp-primary); font-variant-numeric: tabular-nums; }
+.lp-sticky-num { margin: 0; text-align: center; font-family: var(--lp-font-display); font-weight: var(--fw-bold); font-size: var(--fs-sm); color: var(--lp-primary-text); font-variant-numeric: tabular-nums; }
 .lp-sticky-row { display: flex; gap: var(--sp-2); align-items: stretch; }
 .lp-sticky-row > :first-child { flex: 1 1 auto; min-width: 0; }
 @media (max-width: 767px) { .lp-sticky { display: flex; } .lp-foot-in { padding-bottom: calc(var(--sp-20)); } }

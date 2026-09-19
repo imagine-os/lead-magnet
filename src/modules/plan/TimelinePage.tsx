@@ -45,7 +45,8 @@ export function TimelinePage() {
 
   const zoomTo = useCallback((z: number) => setZoom(Math.min(MAX, Math.max(MIN, Number(z.toFixed(2))))), []);
   /** Fit-to-width: the whole graph visible in the frame on first render and whenever the frame or the graph changes (review fix, changelog 0009). */
-  const fit = useCallback(() => { const el = scroller.current; if (!el || !graph.width) return; const inner = el.clientWidth - 16; if (inner > 0) zoomTo(inner / graph.width); }, [graph.width, zoomTo]);
+  // Fit never shrinks a node under 44 px tall (P-03): on a phone the graph scrolls sideways instead of turning its targets into slivers.
+  const fit = useCallback(() => { const el = scroller.current; if (!el || !graph.width) return; const inner = el.clientWidth - 16; if (inner > 0) zoomTo(Math.max(inner / graph.width, 44 / GRAPH.nodeH)); }, [graph.width, zoomTo]);
   const userZoomed = useRef(false);
   useEffect(() => { if (userZoomed.current) return; fit(); const el = scroller.current; if (!el || typeof ResizeObserver === 'undefined') return; const ro = new ResizeObserver(() => { if (!userZoomed.current) fit(); }); ro.observe(el); return () => ro.disconnect(); }, [fit]);
   const zoomBy = (z: number) => { userZoomed.current = true; zoomTo(z); };
@@ -76,7 +77,7 @@ export function TimelinePage() {
   return (<div className="container container-wide page stack pl-timeline">
     <div className="page-head">
       <div className="stack-sm"><h1>K-03 · {t('plan.k03_title')}</h1><p className="muted small">{t('plan.tagline')}</p></div>
-      <nav className="row wrap xs" aria-label={t('plan.views')}><Link to="/plan">{t('plan.view_kanban')}</Link><span className="faint">·</span><Link to="/plan/list">{t('plan.view_list')}</Link></nav>
+      <nav className="pl-views row wrap xs" aria-label={t('plan.views')}><Link to="/plan">{t('plan.view_kanban')}</Link><span className="faint">·</span><Link to="/plan/list">{t('plan.view_list')}</Link></nav>
     </div>
 
     <div className="grid grid-4 pl-stats">
@@ -108,8 +109,8 @@ export function TimelinePage() {
     </div>
 
     <div className="pl-graph-wrap">
-      <div ref={scroller} className="pl-graph-scroll" tabIndex={0} role="group" aria-label={t('plan.graph_label')} onKeyDown={onKey}>
-        <svg className="pl-graph" width={graph.width * zoom} height={graph.height * zoom} viewBox={`0 0 ${graph.width} ${graph.height}`} role="img" aria-label={t('plan.graph_aria', { nodes: graph.nodes.length, edges: graph.edges.length })}>
+      <div ref={scroller} className="pl-graph-scroll" tabIndex={0} role="group" aria-label={t('plan.graph_label')} onKeyDown={onKey} data-spatial="skip">
+        <svg className="pl-graph" width={graph.width * zoom} height={graph.height * zoom} viewBox={`0 0 ${graph.width} ${graph.height}`} role="group" aria-label={t('plan.graph_aria', { nodes: graph.nodes.length, edges: graph.edges.length })}>
           <defs>
             <marker id="pl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" className="pl-arrowhead" /></marker>
           </defs>

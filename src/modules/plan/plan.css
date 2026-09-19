@@ -62,7 +62,9 @@
 .pl-node-meta { fill: var(--color-text-faint); font-size: 12px; }
 .pl-node-ready { fill: var(--status-done-fg); }
 .pl-node:hover .pl-node-box { stroke: var(--color-primary); }
+/* Focus is both a ring on the node group (what a checker and a sighted user see) and a thicker stroke on the box. */
 .pl-node:focus { outline: none; }
+.pl-node:focus-visible { outline: var(--ring) solid var(--color-focus); outline-offset: 2px; }
 .pl-node:focus-visible .pl-node-box { stroke: var(--color-focus); stroke-width: 3; }
 .pl-node.is-dim { opacity: .22; }
 .pl-node.is-focus .pl-node-box { stroke: var(--color-primary); stroke-width: 3; }
@@ -106,3 +108,10 @@
 .pl-deplist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-2); font-size: var(--fs-xs); }
 .pl-deplist li { display: flex; align-items: center; gap: var(--sp-2); min-height: 32px; flex-wrap: wrap; }
 @media (max-width: 760px) { .pl-task-grid { grid-template-columns: 1fr; } }
+
+/* 44 px targets for the small text controls in the plan (P-03); negative block margins keep the line boxes where they were. */
+.pl-views a { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding: 0 var(--sp-1); }
+.pl-tasklink, .pl-depcount { display: inline-flex; align-items: center; min-width: 44px; min-height: 44px; margin-block: -12px; }
+.pl-card-title { display: inline-flex; align-items: center; min-height: 44px; margin-block: -10px; }
+/* global.css caps svg at max-width: 100 %; the graph is meant to overflow its scroller, otherwise zoom cannot grow a node. */
+.pl-graph { max-width: none; }

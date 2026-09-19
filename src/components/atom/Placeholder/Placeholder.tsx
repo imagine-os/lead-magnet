@@ -21,7 +21,7 @@ export function Placeholder({ will, by, children, button, block }: PlaceholderPr
   const inner = children && isValidElement(children)
     ? cloneElement(children as ReactElement<Record<string, unknown>>, { ...handlers, onClick: (e: Event) => { e.preventDefault?.(); fire(); }, 'data-placeholder': will })
     : (() => { const { label, ...btn } = button ?? { label: will }; return <Button {...btn} {...handlers} onClick={fire} data-placeholder={will}>{label}</Button>; })();
-  return (<span className={`placeholder ${devMode ? 'is-dev' : ''} ${block ? 'is-block' : ''}`} data-placeholder-wrap>
+  return (<span data-component="Placeholder" className={`placeholder ${devMode ? 'is-dev' : ''} ${block ? 'is-block' : ''}`} data-placeholder-wrap>
     {inner}
     {devMode && <span className="placeholder-badge" aria-hidden>not wired</span>}
     <span role="tooltip" id={tipId} className={`placeholder-tip ${show ? 'is-show' : ''}`}>{text}</span>

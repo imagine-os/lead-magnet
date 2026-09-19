@@ -24,16 +24,17 @@ export const neutrals = {
   'n-400': '#A2ABBF', 'n-500': '#7F899E', 'n-600': '#616B80', 'n-700': '#48506A', 'n-800': '#2F3550', 'n-850': '#1F2438', 'n-900': '#161A2B', 'n-950': '#0E1120', 'n-1000': '#000000',
 } as const;
 
+/** Every fg sits at >= 4.5:1 on its own bg and on white (WCAG 2.1 AA for badge-sized text): success 5.9, warn 5.3, danger 5.6, info 5.8. */
 export const status = {
-  light: { success: '#1E9E5A', successBg: '#E3F6EB', warn: '#D97706', warnBg: '#FEF3E2', danger: '#DC3B3B', dangerBg: '#FDEBEB', info: '#2563EB', infoBg: '#E7EEFD' },
+  light: { success: '#0F6B3C', successBg: '#E3F6EB', warn: '#9A5200', warnBg: '#FEF3E2', danger: '#B91C1C', dangerBg: '#FDEBEB', info: '#1D4ED8', infoBg: '#E7EEFD' },
   dark: { success: '#5FD68F', successBg: '#12321F', warn: '#F5A94B', warnBg: '#3B2A0E', danger: '#FF7B7B', dangerBg: '#4A1B1B', info: '#7DA0FF', infoBg: '#17245A' },
 } as const;
 
 /** Plan / task lifecycle hues (K- module) and page status hues (draft/live/expired). One vocabulary. */
 export const lifecycleHues = {
-  backlog: { fg: '#616B80', bg: '#EDF0F6' }, doing: { fg: '#2563EB', bg: '#E7EEFD' }, done: { fg: '#1E9E5A', bg: '#E3F6EB' }, blocked: { fg: '#DC3B3B', bg: '#FDEBEB' }, awaiting_justin: { fg: '#D97706', bg: '#FEF3E2' },
-  draft: { fg: '#616B80', bg: '#EDF0F6' }, live: { fg: '#1E9E5A', bg: '#E3F6EB' }, expired: { fg: '#A2ABBF', bg: '#F5F7FB' },
-  built: { fg: '#1E9E5A', bg: '#E3F6EB' }, stub: { fg: '#D97706', bg: '#FEF3E2' },
+  backlog: { fg: '#616B80', bg: '#EDF0F6' }, doing: { fg: '#1D4ED8', bg: '#E7EEFD' }, done: { fg: '#0F6B3C', bg: '#E3F6EB' }, blocked: { fg: '#B91C1C', bg: '#FDEBEB' }, awaiting_justin: { fg: '#9A5200', bg: '#FEF3E2' },
+  draft: { fg: '#616B80', bg: '#EDF0F6' }, live: { fg: '#0F6B3C', bg: '#E3F6EB' }, expired: { fg: '#616B80', bg: '#F5F7FB' },
+  built: { fg: '#0F6B3C', bg: '#E3F6EB' }, stub: { fg: '#9A5200', bg: '#FEF3E2' },
 } as const;
 
 /** Semantic roles per theme. `{p}` placeholders resolve from brand / neutrals at generation time. */
@@ -41,7 +42,8 @@ export const semantic: Record<ThemeName, Record<string, string>> = {
   light: {
     'color-bg': '{n-50}', 'color-surface': '{n-0}', 'color-surface-2': '{n-50}', 'color-surface-3': '{n-100}',
     'color-surface-tint': '{electric50}', 'color-surface-tint-2': '{electric100}', 'color-sidebar': '{n-0}',
-    'color-text': '{n-900}', 'color-heading': '{ink800}', 'color-text-secondary': '{n-700}', 'color-text-muted': '{n-600}', 'color-label': '{n-500}', 'color-text-faint': '{n-400}',
+    // Text ladder on white: secondary 8.0, muted 6.0, label 5.35, faint 4.9 (>= 4.5:1 also on surface-2; faint is the floor, never lighter).
+    'color-text': '{n-900}', 'color-heading': '{ink800}', 'color-text-secondary': '{n-700}', 'color-text-muted': '#5B6579', 'color-label': '{n-600}', 'color-text-faint': '#66708A',
     'color-text-on-primary': '{n-0}', 'color-primary': '{electric600}', 'color-primary-hover': '{electric700}', 'color-primary-soft': '{electric100}', 'color-primary-text': '{electric700}',
     'color-accent': '{lime500}', 'color-accent-text': '{ink800}', 'color-accent-soft': '{lime100}',
     'color-ink': '{ink800}', 'color-ink-text': '{n-0}',
@@ -53,7 +55,8 @@ export const semantic: Record<ThemeName, Record<string, string>> = {
   dark: {
     'color-bg': '{n-950}', 'color-surface': '{n-900}', 'color-surface-2': '{n-850}', 'color-surface-3': '{n-800}',
     'color-surface-tint': 'rgba(143,166,255,.12)', 'color-surface-tint-2': 'rgba(143,166,255,.20)', 'color-sidebar': '{n-950}',
-    'color-text': '{n-100}', 'color-heading': '{n-0}', 'color-text-secondary': '#C3CAD8', 'color-text-muted': '#A2ABBF', 'color-label': '#8F98AD', 'color-text-faint': '{n-500}',
+    // Dark ladder on n-900: secondary 9.6, muted 7.5, label 6.0, faint 5.8 (n-500 was 4.4 on surface-2).
+    'color-text': '{n-100}', 'color-heading': '{n-0}', 'color-text-secondary': '#C3CAD8', 'color-text-muted': '#A2ABBF', 'color-label': '#8F98AD', 'color-text-faint': '#8C96AB',
     'color-text-on-primary': '{n-0}', 'color-primary': '{electricOnDark}', 'color-primary-hover': '{electricOnDarkHover}', 'color-primary-soft': 'rgba(143,166,255,.20)', 'color-primary-text': '{electricOnDark}',
     'color-accent': '{lime500}', 'color-accent-text': '{ink900}', 'color-accent-soft': 'rgba(184,242,91,.16)',
     'color-ink': '{n-0}', 'color-ink-text': '{ink900}',
@@ -138,7 +141,24 @@ export function buildTokensCss(): string {
 
 /** Prospect palette -> CSS custom properties for a landing page / demo root. Pages spread this into `style`. */
 export interface ProspectPalette { primary: string; accent: string; bg: string; surface: string; text: string }
+/** WCAG relative luminance of a #rgb / #rrggbb colour (0..1). Non-hex input counts as mid grey so nothing throws. */
+export function luminance(hex: string): number {
+  const m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex.trim());
+  if (!m) return 0.5;
+  const h = m[1].length === 3 ? m[1].split('').map((c) => c + c).join('') : m[1];
+  const ch = (i: number) => { const c = parseInt(h.slice(i, i + 2), 16) / 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+  return 0.2126 * ch(0) + 0.7152 * ch(2) + 0.0722 * ch(4);
+}
+/** WCAG contrast ratio between two colours (1..21). */
+export function contrastRatio(a: string, b: string): number { const la = luminance(a); const lb = luminance(b); return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05); }
+/** The readable text colour on `bg`: white when it clears 4.5:1, otherwise `dark` (the prospect's text colour or our ink). Prospect palettes are theirs, so the text on their buttons is computed, never assumed. */
+export function readableOn(bg: string, dark: string = brand.ink800): string { return contrastRatio('#FFFFFF', bg) >= 4.5 || contrastRatio('#FFFFFF', bg) >= contrastRatio(dark, bg) ? '#FFFFFF' : dark; }
+
 export function prospectStyle(p: ProspectPalette, font: 'display' | 'humanist' | 'serif' | 'mono' = 'display'): Record<string, string> {
   const fonts = { display: type['font-display'], humanist: type['font-sans'], serif: "'Iowan Old Style', 'Palatino Linotype', Georgia, serif", mono: type['font-mono'] };
-  return { '--lp-primary': p.primary, '--lp-accent': p.accent, '--lp-bg': p.bg, '--lp-surface': p.surface, '--lp-text': p.text, '--lp-font-display': fonts[font], '--lp-font-body': font === 'mono' ? fonts.mono : type['font-sans'] };
+  return {
+    '--lp-primary': p.primary, '--lp-accent': p.accent, '--lp-bg': p.bg, '--lp-surface': p.surface, '--lp-text': p.text,
+    '--lp-on-primary': readableOn(p.primary, p.text), '--lp-on-accent': readableOn(p.accent, p.text),
+    '--lp-font-display': fonts[font], '--lp-font-body': font === 'mono' ? fonts.mono : type['font-sans'],
+  };
 }

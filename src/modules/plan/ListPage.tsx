@@ -65,7 +65,7 @@ export function ListPage() {
   return (<div className="container container-wide page stack">
     <div className="page-head">
       <div className="stack-sm"><h1>K-02 · {t('plan.k02_title')}</h1><p className="muted small">{t('plan.tagline')}</p></div>
-      <nav className="row wrap xs" aria-label={t('plan.views')}><Link to="/plan">{t('plan.view_kanban')}</Link><span className="faint">·</span><Link to="/plan/timeline">{t('plan.view_timeline')}</Link></nav>
+      <nav className="pl-views row wrap xs" aria-label={t('plan.views')}><Link to="/plan">{t('plan.view_kanban')}</Link><span className="faint">·</span><Link to="/plan/timeline">{t('plan.view_timeline')}</Link></nav>
     </div>
 
     <div className="grid grid-4 pl-stats">

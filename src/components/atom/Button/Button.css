@@ -1,4 +1,4 @@
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2); border-radius: var(--r-md); border: 1px solid transparent; font-weight: var(--fw-semibold); font-size: var(--fs-sm); line-height: 1; padding: 0 var(--sp-5); height: var(--h-control); white-space: nowrap; transition: background var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast), transform var(--dur-fast); }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; gap: var(--sp-2); border-radius: var(--r-md); border: 1px solid transparent; font-weight: var(--fw-semibold); font-size: var(--fs-sm); line-height: 1; padding: 0 var(--sp-5); height: var(--h-control); white-space: nowrap; transition: background var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast), transform var(--dur-fast); }
 .btn:active:not(:disabled) { transform: translateY(1px); }
 .btn:disabled { opacity: .55; cursor: not-allowed; }
 .btn-sm { height: var(--h-control-sm); padding: 0 var(--sp-4); font-size: var(--fs-xs); }

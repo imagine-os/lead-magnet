@@ -1,4 +1,4 @@
-# annotations (T49, D-09)
+# 0012 - Annotations: element-level pins and enforced triage (T49, D-09)
 
 version: 0.3.0
 date: 2026-09-19
@@ -45,11 +45,11 @@ codes: D-09 (extended), T49
 
 | id | date | decision | source | status |
 | --- | --- | --- | --- | --- |
-| D-0xx | 2026-09-19 | **Annotations anchor to an element, never to a coordinate.** `element_path` is a short selector that stops at the nearest `id` / `[data-component]`; a pin whose element is gone is listed in the drawer, never drawn at a stale position (R-F03). Rejected: canvas overlays and absolute coordinates (break on every reflow and every viewport). | T49, P-08 | proposed |
-| D-0xx | 2026-09-19 | **R-F01 is enforced in code, not by habit**: D-09 refuses `status = done` while `triage` or `decision_ref` is empty. An agent records why before it changes anything. | T49, P-08 house-pattern workflow | proposed |
-| D-0xx | 2026-09-19 | **R-F02 author weight**: Justin / super admin binding, staff tester request, prospect / guest signal - with kind cutting across it (a reproducible bug is fixed whoever files it). Encoded once in `src/rules/annotations.ts` and shown per row; a suggestion, never an autopilot. | T49, house pattern | proposed |
-| D-0xx | 2026-09-19 | **No `screenshot_url` on `feedback`** (the P-08 sketch had one): browser screenshot capture is not wired (T40), and `element_path` + `viewport` + `theme` has been enough to reproduce. Revisit when the image provider lands. | T49 | proposed |
-| D-0xx | 2026-09-19 | **`data-component` on component roots is foundation work**, not a module worker's: the AnnotationLayer prefers the attribute and falls back to a class-hint table until the sweep happens. | T49, module contract | proposed |
+| D-072 | 2026-09-19 | **Annotations anchor to an element, never to a coordinate.** `element_path` is a short selector that stops at the nearest `id` / `[data-component]`; a pin whose element is gone is listed in the drawer, never drawn at a stale position (R-F03). Rejected: canvas overlays and absolute coordinates (break on every reflow and every viewport). | T49, P-08 | proposed |
+| D-073 | 2026-09-19 | **R-F01 is enforced in code, not by habit**: D-09 refuses `status = done` while `triage` or `decision_ref` is empty. An agent records why before it changes anything. | T49, P-08 house-pattern workflow | proposed |
+| D-074 | 2026-09-19 | **R-F02 author weight**: Justin / super admin binding, staff tester request, prospect / guest signal - with kind cutting across it (a reproducible bug is fixed whoever files it). Encoded once in `src/rules/annotations.ts` and shown per row; a suggestion, never an autopilot. | T49, house pattern | proposed |
+| D-075 | 2026-09-19 | **No `screenshot_url` on `feedback`** (the P-08 sketch had one): browser screenshot capture is not wired (T40), and `element_path` + `viewport` + `theme` has been enough to reproduce. Revisit when the image provider lands. | T49 | proposed |
+| D-076 | 2026-09-19 | **`data-component` on component roots is foundation work**, not a module worker's: the AnnotationLayer prefers the attribute and falls back to a class-hint table until the sweep happens. | T49, module contract | proposed |
 
 ## Proposed surfaces.md rows
 

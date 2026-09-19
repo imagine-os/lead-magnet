@@ -11,7 +11,7 @@
 .hub-prospect-band { height: 6px; margin: calc(-1 * var(--sp-4)) calc(-1 * var(--sp-4)) 0; background: linear-gradient(90deg, var(--lp-primary), var(--lp-accent)); }
 .hub-prospect-name { font-weight: var(--fw-semibold); color: var(--color-heading); }
 .hub-prospect-savings .font-display { font-size: var(--fs-xl); font-weight: var(--fw-bold); color: var(--lp-primary); }
-.hub-arch { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 var(--sp-2); border-radius: var(--r-md); border: 1px solid var(--color-border); color: var(--color-text); font-size: var(--fs-xs); }
+.hub-arch { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 var(--sp-2); border-radius: var(--r-md); border: 1px solid var(--color-border); color: var(--color-text); font-size: var(--fs-xs); }
 .hub-arch.is-live { border-color: var(--lp-primary); }
 .hub-arch:hover { text-decoration: none; background: var(--color-surface-tint); }
 .hub-surface-link { display: flex; flex-direction: column; gap: var(--sp-3); color: inherit; }

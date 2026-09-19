@@ -5,3 +5,5 @@
 .card-ink h1, .card-ink h2, .card-ink h3 { color: inherit; }
 .card.is-interactive { transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast); }
 .card.is-interactive:hover, .card.is-interactive:focus-within { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--color-border); }
+.card-prospect { background: var(--lp-surface, var(--color-surface)); color: var(--lp-text, var(--color-text)); border-color: color-mix(in srgb, var(--lp-text, var(--color-text)) 14%, var(--lp-bg, var(--color-bg))); }
+.card-prospect h1, .card-prospect h2, .card-prospect h3 { color: inherit; font-family: var(--lp-font-display, var(--font-display)); }

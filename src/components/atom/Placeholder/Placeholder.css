@@ -5,3 +5,5 @@
 .placeholder-tip { display: none; position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); background: var(--color-ink); color: var(--color-ink-text); font-size: var(--fs-xs); line-height: 1.3; padding: 6px 10px; border-radius: var(--r-md); white-space: nowrap; max-width: min(320px, calc(100vw - 32px)); overflow: hidden; text-overflow: ellipsis; opacity: 0; pointer-events: none; transition: opacity var(--dur-fast); z-index: 30; box-shadow: var(--shadow-md); }
 .placeholder-tip.is-show { display: block; opacity: 1; }
 @media (max-width: 600px) { .placeholder-tip { white-space: normal; max-width: 220px; } }
+/* A wrapped link keeps its link look (underline, colour) so a person can tell it is a destination that is not open yet. */
+.placeholder.is-link > a { min-height: 44px; display: inline-flex; align-items: center; }

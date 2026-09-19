@@ -1,0 +1,7 @@
+.daterange { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--sp-3); min-width: 0; }
+.daterange-inputs { display: flex; flex-wrap: wrap; gap: var(--sp-2); min-width: 0; }
+.daterange-field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.daterange-field .field-label { font-size: var(--fs-xs); font-weight: var(--fw-semibold); color: var(--color-label); }
+.daterange-field .input { min-width: 150px; }
+.daterange-sm .daterange-field .input { min-height: var(--h-control-sm); }
+@media (max-width: 479px) { .daterange-inputs { width: 100%; } .daterange-field { flex: 1 1 140px; } .daterange-field .input { min-width: 0; } }

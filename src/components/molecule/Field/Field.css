@@ -4,3 +4,8 @@
 .field-label { font-size: var(--fs-xs); font-weight: var(--fw-semibold); color: var(--color-label); }
 .field-req { color: var(--color-danger); }
 .field-error { color: var(--color-danger); }
+/* action slot: the control stretches, the action keeps its own 44 px box beside it (P-03). */
+.field-row { display: flex; align-items: stretch; gap: var(--sp-2); min-width: 0; }
+.field-row > :first-child { flex: 1 1 auto; min-width: 0; }
+.field-action { flex: 0 0 auto; display: flex; align-items: center; min-height: 44px; }
+.field.is-inline > .field-row { flex: 1 1 auto; }

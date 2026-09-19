@@ -7,3 +7,5 @@
 .badge-info { background: var(--color-info-bg); color: var(--color-info); }
 .badge-accent { background: var(--color-accent); color: var(--color-accent-text); }
 .badge-ink { background: var(--color-ink); color: var(--color-ink-text); }
+.badge-violet { background: var(--color-violet-bg); color: var(--color-violet); }
+.badge-outline { background: transparent; color: var(--color-text-secondary); box-shadow: inset 0 0 0 1px currentColor; }

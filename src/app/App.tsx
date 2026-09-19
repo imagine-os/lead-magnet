@@ -5,6 +5,7 @@ import { SessionProvider } from '../auth/SessionProvider';
 import { DataProviderRoot } from '../data/DataContext';
 import { RequireRole } from '../auth/RequireRole';
 import { ToastProvider } from '../components/molecule/Toast/Toast';
+import { ConfirmProvider } from '../components/organism/ConfirmDialog/ConfirmDialog';
 import { ErrorBoundary } from '../components/organism/ErrorBoundary/ErrorBoundary';
 import { DevTools } from '../dev/DevTools';
 import { getRoutes, getStrings } from './registry';
@@ -23,6 +24,7 @@ export function App() {
         <DataProviderRoot>
           <SessionProvider>
             <ToastProvider>
+              <ConfirmProvider>
               <HashRouter>
                 <ScrollToTop />
                 <ControlBridge />
@@ -32,6 +34,7 @@ export function App() {
                 </Routes>
                 <DevTools />
               </HashRouter>
+              </ConfirmProvider>
             </ToastProvider>
           </SessionProvider>
         </DataProviderRoot>

@@ -16,6 +16,15 @@
 .dt td:has(button, a:not(.dt-rowlink), input, select, textarea, [role="button"]) { position: relative; z-index: 1; }
 .is-dense .dt td { height: 36px; padding: 4px var(--sp-3); }
 .is-dense .dt-rowlink { min-height: 36px; }
+/* Sortable header: the whole th is one 44 px button (P-03); aria-sort on the th carries the state, the glyph is decoration. */
+.dt th.is-sortable { padding: 0; }
+.dt-sort { display: inline-flex; align-items: center; gap: 4px; min-height: var(--h-thead); min-width: 44px; width: 100%; padding: 0 var(--sp-3); border: 0; background: transparent; color: inherit; font: inherit; text-align: inherit; cursor: pointer; border-radius: var(--r-sm, 6px); }
+.dt th[style*="right"] .dt-sort { justify-content: flex-end; }
+.dt-sort:hover { color: var(--color-primary-text); }
+.dt-sort:focus-visible { outline: var(--ring) solid var(--color-focus); outline-offset: -3px; }
+.dt-sort-icon { flex: 0 0 auto; opacity: .45; }
+.dt-sort.is-active .dt-sort-icon { opacity: 1; color: var(--color-primary-text); }
+.dt th.is-sr { width: 1px; }
 @media (max-width: 768px) {
   .dt thead { display: none; }
   .dt, .dt tbody, .dt tr, .dt td { display: block; width: 100%; }
@@ -25,5 +34,6 @@
   .dt td:first-child:has(> .dt-rowlink) { padding-block: 0; }
   .dt td::before { content: attr(data-label); color: var(--color-label); font-size: var(--fs-xs); font-weight: var(--fw-semibold); text-align: left; flex: 0 0 40%; }
   .dt td.hide-card { display: none; }
+  .dt td.no-label::before { content: none; } .dt td.no-label { justify-content: flex-end; }
   .dt tbody tr:nth-child(even) td { background: transparent; }
 }

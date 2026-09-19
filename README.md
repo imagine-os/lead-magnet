@@ -4,19 +4,21 @@
 
 - **Live:** https://imagine-os.github.io/lead-magnet/ (GitHub Pages, Actions source; deploys on every push to `main`)
 - **Start here:** `/#/` (HUB-01 testing hub) then `docs/README.md`, `CLAUDE.md`, `docs/build-plan.md`
-- **Version:** 0.1.0 (foundation)
+- **Version:** 0.2.0 (first full pass: foundation + seven modules + integration)
 
-## What is in the box (v0.1.0)
+## What is in the box (v0.2.0)
 
 | Count | Note |
 | --- | --- |
-| 50 routes · 13 built · 37 stubs | every planned page code is registered (`src/modules/_stubs`) so the hub, canvas and manifest show the whole map |
-| 9 tables | prospects, stack_guesses, pages, events, bookings, assets, touches, tasks, feedback |
-| 36 components | `src/components/<tier>/<Name>/` with metas at `/#/dev/components` |
-| 12 rules | `/#/dev/rules` |
+| 50 routes · 45 built · 5 stubs | every planned page code is registered (`src/modules/_stubs`); only the ops manual M-01..M-05 (T33) is still a stub |
+| 10 tables | prospects, stack_guesses, pages, events, bookings (with contact columns), assets, touches, tasks, feedback, recommendations |
+| 37 components | `src/components/<tier>/<Name>/` with metas at `/#/dev/components` (+ `FunnelChart`) |
+| 38 rules | `/#/dev/rules` (core R-C / R-P / R-E + plan R-K, studio R-S, landing R-L, demo R-D, booking R-B, admin R-A, proposal R-R, website R-W) |
+| 175 declared actions (117 unique ids) | `/#/dev/actions`, the WebMCP surface; handlers read the latest render |
+| 11 engine checks | `npm run test:engine` (engine + the shared slot generator) |
 | 3 seeded prospects | dog daycare (Austin, en, warm), two-location dental (Miami, es, cold), restaurant group (Denver, en, hot); one live page each, stack guesses, assets, events, touches |
 | 4 archetypes | Reveal / Savings Audit / Walkthrough / Letter, `docs/reference/conversion-playbook.md` |
-| 31 plan tasks | `/#/plan` (stub until T10) and `docs/build-plan.md` |
+| 31 plan tasks | `/#/plan` (Kanban, list, dependency graph, task detail) and `docs/build-plan.md`: 15 done, 2 doing, 8 backlog, 5 awaiting Justin, 1 blocked |
 
 Counts come from the hub footer; re-measure when you change them.
 
@@ -36,6 +38,6 @@ Node 22 (`--experimental-strip-types` for `.mjs` scripts importing `.ts`). Chrom
 
 ## Map
 
-`src/engine` (pure personalization: catalog, stack guess, savings, role views, archetype picker, composer, image prompts, adaptive intake) · `src/modules/*` (pages; each exports `{ routes, strings }`) · `src/data` (DataProvider seam, MockProvider, schema, seed) · `src/components` (library) · `src/design` (tokens) · `src/actions` (actions bus = WebMCP surface) · `src/tracking` (`track()`) · `docs/` (prompts, changelog, decisions, kanban, pages, reference).
+`src/engine` (pure personalization: catalog, stack guess, savings, role views, archetype picker, composer, image prompts, adaptive intake, booking slots) · `src/modules/*` (pages; each exports `{ routes, strings }`) · `src/data` (DataProvider seam, MockProvider, schema, seed) · `src/components` (library) · `src/design` (tokens) · `src/actions` (actions bus = WebMCP surface) · `src/tracking` (`track()`) · `docs/` (prompts, changelog, decisions, kanban, pages, reference).
 
-Rules for agents: `CLAUDE.md`. Model used for this foundation: Fable 5.1.
+Rules for agents: `CLAUDE.md`. Models: Fable 5.1 (foundation, integration, shared code), Opus 5 (the seven modules).

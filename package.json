@@ -1,7 +1,7 @@
 {
   "name": "lead-magnet",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "description": "Lead Magnet - hyper-personalized landing pages whose lead magnet is a pre-built, fully themed operations system for one prospect",
   "homepage": "https://imagine-os.github.io/lead-magnet/",

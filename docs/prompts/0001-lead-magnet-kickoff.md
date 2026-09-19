@@ -35,3 +35,22 @@ This turn built the foundation of `imagine-os/lead-magnet` (v0.1.0), live at htt
 Not wired yet (by design, Placeholders + interfaces): image generation (T40), video-on-scroll (T41), booking provider (T42), LLM enricher (T43), Supabase (T44), Stripe (T51), Company OS (T50, blocked until Justin says so).
 
 Justin's examples of real content are welcome next: they feed the catalog copy, the section templates and the image prompts.
+
+### Outcome of the full turn (updated 2026-09-19 by T20, Fable 5.1)
+
+**Models:** Fable 5.1 built the foundation (v0.1.0) and did the integration (v0.2.0); six Opus 5 workers built the seven modules in parallel under the module contract; Sonnet 5 runs T30..T32 next.
+
+Shipped in v0.2.0 (changelogs 0002..0009), live at https://imagine-os.github.io/lead-magnet/ after the Pages workflow:
+- **Plan viewer** K-01..K-04 (T10): Kanban with Select + lane buttons, list, dependency graph (phases as columns, critical path 8), task detail; only `status` / `done_at` editable (D-024..D-027).
+- **Studio** S-01..S-05 (T11): prospects + create flow, adaptive intake (`nextQuestions` / `applyAnswer`), composer with archetype ranking, 30 % publish gate, 14-day publish, real-route preview, image-prompt board, outreach composer with 13 EN + ES templates (D-028..D-031).
+- **Landing archetypes** L-01..L-05 (T12): Reveal / Savings Audit / Walkthrough / Letter + expired, every section kind rendered, sticky CTA, exit intent, save-your-workspace at the moment of value, full tracking; the URL archetype wins (D-032); pages open in the prospect's language (D-034).
+- **The lead magnet itself** C-01..C-07 (T13): the prospect's themed OS with a view per business and life role (URL state, unique slugs), departments, unified inbox, money, life, settings (D-036..D-038).
+- **Booking** B-01 / B-02 (T14): 15-minute slots in the prospect's timezone, real `bookings` rows with contact columns, `?slot=` deep links from the landing calendar honoured exactly (D-039..D-041, D-051, D-052).
+- **Admin** A-01..A-05 (T15): session-counted funnel with an accessible SVG chart, prospect timeline with recorded recommendations (`recommendations` table), events log, outreach board, bookings (D-042..D-046).
+- **Proposal + website** R-01, W-01..W-03 (T16): printable client proposal, our public site and pricing with engine-only numbers and a Stripe Placeholder (D-047..D-050).
+- **Integration** (T20): shared slot engine, contact columns, `useActions` latest-render handlers, I18n page defaults, component fixes, 32 decisions, surfaces, screenshots for 15 key codes, the 7-width responsive matrix, version 0.2.0.
+
+Counts: 50 routes (45 built, 5 stubs: the ops manual M-01..M-05), 10 tables, 38 rules, 37 components, 175 declared action rows, 11 engine checks, 31 tasks (15 done). Justin's three vision images are recorded in prompt 0002 as references.
+
+Still not wired (by design, Placeholders + seams): image generation (T40), video-on-scroll (T41), booking provider (T42), LLM enricher (T43), Supabase (T44), Stripe (T51), Company OS (T50). Decisions marked `proposed` in `docs/decisions.md` are waiting for Justin.
+

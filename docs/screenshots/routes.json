@@ -3,7 +3,7 @@
   "path": "/p/:slug",
   "code": "L-01",
   "surface": "public",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -12,26 +12,6 @@
    "guest"
   ],
   "spec": {
-   "code": "L-01",
-   "name": "Reveal landing",
-   "purpose": "\"We already built <Business>'s operating system\": hero reveal on phone/laptop/TV, savings stack, role views, proof, FAQ, CTA band, inline booking.",
-   "layout": [
-    "hero_reveal",
-    "savings_stack",
-    "role_views",
-    "proof",
-    "faq",
-    "cta_band",
-    "booking_inline",
-    "sticky CTA (mobile)",
-    "exit intent"
-   ],
-   "data": [
-    "pages",
-    "prospects",
-    "stack_guesses",
-    "events"
-   ],
    "roles": [
     "super_admin",
     "strategist",
@@ -39,14 +19,72 @@
     "prospect",
     "guest"
    ],
-   "logic": [],
-   "integrations": [],
+   "data": [
+    "pages",
+    "prospects",
+    "stack_guesses",
+    "events"
+   ],
+   "integrations": [
+    "none yet: image / video assets (T40, T41), booking provider (T50), Supabase (T44)"
+   ],
+   "states": [
+    "loading",
+    "live",
+    "expired -> L-05",
+    "reduced motion",
+    "phone sticky CTA",
+    "exit intent shown"
+   ],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "tone": "landing",
+   "code": "L-01",
+   "name": "Reveal landing",
+   "purpose": "The default archetype: \"We already built <Business>'s operating system\" - their OS revealed on phone, laptop and the back-office TV, the stack it replaces crossed out, a view for every role, proof, FAQ, the CTA band and the calendar inline.",
+   "layout": [
+    "top bar (wordmark, EN/ES, primary CTA)",
+    "hero_reveal (3 devices, scroll-driven)",
+    "savings_stack (struck-through prices, count-up)",
+    "role_views (snap carousel / grid)",
+    "proof",
+    "faq",
+    "cta_band (honest urgency)",
+    "booking_inline (7-day grid)",
+    "sticky CTA (phone)",
+    "exit intent modal",
+    "save workspace modal"
+   ],
+   "logic": [
+    "pages row looked up by :slug; status live and expires_at in the future, otherwise L-05 renders in place (never a 404)",
+    "renders the pages.model snapshot in order; the archetype in the URL wins, recomposing with composePage(prospect, archetype, { pageId, slug, guesses }) only when the snapshot was composed for another archetype",
+    "prospectStyle(palette, font) on the page root; every section reads --lp-*",
+    "tracking: view on mount, section_view once per section, scroll_depth at 25/50/75/100, cta_click with cta + section, demo_open, booking_started, exit_intent, form_submit",
+    "sticky CTA bar on phone once the hero has scrolled past; exit intent once per session (pointer leaves the top, or back / 45 s idle on touch)",
+    "save your workspace asks for name + email only after a demo open or a long press on the sticky CTA (R-C01)",
+    "hero devices are driven by useScrollFrames(12): the same frame index a generated video-on-scroll sequence will use (T41)"
+   ],
    "components": [
     "DeviceMockup",
     "Stat",
     "Button",
+    "IconButton",
     "Card",
-    "LangToggle"
+    "Badge",
+    "Modal",
+    "Field",
+    "Input",
+    "LangToggle",
+    "Placeholder",
+    "Toast",
+    "Avatar"
    ],
    "actions": [
     {
@@ -65,15 +103,58 @@
      "id": "landing.saveWorkspace",
      "label": "Save your workspace",
      "intent": "save my workspace with my email"
+    },
+    {
+     "id": "landing.setLang",
+     "label": "EN / ES",
+     "intent": "switch language to {lang}",
+     "params": {
+      "lang": "enum:en|es"
+     }
+    },
+    {
+     "id": "landing.viewRole",
+     "label": "See a role view",
+     "intent": "show me the {role} view",
+     "params": {
+      "role": "string"
+     }
+    },
+    {
+     "id": "landing.toggleFaq",
+     "label": "Open a question",
+     "intent": "answer {question}",
+     "params": {
+      "question": "string"
+     }
+    },
+    {
+     "id": "landing.seeCaseStudy",
+     "label": "See the case study",
+     "intent": "show me a case study"
+    },
+    {
+     "id": "landing.pickSlot",
+     "label": "Pick a slot",
+     "intent": "book {slot}",
+     "params": {
+      "slot": "date"
+     },
+     "permission": "booking.create"
     }
    ],
-   "states": [
-    "loading",
-    "default",
-    "empty"
-   ],
-   "notes": [
-    "Built by module landing (T12)"
+   "rules": [
+    "R-C01",
+    "R-C02",
+    "R-C03",
+    "R-C04",
+    "R-C05",
+    "R-C06",
+    "R-L01",
+    "R-L02",
+    "R-L03",
+    "R-L04",
+    "R-L05"
    ]
   }
  },
@@ -81,7 +162,7 @@
   "path": "/p/:slug/audit",
   "code": "L-02",
   "surface": "public",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -90,24 +171,6 @@
    "guest"
   ],
   "spec": {
-   "code": "L-02",
-   "name": "Savings audit landing",
-   "purpose": "Leads with money: pre-checked tool list the prospect corrects, live savings counter, then the reveal.",
-   "layout": [
-    "hero (money headline)",
-    "stack_audit",
-    "savings_stack (live counter)",
-    "role_views",
-    "proof",
-    "cta_band",
-    "booking_inline"
-   ],
-   "data": [
-    "pages",
-    "prospects",
-    "stack_guesses",
-    "events"
-   ],
    "roles": [
     "super_admin",
     "strategist",
@@ -115,14 +178,66 @@
     "prospect",
     "guest"
    ],
-   "logic": [],
-   "integrations": [],
+   "data": [
+    "pages",
+    "prospects",
+    "stack_guesses",
+    "events"
+   ],
+   "integrations": [
+    "none yet: image / video assets (T40, T41), booking provider (T50), Supabase (T44)"
+   ],
+   "states": [
+    "loading",
+    "live",
+    "expired -> L-05",
+    "reduced motion",
+    "phone sticky CTA",
+    "exit intent shown"
+   ],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "tone": "landing",
+   "code": "L-02",
+   "name": "Savings audit landing",
+   "purpose": "Leads with money: the tool stack we think they pay for, pre-checked, corrected with one tap per line, and a savings counter that moves as they answer. A number they can correct beats a number they must believe.",
+   "layout": [
+    "top bar",
+    "hero (money headline)",
+    "stack_audit (Yes / No per tool, live counter)",
+    "savings_stack",
+    "role_views",
+    "proof",
+    "cta_band",
+    "booking_inline",
+    "sticky CTA (phone)",
+    "exit intent modal"
+   ],
+   "logic": [
+    "pages row looked up by :slug; status live and expires_at in the future, otherwise L-05 renders in place (never a 404)",
+    "renders the pages.model snapshot in order; the archetype in the URL wins, recomposing with composePage(prospect, archetype, { pageId, slug, guesses }) only when the snapshot was composed for another archetype",
+    "prospectStyle(palette, font) on the page root; every section reads --lp-*",
+    "tracking: view on mount, section_view once per section, scroll_depth at 25/50/75/100, cta_click with cta + section, demo_open, booking_started, exit_intent, form_submit",
+    "sticky CTA bar on phone once the hero has scrolled past; exit intent once per session (pointer leaves the top, or back / 45 s idle on touch)",
+    "save your workspace asks for name + email only after a demo open or a long press on the sticky CTA (R-C01)",
+    "each answer writes stack_guesses.status by id through the provider and a form_submit event; savings() recomputes from the live rows, never from the snapshot"
+   ],
    "components": [
-    "DataTable",
-    "Chip",
     "Stat",
+    "Button",
+    "Badge",
+    "Card",
     "DeviceMockup",
-    "Button"
+    "Modal",
+    "LangToggle",
+    "Placeholder"
    ],
    "actions": [
     {
@@ -144,21 +259,64 @@
     {
      "id": "landing.openDemo",
      "label": "Open your demo",
-     "intent": "open {business} demo"
+     "intent": "open {business} demo",
+     "permission": "demo.open"
     },
     {
      "id": "landing.bookCall",
-     "label": "Book a walkthrough",
-     "intent": "book a walkthrough call"
+     "label": "Book a 15-min walkthrough",
+     "intent": "book a walkthrough call",
+     "permission": "booking.create"
+    },
+    {
+     "id": "landing.saveWorkspace",
+     "label": "Save your workspace",
+     "intent": "save my workspace with my email"
+    },
+    {
+     "id": "landing.setLang",
+     "label": "EN / ES",
+     "intent": "switch language to {lang}",
+     "params": {
+      "lang": "enum:en|es"
+     }
+    },
+    {
+     "id": "landing.viewRole",
+     "label": "See a role view",
+     "intent": "show me the {role} view",
+     "params": {
+      "role": "string"
+     }
+    },
+    {
+     "id": "landing.seeCaseStudy",
+     "label": "See the case study",
+     "intent": "show me a case study"
+    },
+    {
+     "id": "landing.pickSlot",
+     "label": "Pick a slot",
+     "intent": "book {slot}",
+     "params": {
+      "slot": "date"
+     },
+     "permission": "booking.create"
     }
    ],
-   "states": [
-    "loading",
-    "default",
-    "empty"
-   ],
-   "notes": [
-    "Built by module landing (T12)"
+   "rules": [
+    "R-C01",
+    "R-C02",
+    "R-C03",
+    "R-C04",
+    "R-C05",
+    "R-C06",
+    "R-L01",
+    "R-L02",
+    "R-L03",
+    "R-L04",
+    "R-L05",
+    "R-L06"
    ]
   }
  },
@@ -166,7 +324,7 @@
   "path": "/p/:slug/story",
   "code": "L-03",
   "surface": "public",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -175,22 +333,6 @@
    "guest"
   ],
   "spec": {
-   "code": "L-03",
-   "name": "Walkthrough landing",
-   "purpose": "\"A day in the life\" scroll story through each role's view; ends with \"this is Tuesday next week if you book today\".",
-   "layout": [
-    "hero",
-    "walkthrough_steps (scroll-driven)",
-    "role_views",
-    "savings_stack",
-    "cta_band",
-    "booking_inline"
-   ],
-   "data": [
-    "pages",
-    "prospects",
-    "events"
-   ],
    "roles": [
     "super_admin",
     "strategist",
@@ -198,32 +340,126 @@
     "prospect",
     "guest"
    ],
-   "logic": [],
-   "integrations": [],
-   "components": [
-    "DeviceMockup",
-    "Card",
-    "Button"
+   "data": [
+    "pages",
+    "prospects",
+    "stack_guesses",
+    "events"
    ],
-   "actions": [
-    {
-     "id": "landing.openDemo",
-     "label": "Open your demo",
-     "intent": "open {business} demo"
-    },
-    {
-     "id": "landing.bookCall",
-     "label": "Make it next Tuesday",
-     "intent": "book a walkthrough call"
-    }
+   "integrations": [
+    "none yet: image / video assets (T40, T41), booking provider (T50), Supabase (T44)"
    ],
    "states": [
     "loading",
-    "default",
-    "empty"
+    "live",
+    "expired -> L-05",
+    "reduced motion",
+    "phone sticky CTA",
+    "exit intent shown"
    ],
-   "notes": [
-    "Built by module landing (T12)"
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "tone": "landing",
+   "code": "L-03",
+   "name": "Walkthrough landing",
+   "purpose": "A pinned day-in-the-life story: 7:10 to 21:00 at their business, one scene per role, the device screen changing as you scroll - and prev / next buttons so the story is never scroll-only.",
+   "layout": [
+    "top bar",
+    "hero (story headline)",
+    "walkthrough_steps (pinned device, progress rail, prev / next)",
+    "role_views",
+    "savings_stack",
+    "cta_band (\"Make it next Tuesday\")",
+    "booking_inline",
+    "sticky CTA (phone)"
+   ],
+   "logic": [
+    "pages row looked up by :slug; status live and expires_at in the future, otherwise L-05 renders in place (never a 404)",
+    "renders the pages.model snapshot in order; the archetype in the URL wins, recomposing with composePage(prospect, archetype, { pageId, slug, guesses }) only when the snapshot was composed for another archetype",
+    "prospectStyle(palette, font) on the page root; every section reads --lp-*",
+    "tracking: view on mount, section_view once per section, scroll_depth at 25/50/75/100, cta_click with cta + section, demo_open, booking_started, exit_intent, form_submit",
+    "sticky CTA bar on phone once the hero has scrolled past; exit intent once per session (pointer leaves the top, or back / 45 s idle on touch)",
+    "save your workspace asks for name + email only after a demo open or a long press on the sticky CTA (R-C01)",
+    "an IntersectionObserver band at the middle of the viewport sets the active step; prev / next set the same state and scroll to it, so keyboard, remote and reduced motion all work"
+   ],
+   "components": [
+    "DeviceMockup",
+    "Card",
+    "Button",
+    "Stat",
+    "Modal",
+    "LangToggle"
+   ],
+   "actions": [
+    {
+     "id": "landing.goToStep",
+     "label": "Next / previous scene",
+     "intent": "go to step {step} of the story",
+     "params": {
+      "step": "number"
+     }
+    },
+    {
+     "id": "landing.openDemo",
+     "label": "Open your demo",
+     "intent": "open {business} demo",
+     "permission": "demo.open"
+    },
+    {
+     "id": "landing.bookCall",
+     "label": "Book a 15-min walkthrough",
+     "intent": "book a walkthrough call",
+     "permission": "booking.create"
+    },
+    {
+     "id": "landing.saveWorkspace",
+     "label": "Save your workspace",
+     "intent": "save my workspace with my email"
+    },
+    {
+     "id": "landing.setLang",
+     "label": "EN / ES",
+     "intent": "switch language to {lang}",
+     "params": {
+      "lang": "enum:en|es"
+     }
+    },
+    {
+     "id": "landing.viewRole",
+     "label": "See a role view",
+     "intent": "show me the {role} view",
+     "params": {
+      "role": "string"
+     }
+    },
+    {
+     "id": "landing.pickSlot",
+     "label": "Pick a slot",
+     "intent": "book {slot}",
+     "params": {
+      "slot": "date"
+     },
+     "permission": "booking.create"
+    }
+   ],
+   "rules": [
+    "R-C01",
+    "R-C02",
+    "R-C04",
+    "R-C05",
+    "R-C06",
+    "R-L01",
+    "R-L02",
+    "R-L03",
+    "R-L04",
+    "R-L05"
    ]
   }
  },
@@ -231,7 +467,7 @@
   "path": "/p/:slug/letter",
   "code": "L-04",
   "surface": "public",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -240,20 +476,6 @@
    "guest"
   ],
   "spec": {
-   "code": "L-04",
-   "name": "Letter landing",
-   "purpose": "Short personal message from us over their branded app, one CTA. Best for hot / high-ticket warm.",
-   "layout": [
-    "letter",
-    "hero_reveal (app behind)",
-    "cta_band",
-    "booking_inline"
-   ],
-   "data": [
-    "pages",
-    "prospects",
-    "events"
-   ],
    "roles": [
     "super_admin",
     "strategist",
@@ -261,31 +483,112 @@
     "prospect",
     "guest"
    ],
-   "logic": [],
-   "integrations": [],
+   "data": [
+    "pages",
+    "prospects",
+    "stack_guesses",
+    "events"
+   ],
+   "integrations": [
+    "none yet: image / video assets (T40, T41), booking provider (T50), Supabase (T44)"
+   ],
+   "states": [
+    "loading",
+    "live",
+    "expired -> L-05",
+    "reduced motion",
+    "phone sticky CTA",
+    "exit intent shown"
+   ],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "tone": "landing",
+   "code": "L-04",
+   "name": "Letter landing",
+   "purpose": "For hot and referred prospects: a short personal note over their own app, one primary CTA, the calendar underneath. The voice note is a Placeholder until it is really recorded.",
+   "layout": [
+    "top bar",
+    "letter (greeting, 3 paragraphs, signoff, sender)",
+    "hero_reveal (their app behind it)",
+    "cta_band",
+    "booking_inline",
+    "sticky CTA (phone)"
+   ],
+   "logic": [
+    "pages row looked up by :slug; status live and expires_at in the future, otherwise L-05 renders in place (never a 404)",
+    "renders the pages.model snapshot in order; the archetype in the URL wins, recomposing with composePage(prospect, archetype, { pageId, slug, guesses }) only when the snapshot was composed for another archetype",
+    "prospectStyle(palette, font) on the page root; every section reads --lp-*",
+    "tracking: view on mount, section_view once per section, scroll_depth at 25/50/75/100, cta_click with cta + section, demo_open, booking_started, exit_intent, form_submit",
+    "sticky CTA bar on phone once the hero has scrolled past; exit intent once per session (pointer leaves the top, or back / 45 s idle on touch)",
+    "save your workspace asks for name + email only after a demo open or a long press on the sticky CTA (R-C01)",
+    "no fabricated audio: the voice note is a Placeholder (P-09) until the content pass records one"
+   ],
    "components": [
+    "Avatar",
     "DeviceMockup",
-    "Button"
+    "Button",
+    "Placeholder",
+    "Modal",
+    "LangToggle"
    ],
    "actions": [
     {
      "id": "landing.openDemo",
      "label": "Open your demo",
-     "intent": "open {business} demo"
+     "intent": "open {business} demo",
+     "permission": "demo.open"
     },
     {
      "id": "landing.bookCall",
+     "label": "Book a 15-min walkthrough",
+     "intent": "book a walkthrough call",
+     "permission": "booking.create"
+    },
+    {
+     "id": "landing.saveWorkspace",
+     "label": "Save your workspace",
+     "intent": "save my workspace with my email"
+    },
+    {
+     "id": "landing.setLang",
+     "label": "EN / ES",
+     "intent": "switch language to {lang}",
+     "params": {
+      "lang": "enum:en|es"
+     }
+    },
+    {
+     "id": "landing.playLetter",
+     "label": "Play the voice note",
+     "intent": "play the voice note"
+    },
+    {
+     "id": "landing.pickSlot",
      "label": "Pick a slot",
-     "intent": "book a walkthrough call"
+     "intent": "book {slot}",
+     "params": {
+      "slot": "date"
+     },
+     "permission": "booking.create"
     }
    ],
-   "states": [
-    "loading",
-    "default",
-    "empty"
-   ],
-   "notes": [
-    "Built by module landing (T12)"
+   "rules": [
+    "R-C01",
+    "R-C02",
+    "R-C04",
+    "R-C05",
+    "R-C06",
+    "R-L01",
+    "R-L02",
+    "R-L04",
+    "R-L05"
    ]
   }
  },
@@ -293,7 +596,7 @@
   "path": "/p/:slug/expired",
   "code": "L-05",
   "surface": "public",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -302,17 +605,6 @@
    "guest"
   ],
   "spec": {
-   "code": "L-05",
-   "name": "Expired / generic page",
-   "purpose": "Shown when a page is past expires_at or the slug is unknown: honest message and a way to book or request a fresh workspace.",
-   "layout": [
-    "message",
-    "request new workspace",
-    "book a call"
-   ],
-   "data": [
-    "pages"
-   ],
    "roles": [
     "super_admin",
     "strategist",
@@ -320,11 +612,54 @@
     "prospect",
     "guest"
    ],
-   "logic": [],
-   "integrations": [],
+   "data": [
+    "pages",
+    "prospects",
+    "feedback",
+    "events"
+   ],
+   "integrations": [
+    "none yet: image / video assets (T40, T41), booking provider (T50), Supabase (T44)"
+   ],
+   "states": [
+    "expired page",
+    "unknown slug",
+    "request sent"
+   ],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "tone": "landing",
+   "code": "L-05",
+   "name": "Expired / unknown workspace",
+   "purpose": "Shown for an expired page or a slug we do not know, in place of the page and never as a 404: what happened in plain words, a request for a fresh workspace (a real feedback row the studio triages) and the calendar when we still know whose link it was.",
+   "layout": [
+    "top bar",
+    "honest message",
+    "request form (email + note)",
+    "book a call",
+    "link to our site"
+   ],
+   "logic": [
+    "isExpired(page) = status expired or expires_at in the past",
+    "request inserts feedback { kind: request, page_code: L-05, status: new } and a form_submit event",
+    "keeps the prospect palette when the page is merely expired"
+   ],
    "components": [
     "Card",
-    "Button"
+    "Field",
+    "Input",
+    "Textarea",
+    "Button",
+    "Placeholder",
+    "LangToggle",
+    "Toast"
    ],
    "actions": [
     {
@@ -334,17 +669,22 @@
     },
     {
      "id": "landing.bookCall",
-     "label": "Book a call",
-     "intent": "book a walkthrough call"
+     "label": "Book a 15-min walkthrough",
+     "intent": "book a walkthrough call",
+     "permission": "booking.create"
+    },
+    {
+     "id": "landing.setLang",
+     "label": "EN / ES",
+     "intent": "switch language to {lang}",
+     "params": {
+      "lang": "enum:en|es"
+     }
     }
    ],
-   "states": [
-    "loading",
-    "default",
-    "empty"
-   ],
-   "notes": [
-    "Built by module landing (T12)"
+   "rules": [
+    "R-C05",
+    "R-L05"
    ]
   }
  },
@@ -352,7 +692,7 @@
   "path": "/demo/:prospectId",
   "code": "C-01",
   "surface": "demo",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -363,12 +703,14 @@
   "spec": {
    "code": "C-01",
    "name": "OS demo shell",
-   "purpose": "The prospect's operating system, themed to them: role switcher for every business + life role, phone / desktop / TV layouts, EN/ES.",
+   "purpose": "The prospect's operating system, themed to them: role switcher for every business + life role, phone / desktop / 10-foot layouts, EN/ES, and a save / book pair that never gates the demo.",
    "layout": [
-    "top bar (their logo, role switcher, lang)",
-    "role home",
-    "nav per role",
-    "save workspace prompt at moment of value"
+    "top bar (wordmark, role switcher, EN/ES, save + book)",
+    "sidebar / bottom nav",
+    "headline",
+    "today strip",
+    "quick actions",
+    "widgets grid (kpi, calendar week, list, chat, chart, doc, table)"
    ],
    "data": [
     "prospects",
@@ -382,22 +724,50 @@
     "prospect",
     "guest"
    ],
-   "logic": [],
-   "integrations": [],
+   "logic": [
+    "deriveRoleViews(prospect) gives one view per business + life role (R-D02)",
+    "the role lives in the URL (/role/:slug); missing role falls back to the first business role",
+    "demo_open once per session, demo_role_switch on change, section_view per page, cta_click + form_submit for save / book"
+   ],
+   "integrations": [
+    "comms provider (T42, Placeholder)",
+    "Stripe (T51, Placeholder)",
+    "Supabase auth (T44, Placeholder)"
+   ],
    "components": [
-    "RoleSwitcher",
-    "Stat",
     "Card",
-    "Tabs",
-    "LangToggle"
+    "Stat",
+    "Badge",
+    "Button",
+    "Chip",
+    "Avatar",
+    "DataTable",
+    "Placeholder",
+    "Select",
+    "Field",
+    "LangToggle",
+    "Modal",
+    "Input",
+    "EmptyState",
+    "Icon"
    ],
    "actions": [
     {
      "id": "demo.switchRole",
      "label": "Switch role",
      "intent": "view as {role}",
+     "permission": "demo.open",
      "params": {
       "role": "string"
+     }
+    },
+    {
+     "id": "demo.goto",
+     "label": "Go to section",
+     "intent": "open {section}",
+     "permission": "demo.open",
+     "params": {
+      "section": "enum:home|departments|comms|money|life|settings"
      }
     },
     {
@@ -408,13 +778,47 @@
     {
      "id": "demo.bookCall",
      "label": "Book a walkthrough",
-     "intent": "book a walkthrough call"
+     "intent": "book a walkthrough call",
+     "permission": "booking.create"
+    },
+    {
+     "id": "demo.openWidget",
+     "label": "Open",
+     "intent": "open {widget}",
+     "permission": "demo.open",
+     "params": {
+      "widget": "string"
+     }
+    },
+    {
+     "id": "demo.quickAction",
+     "label": "Quick action",
+     "intent": "run the quick action {action}",
+     "params": {
+      "action": "string"
+     }
     }
+   ],
+   "rules": [
+    "R-D01",
+    "R-D02",
+    "R-D03",
+    "R-C01",
+    "R-C06"
    ],
    "states": [
     "loading",
     "default",
-    "empty"
+    "empty (unknown prospect)"
+   ],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
    ],
    "notes": [
     "Built by module os-demo (T13)"
@@ -425,7 +829,7 @@
   "path": "/demo/:prospectId/role/:role",
   "code": "C-02",
   "surface": "demo",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -436,15 +840,19 @@
   "spec": {
    "code": "C-02",
    "name": "Role home",
-   "purpose": "One role's view: 3+ widgets from deriveRoleViews themed to the industry (KPI, calendar, list, chat, chart, doc).",
+   "purpose": "One role's view: the widgets deriveRoleViews gives that role, rendered by kind and themed to the industry, plus today and quick actions.",
    "layout": [
+    "top bar (wordmark, role switcher, EN/ES, save + book)",
+    "sidebar / bottom nav",
     "headline",
-    "widgets grid",
-    "today",
-    "quick actions"
+    "today strip",
+    "quick actions",
+    "widgets grid (kpi, calendar week, list, chat, chart, doc, table)"
    ],
    "data": [
-    "prospects"
+    "prospects",
+    "pages",
+    "events"
    ],
    "roles": [
     "super_admin",
@@ -453,27 +861,99 @@
     "prospect",
     "guest"
    ],
-   "logic": [],
-   "integrations": [],
+   "logic": [
+    "deriveRoleViews(prospect) gives one view per business + life role (R-D02)",
+    "the role lives in the URL (/role/:slug); missing role falls back to the first business role",
+    "demo_open once per session, demo_role_switch on change, section_view per page, cta_click + form_submit for save / book"
+   ],
+   "integrations": [
+    "comms provider (T42, Placeholder)",
+    "Stripe (T51, Placeholder)",
+    "Supabase auth (T44, Placeholder)"
+   ],
    "components": [
-    "Stat",
     "Card",
-    "DataTable"
+    "Stat",
+    "Badge",
+    "Button",
+    "Chip",
+    "Avatar",
+    "DataTable",
+    "Placeholder",
+    "Select",
+    "Field",
+    "LangToggle",
+    "Modal",
+    "Input",
+    "EmptyState",
+    "Icon"
    ],
    "actions": [
+    {
+     "id": "demo.switchRole",
+     "label": "Switch role",
+     "intent": "view as {role}",
+     "permission": "demo.open",
+     "params": {
+      "role": "string"
+     }
+    },
+    {
+     "id": "demo.goto",
+     "label": "Go to section",
+     "intent": "open {section}",
+     "permission": "demo.open",
+     "params": {
+      "section": "enum:home|departments|comms|money|life|settings"
+     }
+    },
+    {
+     "id": "demo.saveWorkspace",
+     "label": "Save your workspace",
+     "intent": "save my workspace"
+    },
+    {
+     "id": "demo.bookCall",
+     "label": "Book a walkthrough",
+     "intent": "book a walkthrough call",
+     "permission": "booking.create"
+    },
     {
      "id": "demo.openWidget",
      "label": "Open",
      "intent": "open {widget}",
+     "permission": "demo.open",
      "params": {
       "widget": "string"
      }
+    },
+    {
+     "id": "demo.quickAction",
+     "label": "Quick action",
+     "intent": "run the quick action {action}",
+     "params": {
+      "action": "string"
+     }
     }
+   ],
+   "rules": [
+    "R-D01",
+    "R-D02",
+    "R-C06"
    ],
    "states": [
     "loading",
     "default",
-    "empty"
+    "empty (unknown prospect)"
+   ],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
    ],
    "notes": [
     "Built by module os-demo (T13)"
@@ -484,7 +964,7 @@
   "path": "/demo/:prospectId/departments",
   "code": "C-03",
   "surface": "demo",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -495,14 +975,17 @@
   "spec": {
    "code": "C-03",
    "name": "Departments board",
-   "purpose": "Their departments (from the industry catalog) as a board with people, tasks and KPIs.",
+   "purpose": "Their departments from the industry catalog as a board: people, open items and a KPI per column.",
    "layout": [
     "department columns",
+    "KPI per department",
     "people",
-    "open items"
+    "open items",
+    "open department (Placeholder)"
    ],
    "data": [
-    "prospects"
+    "prospects",
+    "pages"
    ],
    "roles": [
     "super_admin",
@@ -511,17 +994,80 @@
     "prospect",
     "guest"
    ],
-   "logic": [],
-   "integrations": [],
+   "logic": [
+    "departments, pains and KPIs come from the industry catalog",
+    "people are deterministic fictional names seeded from the prospect id and the role"
+   ],
+   "integrations": [
+    "comms provider (T42, Placeholder)",
+    "Stripe (T51, Placeholder)",
+    "Supabase auth (T44, Placeholder)"
+   ],
    "components": [
     "Card",
-    "Badge"
+    "Stat",
+    "Badge",
+    "Avatar",
+    "Button",
+    "Placeholder"
    ],
-   "actions": [],
+   "actions": [
+    {
+     "id": "demo.switchRole",
+     "label": "Switch role",
+     "intent": "view as {role}",
+     "permission": "demo.open",
+     "params": {
+      "role": "string"
+     }
+    },
+    {
+     "id": "demo.goto",
+     "label": "Go to section",
+     "intent": "open {section}",
+     "permission": "demo.open",
+     "params": {
+      "section": "enum:home|departments|comms|money|life|settings"
+     }
+    },
+    {
+     "id": "demo.saveWorkspace",
+     "label": "Save your workspace",
+     "intent": "save my workspace"
+    },
+    {
+     "id": "demo.bookCall",
+     "label": "Book a walkthrough",
+     "intent": "book a walkthrough call",
+     "permission": "booking.create"
+    },
+    {
+     "id": "demo.openDepartment",
+     "label": "Open department",
+     "intent": "open the {department} department",
+     "permission": "demo.open",
+     "params": {
+      "department": "string"
+     }
+    }
+   ],
+   "rules": [
+    "R-D01",
+    "R-D02"
+   ],
    "states": [
     "loading",
     "default",
-    "empty"
+    "empty (unknown prospect)"
+   ],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
    ],
    "notes": [
     "Built by module os-demo (T13)"
@@ -532,7 +1078,7 @@
   "path": "/demo/:prospectId/comms",
   "code": "C-04",
   "surface": "demo",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -543,15 +1089,17 @@
   "spec": {
    "code": "C-04",
    "name": "Comms inbox",
-   "purpose": "Unified inbox mock: calls, email, SMS, WhatsApp in one thread list, themed sample messages.",
+   "purpose": "Unified inbox: calls, email, SMS and WhatsApp in one thread list with themed sample messages; the composer is an honest Placeholder.",
    "layout": [
-    "channel filter",
+    "channel tabs",
     "thread list",
-    "thread",
+    "thread pane",
     "composer (Placeholder)"
    ],
    "data": [
-    "prospects"
+    "prospects",
+    "pages",
+    "events"
    ],
    "roles": [
     "super_admin",
@@ -560,15 +1108,71 @@
     "prospect",
     "guest"
    ],
-   "logic": [],
-   "integrations": [],
+   "logic": [
+    "sample threads mention the business by name in EN + ES",
+    "channel filter is client-side; selecting a thread never leaves the page"
+   ],
+   "integrations": [
+    "comms provider (T42, Placeholder)",
+    "Stripe (T51, Placeholder)",
+    "Supabase auth (T44, Placeholder)"
+   ],
    "components": [
     "Tabs",
     "Card",
+    "Avatar",
+    "Badge",
     "Textarea",
-    "Placeholder"
+    "Placeholder",
+    "EmptyState",
+    "Icon"
    ],
    "actions": [
+    {
+     "id": "demo.switchRole",
+     "label": "Switch role",
+     "intent": "view as {role}",
+     "permission": "demo.open",
+     "params": {
+      "role": "string"
+     }
+    },
+    {
+     "id": "demo.goto",
+     "label": "Go to section",
+     "intent": "open {section}",
+     "permission": "demo.open",
+     "params": {
+      "section": "enum:home|departments|comms|money|life|settings"
+     }
+    },
+    {
+     "id": "demo.saveWorkspace",
+     "label": "Save your workspace",
+     "intent": "save my workspace"
+    },
+    {
+     "id": "demo.bookCall",
+     "label": "Book a walkthrough",
+     "intent": "book a walkthrough call",
+     "permission": "booking.create"
+    },
+    {
+     "id": "demo.filterChannel",
+     "label": "Filter channel",
+     "intent": "show {channel} only",
+     "params": {
+      "channel": "enum:all|call|email|sms|whatsapp"
+     }
+    },
+    {
+     "id": "demo.openThread",
+     "label": "Open thread",
+     "intent": "open the thread with {thread}",
+     "params": {
+      "thread": "id"
+     }
+    },
     {
      "id": "demo.reply",
      "label": "Reply",
@@ -578,10 +1182,22 @@
      }
     }
    ],
+   "rules": [
+    "R-D01"
+   ],
    "states": [
     "loading",
     "default",
-    "empty"
+    "empty (unknown prospect)"
+   ],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
    ],
    "notes": [
     "Built by module os-demo (T13)"
@@ -592,7 +1208,7 @@
   "path": "/demo/:prospectId/money",
   "code": "C-05",
   "surface": "demo",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -603,16 +1219,18 @@
   "spec": {
    "code": "C-05",
    "name": "Money",
-   "purpose": "Savings (their crossed-out stack) plus payments / payroll sample views.",
+   "purpose": "Their crossed-out stack with the savings, cash today, payments and payroll (Stripe is not wired).",
    "layout": [
-    "savings stack",
-    "cash today",
-    "payments list",
+    "savings stats",
+    "crossed-out stack",
+    "savings curve",
+    "payments table",
     "payroll (Placeholder)"
    ],
    "data": [
     "prospects",
-    "stack_guesses"
+    "stack_guesses",
+    "pages"
    ],
    "roles": [
     "super_admin",
@@ -621,18 +1239,78 @@
     "prospect",
     "guest"
    ],
-   "logic": [],
-   "integrations": [],
+   "logic": [
+    "stack_guesses rows are read live and run through savings(); rejected guesses drop out",
+    "cash today is the sum of the paid sample payments"
+   ],
+   "integrations": [
+    "comms provider (T42, Placeholder)",
+    "Stripe (T51, Placeholder)",
+    "Supabase auth (T44, Placeholder)"
+   ],
    "components": [
     "Stat",
+    "Card",
+    "Badge",
     "DataTable",
     "Placeholder"
    ],
-   "actions": [],
+   "actions": [
+    {
+     "id": "demo.switchRole",
+     "label": "Switch role",
+     "intent": "view as {role}",
+     "permission": "demo.open",
+     "params": {
+      "role": "string"
+     }
+    },
+    {
+     "id": "demo.goto",
+     "label": "Go to section",
+     "intent": "open {section}",
+     "permission": "demo.open",
+     "params": {
+      "section": "enum:home|departments|comms|money|life|settings"
+     }
+    },
+    {
+     "id": "demo.saveWorkspace",
+     "label": "Save your workspace",
+     "intent": "save my workspace"
+    },
+    {
+     "id": "demo.bookCall",
+     "label": "Book a walkthrough",
+     "intent": "book a walkthrough call",
+     "permission": "booking.create"
+    },
+    {
+     "id": "demo.openPayment",
+     "label": "Open payment",
+     "intent": "open payment {payment}",
+     "params": {
+      "payment": "id"
+     }
+    }
+   ],
+   "rules": [
+    "R-D01",
+    "R-C03"
+   ],
    "states": [
     "loading",
     "default",
-    "empty"
+    "empty (unknown prospect)"
+   ],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
    ],
    "notes": [
     "Built by module os-demo (T13)"
@@ -643,7 +1321,7 @@
   "path": "/demo/:prospectId/life",
   "code": "C-06",
   "surface": "demo",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -654,15 +1332,16 @@
   "spec": {
    "code": "C-06",
    "name": "Family / life view",
-   "purpose": "Views for the people in their life: partner, kids, accountant, coach; shared calendar and lists.",
+   "purpose": "The people in their life as views of their own: partner, kids, accountant, coach; shared calendar, shared lists, family chat.",
    "layout": [
-    "people row",
-    "shared calendar",
-    "lists",
-    "chat"
+    "life people row",
+    "shared calendar (week)",
+    "shared lists",
+    "family chat"
    ],
    "data": [
-    "prospects"
+    "prospects",
+    "pages"
    ],
    "roles": [
     "super_admin",
@@ -671,17 +1350,80 @@
     "prospect",
     "guest"
    ],
-   "logic": [],
-   "integrations": [],
-   "components": [
-    "Avatar",
-    "Card"
+   "logic": [
+    "life roles come from deriveRoleViews(kind = life)",
+    "each person opens their own role home"
    ],
-   "actions": [],
+   "integrations": [
+    "comms provider (T42, Placeholder)",
+    "Stripe (T51, Placeholder)",
+    "Supabase auth (T44, Placeholder)"
+   ],
+   "components": [
+    "Card",
+    "Avatar",
+    "Badge",
+    "Button",
+    "Placeholder",
+    "EmptyState"
+   ],
+   "actions": [
+    {
+     "id": "demo.switchRole",
+     "label": "Switch role",
+     "intent": "view as {role}",
+     "permission": "demo.open",
+     "params": {
+      "role": "string"
+     }
+    },
+    {
+     "id": "demo.goto",
+     "label": "Go to section",
+     "intent": "open {section}",
+     "permission": "demo.open",
+     "params": {
+      "section": "enum:home|departments|comms|money|life|settings"
+     }
+    },
+    {
+     "id": "demo.saveWorkspace",
+     "label": "Save your workspace",
+     "intent": "save my workspace"
+    },
+    {
+     "id": "demo.bookCall",
+     "label": "Book a walkthrough",
+     "intent": "book a walkthrough call",
+     "permission": "booking.create"
+    },
+    {
+     "id": "demo.openLifeRole",
+     "label": "Open view",
+     "intent": "open {role}'s view",
+     "permission": "demo.open",
+     "params": {
+      "role": "string"
+     }
+    }
+   ],
+   "rules": [
+    "R-D01",
+    "R-D02"
+   ],
    "states": [
     "loading",
     "default",
-    "empty"
+    "empty (unknown prospect)"
+   ],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
    ],
    "notes": [
     "Built by module os-demo (T13)"
@@ -692,7 +1434,7 @@
   "path": "/demo/:prospectId/settings",
   "code": "C-07",
   "surface": "demo",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -703,15 +1445,17 @@
   "spec": {
    "code": "C-07",
    "name": "Settings & roles",
-   "purpose": "Their roles and permissions, brand palette, language: shows that it is theirs and configurable.",
+   "purpose": "Every business and life role with a permission summary, the brand palette and font, language, invite: proof that it is theirs and configurable.",
    "layout": [
     "roles table",
-    "brand",
+    "brand palette + font",
     "language",
+    "data export (Placeholder)",
     "invite (Placeholder)"
    ],
    "data": [
-    "prospects"
+    "prospects",
+    "pages"
    ],
    "roles": [
     "super_admin",
@@ -720,14 +1464,53 @@
     "prospect",
     "guest"
    ],
-   "logic": [],
-   "integrations": [],
+   "logic": [
+    "permission summary is derived from the role name (owner / staff / life / books) until real auth (T44)"
+   ],
+   "integrations": [
+    "comms provider (T42, Placeholder)",
+    "Stripe (T51, Placeholder)",
+    "Supabase auth (T44, Placeholder)"
+   ],
    "components": [
     "DataTable",
-    "Placeholder",
-    "LangToggle"
+    "Card",
+    "Badge",
+    "Avatar",
+    "Button",
+    "LangToggle",
+    "Placeholder"
    ],
    "actions": [
+    {
+     "id": "demo.switchRole",
+     "label": "Switch role",
+     "intent": "view as {role}",
+     "permission": "demo.open",
+     "params": {
+      "role": "string"
+     }
+    },
+    {
+     "id": "demo.goto",
+     "label": "Go to section",
+     "intent": "open {section}",
+     "permission": "demo.open",
+     "params": {
+      "section": "enum:home|departments|comms|money|life|settings"
+     }
+    },
+    {
+     "id": "demo.saveWorkspace",
+     "label": "Save your workspace",
+     "intent": "save my workspace"
+    },
+    {
+     "id": "demo.bookCall",
+     "label": "Book a walkthrough",
+     "intent": "book a walkthrough call",
+     "permission": "booking.create"
+    },
     {
      "id": "demo.invite",
      "label": "Invite",
@@ -735,12 +1518,34 @@
      "params": {
       "person": "string"
      }
+    },
+    {
+     "id": "demo.openRole",
+     "label": "Open view",
+     "intent": "open {role}'s view",
+     "permission": "demo.open",
+     "params": {
+      "role": "string"
+     }
     }
+   ],
+   "rules": [
+    "R-D01",
+    "R-D02"
    ],
    "states": [
     "loading",
     "default",
-    "empty"
+    "empty (unknown prospect)"
+   ],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
    ],
    "notes": [
     "Built by module os-demo (T13)"
@@ -751,7 +1556,7 @@
   "path": "/book/:prospectId",
   "code": "B-01",
   "surface": "public",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -762,15 +1567,19 @@
   "spec": {
    "code": "B-01",
    "name": "Book a call",
-   "purpose": "Inline 15-min slot picker (mock calendar), name/email at the moment of value, writes bookings + booking_started/confirmed events.",
+   "purpose": "The prospect picks a 15-minute walkthrough in their own timezone, then gives a name and email at the moment of value. Themed to their brand, own slim chrome, no form before the calendar.",
    "layout": [
-    "slot grid (next 7 days)",
-    "details form",
-    "confirm"
+    "slim top bar (wordmark, EN/ES)",
+    "headline + what the call is",
+    "slot grid (next 7 days, 15-min slots)",
+    "details form (name, email, phone optional, note)",
+    "confirm",
+    "dev-mode provider note"
    ],
    "data": [
-    "bookings",
     "prospects",
+    "pages",
+    "bookings",
     "events"
    ],
    "roles": [
@@ -780,13 +1589,27 @@
     "prospect",
     "guest"
    ],
-   "logic": [],
-   "integrations": [],
+   "logic": [
+    "timezone guessed from prospects.city (Intl, DST-correct), working hours 09:00-17:00, lunch 12:00 blocked, weekends closed",
+    "mock availability is a deterministic FNV hash of prospect id + day + time, so the grid never shifts between renders or machines",
+    "?slot=<iso> preselects a slot when it is still free",
+    "booking_started tracked once per session when a slot is picked; booking_confirmed on confirm with the new booking id",
+    "confirm inserts bookings { status: requested, duration_min: 15 } and navigates to B-02"
+   ],
+   "integrations": [
+    "Booking provider (Cal.com / Calendly) - not wired, T42"
+   ],
    "components": [
     "Card",
     "Field",
     "Input",
-    "Button"
+    "Textarea",
+    "Button",
+    "Badge",
+    "Chip",
+    "LangToggle",
+    "EmptyState",
+    "Icon"
    ],
    "actions": [
     {
@@ -799,27 +1622,63 @@
      "permission": "booking.create"
     },
     {
+     "id": "booking.clearSlot",
+     "label": "Change time",
+     "intent": "change the time",
+     "permission": "booking.create"
+    },
+    {
      "id": "booking.confirm",
      "label": "Confirm",
      "intent": "confirm my booking",
      "permission": "booking.create"
+    },
+    {
+     "id": "booking.setLang",
+     "label": "EN / ES",
+     "intent": "switch language to {lang}",
+     "params": {
+      "lang": "enum:en|es"
+     }
+    },
+    {
+     "id": "booking.openDemo",
+     "label": "Open your demo",
+     "intent": "open my demo",
+     "permission": "demo.open"
     }
+   ],
+   "rules": [
+    "R-B01",
+    "R-B02",
+    "R-B03",
+    "R-C01",
+    "R-C06"
    ],
    "states": [
     "loading",
     "default",
-    "empty"
+    "slot picked",
+    "submitting",
+    "unknown prospect"
    ],
-   "notes": [
-    "Built by module booking (T14)"
-   ]
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "tone": "form"
   }
  },
  {
   "path": "/book/:prospectId/confirmed",
   "code": "B-02",
   "surface": "public",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -830,14 +1689,18 @@
   "spec": {
    "code": "B-02",
    "name": "Booking confirmed",
-   "purpose": "Confirmation with calendar add (Placeholder until a real provider) and a link back to their demo.",
+   "purpose": "Confirms the walkthrough in words the prospect can read back, then sends them straight into their demo or landing page. Calendar files wait for the real provider.",
    "layout": [
-    "confirmation",
+    "slim top bar (wordmark, EN/ES)",
+    "confirmation card (slot in words, duration, what happens next)",
     "add to calendar (Placeholder)",
-    "back to demo"
+    "back to your demo",
+    "back to your page"
    ],
    "data": [
-    "bookings"
+    "bookings",
+    "prospects",
+    "pages"
    ],
    "roles": [
     "super_admin",
@@ -846,26 +1709,65 @@
     "prospect",
     "guest"
    ],
-   "logic": [],
-   "integrations": [],
+   "logic": [
+    "reads ?booking=<id> when present, otherwise the prospect's newest bookings row",
+    "slot rendered with Intl in the prospect timezone and the current language",
+    "add to calendar is a Placeholder until T42 (.ics / provider link)"
+   ],
+   "integrations": [
+    "Booking provider (Cal.com / Calendly) - not wired, T42"
+   ],
    "components": [
     "Card",
-    "Placeholder"
+    "Placeholder",
+    "Button",
+    "Badge",
+    "LangToggle",
+    "EmptyState"
    ],
    "actions": [
     {
      "id": "booking.addToCalendar",
      "label": "Add to calendar",
      "intent": "add the call to my calendar"
+    },
+    {
+     "id": "booking.openDemo",
+     "label": "Open your demo",
+     "intent": "open my demo",
+     "permission": "demo.open"
+    },
+    {
+     "id": "booking.openPage",
+     "label": "Back to your page",
+     "intent": "go back to my page"
+    },
+    {
+     "id": "booking.setLang",
+     "label": "EN / ES",
+     "intent": "switch language to {lang}",
+     "params": {
+      "lang": "enum:en|es"
+     }
     }
+   ],
+   "rules": [
+    "R-B02",
+    "R-B03"
    ],
    "states": [
     "loading",
     "default",
-    "empty"
+    "no booking found"
    ],
-   "notes": [
-    "Built by module booking (T14)"
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
    ]
   }
  },
@@ -873,36 +1775,64 @@
   "path": "/studio",
   "code": "S-01",
   "surface": "studio",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist"
   ],
   "spec": {
-   "code": "S-01",
-   "name": "Prospects list",
-   "purpose": "Every prospect with warmth, confidence, live page, last event; filters; new prospect.",
-   "layout": [
-    "filters",
-    "DataTable",
-    "new prospect"
-   ],
-   "data": [
-    "prospects",
-    "pages",
-    "events"
-   ],
    "roles": [
     "super_admin",
     "strategist"
    ],
-   "logic": [],
    "integrations": [],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "code": "S-01",
+   "name": "Prospects list",
+   "tone": "list",
+   "purpose": "Every prospect with warmth, confidence, the live page (archetype, status, expiry), the last tracked event and the booking state; filter by warmth, industry and whether a page is live; create a prospect and go straight into intake.",
+   "layout": [
+    "page head + New prospect",
+    "KPI row",
+    "filters (warmth chips, industry select, live-page toggle)",
+    "DataTable (cards under 768)",
+    "new prospect Modal"
+   ],
+   "data": [
+    "prospects (read/write)",
+    "pages (read)",
+    "events (read)",
+    "bookings (read)",
+    "stack_guesses (write on create)"
+   ],
+   "logic": [
+    "live page per prospect = the row with status live, else the most recently published",
+    "last event = max(ts) over events for that prospect",
+    "booking = the latest bookings row by slot",
+    "create: insert prospects with the industry catalog roles + the default palette, confidence = computeConfidence(fields_known), then insert guessStack() rows, then navigate to S-02"
+   ],
    "components": [
     "DataTable",
     "Chip",
+    "Select",
+    "Toggle",
     "Button",
-    "Badge"
+    "Badge",
+    "ProgressBar",
+    "Stat",
+    "Modal",
+    "Field",
+    "Input",
+    "Card",
+    "EmptyState"
    ],
    "actions": [
     {
@@ -910,6 +1840,26 @@
      "label": "New prospect",
      "intent": "create a prospect",
      "permission": "prospects.write"
+    },
+    {
+     "id": "studio.createProspect",
+     "label": "Create prospect",
+     "intent": "create {business} in {industry}",
+     "params": {
+      "business": "string",
+      "industry": "string"
+     },
+     "permission": "prospects.write"
+    },
+    {
+     "id": "studio.filterProspects",
+     "label": "Filter",
+     "intent": "show {warmth} prospects in {industry}",
+     "params": {
+      "warmth": "string",
+      "industry": "string",
+      "live": "string"
+     }
     },
     {
      "id": "studio.openProspect",
@@ -920,13 +1870,17 @@
      }
     }
    ],
+   "rules": [
+    "R-S03",
+    "R-E01",
+    "R-E03"
+   ],
    "states": [
     "loading",
     "default",
-    "empty"
-   ],
-   "notes": [
-    "Built by module studio (T11)"
+    "filtered",
+    "empty",
+    "modal open"
    ]
   }
  },
@@ -934,40 +1888,69 @@
   "path": "/studio/prospects/:id",
   "code": "S-02",
   "surface": "studio",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist"
   ],
   "spec": {
-   "code": "S-02",
-   "name": "Prospect profile + AI intake",
-   "purpose": "Profile, confidence meter, nextQuestions() as an adaptive intake form, applyAnswer() updates; stack guesses to confirm/reject; enricher status (LLM not wired).",
-   "layout": [
-    "header",
-    "confidence",
-    "intake questions",
-    "stack guesses",
-    "roles",
-    "style"
-   ],
-   "data": [
-    "prospects",
-    "stack_guesses"
-   ],
    "roles": [
     "super_admin",
     "strategist"
    ],
-   "logic": [],
    "integrations": [],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "code": "S-02",
+   "name": "Prospect profile + AI intake",
+   "tone": "form",
+   "purpose": "Everything we know about one prospect and the adaptive intake that closes the gaps: nextQuestions() as real fields, applyAnswer() on save, confidence and the recommended archetype recomputing live, stack guesses to confirm or reject with the savings total, role and style editors with a themed mini preview.",
+   "layout": [
+    "prospect nav",
+    "header (palette swatches, tone, warmth, language)",
+    "confidence meter + recommendation",
+    "what we know / still unknown",
+    "adaptive intake questions",
+    "stack guesses + savings",
+    "roles editor",
+    "style editor + mini preview",
+    "enrichment"
+   ],
+   "data": [
+    "prospects (read/write)",
+    "stack_guesses (read/write)",
+    "pages (read)"
+   ],
+   "logic": [
+    "nextQuestions(p, 4) drives the form; each field renders the control its type deserves (select for enums, number for counts, comma list for arrays)",
+    "save = applyAnswer(p, field, value) then update(\"prospects\", id, { field, fields_known, confidence }) - R-S03",
+    "confidence = computeConfidence(fields_known) (R-E03); the recommendation is pickArchetype(p)[0] and re-ranks on every answer",
+    "confirm / reject writes stack_guesses.status by id; savings(p, guesses) ignores rejected rows",
+    "the mini preview uses prospectStyle(palette, font) -> --lp-* custom properties, never forked tokens",
+    "defaultEnricher (rules) fills obvious gaps; the LLM enricher is not wired (T43)"
+   ],
    "components": [
     "ProgressBar",
     "Field",
     "Input",
     "Select",
+    "Chip",
+    "Card",
+    "Badge",
+    "Button",
+    "Stat",
     "DataTable",
-    "Placeholder"
+    "Textarea",
+    "Placeholder",
+    "Avatar",
+    "EmptyState"
    ],
    "actions": [
     {
@@ -990,19 +1973,79 @@
      "permission": "prospects.write"
     },
     {
+     "id": "studio.rejectTool",
+     "label": "Reject tool",
+     "intent": "reject {tool}",
+     "params": {
+      "tool": "string"
+     },
+     "permission": "prospects.write"
+    },
+    {
+     "id": "studio.addRole",
+     "label": "Add role",
+     "intent": "add the {role} {kind} role",
+     "params": {
+      "role": "string",
+      "kind": "enum:business|life"
+     },
+     "permission": "prospects.write"
+    },
+    {
+     "id": "studio.removeRole",
+     "label": "Remove role",
+     "intent": "remove the {role} {kind} role",
+     "params": {
+      "role": "string",
+      "kind": "enum:business|life"
+     },
+     "permission": "prospects.write"
+    },
+    {
+     "id": "studio.setStyle",
+     "label": "Set style",
+     "intent": "set {key} to {value}",
+     "params": {
+      "key": "string",
+      "value": "string"
+     },
+     "permission": "prospects.write"
+    },
+    {
+     "id": "studio.saveNotes",
+     "label": "Save notes",
+     "intent": "save the research notes",
+     "permission": "prospects.write"
+    },
+    {
+     "id": "studio.fillGaps",
+     "label": "Fill obvious gaps",
+     "intent": "fill the obvious gaps with the rule enricher",
+     "permission": "prospects.write"
+    },
+    {
      "id": "studio.runEnricher",
      "label": "Enrich with AI",
      "intent": "enrich this prospect",
      "permission": "prospects.write"
+    },
+    {
+     "id": "studio.openCompose",
+     "label": "Compose the page",
+     "intent": "compose the page",
+     "permission": "pages.publish"
     }
+   ],
+   "rules": [
+    "R-S03",
+    "R-E01",
+    "R-E03"
    ],
    "states": [
     "loading",
     "default",
-    "empty"
-   ],
-   "notes": [
-    "Built by module studio (T11)"
+    "fully known",
+    "not found"
    ]
   }
  },
@@ -1010,37 +2053,63 @@
   "path": "/studio/prospects/:id/compose",
   "code": "S-03",
   "surface": "studio",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist"
   ],
   "spec": {
-   "code": "S-03",
-   "name": "Page composer",
-   "purpose": "pickArchetype() ranking with reasons, composePage() preview in ViewportFrame at 390 / 1280, variant, publish (14 days).",
-   "layout": [
-    "archetype ranking",
-    "preview",
-    "variant",
-    "publish"
-   ],
-   "data": [
-    "prospects",
-    "pages",
-    "stack_guesses"
-   ],
    "roles": [
     "super_admin",
     "strategist"
    ],
-   "logic": [],
    "integrations": [],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "code": "S-03",
+   "name": "Page composer",
+   "tone": "form",
+   "purpose": "Rank the four archetypes with their reasons, pick one, preview the real landing route at 390 and 1280, set the A/B variant and publish a 14-day page (or expire it).",
+   "layout": [
+    "prospect nav",
+    "live page status",
+    "archetype ranking cards with score bars",
+    "segmented picker",
+    "variant + slug",
+    "previews (390 / 1280)",
+    "publish / expire"
+   ],
+   "data": [
+    "prospects (read)",
+    "stack_guesses (read)",
+    "pages (read/write)"
+   ],
+   "logic": [
+    "pickArchetype(p) gives score + reasons; the top score sets the card order",
+    "the preview iframes the real public route for the archetype (/p/:slug, /p/:slug/audit, /p/:slug/story, /p/:slug/letter)",
+    "publish writes pages: status live, published_at now, expires_at +14 days (R-S02), model = composePage() snapshot, slug from the existing row or slugify(business)",
+    "publish is blocked under 0.3 confidence unless the override is on (R-S01)",
+    "expire sets status expired and leaves the snapshot in place"
+   ],
    "components": [
     "ViewportFrame",
     "SegmentedControl",
+    "Card",
     "Button",
-    "Badge"
+    "Badge",
+    "ProgressBar",
+    "Field",
+    "Input",
+    "Toggle",
+    "Stat",
+    "Chip"
    ],
    "actions": [
     {
@@ -1050,6 +2119,21 @@
      "params": {
       "archetype": "enum:reveal|audit|walkthrough|letter"
      },
+     "permission": "pages.publish"
+    },
+    {
+     "id": "studio.setVariant",
+     "label": "Variant",
+     "intent": "set the variant to {variant}",
+     "params": {
+      "variant": "string"
+     },
+     "permission": "pages.publish"
+    },
+    {
+     "id": "studio.overrideConfidence",
+     "label": "Override the gate",
+     "intent": "publish anyway under 30 % confidence",
      "permission": "pages.publish"
     },
     {
@@ -1063,15 +2147,27 @@
      "label": "Expire",
      "intent": "expire the page",
      "permission": "pages.publish"
+    },
+    {
+     "id": "studio.copyPageLink",
+     "label": "Copy link",
+     "intent": "copy the public link"
     }
+   ],
+   "rules": [
+    "R-S01",
+    "R-S02",
+    "R-S03",
+    "R-C05",
+    "R-E02"
    ],
    "states": [
     "loading",
-    "default",
-    "empty"
-   ],
-   "notes": [
-    "Built by module studio (T11)"
+    "no page yet",
+    "draft",
+    "live",
+    "expired",
+    "blocked by confidence"
    ]
   }
  },
@@ -1079,35 +2175,55 @@
   "path": "/studio/prospects/:id/assets",
   "code": "S-04",
   "surface": "studio",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist"
   ],
   "spec": {
-   "code": "S-04",
-   "name": "Assets & image prompts",
-   "purpose": "imagePrompts() per kind with status; generate is a Placeholder until the provider is wired (T40); approve / reject.",
-   "layout": [
-    "prompt cards by kind",
-    "generate (Placeholder)",
-    "approve / reject"
-   ],
-   "data": [
-    "assets",
-    "prospects"
-   ],
    "roles": [
     "super_admin",
     "strategist"
    ],
-   "logic": [],
    "integrations": [],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "code": "S-04",
+   "name": "Assets & image prompts",
+   "tone": "list",
+   "purpose": "Every image and video prompt the page needs, grouped by kind, editable before generation; approve or reject each one. The image provider is not wired yet (T40).",
+   "layout": [
+    "prospect nav",
+    "status counts",
+    "groups by kind",
+    "prompt cards (editable Textarea, aspect, notes)",
+    "generate (Placeholder) / approve / reject"
+   ],
+   "data": [
+    "assets (read/write)",
+    "prospects (read)"
+   ],
+   "logic": [
+    "imagePrompts(p) is the source of truth; on first visit the missing rows are inserted as queued",
+    "editing a prompt updates assets.prompt by id on blur",
+    "approve / reject set assets.status by id"
+   ],
    "components": [
     "Card",
     "Textarea",
+    "Badge",
+    "Button",
     "Placeholder",
-    "Badge"
+    "Stat",
+    "Chip",
+    "EmptyState"
    ],
    "actions": [
     {
@@ -1119,6 +2235,15 @@
      }
     },
     {
+     "id": "studio.savePrompt",
+     "label": "Save prompt",
+     "intent": "save the prompt for {asset}",
+     "params": {
+      "asset": "id"
+     },
+     "permission": "prospects.write"
+    },
+    {
      "id": "studio.approveAsset",
      "label": "Approve",
      "intent": "approve {asset}",
@@ -1126,15 +2251,27 @@
       "asset": "id"
      },
      "permission": "prospects.write"
+    },
+    {
+     "id": "studio.rejectAsset",
+     "label": "Reject",
+     "intent": "reject {asset}",
+     "params": {
+      "asset": "id"
+     },
+     "permission": "prospects.write"
     }
+   ],
+   "rules": [
+    "R-S03",
+    "R-P02"
    ],
    "states": [
     "loading",
-    "default",
+    "queued",
+    "approved",
+    "rejected",
     "empty"
-   ],
-   "notes": [
-    "Built by module studio (T11)"
    ]
   }
  },
@@ -1142,40 +2279,80 @@
   "path": "/studio/prospects/:id/outreach",
   "code": "S-05",
   "surface": "studio",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist"
   ],
   "spec": {
-   "code": "S-05",
-   "name": "Outreach composer",
-   "purpose": "Cold / warm messages per channel pointing at the page; templates filled with prospect tokens; send is a Placeholder.",
-   "layout": [
-    "channel",
-    "template",
-    "preview",
-    "send (Placeholder)",
-    "touches history"
-   ],
-   "data": [
-    "touches",
-    "prospects",
-    "pages"
-   ],
    "roles": [
     "super_admin",
     "strategist"
    ],
-   "logic": [],
    "integrations": [],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "code": "S-05",
+   "name": "Outreach composer",
+   "tone": "form",
+   "purpose": "Write the message that points at the page: two or three templates per channel in English and Spanish, tokens filled from the profile and the savings, drafted into touches. Sending is not wired; \"mark as sent\" keeps the demo funnel honest.",
+   "layout": [
+    "prospect nav",
+    "channel select",
+    "template cards",
+    "subject + body editor",
+    "filled preview",
+    "draft / send (Placeholder) / mark as sent",
+    "touches history table"
+   ],
+   "data": [
+    "touches (read/write)",
+    "prospects (read)",
+    "pages (read)",
+    "stack_guesses (read)"
+   ],
+   "logic": [
+    "tokens {first_name} {business} {savings_annual} {tools_cut} {page_url} {city} {industry} are filled from the prospect, savings() and the live page slug",
+    "the template language follows the prospect (prospects.lang), overridable with the EN / ES picker",
+    "Draft inserts a touches row with status draft and the page id; Mark as sent sets sent_at + status sent by id (R-S03)"
+   ],
    "components": [
     "Select",
+    "SegmentedControl",
     "Textarea",
+    "Input",
+    "Field",
+    "Card",
     "DataTable",
-    "Placeholder"
+    "Badge",
+    "Button",
+    "Placeholder",
+    "EmptyState"
    ],
    "actions": [
+    {
+     "id": "studio.pickChannel",
+     "label": "Channel",
+     "intent": "write a {channel} message",
+     "params": {
+      "channel": "enum:cold_email|linkedin_dm|whatsapp|sms|call|warm_intro"
+     }
+    },
+    {
+     "id": "studio.pickTemplate",
+     "label": "Template",
+     "intent": "use the {template} template",
+     "params": {
+      "template": "string"
+     }
+    },
     {
      "id": "studio.draftTouch",
      "label": "Draft",
@@ -1189,15 +2366,27 @@
      "id": "studio.sendTouch",
      "label": "Send",
      "intent": "send the message"
+    },
+    {
+     "id": "studio.markTouchSent",
+     "label": "Mark as sent",
+     "intent": "mark {touch} as sent",
+     "params": {
+      "touch": "id"
+     },
+     "permission": "prospects.write"
     }
+   ],
+   "rules": [
+    "R-S03",
+    "R-C06"
    ],
    "states": [
     "loading",
     "default",
-    "empty"
-   ],
-   "notes": [
-    "Built by module studio (T11)"
+    "drafted",
+    "sent",
+    "no page yet"
    ]
   }
  },
@@ -1205,7 +2394,7 @@
   "path": "/admin",
   "code": "A-01",
   "surface": "admin",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -1214,12 +2403,15 @@
   "spec": {
    "code": "A-01",
    "name": "Funnel overview",
-   "purpose": "outreach_open -> view -> demo_open -> booking per archetype / warmth; A/B by variant.",
+   "purpose": "The whole funnel on one screen: outreach_open -> view -> demo_open -> booking_started -> booking_confirmed counted as distinct sessions, the same five stages broken down by archetype, warmth and A/B variant, and the last twelve things that happened.",
    "layout": [
+    "filters (archetype, warmth)",
     "KPI row",
-    "funnel",
+    "funnel chart + table view",
     "by archetype",
-    "recent"
+    "by warmth",
+    "A/B by variant",
+    "recent activity"
    ],
    "data": [
     "events",
@@ -1232,39 +2424,80 @@
     "strategist",
     "analyst"
    ],
-   "logic": [],
+   "logic": [
+    "a stage counts DISTINCT session_id, so one chatty session is one viewer (R-A01)",
+    "archetype and variant join through pages.page_id; warmth joins through prospects.prospect_id",
+    "A/B is only compared when two or more variants have live pages and events (R-A02)",
+    "conversion labels return an em dash instead of dividing by zero"
+   ],
    "integrations": [],
    "components": [
     "Stat",
+    "FunnelChart",
     "DataTable",
-    "Chip"
+    "Chip",
+    "Card",
+    "Badge",
+    "EmptyState",
+    "Button",
+    "Icon"
    ],
    "actions": [
     {
      "id": "admin.filterFunnel",
      "label": "Filter",
-     "intent": "filter the funnel by {archetype}",
+     "intent": "filter the funnel by {archetype} and {warmth}",
      "params": {
-      "archetype": "string"
+      "archetype": "enum:all|reveal|audit|walkthrough|letter",
+      "warmth": "enum:all|cold|warm|hot"
      },
      "permission": "events.read"
+    },
+    {
+     "id": "admin.openProspect",
+     "label": "Open prospect",
+     "intent": "open the timeline for {prospect}",
+     "params": {
+      "prospect": "id"
+     },
+     "permission": "prospects.read"
+    },
+    {
+     "id": "admin.openStudio",
+     "label": "Open the studio",
+     "intent": "open the studio",
+     "permission": "pages.publish"
     }
+   ],
+   "rules": [
+    "R-A01",
+    "R-A02",
+    "R-C06"
    ],
    "states": [
     "loading",
     "default",
-    "empty"
+    "empty",
+    "filtered",
+    "A/B blocked"
    ],
-   "notes": [
-    "Built by module admin (T15)"
-   ]
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "tone": "home"
   }
  },
  {
   "path": "/admin/prospects/:id",
   "code": "A-02",
   "surface": "admin",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -1273,29 +2506,43 @@
   "spec": {
    "code": "A-02",
    "name": "Prospect timeline",
-   "purpose": "Every touch, view, section, CTA, demo role switch and booking for one prospect, in order; adaptFromEvents() recommendations.",
+   "purpose": "Everything one prospect has done - every outreach touch, every tracked event, every booking - merged into one ordered list, with the engine's current recommendations recorded before any of them is applied.",
    "layout": [
-    "header",
-    "timeline",
-    "recommendations"
+    "header (prospect, warmth, page archetype / variant)",
+    "confidence + shortcuts",
+    "recommendations",
+    "merged timeline (touches + events + bookings)"
    ],
    "data": [
+    "prospects",
+    "pages",
     "events",
     "touches",
     "bookings",
-    "prospects",
-    "pages"
+    "stack_guesses",
+    "recommendations"
    ],
    "roles": [
     "super_admin",
     "strategist",
     "analyst"
    ],
-   "logic": [],
+   "logic": [
+    "adaptFromEvents(page, events, prospect) is re-derived on every render; nothing is cached",
+    "a recommendation is written to `recommendations` as proposed before a page changes, then flipped to applied / dismissed with decided_at and decided_by (R-A03)",
+    "applying an archetype switch recomposes pages.model with composePage() and writes archetype + model by id",
+    "add_section / shorten / ask are Placeholders until the landing and studio modules can act on them"
+   ],
    "integrations": [],
    "components": [
     "Card",
-    "Badge"
+    "Badge",
+    "Avatar",
+    "ProgressBar",
+    "Button",
+    "Placeholder",
+    "EmptyState",
+    "Icon"
    ],
    "actions": [
     {
@@ -1306,15 +2553,56 @@
       "n": "number"
      },
      "permission": "pages.publish"
+    },
+    {
+     "id": "admin.recordRecommendation",
+     "label": "Record",
+     "intent": "record recommendation {n}",
+     "params": {
+      "n": "number",
+      "note": "string"
+     },
+     "permission": "prospects.write"
+    },
+    {
+     "id": "admin.dismissRecommendation",
+     "label": "Dismiss",
+     "intent": "dismiss recommendation {n}",
+     "params": {
+      "n": "number"
+     },
+     "permission": "prospects.write"
+    },
+    {
+     "id": "admin.openFor",
+     "label": "Open",
+     "intent": "open the {surface} for this prospect",
+     "params": {
+      "surface": "enum:studio|demo|page|booking"
+     },
+     "permission": "prospects.read"
     }
+   ],
+   "rules": [
+    "R-A01",
+    "R-A03",
+    "R-E02"
    ],
    "states": [
     "loading",
     "default",
-    "empty"
+    "no page",
+    "no recommendations",
+    "empty timeline"
    ],
-   "notes": [
-    "Built by module admin (T15)"
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
    ]
   }
  },
@@ -1322,7 +2610,7 @@
   "path": "/admin/events",
   "code": "A-03",
   "surface": "admin",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -1331,41 +2619,95 @@
   "spec": {
    "code": "A-03",
    "name": "Events log",
-   "purpose": "Raw events table with filters by type / page / session.",
+   "purpose": "The raw tracking table, filterable by type, page, session and prospect, with the full meta JSON of any row one click away. This is where you check that a page really tracked what it claims.",
    "layout": [
-    "filters",
-    "DataTable"
+    "filters (type, page, session, prospect)",
+    "events DataTable",
+    "meta drawer (JSON)"
    ],
    "data": [
-    "events"
+    "events",
+    "pages",
+    "prospects"
    ],
    "roles": [
     "super_admin",
     "strategist",
     "analyst"
    ],
-   "logic": [],
+   "logic": [
+    "newest first by ts",
+    "filters are AND-combined; an empty filter means all",
+    "session ids are read from the rows themselves, so a new visitor appears in the list without a schema change"
+   ],
    "integrations": [],
    "components": [
     "DataTable",
-    "Chip"
+    "Drawer",
+    "Select",
+    "Field",
+    "Badge",
+    "Button",
+    "Card",
+    "Icon"
    ],
-   "actions": [],
+   "actions": [
+    {
+     "id": "admin.filterEvents",
+     "label": "Filter",
+     "intent": "show {type} events for {prospect}",
+     "params": {
+      "type": "string",
+      "page": "id",
+      "session": "string",
+      "prospect": "id"
+     },
+     "permission": "events.read"
+    },
+    {
+     "id": "admin.clearEventFilters",
+     "label": "Clear filters",
+     "intent": "clear the event filters",
+     "permission": "events.read"
+    },
+    {
+     "id": "admin.openEventMeta",
+     "label": "JSON",
+     "intent": "show the meta for event {id}",
+     "params": {
+      "id": "id"
+     },
+     "permission": "events.read"
+    }
+   ],
+   "rules": [
+    "R-A01",
+    "R-C06"
+   ],
    "states": [
     "loading",
     "default",
-    "empty"
+    "filtered",
+    "empty",
+    "drawer open"
    ],
-   "notes": [
-    "Built by module admin (T15)"
-   ]
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "tone": "list"
   }
  },
  {
   "path": "/admin/outreach",
   "code": "A-04",
   "surface": "admin",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -1374,25 +2716,37 @@
   "spec": {
    "code": "A-04",
    "name": "Outreach board",
-   "purpose": "Touches by status (draft, sent, opened, clicked, replied) per channel.",
+   "purpose": "Every touch as a card in a status column - draft, sent, opened, clicked, replied - with its channel, its page and its timestamps. Moving a card is a Select, so it works on a keyboard, a phone and a remote.",
    "layout": [
-    "status columns",
-    "cards"
+    "channel filter",
+    "status columns with touch cards",
+    "move Select per card"
    ],
    "data": [
     "touches",
-    "prospects"
+    "prospects",
+    "pages"
    ],
    "roles": [
     "super_admin",
     "strategist",
     "analyst"
    ],
-   "logic": [],
-   "integrations": [],
+   "logic": [
+    "scheduled and bounced land in an \"other\" column so no touch can disappear from the board",
+    "moving a touch forward stamps sent_at / opened_at / clicked_at when they are missing and never clears an earlier stamp",
+    "writes go through the provider by id (P-14); the board re-renders from the change event"
+   ],
+   "integrations": [
+    "Sending is not wired: S-05 drafts, a provider sends (T41)"
+   ],
    "components": [
     "Card",
-    "Badge"
+    "Select",
+    "Field",
+    "Badge",
+    "Icon",
+    "EmptyState"
    ],
    "actions": [
     {
@@ -1401,18 +2755,38 @@
      "intent": "mark {touch} as {status}",
      "params": {
       "touch": "id",
-      "status": "string"
+      "status": "enum:draft|scheduled|sent|opened|clicked|replied|bounced"
      },
      "permission": "prospects.write"
+    },
+    {
+     "id": "admin.filterOutreach",
+     "label": "Filter channel",
+     "intent": "show only {channel} outreach",
+     "params": {
+      "channel": "string"
+     },
+     "permission": "events.read"
     }
+   ],
+   "rules": [
+    "R-A01"
    ],
    "states": [
     "loading",
     "default",
-    "empty"
+    "filtered",
+    "empty",
+    "read-only role"
    ],
-   "notes": [
-    "Built by module admin (T15)"
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
    ]
   }
  },
@@ -1420,7 +2794,7 @@
   "path": "/admin/bookings",
   "code": "A-05",
   "surface": "admin",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -1429,11 +2803,11 @@
   "spec": {
    "code": "A-05",
    "name": "Bookings",
-   "purpose": "Upcoming and past walkthrough calls with status changes.",
+   "purpose": "Upcoming and past walkthrough calls with the slot in the prospect's own timezone, who asked, what they wrote, and a status Select that writes the row by id.",
    "layout": [
-    "upcoming",
-    "past",
-    "status"
+    "counts",
+    "upcoming table",
+    "past table"
    ],
    "data": [
     "bookings",
@@ -1444,11 +2818,20 @@
     "strategist",
     "analyst"
    ],
-   "logic": [],
-   "integrations": [],
+   "logic": [
+    "upcoming = slot in the future and not cancelled; everything else is past",
+    "the slot is rendered in the prospect's timezone (guessed from their city) and the current language",
+    "status writes by id through the provider (R-B03)"
+   ],
+   "integrations": [
+    "Booking provider (Cal.com / Calendly) - not wired, T42"
+   ],
    "components": [
     "DataTable",
-    "Select"
+    "Select",
+    "Stat",
+    "Badge",
+    "Card"
    ],
    "actions": [
     {
@@ -1462,49 +2845,86 @@
      "permission": "prospects.write"
     }
    ],
+   "rules": [
+    "R-B02",
+    "R-B03"
+   ],
    "states": [
     "loading",
     "default",
-    "empty"
+    "no upcoming",
+    "read-only role"
    ],
-   "notes": [
-    "Built by module admin (T15)"
-   ]
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "tone": "list"
   }
  },
  {
   "path": "/plan",
   "code": "K-01",
   "surface": "plan",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
    "analyst"
   ],
   "spec": {
-   "code": "K-01",
-   "name": "Plan Kanban",
-   "purpose": "tasks by status (backlog / doing / done / blocked / awaiting Justin) with model badge, codes, dependencies; move with buttons (not drag-only).",
-   "layout": [
-    "lanes",
-    "cards",
-    "move"
-   ],
-   "data": [
-    "tasks"
-   ],
    "roles": [
     "super_admin",
     "strategist",
     "analyst"
    ],
-   "logic": [],
+   "data": [
+    "tasks"
+   ],
    "integrations": [],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "code": "K-01",
+   "name": "Plan Kanban",
+   "tone": "home",
+   "purpose": "The development plan as five lanes (backlog, doing, done, blocked, awaiting Justin). Each card names its model, its page codes, how many dependencies it waits on and whether it is ready to start; moving a lane writes tasks.status through the provider.",
+   "layout": [
+    "counts + progress",
+    "filters (phase, model, ready)",
+    "lanes",
+    "cards (id, title, module, model badge, codes, dependencies, ready)",
+    "move controls (Select + prev / next lane)"
+   ],
+   "logic": [
+    "ready = every dependency done (R-K04)",
+    "done is refused while a dependency is open (R-K01)",
+    "done_at stamped on done, cleared on any move out",
+    "lanes read TASK_STATUS so the vocabulary cannot drift (R-K03)",
+    "writes by id through useData().update (P-14)"
+   ],
    "components": [
     "Card",
     "Badge",
-    "Select"
+    "Chip",
+    "Select",
+    "IconButton",
+    "Stat",
+    "ProgressBar",
+    "Tooltip",
+    "EmptyState",
+    "Placeholder"
    ],
    "actions": [
     {
@@ -1513,18 +2933,46 @@
      "intent": "move {task} to {status}",
      "params": {
       "task": "id",
-      "status": "string"
+      "status": "enum:backlog|doing|done|blocked|awaiting_justin"
      },
      "permission": "plan.edit"
+    },
+    {
+     "id": "plan.filter",
+     "label": "Filter",
+     "intent": "show {phase} tasks for {model}",
+     "params": {
+      "phase": "string",
+      "model": "string",
+      "status": "enum:all|backlog|doing|done|blocked|awaiting_justin",
+      "ready": "string"
+     }
+    },
+    {
+     "id": "plan.openTask",
+     "label": "Open task",
+     "intent": "open task {task}",
+     "params": {
+      "task": "id"
+     }
+    },
+    {
+     "id": "plan.syncBuildPlan",
+     "label": "Sync to build-plan.md",
+     "intent": "write the plan back to docs/build-plan.md"
     }
    ],
-   "states": [
-    "loading",
-    "default",
-    "empty"
+   "rules": [
+    "R-K01",
+    "R-K02",
+    "R-K03",
+    "R-K04"
    ],
-   "notes": [
-    "Built by module plan (T10)"
+   "states": [
+    "default",
+    "filtered",
+    "empty lane",
+    "read-only (no plan.edit)"
    ]
   }
  },
@@ -1532,42 +2980,91 @@
   "path": "/plan/list",
   "code": "K-02",
   "surface": "plan",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
    "analyst"
   ],
   "spec": {
-   "code": "K-02",
-   "name": "Plan list",
-   "purpose": "Sortable table of every task: id, title, module, codes, model, phase, depends on, status.",
-   "layout": [
-    "filters",
-    "DataTable"
-   ],
-   "data": [
-    "tasks"
-   ],
    "roles": [
     "super_admin",
     "strategist",
     "analyst"
    ],
-   "logic": [],
+   "data": [
+    "tasks"
+   ],
    "integrations": [],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "code": "K-02",
+   "name": "Plan list",
+   "tone": "list",
+   "purpose": "Every task in one sortable table: id, title, module, codes, model, phase, dependencies, status, owner. Filters by status, model and phase; a row opens the task detail.",
+   "layout": [
+    "counts",
+    "filters (status, model, phase)",
+    "DataTable (sortable columns)"
+   ],
+   "logic": [
+    "sort by any column, ascending / descending, dependency count sorts numerically",
+    "ready shown per row from readiness() (R-K04)",
+    "row click and the first cell link both open K-04"
+   ],
    "components": [
     "DataTable",
-    "Chip"
+    "Chip",
+    "Badge",
+    "Select",
+    "Stat",
+    "EmptyState"
    ],
-   "actions": [],
+   "actions": [
+    {
+     "id": "plan.filter",
+     "label": "Filter",
+     "intent": "show {phase} tasks for {model}",
+     "params": {
+      "phase": "string",
+      "model": "string",
+      "status": "enum:all|backlog|doing|done|blocked|awaiting_justin",
+      "ready": "string"
+     }
+    },
+    {
+     "id": "plan.openTask",
+     "label": "Open task",
+     "intent": "open task {task}",
+     "params": {
+      "task": "id"
+     }
+    },
+    {
+     "id": "plan.sortList",
+     "label": "Sort",
+     "intent": "sort the plan by {column}",
+     "params": {
+      "column": "string"
+     }
+    }
+   ],
+   "rules": [
+    "R-K02",
+    "R-K03",
+    "R-K04"
+   ],
    "states": [
-    "loading",
     "default",
+    "filtered",
     "empty"
-   ],
-   "notes": [
-    "Built by module plan (T10)"
    ]
   }
  },
@@ -1575,35 +3072,59 @@
   "path": "/plan/timeline",
   "code": "K-03",
   "surface": "plan",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
    "analyst"
   ],
   "spec": {
-   "code": "K-03",
-   "name": "Plan timeline",
-   "purpose": "Dependency graph: phases as columns, tasks as nodes, depends_on as edges (SVG); tasks are bound by dependencies, not calendar days.",
-   "layout": [
-    "phase columns",
-    "nodes",
-    "edges",
-    "legend"
-   ],
-   "data": [
-    "tasks"
-   ],
    "roles": [
     "super_admin",
     "strategist",
     "analyst"
    ],
-   "logic": [],
+   "data": [
+    "tasks"
+   ],
    "integrations": [],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "code": "K-03",
+   "name": "Plan timeline",
+   "tone": "list",
+   "purpose": "The dependency graph: phases 0..4 as columns, tasks as nodes in topological order, depends_on as arrows. Tasks are bound by dependencies, not calendar days - there is no date axis. Focusing a node highlights everything upstream and downstream and shows its details.",
+   "layout": [
+    "title + critical-path count",
+    "filters (phase, model)",
+    "zoom controls",
+    "SVG graph (phase bands, nodes, arrowed edges)",
+    "focused task Card",
+    "legend"
+   ],
+   "logic": [
+    "columns = phase, sub-columns = same-phase dependency depth, rows = topological order",
+    "critical path = longest chain of dependencies (count of tasks, not days)",
+    "focus highlights transitive upstream + downstream and dims the rest",
+    "nodes are role=button, focusable, Enter / Space focuses; tab order runs phase by phase",
+    "zoom with buttons and + / - keys; the graph scrolls horizontally inside its own container, never the page"
+   ],
    "components": [
     "Card",
-    "Badge"
+    "Badge",
+    "Chip",
+    "Button",
+    "IconButton",
+    "Select",
+    "Stat",
+    "Tooltip"
    ],
    "actions": [
     {
@@ -1613,15 +3134,45 @@
      "params": {
       "task": "id"
      }
+    },
+    {
+     "id": "plan.zoomGraph",
+     "label": "Zoom",
+     "intent": "zoom the dependency graph to {percent}",
+     "params": {
+      "percent": "number"
+     }
+    },
+    {
+     "id": "plan.filter",
+     "label": "Filter",
+     "intent": "show {phase} tasks for {model}",
+     "params": {
+      "phase": "string",
+      "model": "string",
+      "status": "enum:all|backlog|doing|done|blocked|awaiting_justin",
+      "ready": "string"
+     }
+    },
+    {
+     "id": "plan.openTask",
+     "label": "Open task",
+     "intent": "open task {task}",
+     "params": {
+      "task": "id"
+     }
     }
    ],
-   "states": [
-    "loading",
-    "default",
-    "empty"
+   "rules": [
+    "R-K01",
+    "R-K02",
+    "R-K04"
    ],
-   "notes": [
-    "Built by module plan (T10)"
+   "states": [
+    "default",
+    "focused",
+    "filtered",
+    "zoomed"
    ]
   }
  },
@@ -1629,36 +3180,57 @@
   "path": "/plan/tasks/:id",
   "code": "K-04",
   "surface": "plan",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
    "analyst"
   ],
   "spec": {
-   "code": "K-04",
-   "name": "Task detail",
-   "purpose": "One task: notes, codes, dependencies both ways, status change, model.",
-   "layout": [
-    "header",
-    "dependencies",
-    "notes",
-    "status"
-   ],
-   "data": [
-    "tasks"
-   ],
    "roles": [
     "super_admin",
     "strategist",
     "analyst"
    ],
-   "logic": [],
+   "data": [
+    "tasks"
+   ],
    "integrations": [],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "code": "K-04",
+   "name": "Task detail",
+   "tone": "form",
+   "purpose": "One task: model, phase, module, codes, notes, the tasks it waits on and the tasks waiting on it (both linked), and the status Select that writes the change.",
+   "layout": [
+    "header (id, title, status, model, phase)",
+    "status Select + ready state",
+    "facts (module, owner, codes, done_at)",
+    "notes",
+    "waits on (upstream)",
+    "blocks (dependents)",
+    "links to K-01 / K-03"
+   ],
+   "logic": [
+    "status change goes through statusChange() so R-K01 refuses done with open dependencies",
+    "done_at stamped / cleared with the status",
+    "unknown id renders an empty state with a link back to the Kanban"
+   ],
    "components": [
     "Card",
+    "Badge",
+    "Chip",
     "Select",
-    "Badge"
+    "Field",
+    "Button",
+    "EmptyState"
    ],
    "actions": [
     {
@@ -1667,18 +3239,29 @@
      "intent": "set {task} to {status}",
      "params": {
       "task": "id",
-      "status": "string"
+      "status": "enum:backlog|doing|done|blocked|awaiting_justin"
      },
      "permission": "plan.edit"
+    },
+    {
+     "id": "plan.openTask",
+     "label": "Open task",
+     "intent": "open task {task}",
+     "params": {
+      "task": "id"
+     }
     }
    ],
-   "states": [
-    "loading",
-    "default",
-    "empty"
+   "rules": [
+    "R-K01",
+    "R-K02",
+    "R-K03",
+    "R-K04"
    ],
-   "notes": [
-    "Built by module plan (T10)"
+   "states": [
+    "default",
+    "not found",
+    "read-only (no plan.edit)"
    ]
   }
  },
@@ -1686,7 +3269,7 @@
   "path": "/site",
   "code": "W-01",
   "surface": "public",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -1695,19 +3278,6 @@
    "guest"
   ],
   "spec": {
-   "code": "W-01",
-   "name": "Website home",
-   "purpose": "Imagine's public site: the offer (an OS already built for you), sample prospect pages, how it works, pricing.",
-   "layout": [
-    "hero",
-    "samples",
-    "how",
-    "pricing teaser",
-    "footer"
-   ],
-   "data": [
-    "prospects"
-   ],
    "roles": [
     "super_admin",
     "strategist",
@@ -1715,18 +3285,81 @@
     "prospect",
     "guest"
    ],
-   "logic": [],
-   "integrations": [],
+   "integrations": [
+    "Stripe checkout (not wired, T51)"
+   ],
+   "states": [
+    "default",
+    "dev mode"
+   ],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "code": "W-01",
+   "name": "Website home",
+   "tone": "landing",
+   "purpose": "Imagine's public home for this offer: an operating system already built for you. Shows a seeded prospect's real OS on phone, laptop and TV, the three-step promise, the average saving across the systems we have built, a grid of sample pages that all open live, a pricing teaser and one CTA into the purchase flow.",
+   "layout": [
+    "top nav (home, how it works, pricing, see the hub)",
+    "hero + device trio with a sample switcher",
+    "three-step promise",
+    "savings proof (average across seeded prospects)",
+    "sample pages grid",
+    "pricing teaser",
+    "CTA band",
+    "footer"
+   ],
+   "data": [
+    "prospects",
+    "pages",
+    "stack_guesses"
+   ],
+   "logic": [
+    "samples = seeded prospects that have a page row, so every sample link opens a real page (R-W02)",
+    "savings proof = mean of savings(prospect, guesses).net_annual over those prospects, from the engine (R-W01)",
+    "hero device trio iframes the sample landing page and its OS demo at the sample's own theme"
+   ],
    "components": [
     "DeviceMockup",
     "Card",
-    "Button"
+    "Stat",
+    "Button",
+    "Badge",
+    "SegmentedControl",
+    "LangToggle",
+    "Icon"
    ],
    "actions": [
     {
+     "id": "site.showSample",
+     "label": "Show sample",
+     "intent": "show {sample} in the hero",
+     "params": {
+      "sample": "string"
+     }
+    },
+    {
      "id": "site.seeSample",
      "label": "See a sample",
-     "intent": "open a sample landing page"
+     "intent": "open a sample landing page",
+     "params": {
+      "sample": "string"
+     }
+    },
+    {
+     "id": "site.openDemo",
+     "label": "Open the demo",
+     "intent": "open the sample OS demo",
+     "params": {
+      "sample": "string"
+     },
+     "permission": "demo.open"
     },
     {
      "id": "site.startPurchase",
@@ -1734,13 +3367,9 @@
      "intent": "start the purchase flow"
     }
    ],
-   "states": [
-    "loading",
-    "default",
-    "empty"
-   ],
-   "notes": [
-    "Built by module website (T16)"
+   "rules": [
+    "R-W01",
+    "R-W02"
    ]
   }
  },
@@ -1748,7 +3377,7 @@
   "path": "/site/how",
   "code": "W-02",
   "surface": "public",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -1757,15 +3386,6 @@
    "guest"
   ],
   "spec": {
-   "code": "W-02",
-   "name": "How it works",
-   "purpose": "Intake -> stack guess -> compose -> demo -> book; the AI methodology explained.",
-   "layout": [
-    "steps",
-    "engine diagram",
-    "faq"
-   ],
-   "data": [],
    "roles": [
     "super_admin",
     "strategist",
@@ -1773,19 +3393,64 @@
     "prospect",
     "guest"
    ],
-   "logic": [],
-   "integrations": [],
-   "components": [
-    "Card"
+   "integrations": [
+    "Stripe checkout (not wired, T51)"
    ],
-   "actions": [],
    "states": [
-    "loading",
     "default",
-    "empty"
+    "dev mode"
    ],
-   "notes": [
-    "Built by module website (T16)"
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "code": "W-02",
+   "name": "How it works",
+   "purpose": "The method in plain words: we learn who you are, guess the stack you pay for, compose your system, show you the live demo, book fifteen minutes, then adapt from what you actually did on the page. Includes the engine diagram, an FAQ and, in dev mode, an honest list of what is not wired yet.",
+   "layout": [
+    "top nav",
+    "intro",
+    "six steps",
+    "engine diagram (inline SVG)",
+    "FAQ",
+    "what is not wired yet (dev mode)",
+    "CTA band",
+    "footer"
+   ],
+   "data": [],
+   "logic": [
+    "steps mirror the engine: nextQuestions -> guessStack -> composePage -> demo -> booking -> adaptFromEvents",
+    "the not-wired list is rendered only when dev mode is on (P-09 honesty without scaring a visitor)"
+   ],
+   "components": [
+    "Card",
+    "Button",
+    "Badge",
+    "Icon",
+    "LangToggle"
+   ],
+   "actions": [
+    {
+     "id": "site.startPurchase",
+     "label": "Get yours",
+     "intent": "start the purchase flow"
+    },
+    {
+     "id": "site.seeSample",
+     "label": "See a sample",
+     "intent": "open a sample landing page",
+     "params": {
+      "sample": "string"
+     }
+    }
+   ],
+   "rules": [
+    "R-W01"
    ]
   }
  },
@@ -1793,7 +3458,7 @@
   "path": "/site/pricing",
   "code": "W-03",
   "surface": "public",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -1802,17 +3467,6 @@
    "guest"
   ],
   "spec": {
-   "code": "W-03",
-   "name": "Pricing + purchase flow",
-   "purpose": "starter / team / multi bands with the savings math; purchase flow is a Placeholder until Stripe (T51).",
-   "layout": [
-    "bands",
-    "savings calculator",
-    "checkout (Placeholder)"
-   ],
-   "data": [
-    "prospects"
-   ],
    "roles": [
     "super_admin",
     "strategist",
@@ -1820,12 +3474,53 @@
     "prospect",
     "guest"
    ],
-   "logic": [],
-   "integrations": [],
+   "integrations": [
+    "Stripe checkout (not wired, T51)"
+   ],
+   "states": [
+    "default",
+    "dev mode"
+   ],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "code": "W-03",
+   "name": "Pricing + purchase flow",
+   "purpose": "Three bands (starter / team / multi) priced from the engine, a savings calculator that guesses your stack from your industry and team size, and a purchase flow that stops honestly at a checkout placeholder while still recording the intent.",
+   "layout": [
+    "top nav",
+    "bands (starter / team / multi)",
+    "savings calculator (industry, team size, locations)",
+    "checkout (Placeholder, records form_submit)",
+    "FAQ line",
+    "footer"
+   ],
+   "data": [
+    "events"
+   ],
+   "logic": [
+    "prices from PRICE_MONTHLY / priceBand in src/engine/stack.ts, never typed into the page (R-W01)",
+    "calculator builds a synthetic prospect and runs guessStack + savings, so the visitor sees the same maths a real prospect sees",
+    "Choose plan records a form_submit event with the band and reveals the checkout card",
+    "checkout button is a Placeholder (will: Stripe checkout; by: T51)"
+   ],
    "components": [
     "Card",
     "Stat",
-    "Placeholder"
+    "Select",
+    "Input",
+    "Field",
+    "Button",
+    "Badge",
+    "Placeholder",
+    "DataTable",
+    "LangToggle"
    ],
    "actions": [
     {
@@ -1837,18 +3532,23 @@
      }
     },
     {
+     "id": "site.calcSavings",
+     "label": "Estimate my saving",
+     "intent": "estimate the saving for a {industry} with {team} people",
+     "params": {
+      "industry": "string",
+      "team": "number",
+      "locations": "number"
+     }
+    },
+    {
      "id": "site.checkout",
      "label": "Checkout",
      "intent": "pay for the plan"
     }
    ],
-   "states": [
-    "loading",
-    "default",
-    "empty"
-   ],
-   "notes": [
-    "Built by module website (T16)"
+   "rules": [
+    "R-W01"
    ]
   }
  },
@@ -1856,7 +3556,7 @@
   "path": "/proposal/:prospectId",
   "code": "R-01",
   "surface": "public",
-  "status": "stub",
+  "status": "built",
   "roles": [
    "super_admin",
    "strategist",
@@ -1867,20 +3567,21 @@
   "spec": {
    "code": "R-01",
    "name": "Client proposal view",
-   "purpose": "The full stack for one prospect: their OS, savings, roles, timeline, price, next steps; printable.",
+   "purpose": "The whole offer for one prospect on one page, themed to them and printable: what they get (their OS surfaces), what they save (their guessed stack vs our price band), who gets a view (every business and life role), how it runs (phases bound by dependencies), the price, and the next step (book the walkthrough, accept, print).",
    "layout": [
-    "cover",
-    "what you get",
-    "savings",
-    "roles",
-    "timeline",
-    "price",
-    "accept (Placeholder)"
+    "cover (business, prepared for, date, Imagine wordmark)",
+    "what you get (7 OS surfaces + phone / laptop / TV composition)",
+    "savings (stack table, tools cut, annual saving vs our band)",
+    "roles (every business + life role and what they see)",
+    "timeline (intake -> compose -> demo -> walkthrough -> build passes -> go-live, dependency-bound)",
+    "price (band, what is included)",
+    "next steps (book a call, accept (Placeholder), print)"
    ],
    "data": [
     "prospects",
     "stack_guesses",
-    "pages"
+    "pages",
+    "events"
    ],
    "roles": [
     "super_admin",
@@ -1889,13 +3590,28 @@
     "prospect",
     "guest"
    ],
-   "logic": [],
-   "integrations": [],
+   "logic": [
+    "prospect from :prospectId; stack guesses read from stack_guesses, falling back to guessStack(prospect) when none are stored",
+    "savings(prospect, guesses) supplies monthly_current, annual_current, tools_cut, our_price_monthly, price_band, net_annual - no number is typed into the page (R-R01)",
+    "deriveRoleViews(prospect) supplies one row per business and life role with the first widgets they see",
+    "themed with prospectStyle(prospect.style.palette, prospect.style.font) on the page root (--lp-*), never by forking tokens",
+    "print stylesheet hides chrome, breaks pages between sections and forces black text on white (R-R02)",
+    "view + section_view + cta_click tracked with prospect_id and the live page_id"
+   ],
+   "integrations": [
+    "e-sign for Accept proposal (not wired, later pass)",
+    "booking B-01 for the walkthrough"
+   ],
    "components": [
     "Card",
     "Stat",
     "DataTable",
-    "Placeholder"
+    "DeviceMockup",
+    "Badge",
+    "Button",
+    "Placeholder",
+    "LangToggle",
+    "EmptyState"
    ],
    "actions": [
     {
@@ -1908,16 +3624,40 @@
      "label": "Print",
      "intent": "print the proposal",
      "permission": "proposal.read"
+    },
+    {
+     "id": "proposal.bookCall",
+     "label": "Book the walkthrough",
+     "intent": "book the walkthrough call",
+     "permission": "booking.create"
+    },
+    {
+     "id": "proposal.openDemo",
+     "label": "Open their OS demo",
+     "intent": "open the live demo",
+     "permission": "demo.open"
     }
    ],
-   "states": [
-    "loading",
-    "default",
-    "empty"
+   "rules": [
+    "R-R01",
+    "R-R02",
+    "R-C06"
    ],
-   "notes": [
-    "Built by module proposal (T16)"
-   ]
+   "states": [
+    "default",
+    "unknown prospect",
+    "print"
+   ],
+   "checkedAt": [
+    360,
+    390,
+    768,
+    1280,
+    1920,
+    2560,
+    3840
+   ],
+   "tone": "landing"
   }
  },
  {

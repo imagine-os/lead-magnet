@@ -5,11 +5,13 @@ import { getRoutes } from '../app/registry';
 import { specCompleteness } from '../specs/types';
 import { InspectorPanel } from '../components/organism/InspectorPanel/InspectorPanel';
 import { SpecChip } from '../components/molecule/SpecChip/SpecChip';
+import { AnnotationLayer } from '../components/organism/AnnotationLayer/AnnotationLayer';
 import { onInspector } from './inspectorBus';
 
 export function useCurrentRoute() { const { pathname } = useLocation(); return getRoutes().find((r) => matchPath({ path: r.path, end: true }, pathname)) ?? null; }
 
-/** Builder tool: floating SpecChip + InspectorPanel on every page in dev mode (super admin). Ctrl+. / Cmd+. toggles. */
+/** Builder tool: floating SpecChip + InspectorPanel on every page in dev mode (super admin). Ctrl+. / Cmd+. toggles.
+ *  Also mounts the AnnotationLayer (T49) on every route - it shows itself for dev mode OR anyone with feedback.read. */
 export function DevTools() {
   const { devMode } = useSession();
   const route = useCurrentRoute();
@@ -22,6 +24,9 @@ export function DevTools() {
     const off = onInspector((a, t) => { setTab(t); setOpen((o) => (a === 'open' ? true : a === 'close' ? false : !o)); });
     return () => { window.removeEventListener('keydown', onKey); off(); };
   }, [devMode]);
-  if (!devMode || !route) return null;
-  return (<><SpecChip code={route.spec.code} name={route.spec.name} completeness={specCompleteness(route.spec).score} onClick={() => setOpen((o) => !o)} /><InspectorPanel spec={route.spec} open={open} onClose={() => setOpen(false)} routePath={route.path} initialTab={tab} /></>);
+  if (!route) return null;
+  return (<>
+    <AnnotationLayer pageCode={route.spec.code} route={route.path} />
+    {devMode && <><SpecChip code={route.spec.code} name={route.spec.name} completeness={specCompleteness(route.spec).score} onClick={() => setOpen((o) => !o)} /><InspectorPanel spec={route.spec} open={open} onClose={() => setOpen(false)} routePath={route.path} initialTab={tab} /></>}
+  </>);
 }

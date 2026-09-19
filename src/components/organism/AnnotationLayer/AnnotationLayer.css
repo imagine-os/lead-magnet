@@ -1,0 +1,51 @@
+/* T49 annotation pins. Tokens only. The layer is transparent to the pointer (R-F03); only pins and the bar take a click. */
+
+.annot-bar { position: fixed; right: var(--sp-4); bottom: calc(var(--sp-4) + 56px); z-index: 60; display: flex; align-items: center; gap: var(--sp-2); }
+.annot-toggle, .annot-count {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2);
+  min-height: 44px; min-width: 44px; padding: 0 var(--sp-3);
+  border: 1px solid var(--color-border-strong); border-radius: var(--r-pill);
+  background: var(--color-surface); color: var(--color-text); font: inherit; font-size: var(--fs-sm); font-weight: var(--fw-semibold);
+  box-shadow: var(--shadow-md); cursor: pointer;
+}
+.annot-toggle:hover, .annot-count:hover { background: var(--color-surface-tint); }
+.annot-toggle.is-on { background: var(--color-primary); color: var(--color-text-on-primary); border-color: var(--color-primary); }
+.annot-count { font-variant-numeric: tabular-nums; }
+.annot-count-label, .annot-toggle-label { font-weight: var(--fw-regular); }
+
+.annot-hint { position: fixed; left: 50%; transform: translateX(-50%); bottom: var(--sp-4); z-index: 60; margin: 0; max-width: min(520px, calc(100vw - 2 * var(--sp-4)));
+  padding: var(--sp-2) var(--sp-4); border-radius: var(--r-pill); background: var(--color-ink); color: var(--color-ink-text); font-size: var(--fs-sm); text-align: center; box-shadow: var(--shadow-lg); }
+
+/* pins: absolutely positioned in document space so they scroll with the page */
+.annot-layer { position: absolute; inset: 0; pointer-events: none; z-index: 55; }
+.annot-pin {
+  position: absolute; pointer-events: auto; transform: translate(-50%, -50%);
+  width: 28px; height: 28px; min-width: 0; padding: 0; display: grid; place-items: center;
+  border-radius: var(--r-round); border: 2px solid var(--color-surface); background: var(--color-primary); color: var(--color-text-on-primary);
+  font: inherit; font-size: var(--fs-xs); font-weight: var(--fw-bold); font-variant-numeric: tabular-nums;
+  box-shadow: var(--shadow-md); cursor: pointer;
+}
+/* the 44 px target lives in a transparent halo so the dot can stay small (P-03) */
+.annot-pin::before { content: ''; position: absolute; inset: -8px; border-radius: var(--r-round); }
+.annot-pin-bug { background: var(--color-danger); }
+.annot-pin-request { background: var(--color-warn); color: var(--color-ink); }
+.annot-pin-idea, .annot-pin-question { background: var(--color-accent); color: var(--color-accent-text); }
+.annot-pin.is-done { opacity: .55; }
+.annot-pin.is-open, .annot-pin:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+
+/* annotate mode: everything hoverable AND focusable is outlined, so this is not a hover-only affordance */
+body[data-annotating='true'] { cursor: crosshair; }
+[data-annot-target] { outline: 2px dashed var(--color-primary) !important; outline-offset: 1px; }
+
+.annot-list { gap: var(--sp-4); }
+.annot-item { display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-3); border: 1px solid var(--color-border); border-radius: var(--r-lg); }
+.annot-item.is-orphan { border-style: dashed; opacity: .85; }
+.annot-item p, .annot-thread p { margin: 0; }
+.annot-item-top { gap: var(--sp-2); flex-wrap: wrap; align-items: center; }
+.annot-thread { gap: var(--sp-3); }
+.annot-reply { padding: var(--sp-2) var(--sp-3); border-left: 3px solid var(--color-primary); background: var(--color-surface-2); border-radius: var(--r-sm); }
+.annot-ctx { word-break: break-all; }
+
+@media (max-width: 680px) { .annot-bar { right: var(--sp-3); bottom: calc(var(--sp-3) + 56px); } .annot-toggle-label, .annot-count-label { display: none; } }
+@media (min-width: 2560px) { .annot-pin { width: 36px; height: 36px; } }
+@media print { .annot-bar, .annot-layer, .annot-hint { display: none !important; } }

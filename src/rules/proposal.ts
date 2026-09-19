@@ -1,0 +1,5 @@
+import type { Rule } from './index';
+export const rules: Rule[] = [
+  { id: 'R-R01', title: 'Proposal numbers come from the engine, never typed', description: 'Every price, tool cost, tool count and saving on R-01 is read from savings() / guessStack() over the prospect row and their stack_guesses. Copy may frame a number, never invent one; a changed price band changes the proposal with no edit to the page.', category: 'proposal', status: 'implemented', pages: ['R-01'], source: 'D-014 (proposed) + engine stack.ts', implementedIn: 'src/modules/proposal/ProposalPage.tsx' },
+  { id: 'R-R02', title: 'The proposal is a printable document', description: 'R-01 carries a print stylesheet: chrome (language toggle, buttons, dev badges) is hidden, each section starts on a new page and avoids internal breaks, colour is reduced to black text on white with the prospect hue kept only for rules and headings. Print is an action (proposal.print), not a browser-only affordance.', category: 'proposal', status: 'implemented', pages: ['R-01'], source: 'org rules (client proposal view)', implementedIn: 'src/modules/proposal/proposal.css @media print' },
+];

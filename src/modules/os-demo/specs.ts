@@ -7,6 +7,7 @@ const SHELL: ActionDef[] = [
   { id: 'demo.goto', label: 'Go to section', intent: 'open {section}', permission: 'demo.open', params: { section: 'enum:home|departments|comms|money|life|settings' } },
   { id: 'demo.saveWorkspace', label: 'Save your workspace', intent: 'save my workspace' },
   { id: 'demo.bookCall', label: 'Book a walkthrough', intent: 'book a walkthrough call', permission: 'booking.create' },
+  { id: 'demo.shareView', label: 'Share this view', intent: 'copy the link to this view', permission: 'demo.open' },
 ];
 const CHECKED = [360, 390, 768, 1280, 1920, 2560, 3840];
 const base = (code: string, name: string, purpose: string, layout: string[], data: string[], logic: string[], components: string[], actions: ActionDef[], rules: string[]): PageSpec =>
@@ -16,14 +17,14 @@ const HOME_ACTIONS: ActionDef[] = [
   { id: 'demo.openWidget', label: 'Open', intent: 'open {widget}', permission: 'demo.open', params: { widget: 'string' } },
   { id: 'demo.quickAction', label: 'Quick action', intent: 'run the quick action {action}', params: { action: 'string' } },
 ];
-const HOME_LAYOUT = ['top bar (wordmark, role switcher, EN/ES, save + book)', 'sidebar / bottom nav', 'headline', 'today strip', 'quick actions', 'widgets grid (kpi, calendar week, list, chat, chart, doc, table)'];
-const HOME_LOGIC = ['deriveRoleViews(prospect) gives one view per business + life role (R-D02)', 'the role lives in the URL (/role/:slug); missing role falls back to the first business role', 'demo_open once per session, demo_role_switch on change, section_view per page, cta_click + form_submit for save / book'];
+const HOME_LAYOUT = ['top bar (wordmark, role switcher, EN/ES, share this view, save + book)', 'sidebar / bottom nav', 'headline', 'today strip', 'quick actions', 'widgets grid (kpi, calendar week, list, chat, chart, doc, table)'];
+const HOME_LOGIC = ['deriveRoleViews(prospect) gives one view per business + life role (R-D02)', 'the role lives in the URL (/role/:slug); missing role falls back to the first business role', 'demo_open once per session, demo_role_switch on change, section_view per page, cta_click + form_submit for save / book / share_view'];
 const HOME_COMPONENTS = ['Card', 'Stat', 'Badge', 'Button', 'Chip', 'Avatar', 'DataTable', 'Placeholder', 'Select', 'Field', 'LangToggle', 'Modal', 'Input', 'EmptyState', 'Icon'];
 
 export const c01 = base('C-01', 'OS demo shell', "The prospect's operating system, themed to them: role switcher for every business + life role, phone / desktop / 10-foot layouts, EN/ES, and a save / book pair that never gates the demo.", HOME_LAYOUT, ['prospects', 'pages', 'events'], HOME_LOGIC, HOME_COMPONENTS, HOME_ACTIONS, ['R-D01', 'R-D02', 'R-D03', 'R-C01', 'R-C06']);
 export const c02 = base('C-02', 'Role home', "One role's view: the widgets deriveRoleViews gives that role, rendered by kind and themed to the industry, plus today and quick actions.", HOME_LAYOUT, ['prospects', 'pages', 'events'], HOME_LOGIC, HOME_COMPONENTS, HOME_ACTIONS, ['R-D01', 'R-D02', 'R-C06']);
 export const c03 = base('C-03', 'Departments board', 'Their departments from the industry catalog as a board: people, open items and a KPI per column.', ['department columns', 'KPI per department', 'people', 'open items', 'open department (Placeholder)'], ['prospects', 'pages'], ['departments, pains and KPIs come from the industry catalog', 'people are deterministic fictional names seeded from the prospect id and the role'], ['Card', 'Stat', 'Badge', 'Avatar', 'Button', 'Placeholder'], [{ id: 'demo.openDepartment', label: 'Open department', intent: 'open the {department} department', permission: 'demo.open', params: { department: 'string' } }], ['R-D01', 'R-D02']);
-export const c04 = base('C-04', 'Comms inbox', 'Unified inbox: calls, email, SMS and WhatsApp in one thread list with themed sample messages; the composer is an honest Placeholder.', ['channel tabs', 'thread list', 'thread pane', 'composer (Placeholder)'], ['prospects', 'pages', 'events'], ['sample threads mention the business by name in EN + ES', 'channel filter is client-side; selecting a thread never leaves the page'], ['Tabs', 'Card', 'Avatar', 'Badge', 'Textarea', 'Placeholder', 'EmptyState', 'Icon'], [
+export const c04 = base('C-04', 'Comms inbox', 'Unified inbox: calls, email, SMS and WhatsApp in one thread list with themed sample messages; the composer box and its send button are both honest Placeholders.', ['channel tabs', 'thread list', 'thread pane', 'composer box + send (Placeholder)'], ['prospects', 'pages', 'events'], ['sample threads mention the business by name in EN + ES', 'channel filter is client-side; selecting a thread never leaves the page'], ['Tabs', 'Card', 'Avatar', 'Badge', 'Textarea', 'Placeholder', 'EmptyState', 'Icon'], [
   { id: 'demo.filterChannel', label: 'Filter channel', intent: 'show {channel} only', params: { channel: 'enum:all|call|email|sms|whatsapp' } },
   { id: 'demo.openThread', label: 'Open thread', intent: 'open the thread with {thread}', params: { thread: 'id' } },
   { id: 'demo.reply', label: 'Reply', intent: 'reply to {thread}', params: { thread: 'id' } },

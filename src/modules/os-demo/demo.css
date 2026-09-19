@@ -46,7 +46,7 @@
 .demo :focus-visible { outline: 3px solid var(--lp-primary); outline-offset: 2px; border-radius: var(--r-sm); }
 .demo-empty { display: grid; place-items: center; padding: var(--sp-16) var(--sp-4); }
 
-.demo-skip { position: absolute; left: -9999px; top: var(--sp-2); z-index: 40; display: inline-flex; align-items: center; min-height: 44px; background: var(--lp-surface); color: var(--lp-text); padding: var(--sp-2) var(--sp-4); border-radius: var(--r-md); border: 1px solid var(--color-border); }
+.demo-skip { position: absolute; left: -9999px; top: var(--sp-2); z-index: 40; display: inline-flex; align-items: center; min-height: calc(44px * var(--scale)); background: var(--lp-surface); color: var(--lp-text); padding: var(--sp-2) var(--sp-4); border-radius: var(--r-md); border: 1px solid var(--color-border); }
 .demo-skip:focus { left: var(--sp-4); }
 
 /* top bar ------------------------------------------------------------- */
@@ -60,9 +60,15 @@
 .demo-sub { font-size: var(--fs-xs); color: var(--color-text-muted); }
 .demo-role { display: flex; align-items: center; gap: var(--sp-2); flex: 0 0 auto; }
 .demo-role .field-label { white-space: nowrap; }
-.demo-role .select { min-width: 200px; }
+.demo-role .select { min-width: calc(200px * var(--scale)); }
 .demo-role .field { margin: 0; }
 .demo-cta { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+/* "Share this view" copies the deep link of the role / section on screen. Under 600 px it keeps its 44 px box but
+   drops to the icon alone (the accessible name stays on the button), so Book and Save keep the room they need. */
+.demo-share { flex: 0 0 auto; }
+.demo-sharebar { display: flex; align-items: flex-end; gap: var(--sp-2); flex-wrap: wrap; padding: var(--sp-2) var(--demo-gutter) var(--sp-3); background: var(--color-surface-2); border-top: 1px solid var(--color-border-subtle); }
+.demo-sharebar .field { margin: 0; flex: 1 1 260px; min-width: 0; }
+.demo-sharebar .input { width: 100%; }
 /* The phone-only controls (role button, compact EN/ES) are hidden from 600 px up; the Select, the EN | ES group and the inline
    CTAs are hidden below it. display:none keeps the hidden set out of the accessibility tree. */
 .demo-rolebtn, .demo-lang-compact { display: none; }
@@ -83,6 +89,8 @@
   .demo-cta { flex: 1 1 100%; min-width: 0; flex-wrap: nowrap; }
   .demo-cta > .btn { flex: 1 1 0; min-width: 0; padding: 0 var(--sp-3); }
   .demo-cta > .btn .btn-label { overflow: hidden; text-overflow: ellipsis; }
+  .demo-cta > .btn.demo-share { flex: 0 0 auto; width: calc(44px * var(--scale)); padding: 0; }
+  .demo-share .btn-label { display: none; }
 }
 
 /* body, sidebar, bottom nav ------------------------------------------- */
@@ -91,7 +99,7 @@
 .demo-main { padding: var(--sp-5) var(--demo-gutter) calc(var(--sp-20) + var(--sp-8)); max-width: 1680px; margin: 0 auto; width: 100%; }
 
 .demo-bottomnav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px; background: var(--lp-surface); border-top: 1px solid var(--color-border); padding: var(--sp-1) var(--sp-1) max(var(--sp-1), env(safe-area-inset-bottom)); }
-.demo-tabitem { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 52px; padding: var(--sp-1); border: 0; background: none; color: var(--color-text-muted); border-radius: var(--r-md); cursor: pointer; font: inherit; }
+.demo-tabitem { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: calc(52px * var(--scale)); padding: var(--sp-1); border: 0; background: none; color: var(--color-text-muted); border-radius: var(--r-md); cursor: pointer; font: inherit; }
 .demo-tablabel { font-size: var(--fs-2xs); line-height: 1; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-inline: 2px; }
 .demo-tabitem.is-active { color: var(--lp-primary); background: var(--color-primary-soft); }
 
@@ -102,9 +110,9 @@
   .demo-main { padding-bottom: var(--sp-16); }
   .demo-bottomnav { display: none; }
 }
-.demo-navitem { display: flex; align-items: center; gap: var(--sp-3); min-height: 44px; padding: var(--sp-2) var(--sp-3); border: 0; border-radius: var(--r-md); background: none; color: var(--color-text-secondary); font: inherit; font-size: var(--fs-sm); text-align: left; cursor: pointer; width: 100%; }
+.demo-navitem { display: flex; align-items: center; gap: var(--sp-3); min-height: calc(44px * var(--scale)); padding: var(--sp-2) var(--sp-3); border: 0; border-radius: var(--r-md); background: none; color: var(--color-text-secondary); font: inherit; font-size: var(--fs-sm); text-align: left; cursor: pointer; width: 100%; }
 .demo-navitem:hover { background: var(--color-surface-2); }
-.demo-navitem.is-active { background: var(--color-primary-soft); color: var(--color-primary-text); font-weight: var(--fw-semibold); box-shadow: inset 3px 0 0 var(--lp-primary); }
+.demo-navitem.is-active { background: var(--color-primary-soft); color: var(--color-primary-text); font-weight: var(--fw-semibold); box-shadow: inset calc(3px * var(--scale)) 0 0 var(--lp-primary); }
 .demo-side-foot { margin-top: var(--sp-4); color: var(--color-text-faint); padding: 0 var(--sp-3); }
 
 /* page scaffolding ----------------------------------------------------- */
@@ -120,7 +128,7 @@
 .demo-hero-roles { gap: var(--sp-2); }
 
 .demo-today { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--sp-3); }
-.demo-today-item { display: flex; flex-direction: column; gap: 2px; padding: var(--sp-3) var(--sp-4); border-radius: var(--r-card); background: var(--lp-surface); border: 1px solid var(--color-border-subtle); border-left: 3px solid var(--lp-accent); }
+.demo-today-item { display: flex; flex-direction: column; gap: 2px; padding: var(--sp-3) var(--sp-4); border-radius: var(--r-card); background: var(--lp-surface); border: 1px solid var(--color-border-subtle); border-left: calc(3px * var(--scale)) solid var(--lp-accent); }
 .demo-today-value { font-size: var(--fs-xl); line-height: 1.1; }
 
 .demo-widgets { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-flow: dense; gap: var(--sp-4); align-items: start; }
@@ -135,7 +143,7 @@
 
 /* widgets -------------------------------------------------------------- */
 .dw-head { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; margin-bottom: var(--sp-3); }
-.dw-icon { display: grid; place-items: center; width: 28px; height: 28px; border-radius: var(--r-sm); background: var(--color-primary-soft); color: var(--color-primary-text); }
+.dw-icon { display: grid; place-items: center; width: calc(28px * var(--scale)); height: calc(28px * var(--scale)); border-radius: var(--r-sm); background: var(--color-primary-soft); color: var(--color-primary-text); }
 .dw-title { font-size: var(--fs-md); flex: 1 1 auto; min-width: 0; }
 .dw-body { display: flex; flex-direction: column; gap: var(--sp-3); }
 .dw-list, .dw-docs, .dw-threads, .demo-items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-2); }
@@ -148,18 +156,28 @@
 .dw-chart svg { display: block; width: 100%; }
 .dw-chart-scale { display: flex; justify-content: space-between; color: var(--color-text-faint); }
 
-.dw-week { display: grid; grid-template-columns: repeat(7, minmax(112px, 1fr)); gap: var(--sp-2); overflow-x: auto; padding-bottom: var(--sp-2); min-width: 0; max-width: 100%; }
-.dw-day { display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-2); border-radius: var(--r-md); background: var(--color-surface-2); min-height: 120px; }
-.dw-day.is-today { background: var(--color-primary-soft); outline: 1px solid var(--lp-primary); }
+.dw-week { display: grid; grid-template-columns: repeat(7, minmax(calc(112px * var(--scale)), 1fr)); gap: var(--sp-2); overflow-x: auto; padding-bottom: var(--sp-2); min-width: 0; max-width: 100%; }
+.dw-day { display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-2); border-radius: var(--r-md); background: var(--color-surface-2); min-height: calc(120px * var(--scale)); }
+.dw-day.is-today { background: var(--color-primary-soft); outline: calc(1px * var(--scale)) solid var(--lp-primary); }
 .dw-day-head { display: flex; align-items: center; gap: var(--sp-1); font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: var(--ls-eyebrow); color: var(--color-text-muted); }
-.dw-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--lp-primary); }
+.dw-dot { width: calc(6px * var(--scale)); height: calc(6px * var(--scale)); border-radius: 50%; background: var(--lp-primary); }
 .dw-day-body { display: flex; flex-direction: column; gap: var(--sp-1); }
-.dw-ev { display: flex; flex-direction: column; gap: 1px; padding: var(--sp-2); border-radius: var(--r-sm); background: var(--lp-surface); border-left: 3px solid var(--color-border-strong); font-size: var(--fs-xs); }
+.dw-ev { display: flex; flex-direction: column; gap: 1px; padding: var(--sp-2); border-radius: var(--r-sm); background: var(--lp-surface); border-left: calc(3px * var(--scale)) solid var(--color-border-strong); font-size: var(--fs-xs); }
 .dw-ev-primary { border-left-color: var(--lp-primary); }
 .dw-ev-accent { border-left-color: var(--lp-accent); }
 .dw-ev-time { color: var(--color-text-muted); font-variant-numeric: tabular-nums; }
 .dw-ev-title { font-size: var(--fs-sm); line-height: 1.25; }
 .dw-ev-who { color: var(--color-text-faint); }
+/* Phone: seven 112 px columns do not fit. At 360 the third day sat 25 px past the viewport inside the horizontal
+   scroller, and a sideways drag is the worst gesture on a phone. The week becomes a stacked agenda instead - one
+   full-width day per row, day name on the left, nothing scrolling sideways (P-01, P-04). The breakpoint is the
+   demo's phone breakpoint (D-089), not 400 px, because 412 / 430 px phones are the common ones. */
+@media (max-width: 599px) {
+  .dw-week { grid-template-columns: minmax(0, 1fr); gap: var(--sp-1); overflow-x: visible; padding-bottom: 0; }
+  .dw-day { flex-direction: row; align-items: flex-start; gap: var(--sp-3); min-height: 0; padding: var(--sp-2) var(--sp-3); }
+  .dw-day-head { flex: 0 0 4.5em; padding-top: 2px; }
+  .dw-day-body { flex: 1 1 auto; min-width: 0; min-height: var(--sp-5); }
+}
 
 .dw-msgs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-3); }
 .dw-msg { display: flex; flex-direction: column; gap: 2px; max-width: min(52ch, 92%); padding: var(--sp-2) var(--sp-3); border-radius: var(--r-card); background: var(--color-surface-2); }
@@ -179,11 +197,11 @@
 
 /* comms ------------------------------------------------------------------ */
 .demo-inbox { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); align-items: start; }
-@media (min-width: 900px) { .demo-inbox { grid-template-columns: minmax(280px, 380px) minmax(0, 1fr); } }
+@media (min-width: 900px) { .demo-inbox { grid-template-columns: minmax(calc(280px * var(--scale)), calc(380px * var(--scale))) minmax(0, 1fr); } }
 .demo-threadlist { list-style: none; margin: 0; padding: var(--sp-2); display: flex; flex-direction: column; gap: 2px; max-height: 60vh; overflow-y: auto; }
-.demo-thread { display: flex; align-items: flex-start; gap: var(--sp-2); width: 100%; text-align: left; border: 0; background: none; font: inherit; color: inherit; padding: var(--sp-3); border-radius: var(--r-md); cursor: pointer; min-height: 56px; }
+.demo-thread { display: flex; align-items: flex-start; gap: var(--sp-2); width: 100%; text-align: left; border: 0; background: none; font: inherit; color: inherit; padding: var(--sp-3); border-radius: var(--r-md); cursor: pointer; min-height: calc(56px * var(--scale)); }
 .demo-thread:hover { background: var(--color-surface-2); }
-.demo-thread.is-active { background: var(--color-primary-soft); box-shadow: inset 3px 0 0 var(--lp-primary); }
+.demo-thread.is-active { background: var(--color-primary-soft); box-shadow: inset calc(3px * var(--scale)) 0 0 var(--lp-primary); }
 .demo-thread-main { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
 .demo-thread-top { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-2); }
 .demo-thread-sub { color: var(--color-text-muted); }
@@ -193,12 +211,14 @@
 .demo-pane-head { display: flex; align-items: center; gap: var(--sp-3); padding-bottom: var(--sp-3); border-bottom: 1px solid var(--color-border-subtle); }
 .demo-pane-who { font-weight: var(--fw-semibold); }
 .demo-composer { display: flex; align-items: flex-end; gap: var(--sp-2); flex-wrap: wrap; padding-top: var(--sp-3); border-top: 1px solid var(--color-border-subtle); }
-.demo-composer .textarea { flex: 1 1 240px; }
+.demo-composer .textarea { flex: 1 1 240px; width: 100%; }
+/* The composer box itself is not wired either, so it is inside the Placeholder: the block wrapper takes the row. */
+.demo-composer .placeholder.is-block { flex: 1 1 240px; min-width: 0; }
 
 /* money ------------------------------------------------------------------ */
 .demo-stack { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-2); }
 .demo-stackrow { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; padding: var(--sp-3); border-radius: var(--r-md); background: var(--lp-surface); border: 1px solid var(--color-border-subtle); }
-.demo-strike { text-decoration: line-through; text-decoration-color: var(--lp-primary); text-decoration-thickness: 2px; font-weight: var(--fw-semibold); }
+.demo-strike { text-decoration: line-through; text-decoration-color: var(--lp-primary); text-decoration-thickness: calc(2px * var(--scale)); font-weight: var(--fw-semibold); }
 .demo-strike-cost { text-decoration: line-through; color: var(--color-text-muted); font-variant-numeric: tabular-nums; }
 .demo-conf { white-space: nowrap; }
 .demo-trend { display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-4); border-radius: var(--r-card); background: var(--color-surface-2); }
@@ -219,19 +239,27 @@
 @media (min-width: 900px) { .demo-settinggrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .demo-swatches { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
 .demo-swatch { display: flex; flex-direction: column; gap: 2px; align-items: flex-start; }
-.demo-chip { width: 56px; height: 40px; border-radius: var(--r-md); border: 1px solid var(--color-border); display: block; }
+.demo-chip { width: calc(56px * var(--scale)); height: calc(40px * var(--scale)); border-radius: var(--r-md); border: 1px solid var(--color-border); display: block; }
 .demo-fontrow { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; }
 .demo-fontsample { font-size: var(--fs-xl); }
 
-/* 10-foot bands: --scale already grows type and spacing; widen the frame too (P-01). */
+/* 10-foot bands: --scale already grows type and spacing; the frame, the sidebar and the smallest type follow it.
+   Every fixed length in this file is calc(px * var(--scale)) so 2560 and 3840 grow the boxes with the words inside
+   them; the two smallest steps (12 / 14 px) are lifted to 14 / 16 px base inside the demo, because a caption on a
+   TV is read from the sofa, not from 60 cm (P-01). */
 @media (min-width: 1920px) {
-  .demo { --demo-side: 300px; --demo-gutter: var(--sp-10); }
+  .demo { --demo-side: calc(268px * var(--scale)); --demo-gutter: var(--sp-10); --fs-2xs: calc(14px * var(--scale)); --fs-xs: calc(14px * var(--scale)); --fs-sm: calc(16px * var(--scale)); }
   .demo-main { max-width: 2200px; }
-  .demo-navitem { font-size: var(--fs-md); min-height: 56px; }
+  .demo-navitem { font-size: var(--fs-md); min-height: calc(56px * var(--scale)); }
   .demo-h1 { font-size: var(--fs-3xl); }
+  .demo-h2 { font-size: var(--fs-2xl); }
   .demo-widgets { gap: var(--sp-5); }
-  .demo-board { grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); }
+  .demo-board { grid-template-columns: repeat(auto-fit, minmax(calc(320px * var(--scale)), 1fr)); }
+  .demo-today { grid-template-columns: repeat(auto-fit, minmax(calc(150px * var(--scale)), 1fr)); }
+  .demo-stats { grid-template-columns: repeat(auto-fit, minmax(calc(190px * var(--scale)), 1fr)); }
+  .demo-peoplerow { grid-template-columns: repeat(auto-fit, minmax(calc(210px * var(--scale)), 1fr)); }
+  .demo-lists { grid-template-columns: repeat(auto-fit, minmax(calc(220px * var(--scale)), 1fr)); }
 }
-@media (min-width: 2560px) { .demo { --demo-side: 360px; } .demo-main { max-width: 3000px; } }
+@media (min-width: 2560px) { .demo { --demo-side: calc(240px * var(--scale)); } .demo-main { max-width: 3000px; } }
 @media (min-width: 3840px) { .demo-main { max-width: 3400px; } }
-@media (pointer: coarse) { .demo-navitem, .demo-thread, .demo-tabitem { min-height: 48px; } }
+@media (pointer: coarse) { .demo-navitem, .demo-thread, .demo-tabitem { min-height: calc(48px * var(--scale)); } }

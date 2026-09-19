@@ -98,14 +98,15 @@ export function familyChat(p: Prospect): Msg[] {
   ];
 }
 
-export interface QuickAction { id: string; label: Bi; icon: 'plus' | 'message' | 'calendar' | 'dollar' | 'doc'; to?: string; will?: string }
+/** A quick action either navigates (`to`) or is honest about not being wired (`will` + `by`) - never both, never neither. */
+export interface QuickAction { id: string; label: Bi; icon: 'plus' | 'message' | 'calendar' | 'dollar' | 'doc'; to?: string; will?: string; by?: string }
 /** Quick actions for a role home: two navigate, two are honest Placeholders. */
 export function quickActionsFor(role: string, base: string): QuickAction[] {
   const r = role.toLowerCase();
   const inbox: QuickAction = { id: 'qa-inbox', label: bi('Open inbox', 'Abrir bandeja'), icon: 'message', to: `${base}/comms` };
   const money: QuickAction = { id: 'qa-money', label: bi('Today’s money', 'Dinero de hoy'), icon: 'dollar', to: `${base}/money` };
-  const add: QuickAction = { id: 'qa-add', label: /front|host|desk|intake|coordinator|advisor/.test(r) ? bi('New booking', 'Nueva reserva') : bi('New item', 'Nuevo elemento'), icon: 'plus', will: 'create a real record through the provider' };
-  const doc: QuickAction = { id: 'qa-doc', label: bi('Start a document', 'Empezar un documento'), icon: 'doc', will: 'open the document editor from the template library' };
+  const add: QuickAction = { id: 'qa-add', label: /front|host|desk|intake|coordinator|advisor/.test(r) ? bi('New booking', 'Nueva reserva') : bi('New item', 'Nuevo elemento'), icon: 'plus', will: 'create a real booking or work item in this workspace', by: 'os-demo, a later pass' };
+  const doc: QuickAction = { id: 'qa-doc', label: bi('Start a document', 'Empezar un documento'), icon: 'doc', will: 'open the document editor from the template library', by: 'os-demo, a later pass' };
   return [inbox, money, add, doc];
 }
 

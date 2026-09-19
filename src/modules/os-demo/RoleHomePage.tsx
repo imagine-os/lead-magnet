@@ -59,7 +59,7 @@ function RoleHome({ d, code }: { d: Demo; code: string }) {
         <div className="row wrap">
           {quick.map((q) => q.to
             ? <Button key={q.id} variant="outline" icon={q.icon} onClick={() => nav(q.to!)}>{bi(q.label)}</Button>
-            : <Placeholder key={q.id} will={q.will ?? 'do this'} by="T13 os-demo" button={{ label: bi(q.label), variant: 'outline', icon: q.icon }} />)}
+            : <Placeholder key={q.id} will={q.will ?? 'do this'} by={q.by ?? 'os-demo, a later pass'} button={{ label: bi(q.label), variant: 'outline', icon: q.icon }} />)}
         </div>
       </section>
 

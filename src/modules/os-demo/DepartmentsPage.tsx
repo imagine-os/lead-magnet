@@ -15,7 +15,7 @@ import { bi } from './sample';
 function Departments({ d }: { d: Demo }) {
   const { t, bi: tr } = useI18n();
   const roles = d.biz.map((v) => v.role);
-  useActions('C-03', { 'demo.openDepartment': (p) => `department ${String(p?.department ?? '')} is not wired yet (T13 os-demo)` });
+  useActions('C-03', { 'demo.openDepartment': (p) => `department ${String(p?.department ?? '')} is not wired yet (os-demo, a later pass)` });
   return (
     <div className="demo-page">
       <SectionHead title={t('demo.depts')} sub={t('demo.depts_sub', { business: d.prospect.business_name })} />
@@ -46,7 +46,7 @@ function Departments({ d }: { d: Demo }) {
               </ul>
               <div className="row wrap">
                 <Button size="sm" variant="ghost" iconRight="arrow-right" onClick={() => d.goRole(roles[i % Math.max(1, roles.length)] ?? d.activeRole)}>{t('demo.view_role', { role: titleCase(roles[i % Math.max(1, roles.length)] ?? d.activeRole) })}</Button>
-                <Placeholder will={`open the ${dept.en} workspace with its queue and files`} by="T13 os-demo" button={{ label: t('demo.open_dept'), variant: 'ghost', size: 'sm' }} />
+                <Placeholder will={`open the ${dept.en} workspace with its queue and files`} by="os-demo, a later pass" button={{ label: t('demo.open_dept'), variant: 'ghost', size: 'sm' }} />
               </div>
             </Card>
           );

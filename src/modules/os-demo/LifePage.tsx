@@ -60,7 +60,7 @@ function Life({ d }: { d: Demo }) {
           <Card padding="md">
             <ThreadMessages messages={chat} />
             <div className="demo-composer">
-              <Placeholder will="send a family message through the comms provider" by="T42 comms provider" button={{ label: t('demo.send'), variant: 'primary', icon: 'message' }} />
+              <Placeholder will="send a family message through the comms provider" by="comms provider (no task yet)" button={{ label: t('demo.send'), variant: 'primary', icon: 'message' }} />
             </div>
           </Card>
         </section>

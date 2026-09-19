@@ -12,6 +12,7 @@ import { Avatar } from '../../components/atom/Avatar/Avatar';
 import { Placeholder } from '../../components/atom/Placeholder/Placeholder';
 import { DataTable, type Column } from '../../components/organism/DataTable/DataTable';
 import { DAYS, weekFor, type CalEvent, type Msg } from './sample';
+import { useDemoScale } from './useDemoScale';
 
 export const asStrings = (s: unknown): string[] => (Array.isArray(s) ? s.filter((x): x is string => typeof x === 'string') : []);
 export const asNumbers = (s: unknown): number[] => (Array.isArray(s) ? s.filter((x): x is number => typeof x === 'number') : []);
@@ -22,13 +23,14 @@ const WIDGET_ICON: Record<Widget['kind'], IconName> = { kpi: 'target', list: 'li
 
 /** Small inline SVG: bars with a trend line. No chart library, no hover-only information (values are labelled). */
 export function MiniChart({ values, label, height = 72 }: { values: number[]; label: string; height?: number }) {
+  const scale = useDemoScale(); // the svg height is a px prop, so it has to be grown by hand for the 10-foot bands
   const v = values.length ? values : [0];
   const max = Math.max(...v, 1);
   const w = 100, gap = 2, bw = (w - gap * (v.length - 1)) / v.length;
   const pts = v.map((n, i) => `${i * (bw + gap) + bw / 2},${34 - (n / max) * 30}`).join(' ');
   return (
     <div className="dw-chart">
-      <svg viewBox={`0 0 ${w} 36`} height={height} width="100%" role="img" aria-label={`${label}: ${v.join(', ')}`} preserveAspectRatio="none">
+      <svg viewBox={`0 0 ${w} 36`} height={Math.round(height * scale)} width="100%" role="img" aria-label={`${label}: ${v.join(', ')}`} preserveAspectRatio="none">
         {v.map((n, i) => <rect key={i} x={i * (bw + gap)} y={34 - (n / max) * 30} width={bw} height={Math.max(1, (n / max) * 30)} rx="1" fill="var(--lp-primary)" opacity={0.28 + 0.72 * (n / max)} />)}
         <polyline points={pts} fill="none" stroke="var(--lp-accent)" strokeWidth="1.2" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
       </svg>
@@ -81,6 +83,7 @@ export function SectionHead({ title, sub, right }: { title: string; sub?: string
 export function WidgetCard({ w, p, ind, open }: { w: Widget; p: Prospect; ind: Industry; open: (w: Widget) => { to?: string; will?: string } }) {
   const { t, bi } = useI18n();
   const nav = useNavigate();
+  const scale = useDemoScale();
   const target = open(w);
   const title = bi(w.title as Bi);
   const rows = useMemo(() => asRows(w.sample).map((r, i) => ({ id: `r${i}`, a: r[0] ?? '', b: r[1] ?? '' })), [w.sample]);
@@ -88,24 +91,24 @@ export function WidgetCard({ w, p, ind, open }: { w: Widget; p: Prospect; ind: I
   return (
     <Card className={`dw dw-${w.kind}`} padding="md">
       <div className="dw-head">
-        <span className="dw-icon" aria-hidden><Icon name={WIDGET_ICON[w.kind]} size={16} /></span>
+        <span className="dw-icon" aria-hidden><Icon name={WIDGET_ICON[w.kind]} size={Math.round(16 * scale)} /></span>
         <h3 className="dw-title">{title}</h3>
         <Badge size="sm" tone="neutral">{t(`demo.kind_${w.kind}`)}</Badge>
         {target.to
           ? <Button size="sm" variant="ghost" iconRight="arrow-right" onClick={() => nav(target.to!)}>{t('demo.open')}</Button>
-          : <Placeholder will={target.will ?? `open the full ${title} view`} by="T13 os-demo"><Button size="sm" variant="ghost" iconRight="arrow-right">{t('demo.open')}</Button></Placeholder>}
+          : <Placeholder will={target.will ?? `open the full ${title} view`} by="os-demo, a later pass"><Button size="sm" variant="ghost" iconRight="arrow-right">{t('demo.open')}</Button></Placeholder>}
       </div>
       <div className="dw-body">
         {w.kind === 'kpi' && <Stat label={title} value={String(w.sample ?? '—')} hint={t('demo.kpi_hint')} size="lg" />}
         {w.kind === 'chart' && <MiniChart values={asNumbers(w.sample)} label={title} />}
         {w.kind === 'list' && (
           <ul className="dw-list">{asStrings(w.sample).map((s, i) => (
-            <li key={s + i}><span className="dw-tick" aria-hidden><Icon name="alert" size={14} /></span><span className="grow">{s}</span><Badge size="sm" tone={i === 0 ? 'warn' : 'neutral'}>{i === 0 ? t('demo.now') : t('demo.queued')}</Badge></li>
+            <li key={s + i}><span className="dw-tick" aria-hidden><Icon name="alert" size={Math.round(14 * scale)} /></span><span className="grow">{s}</span><Badge size="sm" tone={i === 0 ? 'warn' : 'neutral'}>{i === 0 ? t('demo.now') : t('demo.queued')}</Badge></li>
           ))}</ul>
         )}
         {w.kind === 'doc' && (
           <ul className="dw-docs">{asStrings(w.sample).map((s, i) => (
-            <li key={s + i}><span className="dw-doc-ic" aria-hidden><Icon name="doc" size={16} /></span><span className="grow">{s}</span><span className="xs muted">{t('demo.doc_edited')}</span></li>
+            <li key={s + i}><span className="dw-doc-ic" aria-hidden><Icon name="doc" size={Math.round(16 * scale)} /></span><span className="grow">{s}</span><span className="xs muted">{t('demo.doc_edited')}</span></li>
           ))}</ul>
         )}
         {w.kind === 'calendar' && <WeekStrip events={weekFor(p, ind, w.id, asStrings(w.sample))} label={title} />}

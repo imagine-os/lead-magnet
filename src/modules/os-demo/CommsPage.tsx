@@ -27,7 +27,7 @@ function Comms({ d }: { d: Demo }) {
   useActions('C-04', {
     'demo.filterChannel': (p) => { setTab((String(p?.channel ?? 'all') as 'all' | Channel)); return String(p?.channel ?? 'all'); },
     'demo.openThread': (p) => { setOpenId(String(p?.thread ?? '')); return String(p?.thread ?? ''); },
-    'demo.reply': (p) => `reply to ${String(p?.thread ?? '')} is not wired yet (T42 comms provider)`,
+    'demo.reply': (p) => `reply to ${String(p?.thread ?? '')} is not wired yet (comms provider, no task yet)`,
   });
   const tabs = ([['all', 'demo.ch_all'], ['call', 'demo.ch_calls'], ['email', 'demo.ch_email'], ['sms', 'demo.ch_sms'], ['whatsapp', 'demo.ch_whatsapp']] as const)
     .map(([id, k]) => ({ id: id as 'all' | Channel, label: t(k), count: id === 'all' ? threads.length : threads.filter((x) => x.channel === id).length }));
@@ -63,8 +63,10 @@ function Comms({ d }: { d: Demo }) {
             <ThreadMessages messages={open.messages} />
             <div className="demo-composer">
               <label className="sr-only" htmlFor="demo-composer">{t('demo.composer')}</label>
-              <Textarea id="demo-composer" rows={2} placeholder={t('demo.composer_ph')} readOnly value="" />
-              <Placeholder will="send this reply through the comms provider (calls, email, SMS, WhatsApp on one number)" by="T42 comms provider" button={{ label: t('demo.send'), variant: 'primary', icon: 'arrow-right' }} />
+              <Placeholder block will="take a typed reply here" by="comms provider (no task yet)">
+                <Textarea id="demo-composer" rows={2} placeholder={t('demo.composer_ph')} readOnly value="" />
+              </Placeholder>
+              <Placeholder will="send this reply through the comms provider (calls, email, SMS, WhatsApp on one number)" by="comms provider (no task yet)" button={{ label: t('demo.send'), variant: 'primary', icon: 'arrow-right' }} />
             </div>
           </>) : <EmptyState icon="message" title={t('demo.no_threads')} />}
         </Card>

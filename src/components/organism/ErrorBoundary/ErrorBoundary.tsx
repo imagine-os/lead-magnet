@@ -1,10 +1,10 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 import './ErrorBoundary.css';
-interface Props { children: ReactNode; resetKey?: string }
+interface Props { children: ReactNode; resetKey?: string; /** Start in the caught state with this error (component-library demo), without throwing. */ demoError?: Error }
 interface State { error: Error | null }
 /** Catches render errors per route so one broken page never blanks the app. */
 export class ErrorBoundary extends Component<Props, State> {
-  state: State = { error: null };
+  state: State = { error: this.props.demoError ?? null };
   static getDerivedStateFromError(error: Error): State { return { error }; }
   componentDidCatch(error: Error, info: ErrorInfo) { console.error('[page error]', error, info.componentStack); }
   componentDidUpdate(prev: Props) { if (prev.resetKey !== this.props.resetKey && this.state.error) this.setState({ error: null }); }

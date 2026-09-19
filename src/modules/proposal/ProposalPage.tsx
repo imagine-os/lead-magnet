@@ -86,7 +86,7 @@ export function ProposalPage() {
   ];
   const miniKpis = ind.kpis.slice(0, 3);
   const screen = (variant: 'phone' | 'laptop' | 'tv') => (
-    <div className="pr-fit"><div className={`pr-screen pr-screen-${variant}`}>
+    <div className="pr-fit" aria-hidden="true"><div className={`pr-screen pr-screen-${variant}`}>
       <div className="pr-screen-bar"><span className="pr-screen-dot" aria-hidden />{prospect.business_name}<span className="pr-screen-city">{prospect.city}</span></div>
       <div className="pr-screen-kpis">{miniKpis.slice(0, variant === 'phone' ? 1 : 3).map((k) => (<div key={k.sample + bi(k.label)} className="pr-screen-kpi"><span className="pr-screen-kpi-v">{k.sample}</span><span className="pr-screen-kpi-l">{bi(k.label)}</span></div>))}</div>
       <div className="pr-screen-rows">{roleViews.slice(0, 4).map((rv) => (<div key={rv.role} className="pr-screen-row"><span className="pr-screen-role">{cap(rv.role)}</span><span className="pr-screen-row-x">{bi(rv.widgets[1]?.title ?? rv.widgets[0].title)}</span></div>))}</div>

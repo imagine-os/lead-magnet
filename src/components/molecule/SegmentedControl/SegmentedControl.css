@@ -1,5 +1,5 @@
 .seg { display: inline-flex; padding: 3px; border-radius: var(--r-md); background: var(--color-surface-3); gap: 2px; }
-.seg-item { min-height: 38px; min-width: 44px; padding: 0 var(--sp-3); border: 0; border-radius: calc(var(--r-md) - 2px); background: transparent; color: var(--color-text-muted); font-weight: var(--fw-medium); font-size: var(--fs-sm); transition: background var(--dur-fast), color var(--dur-fast); }
-.seg-md .seg-item { min-height: 42px; }
+.seg-item { min-height: 44px; min-width: 44px; padding: 0 var(--sp-3); border: 0; border-radius: calc(var(--r-md) - 2px); background: transparent; color: var(--color-text-muted); font-weight: var(--fw-medium); font-size: var(--fs-sm); transition: background var(--dur-fast), color var(--dur-fast); }
+.seg-md .seg-item { min-height: var(--h-control-sm); }
 .seg-item.is-active { background: var(--color-surface); color: var(--color-heading); box-shadow: var(--shadow-sm); }
 .seg-item:disabled { opacity: .5; }

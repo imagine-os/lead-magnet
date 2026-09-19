@@ -20,7 +20,7 @@ export function Placeholder({ will, by, children, button, block }: PlaceholderPr
   const handlers = { onMouseEnter: () => setShow(true), onMouseLeave: () => setShow(false), onFocus: () => setShow(true), onBlur: () => setShow(false), 'aria-describedby': tipId };
   const inner = children && isValidElement(children)
     ? cloneElement(children as ReactElement<Record<string, unknown>>, { ...handlers, onClick: (e: Event) => { e.preventDefault?.(); fire(); }, 'data-placeholder': will })
-    : <Button {...(button ?? { label: will })} {...handlers} onClick={fire} data-placeholder={will}>{button?.label ?? will}</Button>;
+    : (() => { const { label, ...btn } = button ?? { label: will }; return <Button {...btn} {...handlers} onClick={fire} data-placeholder={will}>{label}</Button>; })();
   return (<span className={`placeholder ${devMode ? 'is-dev' : ''} ${block ? 'is-block' : ''}`} data-placeholder-wrap>
     {inner}
     {devMode && <span className="placeholder-badge" aria-hidden>not wired</span>}

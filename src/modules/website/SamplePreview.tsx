@@ -16,7 +16,7 @@ export function SamplePreview({ prospect, variant }: { prospect: ProspectRow; va
   const roles = deriveRoleViews(prospect).slice(0, 3);
   const kpis = ind.kpis.slice(0, variant === 'tv' ? 3 : 2);
   const pains = ind.pains.slice(0, 2);
-  return (<div className={`spv-fit spv-fit-${variant}`}><div className="spv" style={prospectStyle(prospect.style.palette, prospect.style.font)}>
+  return (<div className={`spv-fit spv-fit-${variant}`} aria-hidden="true"><div className="spv" style={prospectStyle(prospect.style.palette, prospect.style.font)}>
     <header className="spv-top">
       <span className="spv-logo" aria-hidden>{initials(prospect.business_name)}</span>
       <span className="spv-name">{prospect.business_name}</span>

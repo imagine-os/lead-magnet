@@ -2,6 +2,6 @@
 .placeholder.is-block, .placeholder.is-block > * { width: 100%; }
 .placeholder.is-dev > *:first-child { outline: 2px dashed var(--color-warn); outline-offset: 2px; }
 .placeholder-badge { position: absolute; top: -8px; right: -6px; font-size: 10px; line-height: 14px; padding: 0 6px; border-radius: var(--r-pill); background: var(--color-warn); color: #fff; font-weight: var(--fw-bold); text-transform: uppercase; letter-spacing: .04em; pointer-events: none; }
-.placeholder-tip { position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); background: var(--color-ink); color: var(--color-ink-text); font-size: var(--fs-xs); line-height: 1.3; padding: 6px 10px; border-radius: var(--r-md); white-space: nowrap; max-width: 320px; overflow: hidden; text-overflow: ellipsis; opacity: 0; pointer-events: none; transition: opacity var(--dur-fast); z-index: 30; box-shadow: var(--shadow-md); }
-.placeholder-tip.is-show { opacity: 1; }
+.placeholder-tip { display: none; position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); background: var(--color-ink); color: var(--color-ink-text); font-size: var(--fs-xs); line-height: 1.3; padding: 6px 10px; border-radius: var(--r-md); white-space: nowrap; max-width: min(320px, calc(100vw - 32px)); overflow: hidden; text-overflow: ellipsis; opacity: 0; pointer-events: none; transition: opacity var(--dur-fast); z-index: 30; box-shadow: var(--shadow-md); }
+.placeholder-tip.is-show { display: block; opacity: 1; }
 @media (max-width: 600px) { .placeholder-tip { white-space: normal; max-width: 220px; } }

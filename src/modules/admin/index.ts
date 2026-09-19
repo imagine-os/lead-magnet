@@ -1,0 +1,126 @@
+import { createElement as h } from 'react';
+import type { RouteDef } from '../../specs/types';
+import { STAFF_ROLES } from '../../auth/roles';
+import { FunnelPage } from './FunnelPage';
+import { ProspectTimelinePage } from './ProspectTimelinePage';
+import { EventsPage } from './EventsPage';
+import { OutreachBoardPage } from './OutreachBoardPage';
+import { BookingsPage } from './BookingsPage';
+import { bookingsSpec, eventsSpec, funnelSpec, outreachSpec, timelineSpec } from './specs';
+
+export const routes: RouteDef[] = [
+  { path: '/admin', element: h(FunnelPage), spec: funnelSpec, roles: STAFF_ROLES, surface: 'admin', nav: { label: 'Funnel', icon: 'chart', order: 1, group: 'admin' } },
+  { path: '/admin/prospects/:id', element: h(ProspectTimelinePage), spec: timelineSpec, roles: STAFF_ROLES, surface: 'admin' },
+  { path: '/admin/events', element: h(EventsPage), spec: eventsSpec, roles: STAFF_ROLES, surface: 'admin', nav: { label: 'Events', icon: 'list', order: 2, group: 'admin' } },
+  { path: '/admin/outreach', element: h(OutreachBoardPage), spec: outreachSpec, roles: STAFF_ROLES, surface: 'admin', nav: { label: 'Outreach', icon: 'mail', order: 3, group: 'admin' } },
+  { path: '/admin/bookings', element: h(BookingsPage), spec: bookingsSpec, roles: STAFF_ROLES, surface: 'admin', nav: { label: 'Bookings', icon: 'calendar', order: 4, group: 'admin' } },
+];
+
+export const strings = {
+  // shared vocabulary
+  'admin.all': { en: 'All', es: 'Todo' },
+  'admin.group': { en: 'Group', es: 'Grupo' },
+  'admin.stage': { en: 'Stage', es: 'Etapa' },
+  'admin.sessions': { en: 'sessions', es: 'sesiones' },
+  'admin.of_previous': { en: 'of previous', es: 'del anterior' },
+  'admin.of_first': { en: 'of stage 1', es: 'de la etapa 1' },
+  'admin.table_view': { en: 'Table view', es: 'Ver como tabla' },
+  'admin.variant': { en: 'Variant {v}', es: 'Variante {v}' },
+  'admin.confidence': { en: 'What we know about them', es: 'Lo que sabemos de ellos' },
+  'admin.clear_filters': { en: 'Clear filters', es: 'Limpiar filtros' },
+  'admin.no_events': { en: 'Nothing tracked yet', es: 'Aún no hay eventos' },
+  'admin.no_events_body': { en: 'Open a landing page or a demo and the events land here within a second.', es: 'Abre una landing o una demo y los eventos aparecen aquí en un segundo.' },
+  'admin.no_prospect': { en: 'No such prospect', es: 'No existe ese prospecto' },
+  'admin.no_prospect_body': { en: 'That id is not in the store. Pick one from the funnel.', es: 'Ese id no está en el almacén. Elige uno desde el embudo.' },
+  'admin.back_funnel': { en: 'Back to the funnel', es: 'Volver al embudo' },
+  // funnel stages (R-A01 vocabulary)
+  'admin.stage_outreach_open': { en: 'Outreach opened', es: 'Outreach abierto' },
+  'admin.stage_view': { en: 'Page viewed', es: 'Página vista' },
+  'admin.stage_demo_open': { en: 'Demo opened', es: 'Demo abierta' },
+  'admin.stage_booking_started': { en: 'Booking started', es: 'Reserva iniciada' },
+  'admin.stage_booking_confirmed': { en: 'Booking confirmed', es: 'Reserva confirmada' },
+  // archetypes / warmth / channels / statuses
+  'admin.arch_reveal': { en: 'Reveal', es: 'Revelación' }, 'admin.arch_audit': { en: 'Audit', es: 'Auditoría' }, 'admin.arch_walkthrough': { en: 'Walkthrough', es: 'Recorrido' }, 'admin.arch_letter': { en: 'Letter', es: 'Carta' },
+  'admin.warm_cold': { en: 'Cold', es: 'Frío' }, 'admin.warm_warm': { en: 'Warm', es: 'Tibio' }, 'admin.warm_hot': { en: 'Hot', es: 'Caliente' },
+  'admin.ch_cold_email': { en: 'Cold email', es: 'Correo frío' }, 'admin.ch_linkedin_dm': { en: 'LinkedIn DM', es: 'DM de LinkedIn' }, 'admin.ch_whatsapp': { en: 'WhatsApp', es: 'WhatsApp' }, 'admin.ch_sms': { en: 'SMS', es: 'SMS' }, 'admin.ch_call': { en: 'Call', es: 'Llamada' }, 'admin.ch_warm_intro': { en: 'Warm intro', es: 'Presentación' },
+  'admin.ts_draft': { en: 'Draft', es: 'Borrador' }, 'admin.ts_scheduled': { en: 'Scheduled', es: 'Programado' }, 'admin.ts_sent': { en: 'Sent', es: 'Enviado' }, 'admin.ts_opened': { en: 'Opened', es: 'Abierto' }, 'admin.ts_clicked': { en: 'Clicked', es: 'Con clic' }, 'admin.ts_replied': { en: 'Replied', es: 'Respondido' }, 'admin.ts_bounced': { en: 'Bounced', es: 'Rebotado' }, 'admin.ts_other': { en: 'Other', es: 'Otros' },
+  // event type labels
+  'admin.ev_view': { en: 'Page view', es: 'Vista de página' }, 'admin.ev_section_view': { en: 'Section seen', es: 'Sección vista' }, 'admin.ev_scroll_depth': { en: 'Scroll depth', es: 'Profundidad de scroll' }, 'admin.ev_cta_click': { en: 'CTA click', es: 'Clic en CTA' },
+  'admin.ev_demo_open': { en: 'Demo opened', es: 'Demo abierta' }, 'admin.ev_demo_role_switch': { en: 'Role switched in demo', es: 'Cambio de rol en la demo' }, 'admin.ev_booking_started': { en: 'Booking started', es: 'Reserva iniciada' }, 'admin.ev_booking_confirmed': { en: 'Booking confirmed', es: 'Reserva confirmada' },
+  'admin.ev_form_submit': { en: 'Form submitted', es: 'Formulario enviado' }, 'admin.ev_exit_intent': { en: 'Exit intent', es: 'Intención de salida' }, 'admin.ev_outreach_open': { en: 'Outreach opened', es: 'Outreach abierto' }, 'admin.ev_outreach_click': { en: 'Outreach clicked', es: 'Clic en outreach' },
+  // A-01
+  'admin.funnel_h1': { en: 'Funnel', es: 'Embudo' },
+  'admin.funnel_sub': { en: 'Distinct sessions per stage, in one vocabulary, from the first outreach open to a confirmed walkthrough.', es: 'Sesiones distintas por etapa, con un solo vocabulario, desde la apertura del outreach hasta un recorrido confirmado.' },
+  'admin.filter_archetype': { en: 'Archetype', es: 'Arquetipo' }, 'admin.filter_warmth': { en: 'Warmth', es: 'Temperatura' },
+  'admin.kpi_prospects': { en: 'Prospects', es: 'Prospectos' }, 'admin.kpi_prospects_hint': { en: 'in this filter', es: 'en este filtro' },
+  'admin.kpi_live_pages': { en: 'Live pages', es: 'Páginas en vivo' }, 'admin.kpi_live_pages_hint': { en: 'published and not expired', es: 'publicadas y sin caducar' },
+  'admin.kpi_views': { en: 'Page views', es: 'Vistas de página' }, 'admin.kpi_demo_opens': { en: 'Demo opens', es: 'Aperturas de demo' },
+  'admin.kpi_bookings': { en: 'Bookings', es: 'Reservas' }, 'admin.kpi_bookings_hint': { en: '{n} confirmed in tracking', es: '{n} confirmadas en el tracking' },
+  'admin.kpi_view_demo': { en: 'View → demo', es: 'Vista → demo' }, 'admin.kpi_view_demo_hint': { en: 'the page did its job', es: 'la página hizo su trabajo' },
+  'admin.kpi_demo_book': { en: 'Demo → booking', es: 'Demo → reserva' }, 'admin.kpi_demo_book_hint': { en: 'the product did its job', es: 'el producto hizo su trabajo' },
+  'admin.funnel_caption': { en: 'Sessions by funnel stage', es: 'Sesiones por etapa del embudo' },
+  'admin.funnel_top': { en: 'widest stage', es: 'etapa más ancha' },
+  'admin.funnel_note': { en: 'A stage counts distinct sessions (R-A01), so a page that fires six section views still counts as one viewer. Percentages compare a stage with the one above it.', es: 'Cada etapa cuenta sesiones distintas (R-A01): una página con seis vistas de sección sigue siendo un visitante. Los porcentajes comparan cada etapa con la anterior.' },
+  'admin.by_archetype': { en: 'By archetype', es: 'Por arquetipo' }, 'admin.by_warmth': { en: 'By warmth', es: 'Por temperatura' },
+  'admin.view_to_book': { en: 'View → booked', es: 'Vista → reservada' },
+  'admin.ab_h2': { en: 'A/B by variant', es: 'A/B por variante' }, 'admin.ab_ready': { en: 'comparable', es: 'comparable' }, 'admin.ab_blocked': { en: 'not comparable yet', es: 'aún no comparable' },
+  'admin.ab_need_title': { en: 'A/B needs two live variants', es: 'El A/B necesita dos variantes en vivo' },
+  'admin.ab_need_body': { en: 'Live variants right now: {n} ({variants}). Publish a second variant from the composer and this table compares the same five stages side by side. Until then we would be reading noise (R-A02).', es: 'Variantes en vivo ahora: {n} ({variants}). Publica una segunda variante desde el compositor y esta tabla compara las mismas cinco etapas. Antes de eso solo leeríamos ruido (R-A02).' },
+  'admin.ab_go_studio': { en: 'Open the composer', es: 'Abrir el compositor' },
+  'admin.ab_note': { en: 'Variants are compared on the same five stages and the same session counting, never on a single metric.', es: 'Las variantes se comparan con las mismas cinco etapas y el mismo conteo de sesiones, nunca con una sola métrica.' },
+  'admin.recent': { en: 'Recent activity', es: 'Actividad reciente' },
+  // A-02
+  'admin.recs_h2': { en: 'What the engine recommends', es: 'Lo que recomienda el motor' },
+  'admin.recs_sub': { en: 'Recorded before anything is applied (R-A03)', es: 'Se registra antes de aplicar nada (R-A03)' },
+  'admin.recs_nopage': { en: 'No page for this prospect yet', es: 'Este prospecto aún no tiene página' },
+  'admin.recs_nopage_body': { en: 'Compose and publish one in the studio and recommendations start arriving with the first session.', es: 'Compón y publica una en el estudio y las recomendaciones llegan con la primera sesión.' },
+  'admin.recs_none': { en: 'Nothing to change', es: 'Nada que cambiar' },
+  'admin.recs_none_body': { en: 'The events so far agree with the archetype on the page.', es: 'Los eventos hasta ahora concuerdan con el arquetipo de la página.' },
+  'admin.rk_switch_archetype': { en: 'Switch archetype', es: 'Cambiar arquetipo' }, 'admin.rk_add_section': { en: 'Add section', es: 'Añadir sección' }, 'admin.rk_shorten': { en: 'Shorten', es: 'Acortar' }, 'admin.rk_ask': { en: 'Ask them', es: 'Preguntarles' },
+  'admin.rs_proposed': { en: 'recorded', es: 'registrada' }, 'admin.rs_applied': { en: 'applied', es: 'aplicada' }, 'admin.rs_dismissed': { en: 'dismissed', es: 'descartada' },
+  'admin.score': { en: 'score {n}', es: 'puntaje {n}' },
+  'admin.rec_recorded': { en: 'On file: {status} · {at}', es: 'En registro: {status} · {at}' },
+  'admin.rec_unrecorded': { en: 'Not recorded yet - recording happens before any page changes.', es: 'Aún sin registrar: se registra antes de cambiar la página.' },
+  'admin.rec_apply': { en: 'Apply', es: 'Aplicar' }, 'admin.rec_is_applied': { en: 'Applied', es: 'Aplicada' },
+  'admin.rec_record': { en: 'Record', es: 'Registrar' }, 'admin.rec_is_recorded': { en: 'Recorded', es: 'Registrada' }, 'admin.rec_dismiss': { en: 'Dismiss', es: 'Descartar' },
+  'admin.rec_will': { en: 'apply "{kind}" to the live page model', es: 'aplicar «{kind}» al modelo de la página en vivo' },
+  'admin.rec_applied': { en: 'Page switched to {to}', es: 'Página cambiada a {to}' },
+  'admin.rec_applied_body': { en: 'pages.archetype and pages.model were recomposed and written by id.', es: 'pages.archetype y pages.model se recompusieron y se escribieron por id.' },
+  'admin.rec_failed': { en: 'Could not apply that recommendation', es: 'No se pudo aplicar la recomendación' },
+  'admin.rec_dismissed': { en: 'Recommendation dismissed', es: 'Recomendación descartada' },
+  'admin.open_studio': { en: 'Studio profile', es: 'Perfil en el estudio' }, 'admin.open_demo': { en: 'Their demo', es: 'Su demo' }, 'admin.open_page': { en: 'Their page', es: 'Su página' }, 'admin.open_booking': { en: 'Their booking page', es: 'Su página de reserva' },
+  'admin.timeline_h2': { en: 'Timeline', es: 'Cronología' },
+  'admin.timeline_sub': { en: '{n} rows, newest first', es: '{n} filas, la más reciente primero' },
+  'admin.timeline_note': { en: 'Touches sit at their latest known moment (clicked, else opened, else sent); events sit at their ts; bookings sit at the moment they were requested.', es: 'Los toques se ubican en su momento más reciente (clic, si no apertura, si no envío); los eventos en su ts; las reservas en el momento de la solicitud.' },
+  'admin.tk_touch': { en: 'outreach', es: 'outreach' }, 'admin.tk_event': { en: 'event', es: 'evento' }, 'admin.tk_booking': { en: 'booking', es: 'reserva' },
+  'admin.tl_booking': { en: 'Walkthrough requested ({minutes} min)', es: 'Recorrido solicitado ({minutes} min)' },
+  // A-03
+  'admin.events_h1': { en: 'Events', es: 'Eventos' },
+  'admin.events_sub': { en: 'Every tracked interaction, raw. Filter it, then read the meta.', es: 'Cada interacción registrada, en crudo. Filtra y luego lee el meta.' },
+  'admin.ev_when': { en: 'When', es: 'Cuándo' }, 'admin.ev_type': { en: 'Type', es: 'Tipo' }, 'admin.ev_prospect': { en: 'Prospect', es: 'Prospecto' }, 'admin.ev_page': { en: 'Page', es: 'Página' }, 'admin.ev_session': { en: 'Session', es: 'Sesión' }, 'admin.ev_meta': { en: 'Meta', es: 'Meta' }, 'admin.ev_json': { en: 'Raw', es: 'Crudo' },
+  'admin.ev_count': { en: '{shown} of {all} events', es: '{shown} de {all} eventos' },
+  // A-04
+  'admin.outreach_h1': { en: 'Outreach', es: 'Outreach' },
+  'admin.outreach_sub': { en: 'Touches by status and channel. Move a card with its Select - no dragging required.', es: 'Toques por estado y canal. Mueve una tarjeta con su selector: no hace falta arrastrar.' },
+  'admin.channel': { en: 'Channel', es: 'Canal' },
+  'admin.touch_count': { en: '{shown} of {all} touches', es: '{shown} de {all} toques' },
+  'admin.col_empty': { en: 'Nothing here', es: 'Nada aquí' },
+  'admin.move_to': { en: 'Move to', es: 'Mover a' },
+  'admin.touch_moved': { en: 'Moved to {status}', es: 'Movido a {status}' },
+  'admin.touch_nostamps': { en: 'not sent yet', es: 'sin enviar' },
+  'admin.no_touches': { en: 'No outreach yet', es: 'Aún no hay outreach' },
+  'admin.no_touches_body': { en: 'Draft the first message in the studio (S-05); it appears here as a draft card.', es: 'Redacta el primer mensaje en el estudio (S-05); aparece aquí como borrador.' },
+  'admin.outreach_note': { en: 'Sending is not wired yet: the studio drafts, a provider sends (T41). Statuses and timestamps here are real rows.', es: 'El envío aún no está conectado: el estudio redacta, un proveedor envía (T41). Los estados y las marcas de tiempo son filas reales.' },
+  // A-05
+  'admin.bookings_h1': { en: 'Bookings', es: 'Reservas' },
+  'admin.bookings_sub': { en: 'Walkthrough calls in the prospect\'s own timezone, with what they told us when they booked.', es: 'Llamadas de recorrido en la zona horaria del prospecto, con lo que nos dijeron al reservar.' },
+  'admin.bk_upcoming': { en: 'Upcoming', es: 'Próximas' }, 'admin.bk_past': { en: 'Past', es: 'Pasadas' },
+  'admin.bk_slot': { en: 'Slot', es: 'Horario' }, 'admin.bk_duration': { en: 'Length', es: 'Duración' }, 'admin.bk_contact': { en: 'Who', es: 'Quién' }, 'admin.bk_notes': { en: 'Note', es: 'Nota' }, 'admin.bk_requested': { en: 'Requested', es: 'Solicitada' }, 'admin.bk_status': { en: 'Status', es: 'Estado' }, 'admin.bk_set_status': { en: 'Set status', es: 'Cambiar estado' },
+  'admin.bk_requested_hint': { en: 'waiting on us', es: 'esperan por nosotros' },
+  'admin.bk_moved': { en: 'Booking marked {status}', es: 'Reserva marcada {status}' },
+  'admin.bk_none_upcoming': { en: 'Nothing on the calendar', es: 'Nada en el calendario' },
+  'admin.bk_none_upcoming_body': { en: 'When a prospect confirms on B-01 the row appears here immediately.', es: 'Cuando un prospecto confirma en B-01, la fila aparece aquí de inmediato.' },
+  'admin.bk_none_past': { en: 'No past calls', es: 'Sin llamadas pasadas' },
+  'admin.bk_none_past_body': { en: 'Cancelled and finished calls collect here.', es: 'Aquí se acumulan las llamadas canceladas y terminadas.' },
+  'admin.bookings_note': { en: 'Bookings are written by the prospect on the booking page:', es: 'Las reservas las escribe el prospecto en la página de reserva:' },
+};

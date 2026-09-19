@@ -1,0 +1,52 @@
+/* A-01..A-05 staff surface. Tokens only; the admin surface never themes per prospect (P-02). */
+.ad { --ad-col-w: 280px; }
+.ad-sub-head { margin-bottom: 0; }
+.ad-strong { font-weight: var(--fw-semibold); color: var(--color-text); }
+.ad-num { font-variant-numeric: tabular-nums; }
+.ad-nowrap { white-space: nowrap; }
+.ad-code { font-size: var(--fs-2xs); color: var(--color-text-muted); background: var(--color-surface-2); padding: 1px 5px; border-radius: var(--r-sm); }
+.ad-filters { display: flex; flex-direction: column; gap: var(--sp-2); }
+.ad-filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--sp-3); margin-bottom: var(--sp-3); }
+.ad-filter-one { grid-template-columns: minmax(200px, 22rem) auto; align-items: end; }
+.ad-kpis { align-items: stretch; }
+.ad-head-meta { display: flex; flex-direction: column; gap: var(--sp-3); }
+.ad-json { font-size: var(--fs-2xs); max-height: 55vh; }
+.ad-dl { display: grid; grid-template-columns: max-content 1fr; gap: var(--sp-1) var(--sp-3); margin: 0; font-size: var(--fs-xs); }
+.ad-dl dt { color: var(--color-label); } .ad-dl dd { margin: 0; }
+.ad-status { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+
+/* recent activity + timeline: one grid, no hover-only affordances */
+.ad-recent, .ad-timeline { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.ad-recent > li, .ad-timeline > li { display: grid; grid-template-columns: 28px 9.5em minmax(0, 1fr) auto; align-items: baseline; gap: var(--sp-2) var(--sp-3); padding: var(--sp-2) 0; border-bottom: 1px solid var(--color-border-subtle); }
+.ad-recent > li:last-child, .ad-timeline > li:last-child { border-bottom: 0; }
+.ad-recent-icon, .ad-tl-dot { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: var(--r-round); background: var(--color-surface-tint); color: var(--color-primary-text); align-self: start; }
+.ad-tl-booking .ad-tl-dot { background: var(--color-accent-soft); color: var(--color-accent-text); }
+.ad-tl-touch .ad-tl-dot { background: var(--color-surface-3); color: var(--color-text-secondary); }
+.ad-recent-when, .ad-tl-when { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ad-recent-what, .ad-tl-body { min-width: 0; }
+.ad-tl-tags { justify-content: flex-end; }
+
+/* A-04 board: columns scroll as one strip, never nested scrollers on touch */
+.ad-board { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(var(--ad-col-w), 1fr); gap: var(--sp-3); overflow-x: auto; padding-bottom: var(--sp-3); align-items: start; }
+.ad-col { display: flex; flex-direction: column; gap: var(--sp-2); min-width: 0; }
+.ad-col-head { display: flex; align-items: center; gap: var(--sp-2); padding-bottom: var(--sp-1); border-bottom: 2px solid var(--color-border); position: sticky; top: 0; background: var(--color-bg); z-index: 1; }
+.ad-col-title { font-size: var(--fs-sm); }
+.ad-col-empty { padding: var(--sp-3) 0; }
+.ad-touch-subject { font-size: var(--fs-sm); }
+.ad-touch-body { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.ad-rec { border-left: 3px solid var(--color-primary); }
+
+@media (max-width: 900px) {
+  .ad-recent > li, .ad-timeline > li { grid-template-columns: 28px minmax(0, 1fr); grid-template-areas: 'icon when' 'body body' 'tags tags'; }
+  .ad-recent-icon, .ad-tl-dot { grid-area: icon; } .ad-recent-when, .ad-tl-when { grid-area: when; } .ad-recent-what, .ad-tl-body { grid-area: body; } .ad-recent-who, .ad-tl-tags { grid-area: tags; justify-content: flex-start; }
+  .ad-board { grid-auto-flow: row; grid-auto-columns: auto; overflow-x: visible; }
+  .ad-col-head { position: static; }
+  .ad-filter-one { grid-template-columns: 1fr; }
+}
+@media (min-width: 1920px) { .ad { --ad-col-w: 320px; } .ad-json { font-size: var(--fs-xs); } }
+@media (min-width: 2560px) { .ad { --ad-col-w: 380px; } }
+
+/* Group labels in the breakdown tables never break mid-word (review fix, changelog 0009). */
+.ad .dt .ad-strong { white-space: nowrap; }
+/* The two breakdown tables have seven columns each: side by side only when both fit without clipping the last header. */
+@media (max-width: 1439px) { .ad .ad-breaks { grid-template-columns: minmax(0, 1fr); } }

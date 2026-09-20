@@ -7,7 +7,9 @@
 // The landing module reads index.json; when it is missing the sections fall back to the live <MiniOs> composition,
 // so this script is an enhancement, never a dependency.
 //
-// Usage: npm run frames [-- --ids=pro_maya,pro_daniel] [-- --quality=68] [-- --desk-quality=58] [-- --port=4179]
+// Usage: npm run frames [-- --ids=pro_maya,pro_daniel] [-- --quality=68] [-- --desk-quality=58] [-- --stride=2] [-- --port=4179]
+// --stride=N keeps every Nth scroll step of each stop (always the first), so the frame count follows the budget
+// (public/frames + public/og <= 5 MB together) when the seeded roster grows; the landing reads count / desk_count from index.json.
 // Chromium is preinstalled at /opt/pw-browsers; never run `playwright install`. External requests are blocked.
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
@@ -17,6 +19,7 @@ const args = process.argv.slice(2);
 const IDS = list(arg(args, 'ids'));
 const QUALITY = Number(arg(args, 'quality', '78'));
 const DESK_QUALITY = Number(arg(args, 'desk-quality', '52'));
+const STRIDE = Math.max(1, Number(arg(args, 'stride', '1')) || 1);
 const PORT = Number(arg(args, 'port', process.env.QA_PORT ?? '4179'));
 const BASE = `http://localhost:${PORT}/#`;
 const ROOT = new URL('../', import.meta.url);
@@ -98,7 +101,7 @@ async function walk(browser, { id, roles, tour, viewport, prefix, quality, dir }
     await page.goto(`${BASE}${urlFor(id, step.stop, roles)}`, { waitUntil: 'load', timeout: 20000 });
     await page.waitForSelector('#root > *:not(dialog)', { timeout: 10000 });
     await page.waitForTimeout(420);
-    for (const y of step.scroll) {
+    for (const y of step.scroll.filter((_, i) => i % STRIDE === 0)) {
       await scrollTo(page, y);
       await page.waitForTimeout(190);
       const file = new URL(`${prefix}${pad(n)}.jpg`, dir);
@@ -123,7 +126,8 @@ async function main() {
   try {
     const db = await readDb(browser);
     const ids = IDS.length ? IDS : db.prospects.map((p) => p.id);
-    console.log(`${ids.length} prospects · phone ${PHONE_TOUR.reduce((a, s) => a + s.scroll.length, 0)} frames q${QUALITY} · desk ${DESK_TOUR.reduce((a, s) => a + s.scroll.length, 0)} frames q${DESK_QUALITY}`);
+    const kept = (tour) => tour.reduce((a, s) => a + s.scroll.filter((_, i) => i % STRIDE === 0).length, 0);
+    console.log(`${ids.length} prospects · phone ${kept(PHONE_TOUR)} frames q${QUALITY} · desk ${kept(DESK_TOUR)} frames q${DESK_QUALITY}${STRIDE > 1 ? ` · stride ${STRIDE}` : ''}`);
     for (const id of ids) {
       const dir = new URL(`${id}/`, OUT);
       rmSync(dir, { recursive: true, force: true });

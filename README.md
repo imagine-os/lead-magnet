@@ -4,21 +4,21 @@
 
 - **Live:** https://imagine-os.github.io/lead-magnet/ (GitHub Pages, Actions source; deploys on every push to `main`)
 - **Start here:** `/#/` (HUB-01 testing hub) then `docs/README.md`, `CLAUDE.md`, `docs/build-plan.md`
-- **Version:** 0.4.0 (pass 3: voice controller + command palette, d-pad on every shell, A/B readout, sub-industry catalog + intake, landing and demo pass 3, nine component requests closed)
+- **Version:** 0.5.0 (reference items: Justin's Hoy OS / CTL OS / Petrock studied into three sub-industries with real depth, `industryFor` in the engine and the renderers, the `Meter` gauge, six seeded prospects)
 
-## What is in the box (v0.4.0)
+## What is in the box (v0.5.0)
 
 | Count | Note |
 | --- | --- |
 | 51 routes · 51 built · 0 stubs | every planned page code is registered (`src/modules/_stubs`) and built; L-06 `/og/:slug` is the hidden social-card route |
 | 11 tables | prospects, stack_guesses, pages, events, bookings (with contact columns), assets, touches, tasks, feedback, recommendations, intake_turns |
-| 42 components | `src/components/<tier>/<Name>/` with metas at `/#/dev/components`; every root carries `data-component="<Name>"` so annotation pins name the real component; `CommandPalette`, `ConfirmDialog`, `DateRange`, `PairedBarChart` since 0.4.0 |
+| 43 components | `src/components/<tier>/<Name>/` with metas at `/#/dev/components`; every root carries `data-component="<Name>"` so annotation pins name the real component; `CommandPalette`, `ConfirmDialog`, `DateRange`, `PairedBarChart` since 0.4.0, `Meter` (a capacity gauge, `role="meter"`) since 0.5.0 |
 | 51 rules | `/#/dev/rules` (core R-C / R-P / R-E + plan R-K, studio R-S, landing R-L, demo R-D, booking R-B, admin R-A, proposal R-R, website R-W) |
 | 230 declared actions (144 unique ids = 144 WebMCP tools) | `/#/dev/actions`, the WebMCP surface and the voice vocabulary (`CommandPalette`, Ctrl/Cmd+K, typed or spoken); `npm run actions -- list | export | run`; handlers read the latest render |
-| 21 engine checks + 18 voice checks | `npm run test:engine` (engine, catalog coverage, sub-industry intake, the shared slot generator), `npm run test:voice` (the phrase matcher over the exported vocabulary) |
-| 3 seeded prospects | dog daycare (Austin, en, warm), two-location dental (Miami, es, cold), restaurant group (Denver, en, hot); one live page each plus a live variant B on two slugs with seeded sessions, stack guesses, assets, events, touches |
+| 26 engine checks + 20 voice checks | `npm run test:engine` (engine, catalog coverage, sub-industry intake and depth, `industryFor`, `candidateStack`, meter widgets, six prospects x four archetypes, the shared slot generator), `npm run test:voice` (the phrase matcher over the exported vocabulary, 144 phrases) |
+| 6 seeded prospects | dog daycare (Austin, en, warm), two-location dental (Miami, es, cold), restaurant group (Denver, en, hot), and since 0.5.0 a two-location dog hotel & spa (San Diego, en, warm), a four-office tenant-law firm (Fresno, en, hot, booked) and a Spanish-first wellness club (San Antonio, es, warm); one live page each plus a live variant B on two slugs, with seeded sessions, stack guesses, assets, events, touches, intake turns; 23 industries / 27 sub-industries / 128 tools in the catalog |
 | 4 archetypes | Reveal / Savings Audit / Walkthrough / Letter, `docs/reference/conversion-playbook.md` |
-| 42 plan tasks | `/#/plan` (Kanban, list, dependency graph, task detail) and `docs/build-plan.md`: 28 done, 0 doing, 6 backlog, 7 awaiting Justin, 1 blocked |
+| 46 plan tasks | `/#/plan` (Kanban, list, dependency graph, task detail) and `docs/build-plan.md`: 30 done, 0 doing, 7 backlog, 8 awaiting Justin, 1 blocked |
 
 Counts come from the hub footer; re-measure when you change them.
 
@@ -40,6 +40,6 @@ Node 22 (`--experimental-strip-types` for `.mjs` scripts importing `.ts`). Chrom
 
 ## Map
 
-`src/engine` (pure personalization: catalog, stack guess, savings, role views, archetype picker, composer, image prompts, adaptive intake, booking slots) · `src/modules/*` (pages; each exports `{ routes, strings }`) · `src/data` (DataProvider seam, MockProvider, schema, seed) · `src/components` (library) · `src/design` (tokens) · `src/actions` (actions bus = WebMCP surface) · `src/tracking` (`track()`) · `docs/` (prompts, changelog, decisions, kanban, pages, reference).
+`src/engine` (pure personalization: catalog with sub-industry depth, `industryFor`, stack guess over `candidateStack`, savings, role views with meters, archetype picker, composer, image prompts, adaptive intake, booking slots) · `src/modules/*` (pages; each exports `{ routes, strings }`) · `src/data` (DataProvider seam, MockProvider, schema, seed) · `src/components` (library) · `src/design` (tokens) · `src/actions` (actions bus = WebMCP surface) · `src/tracking` (`track()`) · `docs/` (prompts, changelog, decisions, kanban, pages, reference).
 
 Rules for agents: `CLAUDE.md`. Models: Fable 5.1 (foundation, integration, shared code, control layer), Opus 5 (the modules and their passes), Sonnet 5 (mechanical passes: Spanish fill, QA matrices, catalog fill).

@@ -2,8 +2,8 @@
 title: Entrevista e investigación
 role: estratega
 part: II
-version: 0.4.0
-updated: 2026-09-19
+version: 0.5.0
+updated: 2026-09-20
 summary: Crear un prospecto, correr la entrevista adaptativa, subir la confianza y confirmar el stack antes de componer nada.
 ---
 
@@ -21,7 +21,7 @@ El inicio del Studio lista cada prospecto con su temperatura, su confianza, su p
 2. Ejecuta **`guessStack()`** y escribe una fila de herramienta adivinada por categoría con su precio mensual.
 3. Te deja en el perfil, donde la entrevista ya está haciendo su primera pregunta.
 
-Elige la industria con cuidado. Es el campo más pesado de todos, y siembra los roles, los dolores, los indicadores y los motivos visuales que leerán todas las secciones siguientes.
+Elige la industria con cuidado. Es el campo más pesado de todos, y siembra los roles, los dolores, los indicadores y los motivos visuales que leerán todas las secciones siguientes. Cuando el catálogo le da a esa industria una sub-industria con profundidad propia —un hotel para perros dentro de cuidado de mascotas, un bufete de inquilinos dentro de bufetes, un club de bienestar dentro de gimnasios— la sub-industria toma esa siembra: sus departamentos, indicadores, dolores, roles y medidor de capacidad son lo que muestran el demo, las vistas por rol y la portada, y sus herramientas se adivinan primero (a un hotel para perros se le pregunta por PetLinx y Squarespace; a una guardería de nueve personas, no). Los tres ejemplos cargados son Fetch & Stay Dog Hotel, Renters' Shield Law y Raíz Wellness Club; abre cualquiera en el demo para ver la diferencia que hace la sub-industria.
 
 [screenshot: S-02 — El perfil del prospecto: medidor de confianza, entrevista, stack, roles, estilo]
 

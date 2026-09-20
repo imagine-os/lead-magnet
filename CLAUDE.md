@@ -38,7 +38,7 @@ It must NOT: commit or push; run `vite build` (run `npm run typecheck` only; the
 | a page | `src/modules/<name>/index.ts` -> `routes: RouteDef[]` with `path, element, spec, roles, surface, nav?`; the same `path` as the stub in `_stubs/specs.ts` replaces it |
 | a spec | `src/modules/<name>/specs.ts` with `defineSpec({ code, name, purpose, layout, data, roles, logic, integrations, components, actions, rules?, states?, checkedAt? })` |
 | a table | `src/data/schema/<name>.ts` exporting `tables = defineTables([...])` + typed row interfaces (base columns `id, created_at, updated_at` are added) |
-| seed rows | `src/data/seed/<name>.ts` exporting `seed(ctx: SeedCtx)` (+ `order`); `ctx.ids.prospects` = seeded prospect ids `pro_maya, pro_daniel, pro_priya`; pages `pg_maya...`; use hand-written ids |
+| seed rows | `src/data/seed/<name>.ts` exporting `seed(ctx: SeedCtx)` (+ `order`); `ctx.ids.prospects` = seeded prospect ids `pro_maya, pro_daniel, pro_priya, pro_camila, pro_alicia, pro_valeria` (six since 0.5.0); pages `pg_*` (`pg_maya`...); use hand-written ids |
 | strings | `strings` export on `index.ts`: `{ '<name>.<key>': { en, es? } }`; read with `useT()` / `useI18n().bi()`; no hard-coded English in JSX |
 | actions | every button / menu item / form submit is an `ActionDef` in `spec.actions` (`id: '<name>.<verb>'`, `label`, `intent`, `permission?`, `params?`); while mounted call `useActions(code, { id: handler })` |
 | tracking | `track('cta_click', { cta: 'primary' }, { page_id, prospect_id })` from `src/tracking` |
@@ -51,7 +51,9 @@ It must NOT: commit or push; run `vite build` (run `npm run typecheck` only; the
 
 ### Engine contract (`src/engine`, pure functions)
 ```ts
-import { guessStack, savings, deriveRoleViews, pickArchetype, composePage, imagePrompts, nextQuestions, applyAnswer, adaptFromEvents, industry, INDUSTRIES, defaultEnricher } from '../../engine';
+import { guessStack, savings, deriveRoleViews, pickArchetype, composePage, imagePrompts, nextQuestions, applyAnswer, adaptFromEvents, industry, industryFor, candidateStack, INDUSTRIES, defaultEnricher } from '../../engine';
+industryFor(p: Prospect): Industry             // the industry as the prospect experiences it: the sub-industry's departments / kpis / pains / motifs / roles / meter applied, the very same object when there is nothing to apply (D-132); also subIndustryFor(p), catalogItem(tool)
+candidateStack(p): StackItem[]                  // industry stack + the sub's extra_tools at the sub's prevalence (D-134); guessStack() draws from it
 guessStack(p: Prospect, existing?: StackGuess[]): StackGuess[]
 savings(p, guesses): Savings                       // monthly/annual totals, tools_cut, our_price_monthly, price_band, net_*
 deriveRoleViews(p): RoleView[]                     // one per business + life role, 3 widgets each

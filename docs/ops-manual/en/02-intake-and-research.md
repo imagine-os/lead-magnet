@@ -2,8 +2,8 @@
 title: Intake and research
 role: strategist
 part: II
-version: 0.4.0
-updated: 2026-09-19
+version: 0.5.0
+updated: 2026-09-20
 summary: Creating a prospect, running the adaptive intake, raising confidence, and confirming the tool stack before you compose anything.
 ---
 
@@ -21,7 +21,7 @@ Studio home lists every prospect with warmth, confidence, live page, last event 
 2. Runs **`guessStack()`** and writes a stack guess row per category with a monthly price.
 3. Lands you on the profile, where the intake is already asking its first question.
 
-Pick the industry carefully. It is the single heaviest field, and it seeds the roles, the pains, the KPIs and the imagery motifs that every downstream section reads.
+Pick the industry carefully. It is the single heaviest field, and it seeds the roles, the pains, the KPIs and the imagery motifs that every downstream section reads. When the catalog gives that industry a sub-industry with its own depth — a dog hotel under pet care, a tenant-law firm under law firms, a wellness club under gyms — the sub-industry takes over that seeding: its departments, KPIs, pains, roles and capacity meter are what the demo, the role views and the hero show, and its tools are guessed first (a dog hotel is asked about PetLinx and Squarespace; a nine-person daycare is not). The three seeded examples are Fetch & Stay Dog Hotel, Renters' Shield Law and Raíz Wellness Club; open any of them in the demo to see the difference the sub-industry makes.
 
 [screenshot: S-02 — The prospect profile: confidence meter, intake, stack, roles, style]
 

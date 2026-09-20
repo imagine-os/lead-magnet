@@ -886,7 +886,7 @@
     "headline",
     "today strip",
     "quick actions",
-    "widgets grid (kpi, calendar week, list, chat, chart, doc, table)"
+    "widgets grid (meter, kpi, calendar week, list, chat, chart, doc, table)"
    ],
    "data": [
     "prospects",
@@ -902,6 +902,8 @@
    ],
    "logic": [
     "deriveRoleViews(prospect) gives one view per business + life role (R-D02)",
+    "industryFor(prospect) resolves the sub-industry's departments, KPIs, pains, roles and capacity meter, so a dog hotel is a hotel and not a generic daycare (D-132)",
+    "an owner / manager of a business with a capacity resource leads with the meter: first widget and first item of the today strip (D-133)",
     "the role lives in the URL (/role/:slug); missing role falls back to the first business role",
     "demo_open once per session, demo_role_switch on change, section_view per page, cta_click + form_submit for save / book / share_view"
    ],
@@ -913,6 +915,7 @@
    "components": [
     "Card",
     "Stat",
+    "Meter",
     "Badge",
     "Button",
     "Chip",
@@ -1029,7 +1032,7 @@
     "headline",
     "today strip",
     "quick actions",
-    "widgets grid (kpi, calendar week, list, chat, chart, doc, table)"
+    "widgets grid (meter, kpi, calendar week, list, chat, chart, doc, table)"
    ],
    "data": [
     "prospects",
@@ -1045,6 +1048,8 @@
    ],
    "logic": [
     "deriveRoleViews(prospect) gives one view per business + life role (R-D02)",
+    "industryFor(prospect) resolves the sub-industry's departments, KPIs, pains, roles and capacity meter, so a dog hotel is a hotel and not a generic daycare (D-132)",
+    "an owner / manager of a business with a capacity resource leads with the meter: first widget and first item of the today strip (D-133)",
     "the role lives in the URL (/role/:slug); missing role falls back to the first business role",
     "demo_open once per session, demo_role_switch on change, section_view per page, cta_click + form_submit for save / book / share_view"
    ],
@@ -1056,6 +1061,7 @@
    "components": [
     "Card",
     "Stat",
+    "Meter",
     "Badge",
     "Button",
     "Chip",
@@ -1163,9 +1169,9 @@
   "spec": {
    "code": "C-03",
    "name": "Departments board",
-   "purpose": "Their departments from the industry catalog as a board: people, open items and a KPI per column.",
+   "purpose": "Their departments from the resolved industry (sub-industry first) as a board: people, open items and one KPI per column - eight for a dog hotel, nine for a tenant-law firm.",
    "layout": [
-    "department columns",
+    "department columns (a responsive grid: 1 column at 360, 2 at 768, 3 at 1280, 4 on a TV)",
     "KPI per department",
     "people",
     "open items",
@@ -1183,7 +1189,9 @@
     "guest"
    ],
    "logic": [
-    "departments, pains and KPIs come from the industry catalog",
+    "departments, pains and KPIs come from industryFor(prospect): the sub-industry when it names them, the industry otherwise (D-132)",
+    "each department shows its own KPI by index where the sub names enough of them, and only wraps past the end",
+    "open items rotate through the resolved pains, so nine columns do not all show the same three",
     "people are deterministic fictional names seeded from the prospect id and the role"
    ],
    "integrations": [

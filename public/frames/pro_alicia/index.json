@@ -1,0 +1,40 @@
+{
+ "prospect_id": "pro_alicia",
+ "generated_at": "2026-09-20T21:59:57.100Z",
+ "roles": [
+  "owner-attorney",
+  "attorney",
+  "paralegal"
+ ],
+ "count": 14,
+ "width": 390,
+ "height": 844,
+ "labels": [
+  "Your role home",
+  "Your role home",
+  "A second role",
+  "A second role",
+  "A third role",
+  "A third role",
+  "Departments",
+  "Departments",
+  "One inbox",
+  "One inbox",
+  "Money",
+  "Money",
+  "Life",
+  "Life"
+ ],
+ "desk_count": 6,
+ "desk_width": 1280,
+ "desk_height": 800,
+ "desk_labels": [
+  "Your role home",
+  "A second role",
+  "Departments",
+  "One inbox",
+  "Money",
+  "Life"
+ ],
+ "bytes": 687599
+}

@@ -75,8 +75,8 @@ export interface Enricher { readonly name: string; readonly wired: boolean; enri
 export class RuleEnricher implements Enricher {
   readonly name = 'rules'; readonly wired = true;
   async enrich(p: Prospect): Promise<Partial<Prospect>> {
-    const { industry } = await import('./catalog/industries');
-    const ind = industry(p.industry);
+    const { industryFor } = await import('./catalog/industries');
+    const ind = industryFor(p);
     const patch: Partial<Prospect> = {};
     if (!p.business_roles?.length) patch.business_roles = ind.business_roles.slice(0, Math.max(2, Math.min(6, Math.ceil(p.team_size / 3))));
     if (!p.life_roles?.length) patch.life_roles = ind.life_roles.slice(0, 4);

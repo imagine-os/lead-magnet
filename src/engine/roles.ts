@@ -1,12 +1,17 @@
-import type { Prospect, RoleView, Widget, Bi } from './types';
-import { industry } from './catalog/industries';
+import type { Prospect, RoleView, Widget, Bi, MeterSample } from './types';
+import { industryFor } from './catalog/industries';
 
 const bi = (en: string, es: string): Bi => ({ en, es });
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+/** Roles that read the whole business, so they get the trend chart and, when the industry names a capacity resource, the meter. */
+const LEADS = /owner|partner|director|manager/;
 
-/** One RoleView per business role and life role, 3 sample widgets each, themed to the industry ("every role of the people in their life gets their own view"). */
+/**
+ * One RoleView per business role and life role, 3 sample widgets each, themed to the industry ("every role of the people in their life gets their own view").
+ * Reads `industryFor(p)`, so a sub-industry's KPIs, pains and roles show (T55). When the industry (or its sub) declares a `meter` hint, the lead roles' KPI tile becomes a `meter` widget - occupancy is a gauge, not a number (reference-systems.md §3.3).
+ */
 export function deriveRoleViews(p: Prospect): RoleView[] {
-  const ind = industry(p.industry);
+  const ind = industryFor(p);
   const biz = (p.business_roles?.length ? p.business_roles : ind.business_roles).slice(0, 6);
   const life = (p.life_roles?.length ? p.life_roles : ind.life_roles).slice(0, 5);
   const k = ind.kpis;
@@ -17,7 +22,8 @@ export function deriveRoleViews(p: Prospect): RoleView[] {
       { id: `${role}-cal`, title: bi(`${cap(role)} schedule`, `Agenda de ${role}`), kind: 'calendar', sample: ['9:00', '10:30', '13:00', '15:30'] },
       { id: `${role}-list`, title: bi('Needs attention', 'Requiere atención'), kind: 'list', sample: ind.pains.slice(0, 3).map((x) => x.en) },
     ];
-    if (/owner|partner|director|manager/.test(role)) w[2] = { id: `${role}-chart`, title: bi('This month vs last', 'Este mes vs anterior'), kind: 'chart', sample: [42, 48, 51, 47, 58, 63, 71] };
+    if (LEADS.test(role) && ind.meter) { const m = ind.meter; const sample: MeterSample = { value: m.value, max: m.max, unit: m.unit, hint: bi(`${m.value} of ${m.max}${m.unit ? ` ${m.unit.en}` : ''}`, `${m.value} de ${m.max}${m.unit ? ` ${m.unit.es}` : ''}`) }; w[0] = { id: `${role}-meter`, title: m.label, kind: 'meter', sample }; }
+    if (LEADS.test(role)) w[2] = { id: `${role}-chart`, title: bi('This month vs last', 'Este mes vs anterior'), kind: 'chart', sample: [42, 48, 51, 47, 58, 63, 71] };
     if (/front|host|desk|intake|advisor|coordinator/.test(role)) w[2] = { id: `${role}-chat`, title: bi('Unified inbox', 'Bandeja unificada'), kind: 'chat', sample: [{ from: 'SMS', text: 'Running 10 min late!' }, { from: 'WhatsApp', text: 'Can I add Saturday?' }, { from: 'Email', text: 'Invoice question' }] };
     views.push({ role, kind: 'business', headline: bi(`${cap(role)}: ${p.business_name} at a glance`, `${cap(role)}: ${p.business_name} de un vistazo`), widgets: w });
   }

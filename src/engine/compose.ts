@@ -1,5 +1,5 @@
 import type { Archetype, Bi, PageModel, Prospect, Section, StackGuess } from './types';
-import { industry } from './catalog/industries';
+import { industryFor } from './catalog/industries';
 import { guessStack, savings } from './stack';
 import { deriveRoleViews } from './roles';
 
@@ -11,7 +11,7 @@ export interface ComposeOpts { pageId?: string; slug?: string; guesses?: StackGu
 
 /** Composes a full PageModel with every copy field resolved in EN and ES with the prospect's tokens. Pure. */
 export function composePage(p: Prospect, archetype: Archetype, opts: ComposeOpts = {}): PageModel {
-  const ind = industry(p.industry);
+  const ind = industryFor(p);
   const guesses = opts.guesses ?? guessStack(p);
   const sav = savings(p, guesses);
   const views = deriveRoleViews(p);

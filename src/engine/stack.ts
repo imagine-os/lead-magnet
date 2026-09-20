@@ -1,5 +1,5 @@
 import type { Prospect, StackGuess, StackTier, Savings, StackItem } from './types';
-import { industry } from './catalog/industries';
+import { industry, subIndustryFor, catalogItem } from './catalog/industries';
 
 const round = (n: number) => Math.round(n * 100) / 100;
 /** Seats we assume pay for per-seat tools: roughly half the team, at least 2. */
@@ -14,6 +14,27 @@ export const stackTier = (g: Pick<StackGuess, 'confidence' | 'status'>): StackTi
 export const RARE_PREVALENCE = 0.3;
 /** A rare product is only guessed for a team this size; below it we would rather ask than invent a line item. */
 export const POSSIBLE_MIN_TEAM = 15;
+/** Prevalence a sub-industry's `extra_tools` entry gets when the sub does not say (`extra_prevalence`): common in that kind of business, not certain. */
+export const SUB_EXTRA_PREVALENCE = 0.6;
+
+/**
+ * The catalog items a prospect's stack guess is drawn from (T55): the industry's stack, with the sub-industry's `extra_tools` on top.
+ * An extra tool already in the industry's stack takes the sub's prevalence (the sub knows better: Ecwid is 0.1 for law firms, 0.8 for tenant law); one from another industry is pulled in at the sub's prevalence with its catalog price. No sub, or a sub without extras: the industry's stack, untouched.
+ */
+export function candidateStack(p: Pick<Prospect, 'industry' | 'sub_industry'>): StackItem[] {
+  const ind = industry(p.industry);
+  const sub = subIndustryFor(p);
+  if (!sub?.extra_tools?.length) return ind.stack;
+  const out = [...ind.stack];
+  for (const tool of sub.extra_tools) {
+    const prevalence = sub.extra_prevalence?.[tool] ?? SUB_EXTRA_PREVALENCE;
+    const at = out.findIndex((x) => x.tool === tool);
+    if (at >= 0) { out[at] = { ...out[at], prevalence }; continue; }
+    const item = catalogItem(tool);
+    if (item) out.push({ ...item, prevalence });
+  }
+  return out;
+}
 
 /** What a catalog item costs this prospect: seat-based tools scale with the paying seats, site-based tools with the locations. */
 export function itemCost(item: StackItem, p: Pick<Prospect, 'team_size' | 'locations'>): number {
@@ -35,10 +56,12 @@ export function itemCost(item: StackItem, p: Pick<Prospect, 'team_size' | 'locat
  * - a rare product (prevalence under RARE_PREVALENCE) is only guessed for teams of POSSIBLE_MIN_TEAM+ - a small shop
  *   gets asked in the intake instead of billed for a tool we invented;
  * - rows the prospect rejected never come back, and `known_tools` / previously confirmed rows come back as confirmed
- *   with confidence 1.
+ *   with confidence 1;
+ * - a sub-industry's `extra_tools` join the candidates at the sub's prevalence (candidateStack(), T55), so a dog hotel is
+ *   guessed PetLinx and Squarespace where a generic daycare is asked.
  */
 export function guessStack(p: Prospect, existing: StackGuess[] = []): StackGuess[] {
-  const ind = industry(p.industry);
+  const ind = { stack: candidateStack(p) };
   const rejected = new Set(existing.filter((g) => g.status === 'rejected').map((g) => g.tool));
   const confirmed = new Set([...existing.filter((g) => g.status === 'confirmed').map((g) => g.tool), ...(p.known_tools ?? [])]);
   const out: StackGuess[] = [];

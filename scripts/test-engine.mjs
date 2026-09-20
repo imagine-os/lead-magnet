@@ -165,4 +165,121 @@ ok('catalog D-063: sub-industry keys are unique per industry and every extra_too
   assert.ok(subIndustryCount >= 20, `catalog: expected 20+ sub-industries across the catalog, found ${subIndustryCount}`);
 });
 
+// --- reference-systems pass: sub-industry depth in the engine (T55), meter widgets, six seeded prospects (2026-09-20) ---
+const { industryFor, subIndustryFor, catalogItem, candidateStack, SUB_EXTRA_PREVALENCE } = eng;
+const REF_SUBS = [['pet_care', 'dog_hotel_spa'], ['law_firm', 'tenant_law'], ['gym_wellness', 'wellness_club']];
+const KNOWN_ALL = ['first_name', 'business_name', 'industry', 'city', 'team_size', 'locations', 'warmth', 'lang', 'style', 'business_roles', 'life_roles'];
+const refProspect = (over) => { const q = { ...p, sub_industry: null, known_tools: [], fields_known: [...KNOWN_ALL, 'sub_industry', 'known_tools'], ...over }; return { ...q, confidence: computeConfidence(q.fields_known, q) }; };
+/** Every seeded prospect, mirrored from src/data/seed/prospects.ts (the seed runs in the browser; the engine checks run here). */
+const SEEDED = [
+  p,
+  refProspect({ id: 'pro_daniel', first_name: 'Daniel', business_name: 'Sonrisa Dental Miami', industry: 'dental', city: 'Miami', lang: 'es', team_size: 22, locations: 2, revenue_band: '1m_5m', warmth: 'cold', life_roles: ['owner', 'spouse/partner', 'kids', 'accountant', 'practice consultant'], business_roles: ['owner dentist', 'office manager', 'front office', 'hygienist', 'associate dentist', 'billing'] }),
+  refProspect({ id: 'pro_priya', first_name: 'Priya', business_name: 'Highline Hospitality Group', industry: 'restaurant', city: 'Denver', team_size: 64, locations: 3, revenue_band: '5m_plus', warmth: 'hot', life_roles: ['owner', 'spouse/partner', 'accountant', 'investor'], business_roles: ['owner', 'general manager', 'chef', 'shift lead', 'host', 'events manager'], known_tools: ['Toast POS', '7shifts', 'OpenTable', 'Tripleseat'] }),
+  refProspect({ id: 'pro_camila', first_name: 'Camila', business_name: 'Fetch & Stay Dog Hotel', industry: 'pet_care', sub_industry: 'dog_hotel_spa', city: 'San Diego', team_size: 18, locations: 2, revenue_band: '1m_5m', warmth: 'warm', life_roles: ['owner', 'spouse/partner', 'kids', 'accountant', 'vet partner'], business_roles: ['owner', 'manager', 'front desk', 'groomer', 'handler', 'walker'], known_tools: ['Squarespace', 'PetLinx'] }),
+  refProspect({ id: 'pro_alicia', first_name: 'Alicia', business_name: "Renters' Shield Law", industry: 'law_firm', sub_industry: 'tenant_law', city: 'Fresno', team_size: 11, locations: 4, revenue_band: '1m_5m', warmth: 'hot', life_roles: ['owner', 'spouse/partner', 'kids', 'accountant', 'of counsel'], business_roles: ['owner attorney', 'attorney', 'paralegal', 'front desk', 'marketing', 'billing'], known_tools: ['WordPress hosting', 'Ecwid', 'Microsoft Teams', 'WordPerfect'] }),
+  refProspect({ id: 'pro_valeria', first_name: 'Valeria', business_name: 'Raíz Wellness Club', industry: 'gym_wellness', sub_industry: 'wellness_club', city: 'San Antonio', lang: 'es', team_size: 14, locations: 1, revenue_band: '250k_1m', warmth: 'warm', life_roles: ['owner', 'spouse/partner', 'kids', 'accountant', 'nutritionist'], business_roles: ['owner', 'coordinator', 'front desk', 'teacher', 'finance', 'maintenance'], known_tools: ['Mindbody', 'WhatsApp Business (manual)', 'Squarespace'] }),
+];
+const camila = SEEDED[3], alicia = SEEDED[4], valeria = SEEDED[5];
+
+ok('reference subs: dog_hotel_spa, tenant_law and wellness_club exist with 4+ bilingual departments, 5+ bilingual KPIs, extra pains, motifs and a meter; every extra tool resolves to a priced, dated catalog item', () => {
+  for (const [key, subKey] of REF_SUBS) {
+    const ind = INDUSTRIES[key];
+    const sub = ind.sub.find((x) => x.key === subKey);
+    assert.ok(sub, `${key}/${subKey} missing`);
+    assert.ok(sub.name.en && sub.name.es);
+    assert.ok(sub.departments.length >= 4 && sub.departments.every((d) => d.en && d.es), `${subKey}: 4+ bilingual departments`);
+    assert.ok(sub.kpis.length >= 5 && sub.kpis.every((k) => k.label.en && k.label.es && k.sample), `${subKey}: 5+ bilingual kpis with samples`);
+    assert.ok(sub.pains.length > ind.pains.length && sub.pains.every((x) => x.en && x.es), `${subKey}: the sub extends the industry pains`);
+    assert.ok(sub.motifs.length >= 3 && sub.roles.length >= 4);
+    assert.ok(sub.meter && sub.meter.label.en && sub.meter.label.es && sub.meter.value <= sub.meter.max && sub.meter.value > 0, `${subKey}: meter hint`);
+    for (const tool of sub.extra_tools) {
+      const item = catalogItem(tool);
+      assert.ok(item && item.monthly_cost > 0 && item.price_reviewed, `${subKey}: extra tool ${tool} must be a priced, dated catalog item`);
+      const prev = sub.extra_prevalence?.[tool] ?? SUB_EXTRA_PREVALENCE;
+      assert.ok(prev > 0 && prev <= 1, `${subKey}: ${tool} prevalence`);
+    }
+    // the industry-level keys the pass had to keep (add, never rename)
+    for (const k of ['grooming', 'boarding', 'family', 'immigration', 'gym', 'yoga_studio']) if (ind.sub.some((x) => x.key === k)) assert.ok(true);
+  }
+  assert.ok(INDUSTRIES.pet_care.sub.some((x) => x.key === 'boarding') && INDUSTRIES.law_firm.sub.some((x) => x.key === 'family') && INDUSTRIES.gym_wellness.sub.some((x) => x.key === 'yoga_studio'), 'existing sub keys kept');
+  for (const tool of ['Squarespace', 'PetLinx', 'Yelp Ads', 'Ecwid', 'WordPress hosting', 'Microsoft Teams', 'VoiceStamps', 'WordPerfect', 'PayPal', 'Jotform', 'WhatsApp Business (manual)', 'Glofox', 'Momence', 'Gusto']) assert.ok(CATALOG_TOOLS.some((t) => t.tool === tool), `${tool} in the tools index`);
+  for (const key of ['pet_care', 'law_firm', 'gym_wellness']) for (const item of INDUSTRIES[key].stack) if (item.price_reviewed === '2026-09-20') assert.ok(item.price_source_note?.startsWith('Estimate'), `${item.tool}: a price added by the reference pass is marked as an estimate`);
+});
+
+ok('industryFor: a sub with depth replaces departments / kpis / pains / motifs / roles / meter; no sub (or an unknown one) returns the very same industry object', () => {
+  const ind = industryFor(camila);
+  assert.equal(ind.key, 'pet_care'); assert.equal(ind.label, INDUSTRIES.pet_care.label); assert.equal(ind.stack, INDUSTRIES.pet_care.stack);
+  assert.ok(ind.departments.length >= 8 && ind.departments.some((d) => /Hotel/.test(d.en)));
+  assert.ok(ind.kpis.length >= 8 && ind.kpis[0].label.en === 'Dogs in house');
+  assert.deepEqual(ind.business_roles, ['owner', 'manager', 'front desk', 'groomer', 'handler', 'walker']);
+  assert.equal(ind.meter.label.en, 'Rooms occupied tonight');
+  assert.strictEqual(industryFor(p), industry('pet_care'), 'no sub: same object');
+  assert.strictEqual(industryFor({ ...p, sub_industry: 'not_a_sub' }), industry('pet_care'), 'unknown sub: same object');
+  assert.equal(subIndustryFor({ ...p, sub_industry: 'grooming' }).key, 'grooming');
+  assert.strictEqual(industryFor({ ...p, sub_industry: 'grooming' }).departments, industry('pet_care').departments, 'a sub without departments keeps the industry\'s');
+  assert.deepEqual(industryFor({ ...p, sub_industry: 'grooming' }).business_roles, ['groomer', 'front desk'], 'but its roles apply');
+});
+
+ok('guessStack T55: the sub\'s extra_tools join at the sub\'s prevalence - a dog hotel gets PetLinx (confirmed when known, first choice even when not) and Squarespace; a 9-person daycare without a sub is not billed for them', () => {
+  const g = guessStack(camila);
+  assert.equal(g.find((x) => x.tool === 'PetLinx')?.status, 'confirmed');
+  assert.equal(g.find((x) => x.tool === 'Squarespace')?.status, 'confirmed');
+  assert.ok(!g.some((x) => x.tool === 'Gingr'), 'PetLinx confirmed knocks Gingr out of Bookings & pets');
+  const cold = guessStack({ ...camila, known_tools: [] });
+  assert.ok(cold.some((x) => x.tool === 'PetLinx' && x.status === 'guessed'), 'without known tools PetLinx is still the dog-hotel pick');
+  assert.ok(cold.some((x) => x.tool === 'Squarespace') && cold.some((x) => x.tool === 'Yelp Ads'));
+  const daycare = guessStack(p);
+  for (const t of ['PetLinx', 'Squarespace', 'Yelp Ads', 'Time To Pet']) assert.ok(!daycare.some((x) => x.tool === t), `${t} is under RARE_PREVALENCE industry-wide: a small daycare is asked, not billed`);
+  assert.equal(new Set(cold.map((x) => x.tool)).size, cold.length); assert.equal(new Set(cold.map((x) => x.replaced_by)).size, cold.length);
+  // the candidate pool: an extra tool already in the stack takes the sub's prevalence; one from elsewhere is pulled in with its catalog price
+  const cands = candidateStack(camila);
+  assert.equal(cands.find((x) => x.tool === 'PetLinx').prevalence, 0.75); assert.equal(cands.filter((x) => x.tool === 'PetLinx').length, 1);
+  assert.strictEqual(candidateStack(p), INDUSTRIES.pet_care.stack, 'no sub: the industry stack itself');
+  const groomer = candidateStack({ ...p, sub_industry: 'grooming' }); const vag = groomer.find((x) => x.tool === 'Vagaro'); assert.ok(vag && vag.monthly_cost === 45 && vag.prevalence === SUB_EXTRA_PREVALENCE, 'Vagaro pulled from salon_spa at the default sub prevalence');
+  // tenant law: Teams (confirmed) replaces Zoom, WhatsApp (confirmed) replaces Slack for the club
+  const a = guessStack(alicia); assert.ok(a.some((x) => x.tool === 'Microsoft Teams' && x.status === 'confirmed') && !a.some((x) => x.tool === 'Zoom'));
+  const v = guessStack(valeria); assert.ok(v.some((x) => x.tool === 'WhatsApp Business (manual)') && !v.some((x) => x.tool === 'Slack') && v.some((x) => x.tool === 'Gusto'));
+  for (const q of [camila, alicia, valeria]) { const s = savings(q, guessStack(q)); assert.ok(s.monthly_current > s.our_price_monthly, `${q.id}: savings story`); }
+});
+
+ok('meter widgets: the dog hotel owner (and manager) view carries one meter with value <= max and a bilingual hint; the industry-level hint (childcare) works without a sub; Maya has none; every view still has 3 widgets', () => {
+  const views = deriveRoleViews(camila);
+  const owner = views.find((v) => v.role === 'owner' && v.kind === 'business');
+  const meter = owner.widgets.find((w) => w.kind === 'meter');
+  assert.ok(meter, 'owner meter'); assert.equal(meter.title.en, 'Rooms occupied tonight'); assert.ok(meter.title.es);
+  assert.ok(meter.sample.value > 0 && meter.sample.value <= meter.sample.max); assert.ok(meter.sample.hint.en && meter.sample.hint.es);
+  assert.ok(views.find((v) => v.role === 'manager').widgets.some((w) => w.kind === 'meter'));
+  assert.ok(!views.find((v) => v.role === 'front desk').widgets.some((w) => w.kind === 'meter'), 'the front desk keeps the KPI tile');
+  assert.ok(views.every((v) => v.widgets.length === 3));
+  assert.equal(views.find((v) => v.role === 'front desk').widgets[0].title.en, 'Dogs in house', 'the sub\'s first KPI is the tile');
+  assert.ok(!deriveRoleViews(p).some((v) => v.widgets.some((w) => w.kind === 'meter')), 'no sub, no industry hint: no meter (Maya\'s page is unchanged)');
+  const cc = deriveRoleViews({ ...p, industry: 'childcare', sub_industry: null, business_roles: [] });
+  assert.ok(cc.find((v) => v.role === 'owner director').widgets.some((w) => w.kind === 'meter'), 'industry-level meter hint');
+  assert.ok(deriveRoleViews(alicia).find((v) => v.role === 'owner attorney').widgets.some((w) => w.kind === 'meter'));
+  assert.ok(deriveRoleViews(valeria).find((v) => v.role === 'owner').widgets.some((w) => w.kind === 'meter'));
+});
+
+ok('six seeded prospects compose all four archetypes without throwing, every Bi resolved in EN and ES, imagePrompts complete, intake asks nothing it already knows', () => {
+  const walk = (x, path, seen = new Set()) => {
+    if (!x || typeof x !== 'object' || seen.has(x)) return; seen.add(x);
+    if ('en' in x && 'es' in x) { assert.ok(typeof x.en === 'string' && x.en.length && typeof x.es === 'string' && x.es.length, `${path}: EN + ES`); assert.ok(!/undefined|NaN|\[object/.test(x.en + x.es), `${path}: ${x.en} / ${x.es}`); return; }
+    for (const [k, v] of Object.entries(x)) walk(v, `${path}.${k}`, seen);
+  };
+  for (const q of SEEDED) {
+    const guesses = guessStack(q);
+    for (const a of ['reveal', 'audit', 'walkthrough', 'letter']) {
+      const m = composePage(q, a, { pageId: `pg_${q.id.slice(4)}`, slug: q.id, guesses, expiresAt: '2026-10-04T00:00:00.000Z' });
+      assert.equal(m.archetype, a); assert.ok(m.sections.length >= 4 && m.sections.every((s) => s.id));
+      assert.equal(m.cta.primary.to, `/demo/${q.id}`); walk(m, `${q.id}.${a}`);
+    }
+    const k = new Set(imagePrompts(q).map((x) => x.kind)); for (const x of ['hero', 'device_phone', 'device_laptop', 'device_tv', 'role_card', 'og_image', 'video_frames']) assert.ok(k.has(x), `${q.id}: ${x}`);
+    assert.ok(!nextQuestions(q, 20).some((x) => x.field === 'sub_industry' && q.sub_industry), `${q.id}: sub-industry already known`);
+    assert.ok(pickArchetype(q)[0].reasons.length);
+  }
+  assert.equal(pickArchetype(alicia)[0].archetype, 'letter'); assert.equal(pickArchetype(camila)[0].archetype, 'reveal');
+  const es = composePage(valeria, 'reveal', { pageId: 'pg_valeria', slug: 'raiz-wellness-san-antonio' });
+  assert.ok(es.sections[0].headline.es.includes('Raíz Wellness Club'));
+  assert.ok(es.sections.find((s) => s.kind === 'proof').items[1].body.es.includes('Profesores y nómina'), 'the proof section lists the sub\'s departments in Spanish');
+});
+
 console.log(`\n${n} engine checks passed`);

@@ -2,6 +2,8 @@
 
 Written 2026-09-18 by Fable 5.1 for the lead-magnet project. Sources: WebFetch of the portfolio site and GitHub pages, plus read-only shallow clones of `imagine-os/{petrock,hoy,graph-gallery,claude-tag-portfolio}` in the scratchpad (`ref/`). Petrock is the most recent and most complete expression of the rules (it already encodes the platform principles P-01..P-15); Hoy is its origin. Prefer Petrock's shapes where the two differ.
 
+**What each system runs (2026-09-20):** this brief records *how* the imagine-os systems are built (stack, hub, tokens, docs conventions). Its companion `docs/reference/reference-systems.md` records *what they run* - roles and permissions, departments, dashboards and KPIs, data tables, the tools each one replaces and its design system - for Hoy OS (wellness club), CTL OS (tenant-law network) and Petrock (dog hotel & spa), and proposes the catalog and seed shape Lead Magnet copies from them. Those proposals landed as the sub-industries `pet_care/dog_hotel_spa`, `law_firm/tenant_law` and `gym_wellness/wellness_club` (resolved by `industryFor(p)`), the `meter` widget kind and the seeded prospects `pro_camila`, `pro_alicia`, `pro_valeria` (changelog 0024; the renderers in 0025). Read reference-systems.md before adding depth to an industry: the KPI names, department lists and replacement maps there are what a real system of that kind ended up needing.
+
 ## 0. Repos and live URLs
 
 | Project | Repo | Live | Notes |

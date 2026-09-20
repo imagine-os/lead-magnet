@@ -1,11 +1,11 @@
 import type { Prospect } from './types';
 import type { AssetRow } from '../data/schema/core';
-import { industry } from './catalog/industries';
+import { industryFor } from './catalog/industries';
 
 export type ImagePrompt = Pick<AssetRow, 'kind' | 'prompt'> & { aspect: string; notes: string };
 /** Asset prompts for the image generator (provider not wired yet, T40). Every prompt carries the palette, motifs and the prospect's world. */
 export function imagePrompts(p: Prospect): ImagePrompt[] {
-  const ind = industry(p.industry);
+  const ind = industryFor(p);
   const pal = p.style.palette;
   const style = `${p.style.tone} tone, palette primary ${pal.primary} accent ${pal.accent} background ${pal.bg}, ${p.style.imagery.join(', ')}, photoreal, soft depth of field, no text, no logos`;
   const world = `${p.business_name}, a ${ind.label.en.toLowerCase()} in ${p.city}`;

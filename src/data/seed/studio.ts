@@ -18,4 +18,12 @@ export function seed(ctx: SeedCtx) {
 
   turn('it_priya_1', 'pro_priya', 'revenue_band', 'Rough revenue band?', '5m_plus', 'manual', 0.66, 9);
   turn('it_priya_2', 'pro_priya', 'known_tools', 'Which software do they pay for today?', 'Toast POS, 7shifts, OpenTable, Tripleseat', 'manual', 0.74, 9);
+
+  // reference-systems pass: the sub-industry question (D-122) answered for the three depth prospects
+  turn('it_camila_1', 'pro_camila', 'sub_industry', 'What kind of pet care (daycare, boarding, grooming) is Fetch & Stay Dog Hotel?', 'dog_hotel_spa', 'manual', 0.71, 2);
+  turn('it_camila_2', 'pro_camila', 'known_tools', 'Which software do they pay for today?', 'Squarespace, PetLinx', 'manual', 0.78, 2);
+  turn('it_alicia_1', 'pro_alicia', 'sub_industry', "What kind of law firm is Renters' Shield Law?", 'tenant_law', 'manual', 0.71, 2);
+  turn('it_alicia_2', 'pro_alicia', 'known_tools', 'Which software do they pay for today?', 'WordPress hosting, Ecwid, Microsoft Teams, WordPerfect', 'manual', 0.78, 2);
+  turn('it_valeria_1', 'pro_valeria', 'sub_industry', '¿Qué tipo de gimnasio / estudio de bienestar es Raíz Wellness Club?', 'wellness_club', 'manual', 0.68, 2);
+  turn('it_valeria_2', 'pro_valeria', 'known_tools', '¿Qué software pagan hoy?', 'Mindbody, WhatsApp Business (manual), Squarespace', 'manual', 0.75, 2);
 }

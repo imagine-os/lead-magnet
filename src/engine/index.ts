@@ -1,6 +1,6 @@
 export * from './types';
-export { INDUSTRIES, INDUSTRY_KEYS, industry, CATALOG_TOOLS, CATALOG_TOOL_NAMES } from './catalog/industries';
-export { guessStack, savings, priceBand, PRICE_MONTHLY, paidSeats, paidLocations, itemCost, stackTier, TIER_MIN_LIKELY, RARE_PREVALENCE, POSSIBLE_MIN_TEAM } from './stack';
+export { INDUSTRIES, INDUSTRY_KEYS, industry, industryFor, subIndustryFor, catalogItem, CATALOG_TOOLS, CATALOG_TOOL_NAMES } from './catalog/industries';
+export { guessStack, candidateStack, savings, priceBand, PRICE_MONTHLY, paidSeats, paidLocations, itemCost, stackTier, TIER_MIN_LIKELY, RARE_PREVALENCE, POSSIBLE_MIN_TEAM, SUB_EXTRA_PREVALENCE } from './stack';
 export { deriveRoleViews } from './roles';
 export { pickArchetype, defaultArchetype } from './archetype';
 export { composePage, slugify, type ComposeOpts } from './compose';

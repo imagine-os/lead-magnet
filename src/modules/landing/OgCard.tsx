@@ -16,7 +16,7 @@ import { useTable } from '../../data/DataContext';
 import type { PageRow, ProspectRow } from '../../data/schema/core';
 import { prospectStyle } from '../../design/tokens';
 import { useI18n } from '../../i18n/I18nProvider';
-import { deriveRoleViews, industry } from '../../engine';
+import { deriveRoleViews, industryFor } from '../../engine';
 import type { PageModel, Section } from '../../engine/types';
 import { useLiveActions } from './hooks';
 import { MiniOs } from './sections/MiniOs';
@@ -49,7 +49,7 @@ export function OgCard() {
 
   const hero = model?.sections.find((s) => s.kind === 'hero_reveal') as Extract<Section, { kind: 'hero_reveal' }> | undefined;
   const headline = hero ? bi(hero.headline) : t('landing.og_fallback_h', { business: prospect.business_name });
-  const ind = industry(prospect.industry);
+  const ind = industryFor(prospect); // same resolved industry as the page and the demo (T62)
 
   return (
     <div className="lp og-route" style={prospectStyle(prospect.style.palette, prospect.style.font)}>

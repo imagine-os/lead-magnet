@@ -53,8 +53,9 @@ export const strings = {
   // widgets
   'demo.open': { en: 'Open', es: 'Abrir' }, 'demo.item': { en: 'Item', es: 'Elemento' }, 'demo.value': { en: 'Value', es: 'Valor' },
   'demo.kind_kpi': { en: 'KPI', es: 'KPI' }, 'demo.kind_list': { en: 'List', es: 'Lista' }, 'demo.kind_calendar': { en: 'Calendar', es: 'Calendario' }, 'demo.kind_chat': { en: 'Chat', es: 'Chat' },
-  'demo.kind_table': { en: 'Table', es: 'Tabla' }, 'demo.kind_chart': { en: 'Chart', es: 'Gráfica' }, 'demo.kind_doc': { en: 'Docs', es: 'Documentos' },
+  'demo.kind_table': { en: 'Table', es: 'Tabla' }, 'demo.kind_chart': { en: 'Chart', es: 'Gráfica' }, 'demo.kind_doc': { en: 'Docs', es: 'Documentos' }, 'demo.kind_meter': { en: 'Meter', es: 'Medidor' },
   'demo.kpi_hint': { en: 'Live in your workspace', es: 'En vivo en tu espacio' },
+  'demo.near_capacity': { en: 'near capacity', es: 'casi al tope' },
   'demo.now': { en: 'Now', es: 'Ahora' }, 'demo.queued': { en: 'Queued', es: 'En cola' }, 'demo.doc_edited': { en: 'edited today', es: 'editado hoy' }, 'demo.no_rows': { en: 'Nothing here yet', es: 'Aún no hay nada' },
   // departments
   'demo.depts': { en: 'Departments', es: 'Departamentos' }, 'demo.depts_sub': { en: 'How {business} is actually organised — people, work and one number each.', es: 'Cómo está organizado {business}: personas, trabajo y un número por área.' },

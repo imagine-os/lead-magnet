@@ -4,7 +4,10 @@
  */
 import type { Bi, Prospect } from '../../engine/types';
 import type { Industry } from '../../engine/types';
-import { hash, personFor, titleCase, type Person } from './people';
+import { bizRoles, hash, personFor, titleCase, type Person } from './people';
+
+/** Roles that read the whole business, so their "Today" strip leads with the capacity meter (same set as the engine's `deriveRoleViews`). */
+const LEADS = /owner|partner|director|manager/;
 
 export const bi = (en: string, es: string): Bi => ({ en, es });
 export const DAYS: Record<'en' | 'es', string[]> = { en: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], es: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'] };
@@ -40,7 +43,8 @@ export interface Thread { id: string; channel: Channel; who: string; subject: Bi
 export function threadsFor(p: Prospect, ind: Industry): Thread[] {
   const b = p.business_name;
   const pain = ind.pains[0] ?? bi('too many tools', 'demasiadas herramientas');
-  const staff = (i: number) => personFor(p, p.business_roles[i % Math.max(1, p.business_roles.length)] ?? 'staff', i + 1).name;
+  const roles = bizRoles(p, ind); // the resolved industry's roles when the prospect has none (a hotel's handlers, a firm's paralegals)
+  const staff = (i: number) => personFor(p, roles[i % Math.max(1, roles.length)] ?? 'staff', i + 1).name;
   const t = (id: string, channel: Channel, who: string, subject: Bi, at: string, unread: boolean, msgs: [string, boolean, string, Bi][]): Thread =>
     ({ id, channel, who, subject, at, unread, preview: msgs[msgs.length - 1][3], messages: msgs.map(([mid, mine, mat, text], i) => ({ id: `${id}-${mid}-${i}`, from: mine ? b : who, mine, at: mat, text })) });
   return [
@@ -110,13 +114,20 @@ export function quickActionsFor(role: string, base: string): QuickAction[] {
   return [inbox, money, add, doc];
 }
 
-/** "Today" strip items: three live-looking numbers from the industry KPIs plus one person. */
+/**
+ * "Today" strip items: three live-looking numbers from the resolved industry's KPIs plus one person. An owner or a
+ * manager of a business with a capacity resource leads with it (rooms tonight, caseload, mats), the way Petrock's owner
+ * dashboard and Hoy's admin home do - the gauge is the number they open the day on (reference-systems.md §1, §3).
+ */
 export function todayFor(p: Prospect, ind: Industry, role: string): { id: string; label: Bi; value: string }[] {
   const k = ind.kpis;
   const person = personFor(p, role, 3).name.split(' ')[0];
+  const m = LEADS.test(role) ? ind.meter : undefined;
+  const head = m
+    ? [{ id: 'td-meter', label: m.label, value: `${m.value} / ${m.max}` }, { id: 'td-1', label: k[0]?.label ?? bi('Today', 'Hoy'), value: k[0]?.sample ?? '—' }]
+    : [{ id: 'td-1', label: k[0]?.label ?? bi('Today', 'Hoy'), value: k[0]?.sample ?? '—' }, { id: 'td-2', label: k[1]?.label ?? bi('Open items', 'Pendientes'), value: k[1]?.sample ?? '12' }];
   return [
-    { id: 'td-1', label: k[0]?.label ?? bi('Today', 'Hoy'), value: k[0]?.sample ?? '—' },
-    { id: 'td-2', label: k[1]?.label ?? bi('Open items', 'Pendientes'), value: k[1]?.sample ?? '12' },
+    ...head,
     { id: 'td-3', label: bi('Unread messages', 'Mensajes sin leer'), value: String(2 + (hash(`${p.id}${role}`) % 6)) },
     { id: 'td-4', label: bi('On shift', 'En turno'), value: `${person} +${2 + (hash(role) % 4)}` },
   ];

@@ -5,6 +5,7 @@ import { useI18n } from '../../i18n/I18nProvider';
 import type { Bi, Industry, Prospect, Widget } from '../../engine/types';
 import { Card } from '../../components/molecule/Card/Card';
 import { Stat } from '../../components/molecule/Stat/Stat';
+import { Meter } from '../../components/molecule/Meter/Meter';
 import { Badge } from '../../components/atom/Badge/Badge';
 import { Button } from '../../components/atom/Button/Button';
 import { Icon, type IconName } from '../../components/atom/Icon/Icon';
@@ -19,7 +20,9 @@ export const asNumbers = (s: unknown): number[] => (Array.isArray(s) ? s.filter(
 export const asChat = (s: unknown): { from: string; text: string }[] => (Array.isArray(s) ? s.filter((x): x is { from: string; text: string } => !!x && typeof x === 'object' && 'from' in x && 'text' in x) : []);
 export const asRows = (s: unknown): string[][] => (Array.isArray(s) ? s.filter((x): x is string[] => Array.isArray(x) && x.every((y) => typeof y === 'string')) : []);
 
-const WIDGET_ICON: Record<Widget['kind'], IconName> = { kpi: 'target', list: 'list', calendar: 'calendar', chat: 'message', table: 'table', chart: 'chart', doc: 'doc' };
+const WIDGET_ICON: Record<Widget['kind'], IconName> = { kpi: 'target', list: 'list', calendar: 'calendar', chat: 'message', table: 'table', chart: 'chart', doc: 'doc', meter: 'target' };
+/** `sample` of a `meter` widget (engine `MeterSample`), clamped so a bad snapshot can never draw past the track. */
+export const asMeter = (s: unknown): { value: number; max: number; unit?: Bi; hint?: Bi } => { const m = (s && typeof s === 'object' ? s : {}) as { value?: unknown; max?: unknown; unit?: Bi; hint?: Bi }; const max = Math.max(1, Number(m.max) || 1); return { value: Math.max(0, Math.min(max, Number(m.value) || 0)), max, unit: m.unit, hint: m.hint }; };
 
 /** Small inline SVG: bars with a trend line. No chart library, no hover-only information (values are labelled). */
 export function MiniChart({ values, label, height = 72 }: { values: number[]; label: string; height?: number }) {
@@ -100,6 +103,8 @@ export function WidgetCard({ w, p, ind, open }: { w: Widget; p: Prospect; ind: I
       </div>
       <div className="dw-body">
         {w.kind === 'kpi' && <Stat label={title} value={String(w.sample ?? '—')} hint={t('demo.kpi_hint')} size="lg" />}
+        {/* The value row already reads "50 / 58 rooms · 86%", which is the engine's own hint word for word, so the card keeps the KPI tile's "live in your workspace" line instead of saying it twice. */}
+        {w.kind === 'meter' && (() => { const m = asMeter(w.sample); return <Meter value={m.value} max={m.max} label={title} unit={m.unit ? bi(m.unit) : undefined} hint={t('demo.kpi_hint')} tone="prospect" warnLabel={t('demo.near_capacity')} />; })()}
         {w.kind === 'chart' && <MiniChart values={asNumbers(w.sample)} label={title} />}
         {w.kind === 'list' && (
           <ul className="dw-list">{asStrings(w.sample).map((s, i) => (

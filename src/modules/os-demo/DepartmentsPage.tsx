@@ -9,21 +9,24 @@ import { Avatar } from '../../components/atom/Avatar/Avatar';
 import { Placeholder } from '../../components/atom/Placeholder/Placeholder';
 import { DemoShell, type Demo } from './DemoShell';
 import { SectionHead } from './widgets';
-import { peopleFor, roleSlug, titleCase } from './people';
+import { bizRoles, peopleFor, roleSlug, titleCase } from './people';
 import { bi } from './sample';
 
 function Departments({ d }: { d: Demo }) {
   const { t, bi: tr } = useI18n();
-  const roles = d.biz.map((v) => v.role);
+  const roles = d.biz.length ? d.biz.map((v) => v.role) : bizRoles(d.prospect, d.ind);
+  /** Open items per column: the resolved industry's pains plus two house items, rotated so nine departments do not all show the same three. */
+  const pool = [...d.ind.pains, bi('Weekly review not sent', 'Revisión semanal sin enviar'), bi('Two approvals waiting', 'Dos aprobaciones pendientes')];
   useActions('C-03', { 'demo.openDepartment': (p) => `department ${String(p?.department ?? '')} is not wired yet (os-demo, a later pass)` });
   return (
     <div className="demo-page">
       <SectionHead title={t('demo.depts')} sub={t('demo.depts_sub', { business: d.prospect.business_name })} />
       <div className="demo-board">
         {d.ind.departments.map((dept, i) => {
-          const kpi = d.ind.kpis[i % d.ind.kpis.length];
+          // One KPI per department where the sub-industry names enough of them (a dog hotel's eight, a firm's eight); wrap only past the end.
+          const kpi = d.ind.kpis[i] ?? d.ind.kpis[i % Math.max(1, d.ind.kpis.length)] ?? { label: bi('Open items', 'Pendientes'), sample: '—' };
           const people = peopleFor(d.prospect, dept.en, roles, 2 + (i % 2));
-          const items = [...d.ind.pains, bi('Weekly review not sent', 'Revisión semanal sin enviar'), bi('Two approvals waiting', 'Dos aprobaciones pendientes')].slice(i % 2, (i % 2) + 3);
+          const items = [0, 1, 2].map((k) => pool[(i * 2 + k) % pool.length]);
           return (
             <Card key={dept.en} className="demo-col" padding="md">
               <header className="demo-col-head">

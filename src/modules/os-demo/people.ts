@@ -1,5 +1,5 @@
 /** Deterministic fictional people for the demo: the prospect is themselves, every other role gets a stable name. */
-import type { Prospect } from '../../engine/types';
+import type { Industry, Prospect } from '../../engine/types';
 
 const FIRST = ['Ana', 'Marcus', 'Lucía', 'Devin', 'Priya', 'Tomás', 'Nora', 'Elias', 'Camila', 'Jordan', 'Sofía', 'Reggie', 'Mira', 'Héctor', 'Beatriz', 'Owen'];
 const LAST = ['Reyes', 'Hale', 'Moreno', 'Park', 'Nakamura', 'Vargas', 'Delgado', 'Okafor', 'Serrano', 'Blake', 'Quintero', 'Ibarra'];
@@ -39,6 +39,12 @@ export function personFor(p: Prospect, role: string, offset = 0): Person {
   const palette = [p.style.palette.primary, p.style.palette.accent, p.style.palette.text];
   return { id: `${roleSlug(role)}-${offset}`, name, role, color: palette[hash(seed) % palette.length] };
 }
+/**
+ * The roles this business actually has: the prospect's own list when they gave one, otherwise the resolved industry's
+ * (`industryFor(p)`, so a dog hotel staffs handlers and groomers and a tenant-law firm paralegals, not a generic list).
+ */
+export const bizRoles = (p: Prospect, ind: Industry): string[] => (p.business_roles?.length ? p.business_roles : ind.business_roles);
+
 /** n people for a department column, seeded by the department label. */
 export function peopleFor(p: Prospect, dept: string, roles: string[], n: number): Person[] {
   const out: Person[] = [];

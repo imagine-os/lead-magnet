@@ -16,7 +16,7 @@ import { DeviceMockup } from '../../../components/molecule/DeviceMockup/DeviceMo
 import { Button } from '../../../components/atom/Button/Button';
 import { Icon } from '../../../components/atom/Icon/Icon';
 import { useI18n } from '../../../i18n/I18nProvider';
-import { deriveRoleViews, industry } from '../../../engine';
+import { deriveRoleViews, industryFor } from '../../../engine';
 import type { RoleView, Section } from '../../../engine/types';
 import { useLanding } from '../context';
 import { useFrames, useScrollFrames } from '../hooks';
@@ -39,7 +39,7 @@ export function HeroReveal({ section }: { section: Hero }) {
   const rolesSection = model.sections.find((s) => s.kind === 'role_views') as Extract<Section, { kind: 'role_views' }> | undefined;
   const views: RoleView[] = rolesSection?.views ?? deriveRoleViews(prospect);
   const devices = section.devices.length ? section.devices : (['phone', 'laptop', 'tv'] as const).slice();
-  const ind = industry(prospect.industry);
+  const ind = industryFor(prospect); // sub-industry depth: a dog hotel's pains and departments, not generic pet care (T62)
   const pain = ind.pains[0];
 
   /** The image for a device at this scroll position, or null when the device keeps the live composition. */

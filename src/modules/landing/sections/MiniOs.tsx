@@ -3,10 +3,15 @@
  * rail and three widgets from `deriveRoleViews` in their palette. Phone shows one column, laptop two, the TV three,
  * so the same composition reads at arm's length and from ten feet (P-01).
  */
+import type { CSSProperties } from 'react';
 import type { ProspectRow } from '../../../data/schema/core';
-import type { RoleView, Widget } from '../../../engine/types';
+import type { Bi, RoleView, Widget } from '../../../engine/types';
 import { useI18n } from '../../../i18n/I18nProvider';
+import { Meter } from '../../../components/molecule/Meter/Meter';
 import { cap } from '../format';
+
+/** The mini OS runs on a 8-11 px em scale; the library Meter is sized down through its own host properties instead of restyling it from here. */
+const MINI_METER = { '--meter-value-size': '2em', '--meter-text-size': '.85em', '--meter-track-h': '.5em' } as CSSProperties;
 
 const asStrings = (v: unknown): string[] => (Array.isArray(v) ? v.map((x) => String(x)) : []);
 const asNumbers = (v: unknown): number[] => (Array.isArray(v) ? v.map((x) => Number(x) || 0) : []);
@@ -18,7 +23,8 @@ export function MiniWidget({ widget }: { widget: Widget }) {
   const title = bi(widget.title);
   return (
     <div className="lp-w" data-kind={widget.kind}>
-      <div className="lp-w-title">{title}</div>
+      {/* A meter carries its own label, so the widget title would be the same words twice in a 9 px box. */}
+      {widget.kind !== 'meter' && <div className="lp-w-title">{title}</div>}
       {widget.kind === 'kpi' && <div className="lp-w-kpi">{String(widget.sample)}</div>}
       {widget.kind === 'calendar' && <ul className="lp-w-cal">{asStrings(widget.sample).slice(0, 4).map((s, i) => <li key={i}><span className="lp-w-dot" aria-hidden />{s}</li>)}</ul>}
       {widget.kind === 'list' && <ul className="lp-w-list">{asStrings(widget.sample).slice(0, 3).map((s, i) => <li key={i}>{s}</li>)}</ul>}
@@ -26,6 +32,7 @@ export function MiniWidget({ widget }: { widget: Widget }) {
       {widget.kind === 'table' && <table className="lp-w-table"><tbody>{asRows(widget.sample).slice(0, 3).map((r, i) => <tr key={i}>{r.map((c, j) => <td key={j}>{c}</td>)}</tr>)}</tbody></table>}
       {widget.kind === 'chart' && (() => { const n = asNumbers(widget.sample); const max = Math.max(1, ...n); return <div className="lp-w-chart" aria-hidden>{n.slice(0, 8).map((v, i) => <span key={i} style={{ height: `${Math.max(8, (v / max) * 100)}%` }} />)}</div>; })()}
       {widget.kind === 'doc' && <ul className="lp-w-doc">{asStrings(widget.sample).slice(0, 3).map((s, i) => <li key={i}>{s}</li>)}</ul>}
+      {widget.kind === 'meter' && (() => { const m = (widget.sample ?? {}) as { value?: number; max?: number; unit?: Bi }; return <Meter className="lp-w-meter" style={MINI_METER} size="sm" tone="prospect" label={title} value={Number(m.value) || 0} max={Number(m.max) || 1} unit={m.unit ? bi(m.unit) : undefined} />; })()}
     </div>
   );
 }

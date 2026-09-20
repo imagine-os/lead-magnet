@@ -8,7 +8,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDefaultLang, useI18n } from '../../i18n/I18nProvider';
 import { useRow, useTable } from '../../data/DataContext';
 import type { PageRow, ProspectRow } from '../../data/schema/core';
-import { deriveRoleViews, industry } from '../../engine';
+import { deriveRoleViews, industryFor } from '../../engine';
 import type { Industry, Prospect, RoleView } from '../../engine/types';
 import { prospectStyle } from '../../design/tokens';
 import { track, trackOnce } from '../../tracking';
@@ -126,7 +126,7 @@ export function DemoShell({ code, section, children }: { code: string; section: 
     </div>
   );
 
-  const ind = industry(prospect.industry);
+  const ind = industryFor(prospect); // the industry as this prospect experiences it: a sub-industry's departments, KPIs, pains, roles and meter win (T55 / T62)
   const d: Demo = { prospect, pageId, ind, views, biz, life, activeRole, activeView, base, ctx, goRole, goView, go, openSave, book };
   const me = personFor(prospect, activeRole || 'owner');
   // Option values are the unique view slugs ("owner" exists as a business AND a life role), never the bare role name.

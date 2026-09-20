@@ -1,0 +1,26 @@
+/* Capacity gauge. Three sizes are host-overridable custom properties (like Stat's --stat-value-size) so a 9 px mini-OS
+   mockup can shrink the whole thing without overriding .meter-* rules from outside this file. */
+.meter { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.meter-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-2); }
+.meter-label { color: var(--color-label); font-size: var(--meter-text-size, var(--fs-xs)); min-width: 0; }
+.meter-warn { color: var(--color-warn); font-size: var(--meter-text-size, var(--fs-xs)); font-weight: var(--fw-semibold); white-space: nowrap; }
+.meter-valuerow { display: flex; align-items: baseline; gap: var(--sp-2); flex-wrap: wrap; }
+.meter-value { font-size: var(--meter-value-size, var(--fs-2xl)); line-height: 1.1; font-weight: var(--fw-bold); color: var(--color-heading); font-variant-numeric: tabular-nums; }
+.meter-max { font-size: var(--meter-text-size, var(--fs-sm)); color: var(--color-text-secondary); font-variant-numeric: tabular-nums; min-width: 0; }
+.meter-pct { margin-left: auto; font-size: var(--meter-text-size, var(--fs-sm)); font-weight: var(--fw-semibold); color: var(--color-text-secondary); font-variant-numeric: tabular-nums; }
+.meter-track { height: var(--meter-track-h, calc(10px * var(--scale))); border-radius: var(--r-pill); background: var(--color-surface-3); overflow: hidden; }
+.meter-fill { height: 100%; border-radius: var(--r-pill); background: var(--color-primary); transition: width var(--dur-slow) var(--ease-out); }
+.meter-hint { font-size: var(--meter-text-size, var(--fs-xs)); color: var(--color-text-muted); }
+.meter-sm { gap: 2px; }
+.meter-sm .meter-value { font-size: var(--meter-value-size, var(--fs-lg)); }
+.meter-sm .meter-track { height: var(--meter-track-h, calc(6px * var(--scale))); }
+/* At capacity: the warn colour only reinforces the percentage, the reading and the optional warn word. */
+.meter.is-warn .meter-fill { background: var(--color-warn); }
+.meter.is-warn .meter-pct { color: var(--color-warn); }
+/* tone="prospect": themed from the page's --lp-* properties with token fallbacks (demo widgets, landing mockups). */
+.meter-prospect .meter-value { color: var(--lp-primary, var(--color-primary-text)); font-family: var(--lp-font-display, var(--font-display)); }
+.meter-prospect .meter-fill { background: var(--lp-primary, var(--color-primary)); }
+.meter-prospect.is-warn .meter-fill { background: var(--color-warn); }
+.meter-prospect .meter-track { background: color-mix(in srgb, var(--lp-text, var(--color-text)) 12%, var(--lp-surface, var(--color-surface))); }
+.meter-prospect .meter-label, .meter-prospect .meter-hint, .meter-prospect .meter-max, .meter-prospect .meter-pct { color: color-mix(in srgb, var(--lp-text, var(--color-text)) 74%, var(--lp-bg, var(--color-bg))); }
+@media (prefers-reduced-motion: reduce) { .meter-fill { transition: none; } }
